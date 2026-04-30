@@ -54,4 +54,4 @@ Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/sett
 ### Resources
 - [Mintlify documentation](https://mintlify.com/docs)
 
-<!-- preview rebuild: proposed-structure-v2 -->
+<!-- preview rebuild: proposed-structure (renamed from -v2) -->
