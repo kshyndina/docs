@@ -1,9 +1,0 @@
----
-title: "Shred streaming"
----
-
-RPC nodes in the trading centers have shred streaming enabled, meaning they receive incoming shreds faster than typical RPC nodes.
-
-Unstaked nodes (RPC nodes) are generally last in Solana's fanout schedule for block data. We can use shred streams to ensure that the RPC node receives the data as soon as any of the other nodes in our data centers.&#x20;
-
-This is enabled by having highly staked validators that can forward shreds. These staked validators typically end up in the first round in the fanout schedule.&#x20;

@@ -30,8 +30,9 @@ Example requests with page filtering, number of tokens per page and filtering by
 curl 'https://customers.triton.one/api/v1/tokens?account_uuid=c92a9cea-47cc-494b-b1b0-4230a2316ee5' -H "Authorization: secret-api-token" -H "Content-Type: application/json" -H "Accept:application/json" 
 ```
 
-<pre><code><strong>curl 'https://customers.triton.one/api/v1/tokens?subscription_uuid=74ea9d9a-4b2a-4f01-af47-1c175f8a2af6' -H "Authorization: secret-api-token" -H "Content-Type: application/json" -H "Accept:application/json" 
-</strong></code></pre>
+```bash
+curl 'https://customers.triton.one/api/v1/tokens?subscription_uuid=74ea9d9a-4b2a-4f01-af47-1c175f8a2af6' -H "Authorization: secret-api-token" -H "Content-Type: application/json" -H "Accept:application/json"
+```
 
 ```bash
 curl 'https://customers.triton.one/api/v1/tokens?per=10&page=2&subscription_uuid=74ea9d9a-4b2a-4f01-af47-1c175f8a2af6' -H "Authorization: secret-api-token" -H "Content-Type: application/json" -H "Accept:application/json" 
@@ -84,7 +85,7 @@ Add a new token that can be used to access the Subscription's Endpoints
 | Name                                                  | Type     | Description                                                                                                                                       |
 | ----------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | name \*required       | `string` | A human readable name to describe the token.                                                                                                      |
-| rate\_tier \*required | `string` | The name of the \<link>Rate Tier for this token, which defines rate limits for it. Each token incurs costs based on the Rate Tier defined for it. |
+| rate\_tier \*required | `string` | The name of the Rate Tier for this token, which defines rate limits for it. Each token incurs costs based on the Rate Tier defined for it.        |
 
 **Request**
 

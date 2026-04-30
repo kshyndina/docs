@@ -48,15 +48,16 @@ curl 'https://customers.triton.one/api/v1/subscriptions?per=10&page=2' -H "Autho
 
 Returns a hash with the `subscriptions` key containing an array of subscriptions objects and the `meta` containing pagination data.
 
-<pre class="language-json"><code class="lang-json">{
+```json
+{
    "subscriptions": [
       { subscription_object_1 },
       { subscription_object_2 },
       { subscription_object_3 },
       ...
    ],
-<strong>   "meta": {
-</strong>      "current_page": 1,
+   "meta": {
+      "current_page": 1,
       "next_page": null,
       "per_page": 50,
       "prev_page": null,
@@ -64,7 +65,7 @@ Returns a hash with the `subscriptions` key containing an array of subscriptions
       "total_count": 3
    }
 }
-</code></pre>
+```
 
 ### Get Subscription
 
@@ -206,7 +207,7 @@ This API is only limited to account management API tokens created with the resel
 | Name                                                          | Type       | Description                                                                                                                          |
 | ------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | account\_uuid \*required      | `string`   | Primary key of the account that the subscription should belong to.                                                                   |
-| subscription\_type \*required | `string`   | Name of the subscription type. Obtained from \<link>Subscription Types                                                               |
+| subscription\_type \*required | `string`   | Name of the subscription type. Obtained from the Subscription Types endpoint.                                                        |
 | name \*required               | `string`   | A human readable display name to describe the subscription.                                                                          |
 | starts\_at                                                    | `datetime` | The scheduled timestamp for the subscription to become active. Defaults to null, which means the subscription is immediately active. |
 | ends\_at                                                      | `datetime` | The timestamp for which the subscription becomes inactive. Defaults to null, which means the subscription never becomes inactive.    |

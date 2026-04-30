@@ -166,14 +166,6 @@
         ]
       },
       {
-        "group": "Pro trading centers",
-        "pages": [
-          "pro-trading-centers/introduction",
-          "pro-trading-centers/shred-streaming",
-          "pro-trading-centers/transaction-prioritisation"
-        ]
-      },
-      {
         "group": "Trading APIs",
         "pages": [
           "trading-apis/introduction",
