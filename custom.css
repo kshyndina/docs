@@ -22,6 +22,25 @@
   }
 }
 
+/* ---- 0c. Sidebar top padding ----
+   Mintlify positions the sidebar at top: calc(3rem + banner) (default
+   navbar height). Our navbar is taller (bigger logo + 0.5rem padding both
+   sides ≈ 4rem), so the first group label crashes into the navbar's
+   bottom edge. Add padding to give "Get Started" the same gap as
+   docs.triton.one. */
+#sidebar-content {
+  padding-top: 1.25rem !important;
+}
+
+/* ---- 0d. Page title: collapse empty description container ----
+   When frontmatter has no `description`, Mintlify still renders a
+   `prose` container with an empty <p> placeholder, leaving an awkward
+   gap between the H1 and the body. Hide it. Pages WITH a real
+   description are unaffected because their <p> isn't empty. */
+div.prose:has(> p:only-child:empty) {
+  display: none !important;
+}
+
 /* ---- 0b. Hide the floating AI assistant input at the bottom of every page.
    The top "Ask AI" button stays; we don't want a second input drifting on
    top of body content. Mintlify's CSS hook for the floating input is the
