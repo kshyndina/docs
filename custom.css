@@ -43,11 +43,25 @@ div.prose:has(> p:only-child:empty) {
 
 
 /* ---- 0e. Page header → body gap ----
-   Mintlify's <mdx-content> has Tailwind mt-8 (32px). docs.triton.one
-   uses ~16px. Tighten the gap so titles sit closer to body text. */
+   Mintlify wraps content in `mdx-content` with Tailwind mt-8 (32px) AND
+   uses Tailwind's prose plugin which adds another ~1.25em margin-top to
+   the first visible paragraph. Combined, that's ~50-60px of gap. Kill
+   both: zero out the container's top margin AND the first visible
+   child's top margin (the leading <blockquote class="sr-only"> doesn't
+   count as the first prose child for this purpose). */
 .mdx-content,
 mdx-content {
-  margin-top: 1rem !important;
+  margin-top: 0.5rem !important;
+}
+.mdx-content > blockquote.sr-only + *,
+mdx-content > blockquote.sr-only + * {
+  margin-top: 0 !important;
+}
+/* Belt-and-braces: even if no sr-only blockquote, force the very first
+   visible child to start without its prose top margin. */
+.mdx-content > *:first-child,
+mdx-content > *:first-child {
+  margin-top: 0 !important;
 }
 
 /* ---- 0b. Hide the floating AI assistant input at the bottom of every page.
