@@ -108,13 +108,23 @@ html.dark :not(pre) > code {
   margin-top: 0 !important;
 }
 
-/* ---- Eyebrow: Geist Mono, uppercase, tracking ---- */
+/* ---- Eyebrow: Geist Mono, uppercase, tracking ----
+   docs.json has styling.eyebrows="breadcrumbs", so this <eyebrow> renders
+   as a multi-segment breadcrumb (e.g. "Chains > Solana"). docs.triton.one
+   only shows the top-level section ("CHAINS"). Trim to the first segment
+   via CSS. */
 .eyebrow {
   font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace !important;
   text-transform: uppercase !important;
   letter-spacing: 0.08em !important;
   font-weight: 500 !important;
   font-size: 0.75rem !important;
+}
+.eyebrow [data-breadcrumb-title]:not(:first-child) {
+  display: none !important;
+}
+.eyebrow [data-breadcrumb-title]:first-child svg {
+  display: none !important;
 }
 
 /* ---- Tables: Triton blog look ----
