@@ -1,11 +1,12 @@
 ---
 title: "Proxying"
 ---
-: We Strongly Advise Against Proxying Our platform is engineered for optimal performance, reliability, and security through direct connections. Placing a third-party proxy (like Cloudflare) in front
 
 ## Proxying Traffic
 
 circle-exclamation
+
+**Warning: We Strongly Advise Against Proxying** Our platform is engineered for optimal performance, reliability, and security through direct connections. Placing a third-party proxy (like Cloudflare) in front of your RPC endpoint is not recommended, as it typically undermines these core features, introduces significant complexity, and degrades performance.
 
 Before attempting to implement a proxy, we urge you to contact our support team. We can almost always provide a more direct, performant, and robust solution to achieve your goals without the drawbacks of an additional network layer.
 
@@ -17,8 +18,8 @@ While proxying can be useful in traditional web hosting, it is poorly suited for
 
 Proxying actively interferes with the sophisticated routing mechanisms we use to give you a fast and reliable connection.
 
-- **It Breaks Geo-Routing:** Our standard routing uses GeoDNS to connect your users to the closest geographical datacenter. If your proxy isn't geographically distributed or does not provide accurate EDNS rmation, it will break this functionality, nullifying the latency benefits.
-- **It Is Incompatible with BGP Anycast:** Our next-generation Anycast routing provides a significant performance boost by using the internet's core protocols to find the optimal path from your user to our network. This system relies on the user's real IP address. A proxy completely masks this rmation, making it impossible for the Anycast system to work as intended and routing your traffic sub-optimally.
+- **It Breaks Geo-Routing:** Our standard routing uses GeoDNS to connect your users to the closest geographical datacenter. If your proxy isn't geographically distributed or does not provide accurate EDNS information, it will break this functionality, nullifying the latency benefits.
+- **It Is Incompatible with BGP Anycast:** Our next-generation Anycast routing provides a significant performance boost by using the internet's core protocols to find the optimal path from your user to our network. This system relies on the user's real IP address. A proxy completely masks this information, making it impossible for the Anycast system to work as intended and routing your traffic sub-optimally.
 - **It Delays Failover:** Proxies often cache DNS records. This can interfere with our ability to reroute your traffic during an emergency, leading to reduced redundancy and longer potential downtimes for your application.
 
 **2. Security and Responsibility Concerns**

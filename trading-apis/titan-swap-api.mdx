@@ -1,13 +1,14 @@
 ---
 title: "Titan Swap API"
 ---
+
 The Titan Swap API is available for all customers with an active Solana Subscription.
 
 ### What is Titan?
 
 The Titan Swap API allows you to stream price updates in real-time. The Argos routing engine serves as a meta-aggregator, sourcing data from multiple DEX aggregators and RFQ sources.
 
-Titan Prime offers a unique websocket implementation that streams quote rmation. This significantly lowers latency and allows front-ends to update prices in real-time without overwhelming the server with HTTP requests.
+Titan Prime offers a unique websocket implementation that streams quote information. This significantly lowers latency and allows front-ends to update prices in real-time without overwhelming the server with HTTP requests.
 
 ## Key Features
 
@@ -35,7 +36,7 @@ Please make sure you use `wss://` and not `https://` as this is a websocket-base
 
 ### Executing a Swap
 
-When you receive quote updates via the WebSocket stream, each quote contains swap route rmation:
+When you receive quote updates via the WebSocket stream, each quote contains swap route information:
 
 1. **Connect to WebSocke**t: Establish connection (as shown above)
 2. **Request Swap Quotes**: Send a `NewSwapQuoteStream` request with your swap parameters
@@ -64,4 +65,4 @@ To learn about how to use the Titan Swap API, please refer to the Titan Swap API
 
 A TypeScript SDK is also available: [https://www.npmjs.com/package/@titanexchange/sdk-ts](https://www.npmjs.com/package/@titanexchange/sdk-ts)
 
-Read more: [https://blog.triton.one/titan-prime-api-for-solana-swaps-is-live-on-triton/](https://blog.triton.one/titan-prime-api-for-solana-swaps-is-live-on-triton/)
+Read more: [https://blog.triton.one/titan-prime-api-for-solana-swaps-is-live-on-triton/arrow-up-right](https://blog.triton.one/titan-prime-api-for-solana-swaps-is-live-on-triton/)

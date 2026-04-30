@@ -1,6 +1,7 @@
 ---
 title: "Dragon's Mouth gRPC Subscriptions"
 ---
+
 Streaming Account Updates for Backend Applications.
 
 Dragon's Mouth is our Geyser-fed gRPC interface that supports streaming:
@@ -14,10 +15,10 @@ Dragon's Mouth is our Geyser-fed gRPC interface that supports streaming:
 
 It also supports unary operations:
 
-- getLatestBhash
-- getBHeight
+- getLatestBlockhash
+- getBlockHeight
 - getSlot
-- isValidBhash
+- isValidBlockhash
 - subscribeReplay
 
 The gRPC streams and RPC calls are supported through Solana's [Geyser](https://docs.triton.one/chains/solana/geyser) interface. This is the fastest way to receive updates on on-chain events. This interface is more stable and faster than the traditional WebSocket interface. We recommend using gRPC for all future development of backend clients.
@@ -138,9 +139,9 @@ You can subscribe to an individual transaction signature, which will provide upd
 
 You do not need to provide further details to subscribe to slot notifications. All you'll need to provide is a name for the slot updates that they will be tagged as.
 
-### Subscribe to bs
+### Subscribe to blocks
 
-This will return all the bs as they are produced. It will send bs along with the transactions:
+This will return all the blocks as they are produced. It will send blocks along with the transactions:
 
 By default `B` message includes all transactions, but you can exclude them or include updated accounts:
 
@@ -148,7 +149,7 @@ If you interested only in transactions/accounts where any of specified accounts 
 
 ### Subscribe to b metadata
 
-If you want to subscribe just to notifications as bs are processed without receiving all the transactions, then you can use the b meta subscription:
+If you want to subscribe just to notifications as blocks are processed without receiving all the transactions, then you can use the b meta subscription:
 
 ### Sending pings to keep the stream alive
 
@@ -190,7 +191,7 @@ gRPC
 
 NodeJS
 
-**Example: ing replay availability**
+**Example: checking replay availability**
 
 For teams running their own Yellowstone gRPC server, replay must be enabled server-side by setting `replay_stored_slots` to a value greater than `0`.
 
@@ -218,7 +219,7 @@ The benefit of working on processed is that you can process transactions as soon
 
 To manage confirmed and finalized you need to buffer events by slot. Each event (transaction or account write) will have a slot attached to it. You store these events in a buffer ordered by slot.
 
-You then also make sure you subscribe to [slot notifications](/project-yellowstone/dragons-mouth-grpc-subscriptions#subscribe-to-slots). This will give you rmation about when a slot is confirmed or finalized. Depending on the commitment level you are interested in, you should release your buffer when you receive the slot notification for a particular slot at a particular commitment level.
+You then also make sure you subscribe to [slot notifications](/project-yellowstone/dragons-mouth-grpc-subscriptions#subscribe-to-slots). This will give you information about when a slot is confirmed or finalized. Depending on the commitment level you are interested in, you should release your buffer when you receive the slot notification for a particular slot at a particular commitment level.
 
 You will receive all the transaction notifications or account write notifications for the slot **before** you receive the "confirmed" and "finalized" notification for that slot.
 
@@ -236,7 +237,7 @@ Here's a list of supported intra-slot update events :
 
 **SLOT_FIRST_SHRED_RECEIVED**: The remote RPC node you're connected to has received the first shred of a given slot. This does not indicate it has been replayed yet. This event occurs during the [retransmit stage](https://docs.anza.xyz/validator/tvu#retransmit-stage) in the [TVU](https://docs.anza.xyz/validator/tvu).
 
-**SLOT_CREATED_BANK**: A bank for the given slot has been created on the remote RPC node you're connected to. Within a validator, a Bank acts as an isolated execution environment during the replay stage (which follows the retransmit stage). Due to the decentralized nature of bchains, forks are inevitable, meaning a slot can have multiple descendants.
+**SLOT_CREATED_BANK**: A bank for the given slot has been created on the remote RPC node you're connected to. Within a validator, a Bank acts as an isolated execution environment during the replay stage (which follows the retransmit stage). Due to the decentralized nature of blockchains, forks are inevitable, meaning a slot can have multiple descendants.
 
 To handle this, validators must be capable of replaying multiple slots that share the same ancestor without their execution interfering with one another. Each slot is assigned its own Bank instance, and these Banks form a fork graph, where each edge represents a parent-child relationship between two banks.
 
@@ -250,9 +251,9 @@ Here's a "simplfied" overview of the expected lifecycle of a slot:\
 
 ## Deshred transactions (beta)
 
-Dragon's Mouth also supports [`SubscribeDeshred`](https://github.com/rpcpool/yellowstone-grpc/blob/236ebd7b0616dd88407a7a2b61f903a56b92b186/yellowstone-grpc-proto/proto/geyser.proto?ref=blog.triton.one#L12), a separate gRPC stream that delivers transactions reconstructed from shreds before the validator executes them.
+Dragon's Mouth also supports [`SubscribeDeshred`arrow-up-right](https://github.com/rpcpool/yellowstone-grpc/blob/236ebd7b0616dd88407a7a2b61f903a56b92b186/yellowstone-grpc-proto/proto/geyser.proto?ref=blog.triton.one#L12), a separate gRPC stream that delivers transactions reconstructed from shreds before the validator executes them.
 
-This is the earliest usable on-chain signal exposed by Dragon's Mouth. It is designed for latency-sensitive systems that care about transaction intent as early as possible, such as arbitrage, market making, trading, liquidations, and HFT pipelines.
+This is the earliest usable on-chain signal exposed by Dragon's Mouth. It is designed for latency-sensitive systems that care about transaction intent as early as possible, such as arbitrage, market making, copy trading, liquidations, and HFT pipelines.
 
 Unlike the standard `Subscribe` transaction stream, deshred updates are emitted before Replay. That means you receive the decoded transaction earlier, but without execution context.
 
@@ -287,6 +288,6 @@ The loaded address fields contain addresses resolved from Address Lookup Tables 
 
 `SubscribeDeshred` is currently available only on Triton One gRPC servers and is in paid beta. It depends on Triton's validator-side extension and does not work out of the box on a stock Agave node.
 
-For a deeper overview of the architecture and tradeoffs, see [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/). For the wire format and RPC definitions, see [`geyser.proto`](https://github.com/rpcpool/yellowstone-grpc/blob/236ebd7b0616dd88407a7a2b61f903a56b92b186/yellowstone-grpc-proto/proto/geyser.proto?ref=blog.triton.one#L12).
+For a deeper overview of the architecture and tradeoffs, see [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/). For the wire format and RPC definitions, see [`geyser.proto`arrow-up-right](https://github.com/rpcpool/yellowstone-grpc/blob/236ebd7b0616dd88407a7a2b61f903a56b92b186/yellowstone-grpc-proto/proto/geyser.proto?ref=blog.triton.one#L12).
 
 ## Rust example
