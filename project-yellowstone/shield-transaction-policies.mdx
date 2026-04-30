@@ -1,36 +1,37 @@
 ---
 title: "Transaction Policies"
 ---
-Learn more about  in our blog post: Introducing Yellowstone  🚫🛡️
 
-### What is ?
+Learn more about Shield in our blog post: [Introducing Yellowstone Shield 🚫🛡️arrow-up-right](https://blog.triton.one/introducing-yellowstone-shield)
 
-Yellowstone lets you control which validators can process your Solana transactions. It's a simple but powerful idea: create a list of validators you trust (allowlist) or don't trust (blist), and your transactions will only go to the validators that match your criteria.
+### What is Shield?
 
-**Why use ?** Some validators engage in practices that can harm users, such as:
+Yellowstone Shield lets you control which validators can process your Solana transactions. It's a simple but powerful idea: create a list of validators you trust (allowlist) or don't trust (blocklist), and your transactions will only go to the validators that match your criteria.
+
+**Why use Shield?** Some validators engage in practices that can harm users, such as:
 
 - **Sandwich attacks** - Inserting transactions before and after yours to extract value
-- **Frontrunning** - ing and executing your transaction idea before you
+- **Frontrunning** - Copying and executing your transaction idea before you
 - **Other harmful MEV strategies** - Various techniques to extract value at users' expense
 
- helps you avoid these validators by simply not sending your transactions to them.
+Shield helps you avoid these validators by simply not sending your transactions to them.
 
 ### How It Works
 
 1. **Create a Policy** - You create an on-chain list of validators (either "allow these validators" or "b these validators")
 2. **Own Your Policy** - When you create a policy, you receive a special token that gives you control over that policy
 3. **Use the Policy** - Add your policy's address to your transactions
-4. **Automatic Filtering** - The RPC s each validator against your policy and only sends transactions to approved validators
+4. **Automatic Filtering** - The RPC checks each validator against your policy and only sends transactions to approved validators
 
-**What happens to bed transactions?** If the current validator doesn't meet your criteria, the transaction is dropped - it won't be sent to that validator. The system doesn't hold or queue transactions.
+**What happens to blocked transactions?** If the current validator doesn't meet your criteria, the transaction is dropped - it won't be sent to that validator. The system doesn't hold or queue transactions.
 
-**Note about time-critical transactions**: Since can drop transactions when no eligible validators are available, be careful using strict policies with time-sensitive operations like arbitrage or liquidations.
+**Note about time-critical transactions**: Since Shield can drop transactions when no eligible validators are available, be careful using strict policies with time-sensitive operations like arbitrage or liquidations.
 
-**Important**: This only works with -enabled RPCs (like those using Yellowstone Jet). Standard Solana RPCs will ignore the policy parameter.
+**Important**: This only works with Shield-enabled RPCs (like those using Yellowstone Jet). Standard Solana RPCs will ignore the policy parameter.
 
 ### Quick Start
 
-If you're already using an RPC that supports (like Triton RPC with Cascade), just add the policy to your transaction:
+If you're already using an RPC that supports Shield (like Triton RPC with Cascade), just add the policy to your transaction:
 
 ## RPC Method Parameter
 
@@ -38,7 +39,7 @@ If you're already using an RPC that supports (like Triton RPC with Cascade), jus
 
 ### Understanding Policies and Tokens
 
-When you create a policy:
+When you create a Shield policy:
 
 - An SPL token (using Token Extensions) is created
 - You receive 1 token in your wallet
@@ -51,9 +52,9 @@ When you create a policy:
 
 ### Important: Protection Limitations
 
- policies are **not automatic protection against harmful validator practices**. Here's why:
+Shield policies are **not automatic protection against harmful validator practices**. Here's why:
 
-- Policies only b validators that are on your blist (or not on your allowlist)
+- Policies only b validators that are on your blocklist (or not on your allowlist)
 - New validators join Solana every epoch
 - Validators engaging in harmful practices (like sandwich attacks or frontrunning) can appear at any time
 - **Policy maintainers must actively update their lists** to catch validators that harm users
@@ -64,12 +65,12 @@ Think of it as a filter, not a guarantee. The quality of protection depends enti
 
 ## Policy Explorer
 
-Visit [validators.app/yellowstone-](https://www.validators.app/yellowstone-?locale=en&network=mainnet) to:
+Visit [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield?locale=en&network=mainnet) to:
 
 - Browse all existing policies
 - See which validators are included/excluded
-- policy addresses for your transactions
-- when policies were last updated
+- Copy policy addresses for your transactions
+- Check when policies were last updated
 
 ## Common Policy Types
 
@@ -93,7 +94,7 @@ Visit [validators.app/yellowstone-](https://www.validators.app/yellowstone-?loca
 - SOL for transaction fees
 - A list of validator addresses
 
-## Step 1: Install CLI
+## Step 1: Install Shield CLI
 
 ## Step 2: Prepare Metadata
 
@@ -123,30 +124,30 @@ To manage a policy (add/remove validators), you must hold at least 1 token in yo
 
 ### For RPC Providers
 
-If you're running your own RPC and want to support :
+If you're running your own RPC and want to support Shield:
 
-1. **Using Yellowstone Jet** - support is built-in
-2. **Custom Integration** - Use the [yellowstone--store](https://crates.io/crates/yellowstone--store) crate to:
+1. **Using Yellowstone Jet** - Shield support is built-in
+2. **Custom Integration** - Use the [yellowstone-shield-store](https://crates.io/crates/yellowstone-shield-store) crate to:
 
  - Cache policies locally
- - validators against policies
+ - Check validators against policies
  - Integrate with your transaction forwarding logic
 
 ### For Developers
 
- policies only work with RPCs that support them. You can't use the standard Solana web3.js methods - you need to make direct RPC calls:
+Shield policies only work with RPCs that support them. You can't use the standard Solana web3.js methods - you need to make direct RPC calls:
 
 ### Key Points to Remember
 
 1. **Policies need maintenance** - New validators appear every epoch. Lists must be updated regularly to remain effective.
-2. **It's just a filter** - simply prevents transactions from going to certain validators. It doesn't guarantee protection from sandwich attacks or transaction failures.
+2. **It's just a filter** - Shield simply prevents transactions from going to certain validators. It doesn't guarantee protection from sandwich attacks or transaction failures.
 3. **Token = Control** - When you create a policy, you get an SPL token. Anyone with this token can manage the policy. As the creator, you can mint more tokens to share control.
 4. **Anyone can use your policy** - Once created, anyone who knows the policy address can use it in their transactions.
-5. **Not all RPCs support ** - Only use -enabled RPCs like those using Yellowstone Jet.
+5. **Not all RPCs support Shield** - Only use Shield-enabled RPCs like those using Yellowstone Jet.
 
 ### Resources
 
-- **GitHub Repository**: [yellowstone-](https://github.com/rpcpool/yellowstone-)
-- **Policy Explorer**: [validators.app/yellowstone-](https://www.validators.app/yellowstone-?locale=en&network=mainnet)
-- **Blog Post**: [Introducing Yellowstone ](https://blog.triton.one/introducing-yellowstone-)
-- **Rust Crate**: [yellowstone--store](https://crates.io/crates/yellowstone--store)
+- **GitHub Repository**: [yellowstone-shield](https://github.com/rpcpool/yellowstone-shield)
+- **Policy Explorer**: [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield?locale=en&network=mainnet)
+- **Blog Post**: [Introducing Yellowstone Shield](https://blog.triton.one/introducing-yellowstone-shield)
+- **Rust Crate**: [yellowstone-shield-store](https://crates.io/crates/yellowstone-shield-store)

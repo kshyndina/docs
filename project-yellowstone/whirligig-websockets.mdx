@@ -1,6 +1,7 @@
 ---
 title: "Whirligig WebSockets"
 ---
+
 Better, Faster, Stronger Solana WebSockets
 
 The Whirligig WebSocket Proxy is a Rust-based proxy between a Dragon's Mouth gRPC server and a WebSocket client. It allows the client to send requests to a WebSocket connection rather than through the gRPC protocol. This can be used when WebSocket connections are preferred, such as in a web3 application.
@@ -19,7 +20,7 @@ NOTE: Connections inactive for over 60 seconds get closed. To keep a connection 
 
 ### Whirligig CLI Client
 
-You can Whirligig CLI Client on GitHub: [https://github.com/rpcpool/yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client)
+You can check Whirligig CLI Client on GitHub: [https://github.com/rpcpool/yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client)
 
 ### Commitment Levels
 
@@ -33,7 +34,7 @@ You can, however, also [manage commitment levels](/project-yellowstone/dragons-m
 
 "**Confirmed**": The highest slot that has been voted on by supermajority of the cluster, ie. is confirmed. Confirmation incorporates votes from gossip and replay. It does not count votes on descendants of a b, only direct votes on that b, and upholds "optimistic confirmation" guarantees in release 1.3 and onwards.
 
-"**Finalized**": The highest slot having reached max vote out, as recognized by a supermajority of the cluster.
+"**Finalized**": The highest slot having reached max vote lockout, as recognized by a supermajority of the cluster.
 
 ### Endpoint
 
@@ -49,7 +50,7 @@ Result would be `true` in case of such subscription was active and removed. In c
 
 ### accountSubscribe
 
-This method is fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.account_subscribe
+This method is fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.account_subscribe
 
 `base58` stream data example:
 
@@ -57,19 +58,19 @@ This method is fully compatiable with Solana WebSocket API. API details: https:/
 
 See [#Unsubscribe](/project-yellowstone/whirligig-websockets#unsubscribe).
 
-### bSubscribe
+### blockSubscribe
 
-Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.b_subscribe
+Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.block_subscribe
 
 stream data example:
 
-### bUnsubscribe
+### blockUnsubscribe
 
 See [#Unsubscribe](/project-yellowstone/whirligig-websockets#unsubscribe).
 
 ### logsSubscribe
 
-Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.logs_subscribe
+Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.logs_subscribe
 
 stream data example:
 
@@ -79,7 +80,7 @@ See [#Unsubscribe](/project-yellowstone/whirligig-websockets#unsubscribe).
 
 ### programSubscribe
 
-Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.program_subscribe
+Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.program_subscribe
 
 stream data example:
 
@@ -89,7 +90,7 @@ See [#Unsubscribe](/project-yellowstone/whirligig-websockets#unsubscribe).
 
 ### signatureSubscribe
 
-Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.signature_subscribe
+Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.signature_subscribe
 
 stream data example:
 
@@ -99,7 +100,7 @@ See [#Unsubscribe](/project-yellowstone/whirligig-websockets#unsubscribe).
 
 ### slotSubscribe
 
-Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.slot_subscribe
+Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.slot_subscribe
 
 stream data example:
 
@@ -111,7 +112,7 @@ See [#Unsubscribe](/project-yellowstone/whirligig-websockets#unsubscribe).
 
 **Solana WebSocket API doesn't support this kind of subscription.**
 
-Method can accept two arguments, first is `filter` and second `config`. In `filter` all fields are optional. `config` argument equal to [RpcBSubscribeConfig](https://docs.rs/solana-client/latest/solana_client/rpc_config/struct.RpcBSubscribeConfig.html).
+Method can accept two arguments, first is `filter` and second `config`. In `filter` all fields are optional. `config` argument equal to [RpcBlockSubscribeConfig](https://docs.rs/solana-client/latest/solana_client/rpc_config/struct.RpcBlockSubscribeConfig.html).
 
 stream data example:
 

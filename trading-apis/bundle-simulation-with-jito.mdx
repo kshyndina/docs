@@ -1,7 +1,8 @@
 ---
 title: "Bundle simulation with Jito"
 ---
-Triton offers support for Jito RPC for all plans . This primarily gives access to the improved simulation support that Jito offers and allows you to simulate bundles of transactions.
+
+Triton offers support for **Jito RPC for all plans**. This primarily gives access to the improved simulation support that Jito offers and allows you to simulate bundles of transactions.
 
 > 🔧 Note: Triton One provides the Jito-enabled RPC node only. It is the customer's responsibility to have their IP whitelisted with Jito’s B Engine in order to use certain features.
 
@@ -59,8 +60,8 @@ pub enum RpcBundleExecutionError {
  #[error("The bank has hit the max allotted time for processing transactions")]
  BankProcessingTimeLimitReached,
 
- #[error("Error ing bundle because a transaction is malformed")]
- BundleError,
+ #[error("Error locking bundle because a transaction is malformed")]
+ BundleLockError,
 
  #[error("Bundle execution timed out")]
  BundleExecutionTimeout,
@@ -91,6 +92,6 @@ pub struct RpcSimulateBundleTransactionResult {
 }
 ```
 
-RpcSimulateBundleConfig: Bundle configuration
+chevron-rightRpcSimulateBundleConfig: Bundle configuration[hashtag](#rpcsimulatebundleconfig-bundle-configuration)
 
 You can pass an optional configuration parameter when simulating bundle. The optional configuration takes the following format:
