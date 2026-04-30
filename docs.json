@@ -1,12 +1,38 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "Docs Triton",
+  "name": "Triton One",
   "theme": "luma",
-  "favicon": "https://media.brand.dev/03e74411-3b32-42eb-a2a6-b14206dcf5e4.png",
+  "favicon": "/favicon.png",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://triton.one"
+  },
   "colors": {
     "primary": "#7A4BA0",
-    "light": "#F2EDF6",
+    "light": "#B591D3",
     "dark": "#492D60"
+  },
+  "fonts": {
+    "heading": {
+      "family": "DM Sans"
+    },
+    "body": {
+      "family": "Work Sans"
+    }
+  },
+  "icons": {
+    "library": "lucide"
+  },
+  "background": {
+    "decoration": "gradient",
+    "color": {
+      "light": "#F7F7F7",
+      "dark": "#171717"
+    }
+  },
+  "styling": {
+    "codeblocks": "dark"
   },
   "navbar": {
     "primary": {
@@ -110,12 +136,5 @@
         ]
       }
     ]
-  },
-  "background": {
-    "color": {
-      "light": "#F7F7F7",
-      "dark": "#171717"
-    },
-    "decoration": "gradient"
   }
 }
