@@ -1,0 +1,58 @@
+---
+title: "getBlockHeight"
+description: "Returns the current block height of the node."
+api: 'POST https://api.mainnet-beta.solana.com'
+---
+
+Returns the height of the most recent block. Block height is incremented for every confirmed block, unlike slots which increment regardless of whether a block was produced.
+
+## Request body
+
+<ParamField body="jsonrpc" type="string" required>
+  Always `"2.0"`.
+</ParamField>
+
+<ParamField body="id" type="integer" required>
+  An identifier you choose.
+</ParamField>
+
+<ParamField body="method" type="string" required>
+  Always `"getBlockHeight"`.
+</ParamField>
+
+<ParamField body="params" type="array">
+  Optional `[config]`:
+  - `config.commitment` (string, optional) -- `"processed"`, `"confirmed"`, or `"finalized"`.
+</ParamField>
+
+## Response
+
+<ResponseField name="result" type="integer">
+  The current block height.
+</ResponseField>
+
+## Example
+
+<RequestExample>
+
+```json Request
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "getBlockHeight"
+}
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 OK
+{
+  "jsonrpc": "2.0",
+  "result": 258234567,
+  "id": 1
+}
+```
+
+</ResponseExample>

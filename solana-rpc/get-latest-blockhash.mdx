@@ -1,0 +1,75 @@
+---
+title: "getLatestBlockhash"
+description: "Returns the latest blockhash, used as a recency anchor when constructing transactions."
+api: 'POST https://api.mainnet-beta.solana.com'
+---
+
+Returns the latest blockhash. Every Solana transaction requires a recent blockhash to prove it was constructed within the last ~150 slots. Fetch one immediately before signing a transaction.
+
+## Request body
+
+<ParamField body="jsonrpc" type="string" required>
+  Always `"2.0"`.
+</ParamField>
+
+<ParamField body="id" type="integer" required>
+  An identifier you choose.
+</ParamField>
+
+<ParamField body="method" type="string" required>
+  Always `"getLatestBlockhash"`.
+</ParamField>
+
+<ParamField body="params" type="array">
+  Optional `[config]`:
+  - `config.commitment` (string, optional) -- `"processed"`, `"confirmed"`, or `"finalized"`.
+</ParamField>
+
+## Response
+
+<ResponseField name="result.context.slot" type="integer">
+  The slot the result was retrieved at.
+</ResponseField>
+
+<ResponseField name="result.value.blockhash" type="string">
+  The base58-encoded blockhash to use in your transaction.
+</ResponseField>
+
+<ResponseField name="result.value.lastValidBlockHeight" type="integer">
+  The last block height at which the blockhash will still be accepted by the network.
+</ResponseField>
+
+## Example
+
+<RequestExample>
+
+```json Request
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "getLatestBlockhash",
+  "params": [
+    { "commitment": "finalized" }
+  ]
+}
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 OK
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "context": { "slot": 280123456 },
+    "value": {
+      "blockhash": "EkSnNWid2cvwEVnVx9aBqawnmiCNiDgp3gUdkDPTKN1N",
+      "lastValidBlockHeight": 258234717
+    }
+  },
+  "id": 1
+}
+```
+
+</ResponseExample>
