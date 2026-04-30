@@ -2,6 +2,7 @@
 title: "getAccountInfo"
 description: "Returns full information about an account, including its data, owner program, lamports, and rent status."
 api: 'POST https://api.mainnet-beta.solana.com'
+authMethod: "none"
 ---
 
 Returns full information about an account: its lamport balance, owner program, executable flag, rent epoch, and the raw data the account holds. Use this to inspect any account on Solana -- system accounts, token accounts, program-derived accounts, etc.

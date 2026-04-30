@@ -2,6 +2,7 @@
 title: "getSlot"
 description: "Returns the slot that the validator is currently processing."
 api: 'POST https://api.mainnet-beta.solana.com'
+authMethod: "none"
 ---
 
 Returns the slot the cluster is currently processing. Slots are Solana's unit of time -- the network produces a new slot roughly every 400ms. Use this to track liveness or to anchor recent events.

@@ -2,6 +2,7 @@
 title: "getLatestBlockhash"
 description: "Returns the latest blockhash, used as a recency anchor when constructing transactions."
 api: 'POST https://api.mainnet-beta.solana.com'
+authMethod: "none"
 ---
 
 Returns the latest blockhash. Every Solana transaction requires a recent blockhash to prove it was constructed within the last ~150 slots. Fetch one immediately before signing a transaction.

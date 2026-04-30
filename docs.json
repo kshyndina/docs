@@ -53,10 +53,7 @@
   },
   "api": {
     "mdx": {
-      "server": "https://api.mainnet-beta.solana.com",
-      "auth": {
-        "method": "none"
-      }
+      "server": "https://api.mainnet-beta.solana.com"
     },
     "playground": {
       "display": "interactive"
