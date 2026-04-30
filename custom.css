@@ -1,18 +1,25 @@
-/*! purgecss start ignore */
-/* SMOKE TEST: if this rule is in the bundled CSS, custom CSS is loading */
-body[data-banner-state] {
-  --triton-css-loaded: yes;
-}
-/*! purgecss end ignore */
+/* Triton One docs -- custom styling overrides */
 
-/* Triton One docs -- custom styling overrides
-   Mintlify's "element selectors" (nav-logo, eyebrow, code-block, etc.)
-   are actually CLASSES on regular HTML elements -- target with `.` prefix. */
+/*! purgecss start ignore */
 
 /* ---- 0. Top navbar: a touch more vertical breathing room ---- */
 #navbar {
   padding-top: 0.5rem !important;
   padding-bottom: 0.5rem !important;
+}
+
+/* ---- 0a. Sidebar: a touch wider so long titles don't break onto two lines.
+   Mintlify default is ~17rem; bump to ~19rem to fit "Solana v2.0: Deprecated
+   RPC Methods" and "Agave - AccountsDB: Storage Files shrinking process". */
+#sidebar {
+  width: 19rem !important;
+  max-width: 19rem !important;
+}
+@media (min-width: 1024px) {
+  #sidebar {
+    width: 19rem !important;
+    flex-basis: 19rem !important;
+  }
 }
 
 /* ---- 0b. Hide the floating AI assistant input at the bottom of every page.
@@ -218,3 +225,5 @@ mdx-content table td code {
   font-size: 0.85em;
   word-break: break-all;
 }
+
+/*! purgecss end ignore */

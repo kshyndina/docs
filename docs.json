@@ -88,25 +88,61 @@
       {
         "group": "Chains",
         "pages": [
-          "chains/solana/solana",
-          "chains/solana/streaming/streaming",
-          "chains/solana/streaming/streaming-troubleshooting-checklist",
-          "chains/solana/geyser",
-          "chains/solana/token-program",
-          "chains/solana/old-faithful-historical-archive-1",
-          "chains/solana/improved-priority-fees-api/improved-priority-fees-api",
-          "chains/solana/improved-priority-fees-api/for-rpc-providers",
-          "chains/solana/cascade/cascade",
-          "chains/solana/sending-txs",
-          "chains/solana/buying-transaction-bandwidth",
-          "chains/solana/providing-transaction-bandwidth",
-          "chains/solana/photon/photon",
-          "chains/solana/photon/api-methods",
-          "chains/solana/web3js-socket-connection-issues",
-          "chains/solana/deprecated-calls-solana-2.0",
-          "chains/solana/agave-accountsdb-storage-files-shrinking-process",
-          "chains/sui/sui",
-          "chains/sui/walrus",
+          {
+            "group": "Solana",
+            "root": "chains/solana/solana",
+            "pages": [
+              "chains/solana/solana",
+              {
+                "group": "Streaming",
+                "root": "chains/solana/streaming/streaming",
+                "pages": [
+                  "chains/solana/streaming/streaming",
+                  "chains/solana/streaming/streaming-troubleshooting-checklist"
+                ]
+              },
+              "chains/solana/geyser",
+              "chains/solana/token-program",
+              "chains/solana/old-faithful-historical-archive-1",
+              {
+                "group": "Improved Priority Fees API",
+                "root": "chains/solana/improved-priority-fees-api/improved-priority-fees-api",
+                "pages": [
+                  "chains/solana/improved-priority-fees-api/improved-priority-fees-api",
+                  "chains/solana/improved-priority-fees-api/for-rpc-providers"
+                ]
+              },
+              {
+                "group": "Cascade",
+                "root": "chains/solana/cascade/cascade",
+                "pages": [
+                  "chains/solana/cascade/cascade",
+                  "chains/solana/sending-txs",
+                  "chains/solana/buying-transaction-bandwidth",
+                  "chains/solana/providing-transaction-bandwidth"
+                ]
+              },
+              {
+                "group": "Photon",
+                "root": "chains/solana/photon/photon",
+                "pages": [
+                  "chains/solana/photon/photon",
+                  "chains/solana/photon/api-methods"
+                ]
+              },
+              "chains/solana/web3js-socket-connection-issues",
+              "chains/solana/deprecated-calls-solana-2.0",
+              "chains/solana/agave-accountsdb-storage-files-shrinking-process"
+            ]
+          },
+          {
+            "group": "SUI",
+            "root": "chains/sui/sui",
+            "pages": [
+              "chains/sui/sui",
+              "chains/sui/walrus"
+            ]
+          },
           "chains/monad",
           "chains/pythnet",
           "chains/others"
@@ -117,20 +153,26 @@
         "pages": [
           "digital-assets-api/introduction",
           "digital-assets-api/fungible-assets",
-          "digital-assets-api/metaplex-digital-assets-api/metaplex-digital-assets-api",
-          "digital-assets-api/metaplex-digital-assets-api/get-asset",
-          "digital-assets-api/metaplex-digital-assets-api/get-assets",
-          "digital-assets-api/metaplex-digital-assets-api/get-asset-proof",
-          "digital-assets-api/metaplex-digital-assets-api/get-asset-proofs",
-          "digital-assets-api/metaplex-digital-assets-api/get-asset-signatures",
-          "digital-assets-api/metaplex-digital-assets-api/get-assets-by-authority",
-          "digital-assets-api/metaplex-digital-assets-api/get-assets-by-creator",
-          "digital-assets-api/metaplex-digital-assets-api/get-assets-by-group",
-          "digital-assets-api/metaplex-digital-assets-api/get-assets-by-owner",
-          "digital-assets-api/metaplex-digital-assets-api/search-assets",
-          "digital-assets-api/metaplex-digital-assets-api/get-nft-editions",
-          "digital-assets-api/metaplex-digital-assets-api/get-token-accounts",
-          "digital-assets-api/metaplex-digital-assets-api/get-token-largest-accounts"
+          {
+            "group": "API Methods",
+            "root": "digital-assets-api/metaplex-digital-assets-api/metaplex-digital-assets-api",
+            "pages": [
+              "digital-assets-api/metaplex-digital-assets-api/metaplex-digital-assets-api",
+              "digital-assets-api/metaplex-digital-assets-api/get-asset",
+              "digital-assets-api/metaplex-digital-assets-api/get-assets",
+              "digital-assets-api/metaplex-digital-assets-api/get-asset-proof",
+              "digital-assets-api/metaplex-digital-assets-api/get-asset-proofs",
+              "digital-assets-api/metaplex-digital-assets-api/get-asset-signatures",
+              "digital-assets-api/metaplex-digital-assets-api/get-assets-by-authority",
+              "digital-assets-api/metaplex-digital-assets-api/get-assets-by-creator",
+              "digital-assets-api/metaplex-digital-assets-api/get-assets-by-group",
+              "digital-assets-api/metaplex-digital-assets-api/get-assets-by-owner",
+              "digital-assets-api/metaplex-digital-assets-api/search-assets",
+              "digital-assets-api/metaplex-digital-assets-api/get-nft-editions",
+              "digital-assets-api/metaplex-digital-assets-api/get-token-accounts",
+              "digital-assets-api/metaplex-digital-assets-api/get-token-largest-accounts"
+            ]
+          }
         ]
       },
       {
@@ -138,31 +180,49 @@
         "pages": [
           "project-yellowstone/introduction",
           "project-yellowstone/dragons-mouth-grpc-subscriptions",
-          "project-yellowstone/old-faithful-historical-archive/old-faithful-historical-archive",
-          "project-yellowstone/old-faithful-historical-archive/public-report-epoch-208",
+          {
+            "group": "Old Faithful Historical Archive",
+            "root": "project-yellowstone/old-faithful-historical-archive/old-faithful-historical-archive",
+            "pages": [
+              "project-yellowstone/old-faithful-historical-archive/old-faithful-historical-archive",
+              "project-yellowstone/old-faithful-historical-archive/public-report-epoch-208"
+            ]
+          },
           "project-yellowstone/steamboat-custom-indexes",
           "project-yellowstone/whirligig-websockets",
           "project-yellowstone/fumarole",
           "project-yellowstone/program-data-streams",
           "project-yellowstone/shield-transaction-policies",
-          "project-yellowstone/vixen-parsing-framework/vixen-parsing-framework",
-          "project-yellowstone/vixen-parsing-framework/generate-parsers-with-codama"
+          {
+            "group": "Vixen Parsing Framework",
+            "root": "project-yellowstone/vixen-parsing-framework/vixen-parsing-framework",
+            "pages": [
+              "project-yellowstone/vixen-parsing-framework/vixen-parsing-framework",
+              "project-yellowstone/vixen-parsing-framework/generate-parsers-with-codama"
+            ]
+          }
         ]
       },
       {
         "group": "Account Management",
         "pages": [
           "account-management/payments",
-          "account-management/api-access/api-access",
-          "account-management/api-access/introduction",
-          "account-management/api-access/auth-and-headers",
-          "account-management/api-access/accounts",
-          "account-management/api-access/address-watch-lists",
-          "account-management/api-access/subscriptions",
-          "account-management/api-access/subscription-types",
-          "account-management/api-access/endpoints",
-          "account-management/api-access/tokens",
-          "account-management/api-access/rate-tiers"
+          {
+            "group": "Account management API",
+            "root": "account-management/api-access/api-access",
+            "pages": [
+              "account-management/api-access/api-access",
+              "account-management/api-access/introduction",
+              "account-management/api-access/auth-and-headers",
+              "account-management/api-access/accounts",
+              "account-management/api-access/address-watch-lists",
+              "account-management/api-access/subscriptions",
+              "account-management/api-access/subscription-types",
+              "account-management/api-access/endpoints",
+              "account-management/api-access/tokens",
+              "account-management/api-access/rate-tiers"
+            ]
+          }
         ]
       },
       {
