@@ -1,31 +1,107 @@
 ---
-title: "Shield Transaction Policies"
-description: "Learn more about Shield in our blog post: Introducing Yellowstone Shield 🚫🛡️"
+title: "Transaction Policies"
+description: "Learn more about Shield in our blog post: Introducing Yellowstone Shield 🚫🛡️ arrow-up-right"
 ---
 
-Learn more about Shield in our blog post: Introducing Yellowstone Shield 🚫🛡️
+Learn more about in our blog post: [Introducing Yellowstone 🚫🛡️](https://blog.triton.one/introducing-yellowstone-)
 
-## What is Shield?
+### What is ?
 
-Yellowstone Shield lets you control which validators can process your Solana transactions. It's a simple but powerful idea: create a list of validators you trust (allowlist) or don't trust (blocklist), and your transactions will only go to the validators that match your criteria.
+Yellowstone lets you control which validators can process your Solana transactions. It's a simple but powerful idea: create a list of validators you trust (allowlist) or don't trust (blist), and your transactions will only go to the validators that match your criteria.
 
-## Why use Shield?
+**Why use ?** Some validators engage in practices that can harm users, such as:
 
-Some validators engage in practices that can harm users, such as: Sandwich attacks - Inserting transactions before and after yours to extract value Frontrunning - Copying and executing your transaction idea before you Other harmful MEV strategies - Various techniques to extract value at users' expense Shield helps you avoid these validators by simply not sending your transactions to them. How It Works Create a Policy - You create an on-chain list of validators (either "allow these validators" or "block these validators") Own Your Policy - When you create a policy, you receive a special token that gives you control over that policy Use the Policy - Add your policy's address to your transactions Automatic Filtering - The RPC checks each validator against your policy and only sends transactions to approved validators What happens to blocked transactions?
+- **Sandwich attacks** - Inserting transactions before and after yours to extract value
+- **Frontrunning** - ing and executing your transaction idea before you
+- **Other harmful MEV strategies** - Various techniques to extract value at users' expense
 
-If the current validator doesn't meet your criteria, the transaction is dropped - it won't be sent to that validator. The system doesn't hold or queue transactions.
+ helps you avoid these validators by simply not sending your transactions to them.
 
-Note about time-critical transactions: Since Shield can drop transactions when no eligible validators are available, be careful using strict policies with time-sensitive operations like arbitrage or liquidations. Important: This only works with Shield-enabled RPCs (like those using Yellowstone Jet). Standard Solana RPCs will ignore the policy parameter. Quick Start If you're already using an RPC that supports Shield (like Triton RPC with Cascade), just add the policy to your transaction: RPC Method Parameter HTTP Header (Alternative) Understanding Policies and Tokens When you create a Shield policy: An SPL token (using Token Extensions) is created You receive 1 token in your wallet This token gives you control over the policy As the creator, you keep the mint authority and can mint more tokens if needed Anyone holding the token can manage the policy (add/remove validators) The policy lives on-chain and can be used by anyone who knows its address Note: Since the token is fungible and more can be minted, you could potentially share policy management with others by minting and sending them tokens.
+### How It Works
 
-Important: Protection Limitations Shield policies are not automatic protection against harmful validator practices. Here's why: Policies only block validators that are on your blocklist (or not on your allowlist) New validators join Solana every epoch Validators engaging in harmful practices (like sandwich attacks or frontrunning) can appear at any time Policy maintainers must actively update their lists to catch validators that harm users Think of it as a filter, not a guarantee. The quality of protection depends entirely on how well the policy is maintained.
+1. **Create a Policy** - You create an on-chain list of validators (either "allow these validators" or "b these validators")
+2. **Own Your Policy** - When you create a policy, you receive a special token that gives you control over that policy
+3. **Use the Policy** - Add your policy's address to your transactions
+4. **Automatic Filtering** - The RPC s each validator against your policy and only sends transactions to approved validators
 
-Finding and Using Existing Policies Policy Explorer Visit validators.app/yellowstone-shield to: Browse all existing policies See which validators are included/excluded Copy policy addresses for your transactions Check when policies were last updated Common Policy Types Allow Lists Top validators by stake Geographically distributed validators Performance-based selection Block Lists (Deny Lists) Validators known for sandwich attacks or frontrunning Poor performing validators Community-flagged validators Creating Your Own Policy Prerequisites Solana CLI installed and configured SOL for transaction fees A list of validator addresses
+**What happens to bed transactions?** If the current validator doesn't meet your criteria, the transaction is dropped - it won't be sent to that validator. The system doesn't hold or queue transactions.
 
-## Step 1: Install Shield CLI
+**Note about time-critical transactions**: Since can drop transactions when no eligible validators are available, be careful using strict policies with time-sensitive operations like arbitrage or liquidations.
+
+**Important**: This only works with -enabled RPCs (like those using Yellowstone Jet). Standard Solana RPCs will ignore the policy parameter.
+
+### Quick Start
+
+If you're already using an RPC that supports (like Triton RPC with Cascade), just add the policy to your transaction:
+
+## RPC Method Parameter
+
+## HTTP Header (Alternative)
+
+### Understanding Policies and Tokens
+
+When you create a policy:
+
+- An SPL token (using Token Extensions) is created
+- You receive 1 token in your wallet
+- This token gives you control over the policy
+- As the creator, you keep the mint authority and can mint more tokens if needed
+- Anyone holding the token can manage the policy (add/remove validators)
+- The policy lives on-chain and can be used by anyone who knows its address
+
+**Note**: Since the token is fungible and more can be minted, you could potentially share policy management with others by minting and sending them tokens.
+
+### Important: Protection Limitations
+
+ policies are **not automatic protection against harmful validator practices**. Here's why:
+
+- Policies only b validators that are on your blist (or not on your allowlist)
+- New validators join Solana every epoch
+- Validators engaging in harmful practices (like sandwich attacks or frontrunning) can appear at any time
+- **Policy maintainers must actively update their lists** to catch validators that harm users
+
+Think of it as a filter, not a guarantee. The quality of protection depends entirely on how well the policy is maintained.
+
+### Finding and Using Existing Policies
+
+## Policy Explorer
+
+Visit [validators.app/yellowstone-](https://www.validators.app/yellowstone-?locale=en&network=mainnet) to:
+
+- Browse all existing policies
+- See which validators are included/excluded
+- policy addresses for your transactions
+- when policies were last updated
+
+## Common Policy Types
+
+**Allow Lists**
+
+- Top validators by stake
+- Geographically distributed validators
+- Performance-based selection
+
+**B Lists (Deny Lists)**
+
+- Validators known for sandwich attacks or frontrunning
+- Poor performing validators
+- Community-flagged validators
+
+### Creating Your Own Policy
+
+## Prerequisites
+
+- Solana CLI installed and configured
+- SOL for transaction fees
+- A list of validator addresses
+
+## Step 1: Install CLI
 
 ## Step 2: Prepare Metadata
 
-Create a JSON file describing your policy: Upload this file to IPFS or Arweave and save the URL.
+Create a JSON file describing your policy:
+
+Upload this file to IPFS or Arweave and save the URL.
 
 ## Step 3: Create the Policy
 
@@ -33,6 +109,46 @@ The CLI will output your policy's mint address - save this! You'll receive 1 tok
 
 ## Step 4: Add Validators
 
-Create a text file with validator addresses (one per line): Then add them to your policy: Managing Your Policy To manage a policy (add/remove validators), you must hold at least 1 token in your wallet. If you've transferred all your tokens to others, you'll lose the ability to manage the policy.
+Create a text file with validator addresses (one per line):
 
-Update validators (replace entire list): Remove specific validators: View policy details: For RPC Providers If you're running your own RPC and want to support Shield: Using Yellowstone Jet - Shield support is built-in Custom Integration - Use the yellowstone-shield-store crate to: Cache policies locally Check validators against policies Integrate with your transaction forwarding logic For Developers Shield policies only work with RPCs that support them. You can't use the standard Solana web3.js methods - you need to make direct RPC calls: Key Points to Remember Policies need maintenance - New validators appear every epoch. Lists must be updated regularly to remain effective. It's just a filter - Shield simply prevents transactions from going to certain validators. It doesn't guarantee protection from sandwich attacks or transaction failures. Token = Control - When you create a policy, you get an SPL token. Anyone with this token can manage the policy. As the creator, you can mint more tokens to share control. Anyone can use your policy - Once created, anyone who knows the policy address can use it in their transactions. Not all RPCs support Shield - Only use Shield-enabled RPCs like those using Yellowstone Jet. Resources GitHub Repository: yellowstone-shield Policy Explorer: validators.app/yellowstone-shield Blog Post: Introducing Yellowstone Shield Rust Crate: yellowstone-shield-store
+Then add them to your policy:
+
+## Managing Your Policy
+
+To manage a policy (add/remove validators), you must hold at least 1 token in your wallet. If you've transferred all your tokens to others, you'll lose the ability to manage the policy.
+
+**Update validators (replace entire list):**
+
+**Remove specific validators:**
+
+**View policy details:**
+
+### For RPC Providers
+
+If you're running your own RPC and want to support :
+
+1. **Using Yellowstone Jet** - support is built-in
+2. **Custom Integration** - Use the [yellowstone--store](https://crates.io/crates/yellowstone--store) crate to:
+
+ - Cache policies locally
+ - validators against policies
+ - Integrate with your transaction forwarding logic
+
+### For Developers
+
+ policies only work with RPCs that support them. You can't use the standard Solana web3.js methods - you need to make direct RPC calls:
+
+### Key Points to Remember
+
+1. **Policies need maintenance** - New validators appear every epoch. Lists must be updated regularly to remain effective.
+2. **It's just a filter** - simply prevents transactions from going to certain validators. It doesn't guarantee protection from sandwich attacks or transaction failures.
+3. **Token = Control** - When you create a policy, you get an SPL token. Anyone with this token can manage the policy. As the creator, you can mint more tokens to share control.
+4. **Anyone can use your policy** - Once created, anyone who knows the policy address can use it in their transactions.
+5. **Not all RPCs support ** - Only use -enabled RPCs like those using Yellowstone Jet.
+
+### Resources
+
+- **GitHub Repository**: [yellowstone-](https://github.com/rpcpool/yellowstone-)
+- **Policy Explorer**: [validators.app/yellowstone-](https://www.validators.app/yellowstone-?locale=en&network=mainnet)
+- **Blog Post**: [Introducing Yellowstone ](https://blog.triton.one/introducing-yellowstone-)
+- **Rust Crate**: [yellowstone--store](https://crates.io/crates/yellowstone--store)

@@ -7,25 +7,27 @@ Running a validator helps protect and decentralize the Solana network and earns 
 
 Our hosted validators utilize the infrastructure we have built over time as a top RPC provider and running validators on the Solana network.
 
-On the validators we run, we ensure: Access by a limited team.
+On the validators we run, we ensure:
 
-Node identity keys in-memory only. 24/7 monitoring to ensure consistent voting.
+- Access by a limited team.
+- Node identity keys in-memory only.
+- 24/7 monitoring to ensure consistent voting.
 
 Triton One owns the validator identity key. You or your team control the vote account withdrawal authority. Control over the withdrawal authority means you have complete control over the vote account.
 
-Before you commit to running a validator, you should make sure that: You are willing to fund vote fees until you have attracted enough stake to break even; this is approximately 1 SOL/day.
+Before you commit to running a validator, you should make sure that:
 
-You can attract enough delegations to break even (TX fees - voting expenses) and make a profit eventually. Currently, this is in the range of 375 000 delegated SOL.
+1. You are willing to fund vote fees until you have attracted enough stake to break even; this is approximately 1 SOL/day.
+2. You can attract enough delegations to break even (TX fees - voting expenses) and make a profit eventually. Currently, this is in the range of 375 000 delegated SOL.
 
-If you merely wish to access staking rewards, you can also stake with existing validators without running your own; see https://validators.app for details about existing validators and stake pools.
+If you merely wish to access staking rewards, you can also stake with existing validators without running your own; see [https://validators.app](https://validators.app/) for details about existing validators and stake pools.
 
-Validators deployed through Triton are compatible with all current Solana validator clients that adhere to protocol specifications. The choice of client is left entirely to the validator owner. Triton monitors compatibility and vote performance across supported clients, which include: Agave – the official reference implementation of the Solana validator, maintained by (Anza)(https://anza.xyz/) . Agave is feature-complete and receives all protocol updates first, serving as the baseline for all other clients.
+Validators deployed through Triton are compatible with all current Solana validator clients that adhere to protocol specifications. The choice of client is left entirely to the validator owner. Triton monitors compatibility and vote performance across supported clients, which include:
 
-Jito-Solana – a fork of Agave maintained by (Jito Labs)(https://jito.network/), integrating an MEV auction system. This client allows validators to receive transaction bundles from a private relay and earn additional rewards through MEV tips, with minimal configuration overhead.
-
-Paladin – a fork of Jito-Solana maintained by the (Paladin)(https://www.paladin.one/) team. It offers stricter bundle filtering and supports a protected transaction pathway that mitigates frontrunning and sandwich attacks. It is designed to improve fairness in MEV distribution while remaining fully compatible with Solana’s consensus.
-
-Frankendancer – a hybrid validator client maintained by (Jump Crypto)(https://jumpcrypto.com/firedancer/), combining a Firedancer networking and block ingestion stack with consensus execution provided by Agave. It is engineered for high performance and low-latency block processing and is already in production on mainnet with active participation.
+- Agave – the official reference implementation of the Solana validator, maintained by (Anza)(https://anza.xyz/) . Agave is feature-complete and receives all protocol updates first, serving as the baseline for all other clients.
+- Jito-Solana – a fork of Agave maintained by (Jito Labs)(https://jito.network/), integrating an MEV auction system. This client allows validators to receive transaction bundles from a private relay and earn additional rewards through MEV tips, with minimal configuration overhead.
+- Paladin – a fork of Jito-Solana maintained by the (Paladin)(https://www.paladin.one/) team. It offers stricter bundle filtering and supports a protected transaction pathway that mitigates frontrunning and sandwich attacks. It is designed to improve fairness in MEV distribution while remaining fully compatible with Solana’s consensus.
+- Frankendancer – a hybrid validator client maintained by (Jump Crypto)(https://jumpcrypto.com/firedancer/), combining a Firedancer networking and b ingestion stack with consensus execution provided by Agave. It is engineered for high performance and low-latency b processing and is already in production on mainnet with active participation.
 
 Each of these clients is capable of full validator participation. Triton validates client behavior continuously to ensure correct protocol operation.
 

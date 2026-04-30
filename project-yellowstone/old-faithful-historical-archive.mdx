@@ -1,22 +1,31 @@
 ---
 title: "Old Faithful Historical Archive"
-description: "Old Faithful is Triton's open-source solution to the Solana historical ledger problem, making the entire history of Solana accessible to everyone."
+description: "Full Historical Access: Retrieve any Solana block from previous epochs!"
 ---
 
-Old Faithful is Triton's open-source solution to the Solana historical ledger problem, making the entire history of Solana accessible to everyone. Sponsored by the Solana Foundation, this project empowers you to explore Solana's blockchain from genesis to the latest block. Key Features
+Old Faithful is Triton's open-source solution to the Solana historical ledger problem, making the entire history of Solana accessible to everyone. Sponsored by the Solana Foundation, this project empowers you to explore Solana's bchain from genesis to the latest b.
 
-**Full Historical Access**
+## Key Features
 
-Retrieve any Solana block from previous epochs!
+- **Full Historical Access:** Retrieve any Solana b from previous epochs!
+- **Flexible APIs:** Access data via standard JSON-RPC or high-performance gRPC streams.
+- **Self-Hosted or Managed:** Run your own archive node (requires significant storage) or use Triton's managed endpoints.
+- **Open Source:** Built in the open for transparency and community collaboration.
 
-**Flexible APIs**
+## Getting Started
 
-Access data via standard JSON-RPC or high-performance gRPC streams.
+Old Faithful is automatically integrated into your Triton One subscription. By making a `getB` or `getTransaction` call for historical data, our systems will intelligently route you to Old Faithful.
 
-**Self-Hosted or Managed**
+### gRPC
 
-Run your own archive node (requires significant storage) or use Triton's managed endpoints.
+Most JSON-RPC methods can be made with gRPC and for greater efficiency we've also implemented **StreamTransactions** and **StreamBs** which allow you to filter large troves of data server side and receive only what's relevant for you. You can see examples in the gRPC [docs](https://docs.old-faithful.net/references/grpc-methods/examples#streaming-methods) page.
 
-**Open Source**
+## Additional Resources
 
-Built in the open for transparency and community collaboration. Getting Started Old Faithful is automatically integrated into your Triton One subscription. By making a getBlock or getTransaction call for historical data, our systems will intelligently route you to Old Faithful. gRPC Most JSON-RPC methods can be made with gRPC and for greater efficiency we've also implemented StreamTransactions and StreamBlocks which allow you to filter large troves of data server side and receive only what's relevant for you. You can see examples in the gRPC docs page. Additional Resources Yellowstone Faithful on GitHub JSON-RPC Examples gRPC Examples Support For questions, feedback, or to request access, please contact customer support or your account representative.
+- [Yellowstone Faithful on GitHub](https://github.com/rpcpool/yellowstone-faithful)
+- [JSON-RPC Examples](https://docs.old-faithful.net/usage-and-installation/rpc-methods)
+- [gRPC Examples](https://docs.old-faithful.net/usage-and-installation/grpc-methods)
+
+## Support
+
+For questions, feedback, or to request access, please contact [customer support](https://docs.triton.one/cdn-cgi/l/email-protection#b2c1c7c2c2ddc0c6f2c6c0dbc6dddc9cdddcd7) or your account representative.

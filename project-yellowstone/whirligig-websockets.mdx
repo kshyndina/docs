@@ -1,14 +1,122 @@
 ---
 title: "Whirligig WebSockets"
-description: "Better, Faster, Stronger Solana WebSockets The Whirligig WebSocket Proxy is a Rust-based proxy between a Dragon's Mouth gRPC server and a WebSocket client."
+description: "Better, Faster, Stronger Solana WebSockets"
 ---
 
-Better, Faster, Stronger Solana WebSockets The Whirligig WebSocket Proxy is a Rust-based proxy between a Dragon's Mouth gRPC server and a WebSocket client. It allows the client to send requests to a WebSocket connection rather than through the gRPC protocol. This can be used when WebSocket connections are preferred, such as in a web3 application.
+Better, Faster, Stronger Solana WebSockets
 
-At the 'processed' commitment level most traders use, Whirligig will also provide intra-slot updates. Account updates will arrive up to 400ms faster than previous WebSocket subscriptions. WebSocket API Whirligig aims for full compatibility with the Solana WebSocket API ( https://docs.solana.com/api/websocket). Please be aware of one extended subscription we introduced: transactionSubscribe. This subscription may not be compatible with other providers. To use Whirligig, append /whirligig to your RPC endpoint. Using web3.js, you can pass in a custom WS endpoint like this: new web3.Connection('rpc_endpoint', { wsEndpoint: 'ws_endpoint' }).
+The Whirligig WebSocket Proxy is a Rust-based proxy between a Dragon's Mouth gRPC server and a WebSocket client. It allows the client to send requests to a WebSocket connection rather than through the gRPC protocol. This can be used when WebSocket connections are preferred, such as in a web3 application.
 
-NOTE: Some client software might require another trailing slash like /whirligig/.
+At the 'processed' commitment level most traders use, Whirligig will also provide intra-slot updates. Account updates will arrive up to 400ms faster than previous WebSocket subscriptions.
 
-NOTE: Connections inactive for over 60 seconds get closed. To keep a connection alive, you need to ping the server {"jsonrpc":"2.0","method":"ping"} Whirligig CLI Client You can check Whirligig CLI Client on GitHub: https://github.com/rpcpool/yellowstone-whirligig-client Commitment Levels The Whirligig WebSocket API supports all three commitment levels (processed, confirmed, finalized). You can, however, also manage commitment levels in your app in the same way as you would in Dragon's Mouth gRPC. Each subscribe method implements a corresponding unsubscribe method which takes the subscription id provided by the subscribe method. https://docs.solana.com/cluster/commitments " Processed ": The highest slot of the heaviest fork processed by the node. Ledger state at this slot is not derived from a confirmed or finalized block, but if multiple forks are present, is from the fork the validator believes is most likely to finalize. " Confirmed ": The highest slot that has been voted on by supermajority of the cluster, ie. is confirmed. Confirmation incorporates votes from gossip and replay. It does not count votes on descendants of a block, only direct votes on that block, and upholds "optimistic confirmation" guarantees in release 1.3 and onwards. " Finalized ": The highest slot having reached max vote lockout, as recognized by a supermajority of the cluster. Endpoint The WebSocket endpoint allows you to stream data from the server to the client in real-time. The default endpoint for the WebSocket is wss://<your endpoint>.rpcpool.com/<token>/whirligig. Unsubscribe Every subscription request on success return id of subscription, like: This subscription id can be used to unsubscribe from the stream: Result would be true in case of such subscription was active and removed. In case if subscription doesn't exists, result would be false. accountSubscribe This method is fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.account_subscribe base58 stream data example: accountUnsubscribe See #Unsubscribe. blockSubscribe Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.block_subscribe stream data example: blockUnsubscribe See #Unsubscribe. logsSubscribe Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.logs_subscribe stream data example: logsUnsubscribe See #Unsubscribe. programSubscribe Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.program_subscribe stream data example: programUnsubscribe See #Unsubscribe. signatureSubscribe Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.signature_subscribe stream data example: signatureUnsubscribe See #Unsubscribe. slotSubscribe Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.slot_subscribe stream data example: slotUnsubscribe See #Unsubscribe. transactionSubscribe Solana WebSocket API doesn't support this kind of subscription.
+## WebSocket API
 
-Method can accept two arguments, first is filter and second config. In filter all fields are optional. config argument equal to RpcBlockSubscribeConfig. stream data example: transactionUnsubscribe See #Unsubscribe.
+Whirligig aims for full compatibility with the Solana WebSocket API ([https://docs.solana.com/api/websocket](https://docs.solana.com/api/websocket)). Please be aware of one extended subscription we introduced: `transactionSubscribe`. This subscription may not be compatible with other providers.
+
+To use Whirligig, append `/whirligig` to your RPC endpoint. Using web3.js, you can pass in a custom WS endpoint like this: `new web3.Connection('rpc_endpoint', { wsEndpoint: 'ws_endpoint' })`.
+
+NOTE: Some client software might require another trailing slash like `/whirligig/`.
+
+NOTE: Connections inactive for over 60 seconds get closed. To keep a connection alive, you need to ping the server `{"jsonrpc":"2.0","method":"ping"}`
+
+### Whirligig CLI Client
+
+You can Whirligig CLI Client on GitHub: [https://github.com/rpcpool/yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client)
+
+### Commitment Levels
+
+The Whirligig WebSocket API supports all three commitment levels (processed, confirmed, finalized).
+
+You can, however, also [manage commitment levels](https://docs.triton.one/project-yellowstone/dragons-mouth-grpc-subscriptions#managing-commitment-levels) in your app in the same way as you would in [Dragon's Mouth gRPC](https://docs.triton.one/project-yellowstone/dragons-mouth-grpc-subscriptions#managing-commitment-levels). Each subscribe method implements a corresponding unsubscribe method which takes the subscription id provided by the subscribe method.
+
+[https://docs.solana.com/cluster/commitments](https://docs.solana.com/cluster/commitments)
+
+"**Processed**": The highest slot of the heaviest fork processed by the node. Ledger state at this slot is not derived from a confirmed or finalized b, but if multiple forks are present, is from the fork the validator believes is most likely to finalize.
+
+"**Confirmed**": The highest slot that has been voted on by supermajority of the cluster, ie. is confirmed. Confirmation incorporates votes from gossip and replay. It does not count votes on descendants of a b, only direct votes on that b, and upholds "optimistic confirmation" guarantees in release 1.3 and onwards.
+
+"**Finalized**": The highest slot having reached max vote out, as recognized by a supermajority of the cluster.
+
+### Endpoint
+
+The WebSocket endpoint allows you to stream data from the server to the client in real-time. The default endpoint for the WebSocket is `wss://<your endpoint>.rpcpool.com/<token>/whirligig`.
+
+### Unsubscribe
+
+Every subscription request on success return `id` of subscription, like:
+
+This subscription `id` can be used to unsubscribe from the stream:
+
+Result would be `true` in case of such subscription was active and removed. In case if subscription doesn't exists, result would be `false`.
+
+### accountSubscribe
+
+This method is fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.account_subscribe
+
+`base58` stream data example:
+
+### accountUnsubscribe
+
+See [#Unsubscribe](https://docs.triton.one/project-yellowstone/whirligig-websockets#unsubscribe).
+
+### bSubscribe
+
+Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.b_subscribe
+
+stream data example:
+
+### bUnsubscribe
+
+See [#Unsubscribe](https://docs.triton.one/project-yellowstone/whirligig-websockets#unsubscribe).
+
+### logsSubscribe
+
+Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.logs_subscribe
+
+stream data example:
+
+### logsUnsubscribe
+
+See [#Unsubscribe](https://docs.triton.one/project-yellowstone/whirligig-websockets#unsubscribe).
+
+### programSubscribe
+
+Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.program_subscribe
+
+stream data example:
+
+### programUnsubscribe
+
+See [#Unsubscribe](https://docs.triton.one/project-yellowstone/whirligig-websockets#unsubscribe).
+
+### signatureSubscribe
+
+Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.signature_subscribe
+
+stream data example:
+
+### signatureUnsubscribe
+
+See [#Unsubscribe](https://docs.triton.one/project-yellowstone/whirligig-websockets#unsubscribe).
+
+### slotSubscribe
+
+Fully compatiable with Solana WebSocket API. API details: https://docs.rs/solana-client/latest/solana_client/nonbing/pubsub_client/struct.PubsubClient.html#method.slot_subscribe
+
+stream data example:
+
+### slotUnsubscribe
+
+See [#Unsubscribe](https://docs.triton.one/project-yellowstone/whirligig-websockets#unsubscribe).
+
+### transactionSubscribe
+
+**Solana WebSocket API doesn't support this kind of subscription.**
+
+Method can accept two arguments, first is `filter` and second `config`. In `filter` all fields are optional. `config` argument equal to [RpcBSubscribeConfig](https://docs.rs/solana-client/latest/solana_client/rpc_config/struct.RpcBSubscribeConfig.html).
+
+stream data example:
+
+### transactionUnsubscribe
+
+See [#Unsubscribe](https://docs.triton.one/project-yellowstone/whirligig-websockets#unsubscribe).

@@ -1,22 +1,60 @@
 ---
 title: "Monad"
-description: "Monad is a Layer-1 blockchain delivering high performance, decentralization, and EVM compatibility with 10.000 TPS, 0.8s finality, and 0.4s block times Overview Block explorers"
+description: "Monad is a Layer-1 blockchain delivering high performance, decentralization, and EVM compatibility with 10.000 TPS, 0.8s finality, and 0.4s block times"
 ---
 
-Monad is a Layer-1 blockchain delivering high performance, decentralization, and EVM compatibility with 10.000 TPS, 0.8s finality, and 0.4s block times Overview Block explorers
+Monad is a Layer-1 bchain delivering high performance, decentralization, and EVM compatibility with 10.000 TPS, 0.8s finality, and 0.4s b times
 
-**Mainnet**
+## Overview
 
-https://monadvision.com
+### B explorers
 
-**Testnet**
+- Mainnet: [https://monadvision.com](https://monadvision.com)
+- Testnet: [https://testnet.monadvision.com/](https://testnet.monadvision.com/)
 
-https://testnet.monadvision.com/ Developer docs https://docs.monad.xyz APIs circle-exclamation The differences between Monad and the standard Geth client are described here: https://docs.monad.xyz/reference/rpc-differences JSON-RPC Monad supports most of the JSON-RPC methods available in Geth. You can find the official documentation here The linked documentation also includes cURL examples where you just need to replace the RPC URL, e.g: curl --request POST \ --url < TRITON_UR L > \ --header ' accept: application/json ' \ --header ' content-type: application/json ' \ --data ' { "id": 0, "jsonrpc": "2.0", "method": "eth_blockNumber", "params": [] } '
+### Developer docs
 
-**Expected result**
+- [https://docs.monad.xyz](https://docs.monad.xyz/)
 
-Websocket The websocket API is also available in Monad. You can find the official documentation here See an example below how to test websocket using the wscat utility: Install node-ws in Linux: Subscribe to websockets:
+## APIs
 
-**Expected result**
+circle-exclamation
 
-Note: JS examples are also available in the official documentation.
+The differences between Monad and the standard Geth client are described here: [https://docs.monad.xyz/reference/rpc-differences](https://docs.monad.xyz/reference/rpc-differences)
+
+### JSON-RPC
+
+Monad supports most of the JSON-RPC methods available in Geth. You can find the official documentation [here](https://docs.monad.xyz/reference/json-rpc/)
+
+The linked documentation also includes cURL examples where you just need to replace the RPC URL, e.g:
+
+```
+curl --request POST \
+ --url <TRITON_URL> \
+ --header 'accept: application/json' \
+ --header 'content-type: application/json' \
+ --data '
+{
+ "id": 0,
+ "jsonrpc": "2.0",
+ "method": "eth_bNumber",
+ "params": []
+}
+'
+```
+
+Expected result:
+
+### Websocket
+
+The websocket API is also available in Monad. You can find the official documentation [here](https://docs.monad.xyz/reference/websockets)
+
+See an example below how to test websocket using the `wscat` utility:
+
+**Install node-ws in Linux**:
+
+**Subscribe to websockets**:
+
+Expected result:
+
+*Note: JS examples are also available in the official documentation.*

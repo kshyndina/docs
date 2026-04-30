@@ -116,8 +116,8 @@
             "group": "Validators",
             "pages": [
               "validators/introduction",
-              "validators/node-identity-protection",
-              "validators/vote-account-setup"
+              "validators/vote-account-setup",
+              "validators/node-identity-protection"
             ]
           },
           {

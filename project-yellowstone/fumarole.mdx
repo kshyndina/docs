@@ -7,12 +7,28 @@ Scalable and reliable streaming of account and transaction data.
 
 Fumarole is currently in limited beta testing. Please contact your Triton CS channel for getting access.
 
-Fumarole is our new streaming system to allow you to be able to reliably stream accounts and transactions. Fumarole provides High availability: by collecting data from multiple downstream Solana nodes and merging them into a single stream, your stream does not get interrupted if a node restarts or is upgraded. Persistence: Fumarole stores the historical state and lets you reconnect your stream if your clients go down. Parallel replay download : Fumarole can replay in parallel geyser data wherever you left off.
+Fumarole is our new streaming system to allow you to be able to reliably stream accounts and transactions.
+
+## Fumarole provides
+
+- **High availability**: by collecting data from multiple downstream Solana nodes and merging them into a single stream, your stream does not get interrupted if a node restarts or is upgraded.
+- **Persistence**: Fumarole stores the historical state and lets you reconnect your stream if your clients go down.
+- **Parallel replay download :** Fumarole can replay in parallel geyser data wherever you left off.
 
 ## How to get started
 
-Get in touch over your Triton customer support channel and ask for a beta access token Read our launch post and get started with the Fume CLI: https://blog.triton.one/introducing-yellowstone-fumarole Build your integration with Fumarole via the Rust or Typescript SDKs: https://github.com/rpcpool/yellowstone-fumarole Migrating from Dragon’s Mouth If you already have code built for our gRPC streams in Dragon’s Mouth, integrating with Fumarole for additional reliability is easy. The code changes should be minimal as Fumarole uses the same types as Dragon’s Mouth.
+1. Get in touch over your Triton customer support channel and ask for a beta access token
+2. Read our launch post and get started with the Fume CLI: [https://blog.triton.one/introducing-yellowstone-fumarole](https://blog.triton.one/introducing-yellowstone-fumarole)
+3. Build your integration with Fumarole via the Rust or Typescript SDKs: [https://github.com/rpcpool/yellowstone-fumarole](https://github.com/rpcpool/yellowstone-fumarole)
+
+## Migrating from Dragon’s Mouth
+
+If you already have code built for our [gRPC streams in Dragon’s Mouth](https://docs.triton.one/project-yellowstone/dragons-mouth-grpc-subscriptions), integrating with Fumarole for additional reliability is easy. The code changes should be minimal as Fumarole uses the same types as Dragon’s Mouth.
 
 The main difference is that you need to add management of customer groups, and alter your subscribe request slightly.
 
-For more details see the Github repo: GitHub - rpcpool/yellowstone-fumarole: Public repo for Yellowstone-Fumarole GitHub Yellowstone-fumarole-client crates.io
+For more details see the Github repo:
+
+[![Logo](https://docs.triton.one/~gitbook/image?url=https%3A%2F%2Fgithub.com%2Ffluidicon.png&width=20&dpr=3&quality=100&sign=6f987a32&sv=2)GitHub - rpcpool/yellowstone-fumarole: Public repo for Yellowstone-FumaroleGitHub](https://github.com/rpcpool/yellowstone-fumarole)
+
+[Yellowstone-fumarole-client crates.io](https://docs.rs/yellowstone-fumarole-client/0.5.0+solana.3/yellowstone_fumarole_client/)

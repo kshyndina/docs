@@ -1,46 +1,41 @@
 ---
 title: "FAQs"
-description: "With our user-friendly platform and thorough documentation, our customer Account & Billing Q: How do I get an account?"
+description: "With our user-friendly platform and thorough documentation, our customer"
 ---
 
-With our user-friendly platform and thorough documentation, our customer Account & Billing Q: How do I get an account?
+With our user-friendly platform and thorough documentation, our customer
 
-A: The best way to start is by filling out our onboarding form. For custom inquiries, you can also email us at [email protected] or contact us on Telegram.
+## Account & Billing
 
-Q: Do you require long-term contracts?
+**Q: How do I get an account?** A: The best way to start is by filling out our [onboarding form](https://forms.gle/rT6nPbUE4toyPfbb7). For custom inquiries, you can also email us at [[email protected]](mailto:[email protected]) or contact us on [Telegram](https://t.me/tritonone).
 
-A: No, our standard billing is month-to-month.
+**Q: Do you require long-term contracts?** A: No, our standard billing is month-to-month.
 
-Q: What payment methods do you accept?
+**Q: What payment methods do you accept?** A: We accept:
 
-**A: We accept**
+- USDC (SPL, ERC20 on Ethereum, Tron, Polygon)
+- Payments through hel.io (USDC)
+- Credit cards (via Coinflow)
+- Wire transfers in GBP and USD
 
-USDC (SPL, ERC20 on Ethereum, Tron, Polygon) Payments through hel.io (USDC) Credit cards (via Coinflow) Wire transfers in GBP and USD Q: Can I change my plan later?
+**Q: Can I change my plan later?** A: Yes, you can upgrade or downgrade your plan as your needs change.
 
-A: Yes, you can upgrade or downgrade your plan as your needs change.
+**Q: How do I cancel my subscription?** A: We require one calendar month's notice for cancellation. This aligns with the notice periods from our own infrastructure vendors.
 
-Q: How do I cancel my subscription?
+## General Technical Questions
 
-A: We require one calendar month's notice for cancellation. This aligns with the notice periods from our own infrastructure vendors. General Technical Questions Q: What happens if I hit my rate limit?
+**Q: What happens if I hit my rate limit?** A: Your application will receive `HTTP 429` errors. When this happens, you must pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See our Rate Limits page for more details.
 
-A: Your application will receive HTTP 429 errors. When this happens, you must pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See our Rate Limits page for more details.
+**Q: Can I run scripts on the shared service?** A: No, the shared service is designed for frontend dApp traffic only. Backend scripts and bots require a dedicated node to ensure fair use and stability for everyone.
 
-Q: Can I run scripts on the shared service?
+**Q: What should I do if my secret token is leaked?** A: Contact us immediately. We will disable the compromised token and issue a new one to secure your account.
 
-A: No, the shared service is designed for frontend dApp traffic only. Backend scripts and bots require a dedicated node to ensure fair use and stability for everyone.
+**Q: How do I connect to WebSockets?** A: Simply replace `https` with `wss` in your RPC endpoint URL. For example: `wss://your-endpoint.rpcpool.com`. We do recommend however to use the gRPC interface for streaming purposes if available, see [Dragon's Mouth gRPC Subscription](https://docs.triton.one/project-yellowstone/dragons-mouth-grpc-subscriptions) page for details on how to do that on Solana.
 
-Q: What should I do if my secret token is leaked?
+## Solana-Specific Questions
 
-A: Contact us immediately. We will disable the compromised token and issue a new one to secure your account.
+**Q: How can I use Geyser plugins?** A: Geyser plugins can be enabled on our dedicated Solana nodes. They provide powerful, real-time streams of on-chain data. Contact our support team to discuss your specific needs and we can configure a node for you.
 
-Q: How do I connect to WebSockets? A: Simply replace https with wss in your RPC endpoint URL. For example: wss://your-endpoint.rpcpool.com. We do recommend however to use the gRPC interface for streaming purposes if available, see Dragon's Mouth gRPC Subscription page for details on how to do that on Solana. Solana-Specific Questions Q: How can I use Geyser plugins?
+**Q: What is the advantage of sending transactions through a staked validator?** A: Staked validators have access to a much larger, reserved connection pool for sending transactions. During periods of high network congestion on Solana, this provides a significant advantage over the limited, highly contested public connection pools. See [Cascade](https://docs.triton.one/chains/solana/cascade).
 
-A: Geyser plugins can be enabled on our dedicated Solana nodes. They provide powerful, real-time streams of on-chain data. Contact our support team to discuss your specific needs and we can configure a node for you.
-
-Q: What is the advantage of sending transactions through a staked validator?
-
-A: Staked validators have access to a much larger, reserved connection pool for sending transactions. During periods of high network congestion on Solana, this provides a significant advantage over the limited, highly contested public connection pools. See Cascade.
-
-Q: Can a "processed" transaction on Solana still be dropped?
-
-A: Yes. A transaction is only final once it reaches confirmed or finalized commitment. Slots containing processed transactions can still be dropped during minority forks or network congestion.
+**Q: Can a "processed" transaction on Solana still be dropped?** A: Yes. A transaction is only final once it reaches `confirmed` or `finalized` commitment. Slots containing `processed` transactions can still be dropped during minority forks or network congestion.

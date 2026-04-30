@@ -1,48 +1,46 @@
 ---
 title: "Getting Started"
-description: "To get started with using Triton One you will need access to a customer account with an active subscription."
+description: "Welcome to Triton One! This guide will walk you through the essential first steps to get your application connected to our RPC services."
 ---
 
 Welcome to Triton One! This guide will walk you through the essential first steps to get your application connected to our RPC services.
 
 ## Step 1: Create an Account
 
-To get started with using Triton One you will need access to a customer account with an active subscription. Self sign up: You can sign up following this link and make a deposit to activate your account. Contact us directly: For custom inquiries, you can email us at [email protected] or reach out via Telegram.
+To get started with using Triton One you will need access to a customer account with an active subscription.
+
+- **Self sign up:** You can sign up following this [link](https://customers.triton.one/onboarding) and make a deposit to activate your account.
+- **Contact us directly:** For custom inquiries, you can email us at [[email protected]](mailto:[email protected]) or reach out via [Telegram](https://t.me/tritonone).
 
 Our team will work with you to understand your needs and recommend the best plan, whether it's our shared service or a dedicated node deployment.
 
 ## Step 2: Understand Your Endpoint vs. Your Token
 
-Once your account is created, you will receive access to Endpoints and Tokens through the Customer Portal. It is critical to understand the difference:
+Once your account is created, you will receive access to **Endpoints** and **Tokens** through the [Customer Portal](https://customers.triton.one). It is critical to understand the difference:
 
-**Endpoint URL (For Frontend / dApps)**
+- **Endpoint URL (For Frontend / dApps):**
 
-This is the URL you integrate directly into your public-facing dApp or website (e.g., https://your-app.mainnet.rpcpool.com).
+ - This is the URL you integrate directly into your public-facing dApp or website (e.g., `https://your-app.mainnet.rpcpool.com`).
+ - Traffic from these endpoints is typically rate-limited by IP and origin domain to protect against abuse.
+ - **Never embed a secret token in your frontend code.**
+- **Secret Token (For Backend Services):**
 
-Traffic from these endpoints is typically rate-limited by IP and origin domain to protect against abuse.
-
-Never embed a secret token in your frontend code.
-
-**Secret Token (For Backend Services)**
-
-A token is a secret key used to authenticate requests from your backend servers, scripts, or trading bots.
-
-You append it to your endpoint URL (e.g., https://your-app.mainnet.rpcpool.com/your-secret-token).
-
-Backend traffic with a token usually has higher rate limits.
-
-This token must be kept secret.
-
-If you suspect it has been leaked, contact us immediately to have it rotated.
+ - A token is a secret key used to authenticate requests from your backend servers, scripts, or trading bots.
+ - You append it to your endpoint URL (e.g., `https://your-app.mainnet.rpcpool.com/your-secret-token`).
+ - Backend traffic with a token usually has higher rate limits.
+ - **This token must be kept secret.** If you suspect it has been leaked, contact us immediately to have it rotated.
 
 ## Step 3: Configure Your Application
 
 With your endpoint URL, you can now configure your application.
 
-For standard RPC calls, use the HTTPS URL (e.g., https://...).
-
-For WebSocket subscriptions, replace https with wss (e.g., wss://...).
+- For standard RPC calls, use the HTTPS URL (e.g., `https://...`).
+- For WebSocket subscriptions, replace `https` with `wss` (e.g., `wss://...`).
 
 ## Step 4: Explore the Documentation
 
-You're all set! Now you can explore the rest of our documentation to make the most of our service: Learn about our Core Features like GeoDNS and Rate Limiting. Read our guide on Best Practices for Sending Solana Transactions. Discover our Advanced Data & Streaming services for real-time insights.
+You're all set! Now you can explore the rest of our documentation to make the most of our service:
+
+- Learn about our [**Core Features**](https://docs.triton.one/core-features/introduction) like [GeoDNS](https://docs.triton.one/core-features/geodns) and [Rate Limiting](https://docs.triton.one/core-features/ratelimits).
+- Read our guide on [**Best Practices for Sending Solana Transactions**](https://docs.triton.one/chains/solana/cascade/sending-txs).
+- Discover our [**Advanced Data & Streaming**](https://docs.triton.one/project-yellowstone/introduction) services for real-time insights.

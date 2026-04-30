@@ -5,82 +5,290 @@ description: "Streaming Account Updates for Backend Applications."
 
 Streaming Account Updates for Backend Applications.
 
-Dragon's Mouth is our Geyser-fed gRPC interface that supports streaming: Account Writes Transactions Deshred transactions (pre-execution, beta) Entries Block notifications Slot notifications It also supports unary operations: getLatestBlockhash getBlockHeight getSlot isValidBlockhash subscribeReplayInfo The gRPC streams and RPC calls are supported through Solana's Geyser interface. This is the fastest way to receive updates on on-chain events. This interface is more stable and faster than the traditional WebSocket interface. We recommend using gRPC for all future development of backend clients.
+Dragon's Mouth is our Geyser-fed gRPC interface that supports streaming:
+
+- Account Writes
+- Transactions
+- Deshred transactions (pre-execution, beta)
+- Entries
+- B notifications
+- Slot notifications
+
+It also supports unary operations:
+
+- getLatestBhash
+- getBHeight
+- getSlot
+- isValidBhash
+- subscribeReplay
+
+The gRPC streams and RPC calls are supported through Solana's [Geyser](https://docs.triton.one/chains/solana/geyser) interface. This is the fastest way to receive updates on on-chain events. This interface is more stable and faster than the traditional WebSocket interface. We recommend using gRPC for all future development of backend clients.
 
 Dragon's Mouth also streams transactions as they are processed in real-time. You will receive multiple account updates within the current slot. This contrasts with regular RPC, where you receive only one update at the end of the slot. For DeFi traders, Dragon's Mouth can give you up to a 400ms advantage over other traders!
 
-Use Dragon's Mouth to stream data directly to your application middle-layer hosted on a cloud service provider. Update your backend database with the lowest possible latency. gRPC is unsupported by web browsers, so Dragon's Mouth is entirely targeted at backend software. Another Yellowstone project, Whirligig, provides a WebSocket interface to replace the current Solana WebSocket implementation. Protocol files You can find the latest version of protobuf files in the repository https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto or use Rust crate https://crates.io/crates/yellowstone-grpc-proto. Clients/SDKs We offer sample clients in multiple languages, and you can also use the generic grpcurl client to test the interface. As the underlying gRPC proto can change, it is essential to test with clients matching the current version of the Solana/gRPC interface. grpcurl grpcurl is a good client for testing. You will also need the following two Protobuf proto files to describe the protocol:
+Use Dragon's Mouth to stream data directly to your application middle-layer hosted on a cloud service provider. Update your backend database with the lowest possible latency.
 
-**Example subscription**
+gRPC is unsupported by web browsers, so Dragon's Mouth is entirely targeted at backend software. Another Yellowstone project, [Whirligig](https://docs.triton.one/project-yellowstone/whirligig-websockets), provides a WebSocket interface to replace the current Solana WebSocket implementation.
 
-Customers should specify their endpoint + token in the example above, developers looking to run their own RPC nodes can test it against their own Solana instances, just remove the x-token header as it's probably not relevant to you. client-ubuntu The yellowstone-grpc project provides a client-ubuntu binary for testing gRPC endpoints. Prebuilt binaries are available for Ubuntu 22.04 and 24.04. Download You can download the latest release from the Releases page. Usage Examples Subscribe to all accounts: Subscribe to a specific program (e.g Raydium) Note: You may also add the --stats flag to see useful stats about the subscription, like total amount of accounts / slots streamed + bandwidth Rust A sample Rust client is available at https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust. Golang A sample Golang client is available at https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang. NodeJS/TypeScript From version 5.1.x we supercharged the TypeScript SDK performance with Rust using the NAPI framework. You can read more about it here.
+### Protocol files
 
-You can include NodeJS Yellowstone gRPC client as a dependency by running the following command: A sample Typescript/Nodejs client is available at https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript. You can also switch the language of code samples to TypeScript in the following documentation. Initializing the client Once you have installed the client dependency, you can initialize it as follows: Please note that the client is asynchronous, so it is expected that all calls are executed inside an async block or async function. Subscription streams You can get updates and send requests through the subscription stream. You can create it by calling the client.subscribe() method: Excluded Programs Certain programs are excluded from all Dragon's Mouth gRPC streams and are also unavailable via getProgramAccounts. Program Address Light Protocol / ZK Compression compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq
+You can find the latest version of protobuf files in the repository [https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto) or use Rust crate [https://crates.io/crates/yellowstone-grpc-proto](https://crates.io/crates/yellowstone-grpc-proto).
 
-## Why is Light Protocol /
+## Clients/SDKs
 
-ZK Compression excluded?
+We offer sample clients in multiple languages, and you can also use the generic grpcurl client to test the interface. As the underlying gRPC proto can change, it is essential to test with clients matching the current version of the Solana/gRPC interface.
+
+### grpcurl
+
+`grpcurl` is a good client for testing. You will also need the following two Protobuf proto files to describe the protocol:
+
+Example subscription:
+
+Customers should specify their endpoint + token in the example above, developers looking to run their own RPC nodes can test it against their own Solana instances, just remove the x-token header as it's probably not relevant to you.
+
+### client-ubuntu
+
+The yellowstone-grpc project provides a `client-ubuntu` binary for testing gRPC endpoints. Prebuilt binaries are available for Ubuntu 22.04 and 24.04. Download
+
+You can download the latest release from the [Releases](https://github.com/rpcpool/yellowstone-grpc/releases) page.
+
+**Usage Examples**
+
+**Subscribe to all accounts:**
+
+**Subscribe to a specific program** (e.g Raydium)
+
+Note: You may also add the `--stats` flag to see useful stats about the subscription, like total amount of accounts / slots streamed + bandwidth
+
+### Rust
+
+A sample Rust client is available at [https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust).
+
+### Golang
+
+A sample Golang client is available at [https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang).
+
+### NodeJS/TypeScript
+
+From version `5.1.x` we supercharged the TypeScript SDK performance with Rust using the NAPI framework. You can read more about it [here](https://blog.triton.one/grpc-js-alternative-napi-rust/).
+
+You can include NodeJS Yellowstone gRPC client as a dependency by running the following command:
+
+A sample Typescript/Nodejs client is available at [https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript). You can also switch the language of code samples to TypeScript in the following documentation.
+
+## Initializing the client
+
+Once you have installed the client dependency, you can initialize it as follows:
+
+Please note that the client is asynchronous, so it is expected that all calls are executed inside an async b or async function.
+
+## Subscription streams
+
+You can get updates and send requests through the *subscription stream*. You can create it by calling the `client.subscribe()` method:
+
+## Excluded Programs
+
+Certain programs are excluded from all Dragon's Mouth gRPC streams and are also unavailable via `getProgramAccounts`.
+
+Program
+
+Address
+
+Light Protocol / ZK Compression
+
+`compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq`
+
+**Why is Light Protocol /** **ZK Compression excluded?**
 
 The ZK Compression program generates extremely high-volume account updates. Each update produces a ~10MB blob, resulting in several gigabits per second of data. This volume makes it impractical to include in standard gRPC streams.
 
-From a practical standpoint, most users consuming this data are interested in the end result processed by the Photon indexer, not the raw account blobs. Triton One provides a hosted Photon service. If you need ZK Compression data, that is the recommended way to consume it. Example Subscribe Requests Here are examples of subscribe requests you can make to the gRPC interface. Subscribe to an account gRPC NodeJS This sample subscribes to the SOL-USDC OpenBook account on confirmed commitment level. In the example above, "wsol/usdc" is a client-assigned label. You can specify different JSON files to subscribe to different items. You can combine any of these variables below into a JSON to receive a combination of program, account, block, and slot updates.
+From a practical standpoint, most users consuming this data are interested in the **end result** processed by the [Photon indexer](https://github.com/helius-labs/photon), not the raw account blobs. Triton One provides a [hosted Photon service](https://docs.triton.one/chains/solana/photon). If you need ZK Compression data, that is the recommended way to consume it.
 
-Subscribe to an account with `account_data_slice` gRPC NodeJS This sample subscribes to the USDC Tokenkeg accounts. With account_data_slice instead of receiving all 165 bytes we receive only 40 bytes from account data ( offset field with 32 gives us owner and lamports). Subscribe to a program gRPC NodeJS Subscribe to multiple programs gRPC NodeJS OR, if you want different tags for different program updates: gRPC NodeJS Subscribe to all finalized non-vote and non-failed transactions gRPC NodeJS For transactions, if all fields are empty, then all transactions are broadcasted. Otherwise, fields work as logical AND, and values in arrays as logical OR. You can include/exclude vote transactions and include/exclude failed transactions.
+## Example Subscribe Requests
 
-Subscribe to non-vote transactions mentioning an account gRPC NodeJS Subscribe to transactions excluding accounts gRPC NodeJS Subscribe to transactions mentioning accounts & excluding certain accounts gRPC NodeJS Subscribe to a transaction signature You can subscribe to an individual transaction signature, which will provide updates as the signature is confirmed and finalized. gRPC NodeJS Subscribe to slots You do not need to provide further details to subscribe to slot notifications. All you'll need to provide is a name for the slot updates that they will be tagged as. gRPC NodeJS Subscribe to blocks This will return all the blocks as they are produced. It will send blocks along with the transactions: gRPC NodeJS By default Block message includes all transactions, but you can exclude them or include updated accounts: gRPC NodeJS If you interested only in transactions/accounts where any of specified accounts are mentioned you can use special filter: gRPC NodeJS Subscribe to block metadata If you want to subscribe just to notifications as blocks are processed without receiving all the transactions, then you can use the block meta subscription: gRPC NodeJS Sending pings to keep the stream alive Some cloud providers (eg. Cloudflare) close idle streams. To avoid this, you need to keep sending pings to the server. The server responds with a pong message every 15 seconds.
+Here are examples of subscribe requests you can make to the gRPC interface.
 
-Here is a rust example for this https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88 Here is an example of how you can do periodic pings and handle the pong responses Modifying subscription The Subscribe method offers a bi-directional stream, so you can modify the subscription by simply submitting your newly updated subscription string, and you will start receiving updates on your modified filters.
+### Subscribe to an account
 
-This will entirely overwrite the previous subscription, so ensure your client maintains a local register of the entire subscription config you are interested in. Replaying from a slot Dragon's Mouth supports replaying recently buffered updates by setting from_slot on SubscribeRequest. This is mainly used to recover from short disconnections. When a client subscribes with from_slot, the server first replays buffered updates starting from that slot and then continues streaming live updates on the same connection.
+This sample subscribes to the SOL-USDC OpenBook account on `confirmed` commitment level. In the example above, "wsol/usdc" is a client-assigned label. You can specify different JSON files to subscribe to different items. You can combine any of these variables below into a JSON to receive a combination of program, account, b, and slot updates.
 
-**Important details**
+### Subscribe to an account with `account_data_slice`
 
-Replay only covers the server's retained replay window.
+This sample subscribes to the USDC Tokenkeg accounts. With `account_data_slice` instead of receiving all 165 bytes we receive only 40 bytes from account data (`offset` field with 32 gives us `owner` and `lamports`).
 
-To discover the earliest replayable slot, call the unary SubscribeReplayInfo RPC and read first_available. If from_slot is older than the earliest available slot, the request will fail and the client should retry with a newer slot.
+### Subscribe to a program
 
-Replay uses the same filters and commitment level as the live subscription.
+### Subscribe to multiple programs
 
-Replay starts at a slot boundary. If you reconnect from the last slot you processed, you may receive duplicate updates from that slot, so clients should deduplicate.
+OR, if you want different tags for different program updates:
 
-This is useful for reconnect logic: Track the latest slot your application has processed.
+### Subscribe to all finalized non-vote and non-failed transactions
 
-On disconnect, reconnect and resubscribe with from_slot set to that slot.
+For transactions, if all fields are empty, then all transactions are broadcasted. Otherwise, fields work as logical `AND`, and values in arrays as logical `OR`. You can include/exclude vote transactions and include/exclude failed transactions.
 
-If the requested slot is no longer available, fall back to a fresh live subscription or your own backfill path.
+### Subscribe to non-vote transactions mentioning an account
 
-Example replay subscribe request gRPC NodeJS Example: checking replay availability For teams running their own Yellowstone gRPC server, replay must be enabled server-side by setting replay_stored_slots to a value greater than 0. Unsubscribing If you want to unsubscribe from all streams, send the following request: gRPC NodeJS This will clear all current subscriptions but keep the connection open for future subscriptions. Managing commitment levels The gRPC streams happen by default on the processed commitment level.
+### Subscribe to transactions excluding accounts
+
+### Subscribe to transactions mentioning accounts & excluding certain accounts
+
+### Subscribe to a transaction signature
+
+You can subscribe to an individual transaction signature, which will provide updates as the signature is confirmed and finalized.
+
+### Subscribe to slots
+
+You do not need to provide further details to subscribe to slot notifications. All you'll need to provide is a name for the slot updates that they will be tagged as.
+
+### Subscribe to bs
+
+This will return all the bs as they are produced. It will send bs along with the transactions:
+
+By default `B` message includes all transactions, but you can exclude them or include updated accounts:
+
+If you interested only in transactions/accounts where any of specified accounts are mentioned you can use special filter:
+
+### Subscribe to b metadata
+
+If you want to subscribe just to notifications as bs are processed without receiving all the transactions, then you can use the b meta subscription:
+
+### Sending pings to keep the stream alive
+
+Some cloud providers (eg. Cloudflare) close idle streams. To avoid this, you need to keep sending pings to the server. The server responds with a `pong` message every 15 seconds.
+
+Here is a rust example for this [https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88)
+
+Here is an example of how you can do periodic pings and handle the pong responses
+
+### Modifying subscription
+
+The Subscribe method offers a bi-directional stream, so you can modify the subscription by simply submitting your newly updated subscription string, and you will start receiving updates on your modified filters.
+
+This will entirely overwrite the previous subscription, so ensure your client maintains a local register of the entire subscription config you are interested in.
+
+### Replaying from a slot
+
+Dragon's Mouth supports replaying recently buffered updates by setting `from_slot` on `SubscribeRequest`. This is mainly used to recover from short disconnections.
+
+When a client subscribes with `from_slot`, the server first replays buffered updates starting from that slot and then continues streaming live updates on the same connection.
+
+Important details:
+
+- Replay only covers the server's retained replay window.
+- To discover the earliest replayable slot, call the unary `SubscribeReplay` RPC and read `first_available`.
+- If `from_slot` is older than the earliest available slot, the request will fail and the client should retry with a newer slot.
+- Replay uses the same filters and commitment level as the live subscription.
+- Replay starts at a slot boundary. If you reconnect from the last slot you processed, you may receive duplicate updates from that slot, so clients should deduplicate.
+
+This is useful for reconnect logic:
+
+1. Track the latest slot your application has processed.
+2. On disconnect, reconnect and resubscribe with `from_slot` set to that slot.
+3. If the requested slot is no longer available, fall back to a fresh live subscription or your own backfill path.
+
+**Example replay subscribe request**
+
+gRPC
+
+NodeJS
+
+**Example: ing replay availability**
+
+For teams running their own Yellowstone gRPC server, replay must be enabled server-side by setting `replay_stored_slots` to a value greater than `0`.
+
+### Unsubscribing
+
+If you want to unsubscribe from all streams, send the following request:
+
+This will clear all current subscriptions but keep the connection open for future subscriptions.
+
+## Managing commitment levels
+
+The gRPC streams happen by default on the processed commitment level.
 
 We also support specifying confirmed and finalized commitment levels. In these cases, Dragon's Mouth will buffer the incoming updates for you and release them once the updates have become confirmed or finalized.
 
 For maximum performance, however, we recommend handling commitment levels client side.
 
-To specify commitment level in your Dragon's Mouth gRPC calls provide the following values: Benefits of working at processed The benefit of working on processed is that you can process transactions as soon as they arrive, but only commit to them once you know whether they are confirmed or finalized. This means that you can get faster response times in your UI by doing a lot of the processing work at a lower commitment level and then be able to surface the changes as soon as you see that the event is committed.
+To specify commitment level in your Dragon's Mouth gRPC calls provide the following values:
 
-## How to manage `confirmed` and `finalized`
+### Benefits of working at processed
+
+The benefit of working on processed is that you can process transactions as soon as they arrive, but only commit to them once you know whether they are confirmed or finalized. This means that you can get faster response times in your UI by doing a lot of the processing work at a lower commitment level and then be able to surface the changes as soon as you see that the event is committed.
+
+### How to manage `confirmed` and `finalized`
 
 To manage confirmed and finalized you need to buffer events by slot. Each event (transaction or account write) will have a slot attached to it. You store these events in a buffer ordered by slot.
 
-You then also make sure you subscribe to slot notifications. This will give you information about when a slot is confirmed or finalized. Depending on the commitment level you are interested in, you should release your buffer when you receive the slot notification for a particular slot at a particular commitment level.
+You then also make sure you subscribe to [slot notifications](https://docs.triton.one/project-yellowstone/dragons-mouth-grpc-subscriptions#subscribe-to-slots). This will give you rmation about when a slot is confirmed or finalized. Depending on the commitment level you are interested in, you should release your buffer when you receive the slot notification for a particular slot at a particular commitment level.
 
-You will receive all the transaction notifications or account write notifications for the slot before you receive the "confirmed" and "finalized" notification for that slot.
+You will receive all the transaction notifications or account write notifications for the slot **before** you receive the "confirmed" and "finalized" notification for that slot.
 
-The special thing about finalized Unfortunately, due to a quirk (fixed in master of solana) in the way that Geyser works on Solana not every slot finalized notification is issued. This means that you need some special processing if you want to handle finalized correctly.
+### The special thing about finalized
 
-The special handling is as follows: whenever you see a finalized slot notification, you need to retroactively mark its ancestors as finalized too, even if you didn't receive a notification for them. Intra-slot update The Dragon's Mouth gRPC stream allows subscribers to listen for 'intra-slot' updates, which represent different lifecycle stages a slot goes through inside the RPC node, from the first shred received to a fully replayed slot.
+Unfortunately, due to a quirk (fixed in `master` of solana) in the way that Geyser works on Solana not every slot finalized notification is issued. This means that you need some special processing if you want to handle finalized correctly.
 
-Here's a list of supported intra-slot update events : SLOT_FIRST_SHRED_RECEIVED: The remote RPC node you're connected to has received the first shred of a given slot. This does not indicate it has been replayed yet. This event occurs during the retransmit stage in the TVU. SLOT_CREATED_BANK: A bank for the given slot has been created on the remote RPC node you're connected to. Within a validator, a Bank acts as an isolated execution environment during the replay stage (which follows the retransmit stage). Due to the decentralized nature of blockchains, forks are inevitable, meaning a slot can have multiple descendants.
+The special handling is as follows: whenever you see a `finalized` slot notification, you need to retroactively mark its ancestors as `finalized` too, even if you didn't receive a notification for them.
+
+## Intra-slot update
+
+The Dragon's Mouth gRPC stream allows subscribers to listen for 'intra-slot' updates, which represent different lifecycle stages a slot goes through inside the RPC node, from the first shred received to a fully replayed slot.
+
+Here's a list of supported intra-slot update events :
+
+**SLOT_FIRST_SHRED_RECEIVED**: The remote RPC node you're connected to has received the first shred of a given slot. This does not indicate it has been replayed yet. This event occurs during the [retransmit stage](https://docs.anza.xyz/validator/tvu#retransmit-stage) in the [TVU](https://docs.anza.xyz/validator/tvu).
+
+**SLOT_CREATED_BANK**: A bank for the given slot has been created on the remote RPC node you're connected to. Within a validator, a Bank acts as an isolated execution environment during the replay stage (which follows the retransmit stage). Due to the decentralized nature of bchains, forks are inevitable, meaning a slot can have multiple descendants.
 
 To handle this, validators must be capable of replaying multiple slots that share the same ancestor without their execution interfering with one another. Each slot is assigned its own Bank instance, and these Banks form a fork graph, where each edge represents a parent-child relationship between two banks.
 
-Banks serve as self-contained execution contexts, maintaining replay results and essential metadata about the slot and its lineage. Importantly, a Bank is instantiated once per slot. SLOT_COMPLETED: All the shreds for the given slot have been received by the RPC node you're connected to. However, this does not necessarily mean that the slot has been fully replayed yet.
+Banks serve as self-contained execution contexts, maintaining replay results and essential metadata about the slot and its lineage. Importantly, a Bank is instantiated once per slot.
 
-**SLOT_DEAD**
+**SLOT_COMPLETED**: All the shreds for the given slot have been received by the RPC node you're connected to. However, this does not necessarily mean that the slot has been fully replayed yet.
 
-Dead slots are slots that have been rejected by the validator for various reasons, such as invalid transaction signatures in the leader's shreds, incorrect entry hashes during Proof of History (PoH) verification, or an unexpected number of entries in the slot. When a slot is marked as dead, it is discarded by the network as a whole and effectively skipped. This can occur at any point during the replay process, even after the slot has been marked as 'completed'.
+**SLOT_DEAD:** Dead slots are slots that have been rejected by the validator for various reasons, such as invalid transaction signatures in the leader's shreds, incorrect entry hashes during Proof of History (PoH) verification, or an unexpected number of entries in the slot. When a slot is marked as dead, it is discarded by the network as a whole and effectively skipped. This can occur at any point during the replay process, even after the slot has been marked as 'completed'.
 
-Here's a "simplfied" overview of the expected lifecycle of a slot:\ Deshred transactions (beta) Dragon's Mouth also supports SubscribeDeshred, a separate gRPC stream that delivers transactions reconstructed from shreds before the validator executes them.
+Here's a "simplfied" overview of the expected lifecycle of a slot:\
 
-This is the earliest usable on-chain signal exposed by Dragon's Mouth. It is designed for latency-sensitive systems that care about transaction intent as early as possible, such as arbitrage, market making, copy trading, liquidations, and HFT pipelines. Unlike the standard Subscribe transaction stream, deshred updates are emitted before Replay. That means you receive the decoded transaction earlier, but without execution context. A deshred update includes: slot signature vote flag raw transaction loaded_writable_addresses loaded_readonly_addresses The loaded address fields contain addresses resolved from Address Lookup Tables (ALTs), so deshred filters match both static account keys and dynamically loaded addresses. Deshred filters SubscribeDeshred supports: vote account_include account_exclude account_required Important limitations SubscribeDeshred is a separate RPC, not a field on SubscribeRequest deshred data has no execution metadata: no status, logs, inner instructions, balance changes, compute units, or TransactionStatusMeta deshred data has no confirmation or finality guarantee: a transaction may fail, land on a dead fork, or never confirm if you need confirmation and execution results, use Deshred together with the normal transactions stream Availability SubscribeDeshred is currently available only on Triton One gRPC servers and is in paid beta. It depends on Triton's validator-side extension and does not work out of the box on a stock Agave node.
+## Deshred transactions (beta)
 
-For a deeper overview of the architecture and tradeoffs, see Deshred transactions: the fastest path to Solana data. For the wire format and RPC definitions, see geyser.proto. Rust example
+Dragon's Mouth also supports [`SubscribeDeshred`](https://github.com/rpcpool/yellowstone-grpc/blob/236ebd7b0616dd88407a7a2b61f903a56b92b186/yellowstone-grpc-proto/proto/geyser.proto?ref=blog.triton.one#L12), a separate gRPC stream that delivers transactions reconstructed from shreds before the validator executes them.
+
+This is the earliest usable on-chain signal exposed by Dragon's Mouth. It is designed for latency-sensitive systems that care about transaction intent as early as possible, such as arbitrage, market making, trading, liquidations, and HFT pipelines.
+
+Unlike the standard `Subscribe` transaction stream, deshred updates are emitted before Replay. That means you receive the decoded transaction earlier, but without execution context.
+
+A deshred update includes:
+
+- `slot`
+- `signature`
+- vote flag
+- raw transaction
+- `loaded_writable_addresses`
+- `loaded_readonly_addresses`
+
+The loaded address fields contain addresses resolved from Address Lookup Tables (ALTs), so deshred filters match both static account keys and dynamically loaded addresses.
+
+## Deshred filters
+
+`SubscribeDeshred` supports:
+
+- `vote`
+- `account_include`
+- `account_exclude`
+- `account_required`
+
+## Important limitations
+
+- `SubscribeDeshred` is a separate RPC, not a field on `SubscribeRequest`
+- deshred data has no execution metadata: no status, logs, inner instructions, balance changes, compute units, or `TransactionStatusMeta`
+- deshred data has no confirmation or finality guarantee: a transaction may fail, land on a dead fork, or never confirm
+- if you need confirmation and execution results, use Deshred together with the normal `transactions` stream
+
+## Availability
+
+`SubscribeDeshred` is currently available only on Triton One gRPC servers and is in paid beta. It depends on Triton's validator-side extension and does not work out of the box on a stock Agave node.
+
+For a deeper overview of the architecture and tradeoffs, see [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/). For the wire format and RPC definitions, see [`geyser.proto`](https://github.com/rpcpool/yellowstone-grpc/blob/236ebd7b0616dd88407a7a2b61f903a56b92b186/yellowstone-grpc-proto/proto/geyser.proto?ref=blog.triton.one#L12).
+
+## Rust example

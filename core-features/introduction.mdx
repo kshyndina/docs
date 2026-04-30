@@ -1,8 +1,45 @@
 ---
 title: "Introduction"
-description: "Our platform provides a rich set of features designed to enhance your experience, from core infrastructure guarantees to advanced, chain-specific APIs."
+description: "These foundational features apply to all our endpoints, providing a baseline of performance, reliability, and security."
 ---
 
-Our platform provides a rich set of features designed to enhance your experience, from core infrastructure guarantees to advanced, chain-specific APIs. This page serves as a guide to some of the key capabilities you can find throughout our documentation. Core Platform Features These foundational features apply to all our endpoints, providing a baseline of performance, reliability, and security. Global Request Routing Learn how our multi-layered system using GeoDNS and BGP Anycast ensures low-latency connections for your users worldwide. Read the Request Routing Guide → Security & Abuse Prevention A look into our proactive, multi-layered defense system, including intelligent rate limiting, protocol-level traffic filtering, and advanced fingerprinting. Learn about Abuse Prevention → High Availability Architecture Our endpoints are backed by clusters of nodes and load balancers, enabling instantaneous failover to ensure maximum uptime for your application.
+Our platform provides a rich set of features designed to enhance your experience, from core infrastructure guarantees to advanced, chain-specific APIs. This page serves as a guide to some of the key capabilities you can find throughout our documentation.
 
-Support for a Multi-Chain Ecosystem While Solana is a core part of our services, our infrastructure is built to support a variety of high-performance blockchains. We provide dedicated, reliable RPC access for multiple ecosystems, including: Solana Sui Pythnet Monad Advanced Solana Features As our core offering, Solana benefits from a number of specialized, high-performance features. Cascade Transaction Network An optimized network for high-performance transaction delivery on Solana, using Stake-Weighted Quality of Service (SWQoS). Explore Cascade → Steamboat Custom Indexes Serve heavy getProgramAccounts queries with exceptional performance using our custom-built, on-chain data indexes. Discover Steamboat → Digital Assets API A powerful, indexed API for querying NFTs and other digital assets on Solana, including support for compressed NFTs. Read the Digital Assets API Docs → Data, Streaming & Archives We offer multiple ways to stream real-time data or query historical information. Dragon's Mouth (gRPC) High-performance, low-latency gRPC streams for real-time Solana data, powered by Geyser. Get started with gRPC → Whirligig (WebSockets) An improved, more reliable WebSocket implementation for applications that require a stable connection for subscriptions. Learn about Whirligig WebSockets → Full Chain Archives Query the entire history of the Solana blockchain, back to the genesis block, using our BigTable and Old Faithful archival solutions. Learn about Archival Access → Trading APIs & Tools Gain a competitive edge with our suite of integrated APIs for on-chain trading. Pyth Hermes Price Feeds Directly query the Pyth Network's high-fidelity, real-time market data from our low-latency endpoints. Learn about Pyth Hermes →
+## Core Platform Features
+
+These foundational features apply to all our endpoints, providing a baseline of performance, reliability, and security.
+
+- **Global Request Routing** Learn how our multi-layered system using GeoDNS and BGP Anycast ensures low-latency connections for your users worldwide. Read the [Request Routing Guide →](https://docs.triton.one/core-features/geodns)
+- **Security & Abuse Prevention** A look into our proactive, multi-layered defense system, including intelligent rate limiting, protocol-level traffic filtering, and advanced fingerprinting. Learn about [Abuse Prevention →](https://docs.triton.one/core-features/abuse-prevention)
+- **High Availability Architecture** Our endpoints are backed by clusters of nodes and load balancers, enabling instantaneous failover to ensure maximum uptime for your application.
+
+## Support for a Multi-Chain Ecosystem
+
+While Solana is a core part of our services, our infrastructure is built to support a variety of high-performance bchains. We provide dedicated, reliable RPC access for multiple ecosystems, including:
+
+- [Solana](https://docs.triton.one/chains/solana)
+- [Sui](https://docs.triton.one/chains/sui)
+- [Pythnet](https://docs.triton.one/chains/monad)
+- [Monad](https://docs.triton.one/chains/monad)
+
+## Advanced Solana Features
+
+As our core offering, Solana benefits from a number of specialized, high-performance features.
+
+- **Cascade Transaction Network** An optimized network for high-performance transaction delivery on Solana, using Stake-Weighted Quality of Service (SWQoS). Explore [Cascade →](https://docs.triton.one/chains/solana/cascade)
+- **Steamboat Custom Indexes** Serve heavy `getProgramAccounts` queries with exceptional performance using our custom-built, on-chain data indexes. Discover [Steamboat →](https://docs.triton.one/project-yellowstone/steamboat-custom-indexes)
+- **Digital Assets API** A powerful, indexed API for querying NFTs and other digital assets on Solana, including support for compressed NFTs. Read the [Digital Assets API Docs →](https://docs.triton.one/digital-assets-api/introduction)
+
+## Data, Streaming & Archives
+
+We offer multiple ways to stream real-time data or query historical rmation.
+
+- **Dragon's Mouth (gRPC)** High-performance, low-latency gRPC streams for real-time Solana data, powered by Geyser. Get started with [gRPC →](https://docs.triton.one/project-yellowstone/dragons-mouth-grpc-subscriptions)
+- **Whirligig (WebSockets)** An improved, more reliable WebSocket implementation for applications that require a stable connection for subscriptions. Learn about [Whirligig WebSockets →](https://docs.triton.one/project-yellowstone/whirligig-websockets)
+- **Full Chain Archives** Query the entire history of the Solana bchain, back to the genesis b, using our BigTable and Old Faithful archival solutions. Learn about [Archival Access →](https://docs.triton.one/project-yellowstone/old-faithful-historical-archive)
+
+## Trading APIs & Tools
+
+Gain a competitive edge with our suite of integrated APIs for on-chain trading.
+
+- **Pyth Hermes Price Feeds** Directly query the Pyth Network's high-fidelity, real-time market data from our low-latency endpoints. Learn about [Pyth Hermes →](https://docs.triton.one/trading-apis/hermes)
