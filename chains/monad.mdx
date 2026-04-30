@@ -1,0 +1,92 @@
+---
+title: "Monad on Triton One: High-Performance EVM RPC"
+sidebarTitle: "Monad"
+description: "Connect to Monad mainnet and testnet via Triton's EVM-compatible RPC nodes. Supports standard Geth JSON-RPC methods and WebSocket subscriptions."
+---
+
+Monad is a high-performance, EVM-compatible Layer-1 that runs Solidity contracts natively with a redesigned execution engine built for higher throughput and lower latency than existing EVM chains. Triton provides shared RPC pools and production-grade infrastructure for teams deploying on Monad, and also operates a Monad validator — giving you deeper alignment with protocol changes as they happen.
+
+## Network details
+
+<CardGroup cols={2}>
+  <Card title="Mainnet block explorer" icon="magnifying-glass" href="https://monadvision.com">
+    monadvision.com
+  </Card>
+  <Card title="Testnet block explorer" icon="magnifying-glass" href="https://testnet.monadvision.com">
+    testnet.monadvision.com
+  </Card>
+</CardGroup>
+
+For Monad developer documentation, see [docs.monad.xyz](https://docs.monad.xyz/).
+
+## API access
+
+Monad supports most Geth JSON-RPC methods with some differences. You can find the full list of RPC differences at [docs.monad.xyz/reference/rpc-differences](https://docs.monad.xyz/reference/rpc-differences).
+
+### JSON-RPC
+
+Monad supports the standard Ethereum JSON-RPC interface. Replace `<TRITON_URL>` with your endpoint from the Triton dashboard.
+
+```bash
+curl --request POST \
+     --url <TRITON_URL> \
+     --header 'accept: application/json' \
+     --header 'content-type: application/json' \
+     --data '{
+  "id": 0,
+  "jsonrpc": "2.0",
+  "method": "eth_blockNumber",
+  "params": []
+}'
+```
+
+Expected response:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": "0x23feb61",
+    "id": 0
+}
+```
+
+For the full list of supported methods and additional cURL examples, see the [Monad JSON-RPC documentation](https://docs.monad.xyz/reference/json-rpc/).
+
+### WebSocket
+
+Monad also provides a WebSocket API for subscriptions and streaming. To test WebSocket connectivity using `wscat`:
+
+**Install wscat on Linux:**
+
+```bash
+sudo apt update
+sudo apt install node-ws
+```
+
+**Subscribe to new block headers:**
+
+```bash
+wscat -c wss://<TRITON_URL>
+Connected (press CTRL+C to quit)
+> { "id": 1, "jsonrpc": "2.0", "method": "eth_subscribe", "params": ["newHeads"] }
+```
+
+Expected response:
+
+```json
+{"jsonrpc":"2.0","result":"0x42cef98808e973c28e55c2ecd59c85c5","id":1}
+```
+
+Subsequent messages will deliver new block headers as they are produced. For the full WebSocket API reference and JavaScript examples, see the [Monad WebSocket documentation](https://docs.monad.xyz/reference/websockets).
+
+## Performance characteristics
+
+Monad's execution engine is built for:
+
+- **10,000 TPS** — parallel execution for high-volume systems
+- **100% EVM compatibility** — your existing Solidity contracts and tooling work without changes
+- **0.8s finality** and **0.4s block times** — low-latency confirmation for latency-sensitive applications
+
+## Get access
+
+To get your Monad RPC endpoint, [start your onboarding](https://customers.triton.one/onboarding) or contact [help@triton.one](mailto:help@triton.one).

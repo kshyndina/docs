@@ -1,0 +1,289 @@
+---
+title: "Tokens API: Manage RPC Authentication Tokens"
+sidebarTitle: "Tokens"
+description: "Create and manage RPC authentication tokens for backend services. Tokens are separate from Account Management API credentials and scoped to subscriptions."
+---
+
+RPC tokens are the credentials your backend services embed when calling a Triton One endpoint. They are entirely separate from the Account Management API token you use to call this API. Each token is scoped to a subscription, carries a rate tier that determines its throughput and cost, and has a unique `value` (the secret your application sends) and an `auth_username` (for services that require HTTP basic authentication).
+
+Tokens are private — they should only live in backend environments and should never be embedded in client-side code or committed to source control. If you need to grant access to a frontend without exposing a token, use [allowed origins](/account-api/endpoints) on the endpoint instead.
+
+Activating and deactivating tokens requires an **Operator** or **Reseller** role token.
+
+<Warning>
+  The `value` field in a token response is the actual secret your application uses for authentication. Treat it like a password — do not log it, commit it to source control, or expose it in frontend code.
+</Warning>
+
+---
+
+## List tokens
+
+`GET /api/v1/tokens`
+
+Returns all tokens accessible to your API token. You must provide either `account_uuid` or `subscription_uuid` as a filter.
+
+### Query parameters
+
+<ParamField query="account_uuid" type="string">
+  Return tokens belonging to this account. Required if `subscription_uuid` is not provided.
+</ParamField>
+
+<ParamField query="subscription_uuid" type="string">
+  Return tokens belonging to this subscription. Required if `account_uuid` is not provided.
+</ParamField>
+
+<ParamField query="per" type="integer" default="50">
+  Maximum number of tokens per page.
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  Page number to return.
+</ParamField>
+
+<Note>
+  You must provide at least one of `account_uuid` or `subscription_uuid`.
+</Note>
+
+### Request
+
+<CodeGroup>
+
+```bash Filter by account
+curl 'https://customers.triton.one/api/v1/tokens?account_uuid=c92a9cea-47cc-494b-b1b0-4230a2316ee5' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+```bash Filter by subscription
+curl 'https://customers.triton.one/api/v1/tokens?subscription_uuid=74ea9d9a-4b2a-4f01-af47-1c175f8a2af6' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+```bash Paginate
+curl 'https://customers.triton.one/api/v1/tokens?per=10&page=2&subscription_uuid=74ea9d9a-4b2a-4f01-af47-1c175f8a2af6' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+</CodeGroup>
+
+### Response
+
+<ResponseField name="tokens" type="object[]">
+  <Expandable title="properties" defaultOpen>
+    <ResponseField name="uuid" type="string">Unique identifier for the token.</ResponseField>
+    <ResponseField name="name" type="string">Display name for the token.</ResponseField>
+    <ResponseField name="value" type="string">The secret value used for RPC authentication.</ResponseField>
+    <ResponseField name="rate_tier" type="string">Rate tier assigned to this token.</ResponseField>
+    <ResponseField name="auth_username" type="string">Randomly generated username for HTTP basic auth, in the format `username:value`.</ResponseField>
+    <ResponseField name="is_active" type="boolean">Whether the token is currently active.</ResponseField>
+    <ResponseField name="deactivation_reasons" type="object[]">Records explaining why the token was deactivated.</ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="meta" type="object">
+  Pagination metadata.
+  <Expandable title="properties">
+    <ResponseField name="current_page" type="integer">Current page number.</ResponseField>
+    <ResponseField name="next_page" type="integer | null">Next page, or `null` if on the last page.</ResponseField>
+    <ResponseField name="prev_page" type="integer | null">Previous page, or `null` if on the first page.</ResponseField>
+    <ResponseField name="per_page" type="integer">Results per page.</ResponseField>
+    <ResponseField name="total_pages" type="integer">Total pages.</ResponseField>
+    <ResponseField name="total_count" type="integer">Total number of tokens.</ResponseField>
+  </Expandable>
+</ResponseField>
+
+```json
+{
+  "tokens": [
+    {
+      "uuid": "fa2fec9c-c3e6-4625-b11f-7906dff5f37c",
+      "name": "token-name",
+      "value": "8d43f8dc-8aa3-4fa2-b09e-361f6af8d972",
+      "rate_tier": "tier1",
+      "auth_username": "tylerqt-tylerwi-db8c",
+      "is_active": false,
+      "deactivation_reasons": []
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "next_page": null,
+    "per_page": 10,
+    "prev_page": null,
+    "total_pages": 1,
+    "total_count": 1
+  }
+}
+```
+
+---
+
+## Create a token
+
+`POST /api/v1/subscriptions/:subscription_uuid/tokens`
+
+Creates a new RPC token under the given subscription. Like endpoints, new tokens are created in an inactive state and must be explicitly activated.
+
+### Path parameters
+
+<ParamField path="subscription_uuid" type="string" required>
+  UUID of the subscription the token will belong to.
+</ParamField>
+
+### Body parameters
+
+Wrap all parameters inside a `token` key.
+
+<ParamField body="name" type="string" required>
+  Human-readable name for the token.
+</ParamField>
+
+<ParamField body="rate_tier" type="string" required>
+  Name of the rate tier to assign. Determines the cost and throughput limits for requests made with this token. Use `GET /api/v1/rate_tiers` to see available options.
+</ParamField>
+
+### Request
+
+```bash
+curl -X POST 'https://customers.triton.one/api/v1/subscriptions/74ea9d9a-4b2a-4f01-af47-1c175f8a2af6/tokens' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "token": {
+      "name": "Token 123",
+      "rate_tier": "developer"
+    }
+  }'
+```
+
+### Response
+
+<ResponseField name="token" type="object">
+  <Expandable title="properties" defaultOpen>
+    <ResponseField name="uuid" type="string">Generated UUID for the new token.</ResponseField>
+    <ResponseField name="name" type="string">Display name.</ResponseField>
+    <ResponseField name="value" type="string">The secret used for RPC authentication. Store this securely — it is not recoverable after this response.</ResponseField>
+    <ResponseField name="rate_tier" type="string">Assigned rate tier.</ResponseField>
+    <ResponseField name="auth_username" type="string">Generated username for HTTP basic auth.</ResponseField>
+    <ResponseField name="is_active" type="boolean">Always `false` on creation. Activate separately.</ResponseField>
+    <ResponseField name="deactivation_reasons" type="object[]">Empty on a newly created token.</ResponseField>
+  </Expandable>
+</ResponseField>
+
+```json
+{
+  "token": {
+    "uuid": "b51e9812-ece9-4cb0-81f1-0c4bbdc8a3b7",
+    "name": "Token 123",
+    "value": "b4274ebd-e2f5-46fd-8e99-8aff8f9f4a85",
+    "rate_tier": "developer",
+    "auth_username": "tylerqt-example-73d1",
+    "is_active": false,
+    "deactivation_reasons": []
+  }
+}
+```
+
+<Tip>
+  Save the `value` field immediately after creating the token. This is the only time the full secret is returned in plaintext. If you lose it, you will need to create a new token.
+</Tip>
+
+---
+
+## Activate a token
+
+`PUT /api/v1/tokens/:token_uuid/activate`
+
+<Note>
+  This endpoint requires an **Operator** or **Reseller** role token.
+</Note>
+
+Activates a token so it can be used to authenticate RPC requests.
+
+### Path parameters
+
+<ParamField path="token_uuid" type="string" required>
+  UUID of the token to activate.
+</ParamField>
+
+### Request
+
+```bash
+curl -X PUT 'https://customers.triton.one/api/v1/tokens/74ea9d9a-4b2a-4f01-af47-1c175f8a2af6/activate' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+### Response
+
+```
+204 No Content
+```
+
+---
+
+## Deactivate a token
+
+`PUT /api/v1/tokens/:token_uuid/deactivate`
+
+<Note>
+  This endpoint requires an **Operator** or **Reseller** role token.
+</Note>
+
+Deactivates a token so it can no longer be used to authenticate RPC requests. You can optionally record a reason.
+
+### Path parameters
+
+<ParamField path="token_uuid" type="string" required>
+  UUID of the token to deactivate.
+</ParamField>
+
+### Body parameters
+
+<ParamField body="deactivation_reason" type="string">
+  Human-readable explanation for the deactivation.
+</ParamField>
+
+### Request
+
+```bash
+curl -X PUT 'https://customers.triton.one/api/v1/tokens/74ea9d9a-4b2a-4f01-af47-1c175f8a2af6/deactivate' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "deactivation_reason": "Rotating credentials"
+  }'
+```
+
+### Response
+
+```
+204 No Content
+```
+
+## Using a token for RPC authentication
+
+When your backend calls a Triton endpoint, you can pass the token value in two ways:
+
+**As a URL path segment** (most common):
+
+```
+https://<endpoint-hostname>/<token-value>
+```
+
+**As HTTP basic auth** (if required by your library):
+
+Use `auth_username` as the username and `value` as the password:
+
+```bash
+curl -u "tylerqt-example-73d1:b4274ebd-e2f5-46fd-8e99-8aff8f9f4a85" \
+     https://tylerqt-example-3c6e.triton.one
+```

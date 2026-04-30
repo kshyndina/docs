@@ -1,0 +1,431 @@
+---
+title: "Subscriptions API: Manage RPC Subscriptions"
+sidebarTitle: "Subscriptions"
+description: "Create, list, retrieve, and activate or deactivate Triton One RPC subscriptions. Subscriptions group the endpoints and tokens for an integration."
+---
+
+A subscription is the primary resource in Triton One. It groups together the endpoints and tokens that make up a working RPC integration, and it carries metadata such as a display name, optional start and end timestamps, and the subscription type that determines which Solana environment and pool is targeted. Before you can create endpoints or tokens, you need a subscription, and to create a subscription you need an `account_uuid`.
+
+Create and activate subscriptions are restricted to **Reseller** role tokens. Listing and reading subscriptions is available to both Operator and Reseller tokens.
+
+## Subscription types
+
+A subscription type defines whether the subscription targets a shared pool, a dedicated pool, or a developer environment (devnet and testnet). Use `GET /api/v1/subscription_types` to fetch the types available to your token.
+
+| Type | Description |
+|---|---|
+| `developer` | Targets Solana devnet and testnet. Endpoints and tokens are automatically usable for both environments, typically at no cost. |
+| `mainnet-shared` | Targets Triton's high-performance shared mainnet pool. |
+| `mainnet-dedicated` | Targets a dedicated mainnet pool provisioned exclusively for your account. |
+
+To list all subscription types your token can use:
+
+```bash
+curl 'https://customers.triton.one/api/v1/subscription_types' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+```json
+{
+  "subscription_types": [
+    {
+      "uuid": "413defdd-b011-4dda-8145-fa782524284c",
+      "name": "developer",
+      "pool_name": "test pool name",
+      "subscriptions_count": 10,
+      "endpoint_default_suffixes": ["TEST 1", "TWST 2"]
+    },
+    {
+      "uuid": "8ddbdbc8-b513-4ba5-a833-2ce8402a9c50",
+      "name": "mainnet-shared",
+      "pool_name": "pool name",
+      "subscriptions_count": 10,
+      "endpoint_default_suffixes": ["endpoint suffix"]
+    },
+    {
+      "uuid": "b97a3264-2c0a-4af5-85ff-14dce864afc9",
+      "name": "mainnet-dedicated",
+      "pool_name": "pool name",
+      "subscriptions_count": 5,
+      "endpoint_default_suffixes": ["endpoint suffix"]
+    }
+  ]
+}
+```
+
+<Note>
+  Creating and updating subscription types is restricted to admin role tokens. Use the available types returned by this endpoint when creating a subscription.
+</Note>
+
+---
+
+## List subscriptions
+
+`GET /api/v1/subscriptions`
+
+Returns all subscriptions accessible to your token.
+
+### Query parameters
+
+<ParamField query="subscription_type" type="string">
+  Filter by subscription type name, e.g. `mainnet-shared`.
+</ParamField>
+
+<ParamField query="account_uuid" type="string">
+  Filter results to subscriptions belonging to this account.
+</ParamField>
+
+<ParamField query="user_uuid" type="string">
+  Filter results to subscriptions associated with this user.
+</ParamField>
+
+<ParamField query="per" type="integer" default="50">
+  Maximum number of results per page.
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  Page number to return.
+</ParamField>
+
+### Request
+
+<CodeGroup>
+
+```bash All subscriptions
+curl 'https://customers.triton.one/api/v1/subscriptions' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+```bash Filter by type
+curl 'https://customers.triton.one/api/v1/subscriptions?subscription_type=mainnet-shared' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+```bash Filter by account
+curl 'https://customers.triton.one/api/v1/subscriptions?account_uuid=c92a9cea-47cc-494b-b1b0-4230a2316ee5' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+```bash Paginate
+curl 'https://customers.triton.one/api/v1/subscriptions?per=10&page=2' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "subscriptions": [
+    { "...subscription_object_1..." },
+    { "...subscription_object_2..." }
+  ],
+  "meta": {
+    "current_page": 1,
+    "next_page": null,
+    "per_page": 50,
+    "prev_page": null,
+    "total_pages": 1,
+    "total_count": 2
+  }
+}
+```
+
+---
+
+## Get a subscription
+
+`GET /api/v1/subscriptions/:subscription_uuid`
+
+Returns the full details of a single subscription, including its endpoints, tokens, supported rate tiers, and deactivation reasons.
+
+### Path parameters
+
+<ParamField path="subscription_uuid" type="string" required>
+  UUID of the subscription to retrieve.
+</ParamField>
+
+### Request
+
+```bash
+curl 'https://customers.triton.one/api/v1/subscriptions/5d8d4591-12cc-424a-8f39-32de0ba6acc3' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+### Response
+
+<ResponseField name="subscription" type="object">
+  <Expandable title="properties" defaultOpen>
+    <ResponseField name="uuid" type="string">Unique identifier for the subscription.</ResponseField>
+    <ResponseField name="name" type="string">Display name.</ResponseField>
+    <ResponseField name="account_uuid" type="string">UUID of the parent account.</ResponseField>
+    <ResponseField name="subscription_type" type="string">Type of subscription, e.g. `mainnet-shared`.</ResponseField>
+    <ResponseField name="starts_at" type="string | null">ISO 8601 timestamp when the subscription becomes active. `null` means immediately active.</ResponseField>
+    <ResponseField name="ends_at" type="string | null">ISO 8601 timestamp when the subscription expires. `null` means it never expires.</ResponseField>
+    <ResponseField name="is_active" type="boolean">Whether the subscription is currently active.</ResponseField>
+    <ResponseField name="account" type="object">The full account object associated with this subscription.</ResponseField>
+    <ResponseField name="supported_rate_tiers" type="object[]">Rate tiers available for endpoints and tokens on this subscription.</ResponseField>
+    <ResponseField name="endpoints" type="object[]">Endpoints belonging to this subscription. See [Endpoints](/account-api/endpoints) for field details.</ResponseField>
+    <ResponseField name="tokens" type="object[]">Tokens belonging to this subscription. See [Tokens](/account-api/tokens) for field details.</ResponseField>
+    <ResponseField name="deactivation_reasons" type="object[]">
+      Records explaining why the subscription was deactivated.
+      <Expandable title="properties">
+        <ResponseField name="description" type="string">Human-readable reason.</ResponseField>
+        <ResponseField name="created_at" type="string">ISO 8601 timestamp.</ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+```json
+{
+  "subscription": {
+    "uuid": "5d8d4591-12cc-424a-8f39-32de0ba6acc3",
+    "name": "Example App",
+    "account_uuid": "4ad26b8a-a9a1-4f9b-b0fa-c13a682d64b1",
+    "subscription_type": "mainnet-shared",
+    "starts_at": null,
+    "ends_at": null,
+    "is_active": false,
+    "account": {
+      "uuid": "4ad26b8a-a9a1-4f9b-b0fa-c13a682d64b1",
+      "name": "Tyler-qt65u8xzj2",
+      "is_active": true,
+      "...": "..."
+    },
+    "supported_rate_tiers": [
+      {
+        "uuid": "ca141949-a46f-446a-abee-a031e501fea0",
+        "name": "developer",
+        "active_tokens_count": 5,
+        "active_endpoints_count": 4,
+        "supported_subscription_type_uuids": [
+          "413defdd-b011-4dda-8145-fa782524284c"
+        ]
+      }
+    ],
+    "endpoints": [
+      {
+        "uuid": "23ab660b-cb09-4ca5-b49a-518b422a8d81",
+        "name": "Jacobson LLC cbp4i3u71m",
+        "slug": "academy-strict-fnalfmab4l",
+        "rate_tier": "developer",
+        "is_active": true,
+        "values": [
+          "academy-strict-fnalfmab4l.TEST 1",
+          "academy-strict-fnalfmab4l.TWST 2"
+        ],
+        "default_values": [
+          "academy-strict-fnalfmab4l.TEST 1",
+          "academy-strict-fnalfmab4l.TWST 2"
+        ],
+        "allowed_origins": [
+          {
+            "uuid": "b4d5ec62-410d-45f8-8b45-44fe6641cf1f",
+            "value": "vonrueden-haag.co",
+            "is_active": true
+          }
+        ]
+      }
+    ],
+    "tokens": [
+      {
+        "uuid": "fa2fec9c-c3e6-4625-b11f-7906dff5f37c",
+        "name": "Token name",
+        "value": "8d43f8dc-8aa3-4fa2-b09e-361f6af8d972",
+        "rate_tier": "tier1",
+        "auth_username": "tylerqt-tylerwi-db8c",
+        "is_active": false
+      }
+    ],
+    "deactivation_reasons": [
+      {
+        "description": "Deactivation reason description",
+        "created_at": "2023-07-03T12:00:22Z"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## Create a subscription
+
+`POST /api/v1/subscriptions`
+
+<Warning>
+  This endpoint requires a **Reseller** role token.
+</Warning>
+
+Creates a new subscription under an existing account.
+
+### Body parameters
+
+Wrap all parameters inside a `subscription` key.
+
+<ParamField body="account_uuid" type="string" required>
+  UUID of the account that will own this subscription.
+</ParamField>
+
+<ParamField body="subscription_type" type="string" required>
+  Name of the subscription type, as returned by `GET /api/v1/subscription_types`. For example, `mainnet-shared`.
+</ParamField>
+
+<ParamField body="name" type="string" required>
+  Human-readable display name for the subscription.
+</ParamField>
+
+<ParamField body="starts_at" type="datetime">
+  ISO 8601 datetime when the subscription should become active. Defaults to `null`, meaning the subscription is immediately active.
+</ParamField>
+
+<ParamField body="ends_at" type="datetime">
+  ISO 8601 datetime when the subscription should expire. Defaults to `null`, meaning it never expires.
+</ParamField>
+
+### Request
+
+```bash
+curl -X POST 'https://customers.triton.one/api/v1/subscriptions' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "subscription": {
+      "account_uuid": "c92a9cea-47cc-494b-b1b0-4230a2316ee5",
+      "subscription_type": "mainnet-shared",
+      "name": "My App Production"
+    }
+  }'
+```
+
+### Response
+
+Returns the newly created `subscription` object. The `endpoints`, `tokens`, and `deactivation_reasons` arrays are empty on a new subscription.
+
+---
+
+## Update a subscription
+
+`PUT /api/v1/subscriptions/:subscription_uuid`
+
+Updates mutable attributes on an existing subscription. To change endpoints or tokens, use their dedicated APIs.
+
+### Path parameters
+
+<ParamField path="subscription_uuid" type="string" required>
+  UUID of the subscription to update.
+</ParamField>
+
+### Body parameters
+
+<ParamField body="name" type="string">
+  Updated display name.
+</ParamField>
+
+### Request
+
+```bash
+curl -X PUT 'https://customers.triton.one/api/v1/subscriptions/5d8d4591-12cc-424a-8f39-32de0ba6acc3' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "subscription": {
+      "name": "My App Production v2"
+    }
+  }'
+```
+
+### Response
+
+Returns the updated `subscription` object in the same shape as `GET /api/v1/subscriptions/:subscription_uuid`.
+
+---
+
+## Activate a subscription
+
+`PUT /api/v1/subscriptions/:subscription_uuid/activate`
+
+<Warning>
+  This endpoint requires a **Reseller** role token.
+</Warning>
+
+Activates a subscription so it can serve RPC traffic.
+
+### Path parameters
+
+<ParamField path="subscription_uuid" type="string" required>
+  UUID of the subscription to activate.
+</ParamField>
+
+### Request
+
+```bash
+curl -X PUT 'https://customers.triton.one/api/v1/subscriptions/5d8d4591-12cc-424a-8f39-32de0ba6acc3/activate' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+### Response
+
+```
+204 No Content
+```
+
+---
+
+## Deactivate a subscription
+
+`PUT /api/v1/subscriptions/:subscription_uuid/deactivate`
+
+<Warning>
+  This endpoint requires a **Reseller** role token.
+</Warning>
+
+Deactivates a subscription. Deactivated subscriptions cannot serve RPC traffic.
+
+### Path parameters
+
+<ParamField path="subscription_uuid" type="string" required>
+  UUID of the subscription to deactivate.
+</ParamField>
+
+### Body parameters
+
+<ParamField body="deactivation_reason" type="string">
+  Human-readable explanation for the deactivation. Stored in `deactivation_reasons` on the subscription.
+</ParamField>
+
+### Request
+
+```bash
+curl -X PUT 'https://customers.triton.one/api/v1/subscriptions/5d8d4591-12cc-424a-8f39-32de0ba6acc3/deactivate' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "deactivation_reason": "Customer requested cancellation"
+  }'
+```
+
+### Response
+
+```
+204 No Content
+```

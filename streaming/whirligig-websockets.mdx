@@ -1,0 +1,452 @@
+---
+title: "Whirligig WebSockets: Improved Solana Subscriptions"
+sidebarTitle: "Whirligig WebSockets"
+description: "Use Whirligig for intra-slot Solana account and transaction updates over WebSockets—fully compatible with the standard Solana WebSocket API."
+---
+
+Whirligig is a high-performance, Rust-based proxy that sits between Dragon's Mouth gRPC and your WebSocket clients. It gives you the intra-slot speed advantages of gRPC over a browser-compatible WebSocket connection, with full compatibility with the standard Solana WebSocket API. If you have an existing application using Solana WebSockets, you can switch to Whirligig with minimal changes and immediately benefit from updates that arrive up to 400ms faster than before.
+
+## Connecting to Whirligig
+
+Append `/whirligig` to your RPC endpoint to connect:
+
+```
+wss://<your-endpoint>.rpcpool.com/<token>/whirligig
+```
+
+If your client requires a trailing slash, use `/whirligig/` instead.
+
+Using `@solana/web3.js`, pass the WebSocket endpoint explicitly:
+
+```typescript
+import { Connection } from "@solana/web3.js";
+
+const connection = new Connection("https://<your-endpoint>.rpcpool.com/<token>", {
+  wsEndpoint: "wss://<your-endpoint>.rpcpool.com/<token>/whirligig",
+});
+```
+
+## Connection management
+
+<Warning>
+Connections that are inactive for more than 60 seconds are automatically closed. Send a ping to keep the connection alive:
+
+```json
+{"jsonrpc":"2.0","method":"ping"}
+```
+</Warning>
+
+## Commitment levels
+
+Whirligig supports all three Solana commitment levels:
+
+| Level | Description |
+|---|---|
+| `processed` | The highest slot of the heaviest fork processed by the node. Not confirmed or finalized. At this level, Whirligig provides intra-slot updates. |
+| `confirmed` | The highest slot voted on by a supermajority of the cluster. Incorporates votes from gossip and replay. |
+| `finalized` | The highest slot that has reached max vote lockout, recognized by a supermajority of the cluster. |
+
+You can also manage commitment levels on the client side using the same approach as [Dragon's Mouth gRPC](/streaming/dragons-mouth-grpc#managing-commitment-levels).
+
+## CLI client
+
+A command-line client for testing Whirligig is available on GitHub: [yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client).
+
+## Unsubscribing
+
+Every successful subscription returns a numeric subscription `id`:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": 42,
+  "id": 1
+}
+```
+
+To unsubscribe, send the corresponding unsubscribe method with that `id` as the parameter:
+
+```json
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "method": "slotUnsubscribe",
+  "params": [42]
+}
+```
+
+The response is `true` if the subscription was active and removed, or `false` if no such subscription existed:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": true,
+  "id": 1
+}
+```
+
+## Subscription methods
+
+### accountSubscribe / accountUnsubscribe
+
+Subscribe to changes on a specific account. Fully compatible with the Solana WebSocket API.
+
+<CodeGroup>
+
+```json subscribe request
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "accountSubscribe",
+  "params": [
+    "SysvarC1ock11111111111111111111111111111111",
+    {
+      "encoding": "base58",
+      "commitment": "finalized"
+    }
+  ]
+}
+```
+
+```json stream data
+{
+  "jsonrpc": "2.0",
+  "method": "accountNotification",
+  "params": {
+    "result": {
+      "context": {
+        "apiVersion": "1.16.1",
+        "slot": 206122916
+      },
+      "value": {
+        "data": [
+          "9AAG2zomYcUVKQfondw13yz193crQ5R5zmzdEojhMPXiyYEjD8viLrb",
+          "base58"
+        ],
+        "executable": false,
+        "lamports": 1169280,
+        "owner": "Sysvar1111111111111111111111111111111111111",
+        "rentEpoch": 361,
+        "space": 40
+      }
+    },
+    "subscription": 0
+  }
+}
+```
+
+</CodeGroup>
+
+To unsubscribe, send `accountUnsubscribe` with the subscription id.
+
+### blockSubscribe / blockUnsubscribe
+
+Subscribe to block notifications. Fully compatible with the Solana WebSocket API.
+
+<CodeGroup>
+
+```json subscribe request
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "blockSubscribe",
+  "params": [
+    "all",
+    {
+      "commitment": "finalized",
+      "maxSupportedTransactionVersion": 1,
+      "showRewards": false,
+      "transactionDetails": "none"
+    }
+  ]
+}
+```
+
+```json stream data
+{
+  "jsonrpc": "2.0",
+  "method": "blockNotification",
+  "params": {
+    "result": {
+      "context": {
+        "apiVersion": "1.16.1",
+        "slot": 206125999
+      },
+      "value": {
+        "block": {
+          "blockHeight": 188652385,
+          "blockTime": 1689709529,
+          "blockhash": "74iqy9xdFvenLkFizkoBkkLRWTyygEeCiiN3B8Z8ma2D",
+          "parentSlot": 206125998,
+          "previousBlockhash": "Cq5nfgu9Y5KF47J9qj5CTYmt8D5CxBpw8HCRqQZ7o7i9"
+        },
+        "err": null,
+        "slot": 206125999
+      }
+    },
+    "subscription": 0
+  }
+}
+```
+
+</CodeGroup>
+
+To unsubscribe, send `blockUnsubscribe` with the subscription id.
+
+### logsSubscribe / logsUnsubscribe
+
+Subscribe to transaction log messages that mention a specific account. Fully compatible with the Solana WebSocket API.
+
+<CodeGroup>
+
+```json subscribe request
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "method": "logsSubscribe",
+  "params": [
+    {
+      "mentions": ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"]
+    },
+    {
+      "commitment": "finalized"
+    }
+  ]
+}
+```
+
+```json stream data
+{
+  "jsonrpc": "2.0",
+  "method": "logsNotification",
+  "params": {
+    "result": {
+      "context": {
+        "apiVersion": "1.16.1",
+        "slot": 206126709
+      },
+      "value": {
+        "err": null,
+        "logs": [
+          "Program FC81tbGt6JWRXidaWYFXxGnTk4VgobhJHATvTRVMqgWj invoke [1]",
+          "Program log: Instruction: UpdateLendingPool",
+          "Program FC81tbGt6JWRXidaWYFXxGnTk4VgobhJHATvTRVMqgWj success"
+        ],
+        "signature": "5UPB2AEWgUafVDEw2xTkup8CUedxCMNL4k7EMuxtcyi1WnYLmpXeYUfBANpnPnpSz6LRwwLnBQf7tViKSFT7ojiB"
+      }
+    },
+    "subscription": 0
+  }
+}
+```
+
+</CodeGroup>
+
+To unsubscribe, send `logsUnsubscribe` with the subscription id.
+
+### programSubscribe / programUnsubscribe
+
+Subscribe to account changes for all accounts owned by a specific program. Fully compatible with the Solana WebSocket API.
+
+<CodeGroup>
+
+```json subscribe request
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "method": "programSubscribe",
+  "params": [
+    "srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX",
+    {
+      "encoding": "base64+zstd",
+      "commitment": "finalized"
+    }
+  ]
+}
+```
+
+```json stream data
+{
+  "jsonrpc": "2.0",
+  "method": "programNotification",
+  "params": {
+    "result": {
+      "context": {
+        "apiVersion": "1.16.1",
+        "slot": 206127070
+      },
+      "value": {
+        "account": {
+          "data": [
+            "KLUv/QBYDQEAkHNlcnVtQQABAAQAcGFkZGluZwUA03+gI0CxQgAYeABG",
+            "base64+zstd"
+          ],
+          "executable": false,
+          "lamports": 457104960,
+          "owner": "srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX",
+          "rentEpoch": 0,
+          "space": 65548
+        },
+        "pubkey": "5qRKrGPYaQmazdtMnia1iC3gFbpgW4CT7KPrHq9nJGm5"
+      }
+    },
+    "subscription": 0
+  }
+}
+```
+
+</CodeGroup>
+
+To unsubscribe, send `programUnsubscribe` with the subscription id.
+
+### signatureSubscribe / signatureUnsubscribe
+
+Subscribe to confirmation status updates for a specific transaction signature. Fully compatible with the Solana WebSocket API.
+
+<CodeGroup>
+
+```json subscribe request
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "signatureSubscribe",
+  "params": [
+    "2EBVM6cB8vAAD93Ktr6Vd8p67XPbQzCJX47MpReuiCXJAtcjaxpvWpcg9Ege1Nr5Tk3a2GFrByT7WPBjdsTycY9b",
+    {
+      "commitment": "finalized"
+    }
+  ]
+}
+```
+
+```json stream data
+{
+  "jsonrpc": "2.0",
+  "method": "signatureNotification",
+  "params": {
+    "result": {
+      "context": {
+        "apiVersion": "1.16.1",
+        "slot": 206127070
+      },
+      "value": {
+        "err": null
+      }
+    },
+    "subscription": 24006
+  }
+}
+```
+
+</CodeGroup>
+
+To unsubscribe, send `signatureUnsubscribe` with the subscription id.
+
+### slotSubscribe / slotUnsubscribe
+
+Subscribe to slot change notifications. No parameters required. Fully compatible with the Solana WebSocket API.
+
+<CodeGroup>
+
+```json subscribe request
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "slotSubscribe"
+}
+```
+
+```json stream data
+{
+  "jsonrpc": "2.0",
+  "method": "slotNotification",
+  "params": {
+    "result": {
+      "parent": 206128153,
+      "root": 206128115,
+      "slot": 206128154
+    },
+    "subscription": 0
+  }
+}
+```
+
+</CodeGroup>
+
+To unsubscribe, send `slotUnsubscribe` with the subscription id.
+
+### transactionSubscribe / transactionUnsubscribe
+
+<Note>
+This is a Triton One extension. It is not part of the standard Solana WebSocket API and may not be compatible with other providers.
+</Note>
+
+Subscribe to transactions matching specific filter criteria. The first parameter is a `filter` object (all fields optional), and the second is a `config` object equivalent to [`RpcBlockSubscribeConfig`](https://docs.rs/solana-client/latest/solana_client/rpc_config/struct.RpcBlockSubscribeConfig.html).
+
+<CodeGroup>
+
+```json subscribe request
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "transactionSubscribe",
+  "params": [
+    {
+      "vote": false,
+      "failed": false,
+      "signature": "2EBVM6cB8vAAD93Ktr6Vd8p67XPbQzCJX47MpReuiCXJAtcjaxpvWpcg9Ege1Nr5Tk3a2GFrByT7WPBjdsTycY9b",
+      "accounts": {
+        "include": ["5qRKrGPYaQmazdtMnia1iC3gFbpgW4CT7KPrHq9nJGm5"],
+        "exclude": ["srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX"],
+        "required": ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"]
+      }
+    },
+    {
+      "commitment": "processed",
+      "encoding": "base58",
+      "transactionDetails": "full",
+      "showRewards": false,
+      "maxSupportedTransactionVersion": 1
+    }
+  ]
+}
+```
+
+```json stream data
+{
+  "jsonrpc": "2.0",
+  "method": "transactionNotification",
+  "params": {
+    "result": {
+      "context": {
+        "apiVersion": "1.16.1",
+        "slot": 206132915
+      },
+      "value": {
+        "slot": 241068727,
+        "signature": "2EBVM6cB8vAAD93Ktr6Vd8p67XPbQzCJX47MpReuiCXJAtcjaxpvWpcg9Ege1Nr5Tk3a2GFrByT7WPBjdsTycY9b",
+        "transaction": {
+          "meta": {
+            "computeUnitsConsumed": 27426,
+            "err": null,
+            "fee": 5000,
+            "logMessages": [
+              "Program ComputeBudget111111111111111111111111111111 invoke [1]",
+              "Program ComputeBudget111111111111111111111111111111 success",
+              "Program srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX invoke [1]",
+              "Program srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX success"
+            ],
+            "status": { "Ok": null }
+          }
+        },
+        "error": null
+      }
+    },
+    "subscription": 0
+  }
+}
+```
+
+</CodeGroup>
+
+To unsubscribe, send `transactionUnsubscribe` with the subscription id.

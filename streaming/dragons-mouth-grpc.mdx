@@ -1,0 +1,459 @@
+---
+title: "Dragon's Mouth gRPC: Real-Time Solana Streaming"
+sidebarTitle: "Dragon's Mouth gRPC"
+description: "Stream Solana account writes, transactions, blocks, and slot notifications with sub-slot latency using Dragon's Mouth gRPC and the Yellowstone protocol."
+---
+
+Dragon's Mouth is Triton One's Geyser-fed gRPC interface for streaming Solana on-chain data directly to your backend. It delivers account writes, transactions, entries, block notifications, and slot notifications in real time—and because it operates at the processed commitment level by default, you receive intra-slot updates up to 400ms faster than standard WebSocket subscriptions. If you're building a trading bot, MEV searcher, or any latency-sensitive backend system, Dragon's Mouth is the interface to use.
+
+<Note>
+gRPC is not supported in web browsers. Dragon's Mouth is intended for server-to-server communication. If you need browser-compatible streaming, use [Whirligig WebSockets](/streaming/whirligig-websockets) instead.
+</Note>
+
+## What Dragon's Mouth streams
+
+**Subscription streams:**
+
+- Account writes
+- Transactions
+- Deshred transactions (pre-execution, beta)
+- Entries
+- Block notifications
+- Slot notifications
+
+**Unary operations:**
+
+- `getLatestBlockhash`
+- `getBlockHeight`
+- `getSlot`
+- `isValidBlockhash`
+- `subscribeReplayInfo`
+
+## Protocol files
+
+The Protobuf definitions are available at:
+
+- GitHub: [yellowstone-grpc-proto/proto](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto)
+- Rust crate: [yellowstone-grpc-proto on crates.io](https://crates.io/crates/yellowstone-grpc-proto)
+
+## Clients and SDKs
+
+<Tabs>
+  <Tab title="TypeScript / Node.js">
+    From version `5.1.x`, the TypeScript SDK is accelerated with Rust via the NAPI framework, making it suitable for production Solana workloads.
+
+    Install the package:
+
+    ```bash
+    npm install --save @triton-one/yellowstone-grpc
+    # or
+    yarn add @triton-one/yellowstone-grpc
+    ```
+
+    Initialize the client:
+
+    ```typescript
+    import Client from "@triton-one/yellowstone-grpc";
+
+    const client = new Client("https://api.rpcpool.com:443", "<insert your token here>");
+
+    // Connect to the client
+    await client.connect();
+
+    // Call any unary method, e.g. get version
+    const version = await client.getVersion();
+    console.log(version);
+    ```
+
+    <Note>
+    All client calls are asynchronous. Ensure they run inside an `async` function or block.
+    </Note>
+
+    Create a subscription stream:
+
+    ```typescript
+    import { SubscribeRequest } from "@triton-one/yellowstone-grpc";
+
+    // Create a subscription stream
+    const stream = client.subscribe();
+
+    // Collect all incoming events
+    stream.on("data", (data) => {
+      console.log("data", data);
+    });
+
+    // Build a subscription request
+    const request: SubscribeRequest = {
+      // Use the JSON request format described in this page
+    };
+
+    // Send the subscription request
+    await new Promise<void>((resolve, reject) => {
+      stream.write(request, (err) => {
+        if (err === null || err === undefined) {
+          resolve();
+        } else {
+          reject(err);
+        }
+      });
+    }).catch((reason) => {
+      console.error(reason);
+      throw reason;
+    });
+    ```
+
+    Sample clients: [examples/typescript](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript)
+  </Tab>
+  <Tab title="Rust">
+    Sample client: [examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust)
+  </Tab>
+  <Tab title="Go">
+    Sample client: [examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang)
+  </Tab>
+  <Tab title="grpcurl">
+    `grpcurl` is useful for testing subscriptions from the command line. You need the `geyser.proto` file from the protocol files above.
+
+    ```bash
+    ./grpcurl \
+      -proto geyser.proto \
+      -d '{"slots": { "slots": { } }, "accounts": { "usdc": { "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
+      -H "x-token: <token>" \
+      api.rpcpool.com:443 \
+      geyser.Geyser/Subscribe
+    ```
+  </Tab>
+  <Tab title="client-ubuntu">
+    The `client-ubuntu` binary lets you benchmark and test your gRPC setup. Download the latest release from the [yellowstone-grpc Releases page](https://github.com/rpcpool/yellowstone-grpc/releases). Prebuilt binaries are available for Ubuntu 22.04 and 24.04.
+
+    Subscribe to all accounts and slots:
+
+    ```bash
+    ./client-ubuntu-22.04 --endpoint https://<endpoint> --x-token <token> subscribe --accounts --slots
+    ```
+
+    Subscribe to a specific program (e.g. Raydium):
+
+    ```bash
+    ./client-ubuntu-22.04 --endpoint https://<endpoint> --x-token <token> subscribe --accounts --slots --accounts-owner 675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8
+    ```
+
+    Benchmark with stats (healthy output: ping every 10s, 60–80 Mbps):
+
+    ```bash
+    ./client-ubuntu-22.04 --http2-adaptive-window true --compression zstd --endpoint https://<endpoint> --x-token <token> subscribe --transactions --accounts --stats
+    ```
+
+    Add `--stats` to see total accounts, slots streamed, and bandwidth figures.
+  </Tab>
+</Tabs>
+
+## Subscription examples
+
+All subscribe requests follow the same JSON structure. You can combine accounts, programs, transactions, blocks, slots, and block metadata in a single request. Labels like `"wsol/usdc"` or `"slots"` are client-assigned names you choose—they appear as tags on incoming updates.
+
+### Subscribe to an account
+
+This example subscribes to the SOL-USDC OpenBook account at `confirmed` commitment level. The value `1` in the `"commitment"` field maps to confirmed.
+
+```json
+{
+  "slots": { "slots": {} },
+  "accounts": {
+    "wsol/usdc": {
+      "account": ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"]
+    }
+  },
+  "transactions": {},
+  "blocks": {},
+  "blocks_meta": {},
+  "accounts_data_slice": [],
+  "commitment": 1
+}
+```
+
+### Subscribe to an account with `account_data_slice`
+
+Use `account_data_slice` to receive only a subset of account data bytes instead of the full account. The example below retrieves 40 bytes starting at offset 32, which covers the `owner` and `lamports` fields of a token account.
+
+```json
+{
+  "slots": { "slots": {} },
+  "accounts": {
+    "usdc-tokenkeg": {
+      "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"]
+    }
+  },
+  "transactions": {},
+  "blocks": {},
+  "blocks_meta": {},
+  "accounts_data_slice": [{ "offset": 32, "length": 40 }],
+  "commitment": 1
+}
+```
+
+### Subscribe to a program
+
+```json
+{
+  "slots": { "slots": {} },
+  "accounts": {
+    "raydium": {
+      "owner": ["675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8"]
+    }
+  },
+  "transactions": {},
+  "blocks": {},
+  "blocks_meta": {}
+}
+```
+
+### Subscribe to all finalized non-vote, non-failed transactions
+
+For transactions, leaving all fields empty broadcasts all transactions. Fields work as logical `AND`; values within arrays work as logical `OR`.
+
+```json
+{
+  "slots": { "slots": {} },
+  "accounts": {},
+  "transactions": {
+    "all-finalized": {
+      "vote": false,
+      "failed": false
+    }
+  },
+  "blocks": {},
+  "blocks_meta": {},
+  "commitment": 2
+}
+```
+
+### Subscribe to transactions mentioning an account
+
+```json
+{
+  "slots": { "slots": {} },
+  "accounts": {},
+  "transactions": {
+    "usdc-mentions": {
+      "vote": false,
+      "accountInclude": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"]
+    }
+  },
+  "blocks": {},
+  "blocks_meta": {}
+}
+```
+
+### Subscribe to slots
+
+No extra parameters are needed—just provide a label for the slot updates.
+
+```json
+{
+  "slots": { "slots": {} },
+  "accounts": {},
+  "transactions": {},
+  "blocks": {},
+  "blocks_meta": {}
+}
+```
+
+### Subscribe to blocks
+
+Returns full blocks including all transactions as they are produced.
+
+```json
+{
+  "slots": { "slots": {} },
+  "accounts": {},
+  "transactions": {},
+  "blocks": { "all": {} },
+  "blocks_meta": {}
+}
+```
+
+You can configure the block payload to exclude transactions or include updated accounts by adding filters to the `blocks` object.
+
+### Subscribe to block metadata only
+
+Receive block-level notifications without any transaction data.
+
+```json
+{
+  "slots": { "slots": {} },
+  "accounts": {},
+  "transactions": {},
+  "blocks": {},
+  "blocks_meta": { "all": {} }
+}
+```
+
+## Managing commitment levels
+
+By default, Dragon's Mouth streams at the `processed` commitment level. You can request `confirmed` or `finalized` instead—Dragon's Mouth will buffer updates and release them once they reach the requested commitment.
+
+For maximum performance, Triton recommends handling commitment levels on the client side rather than delegating to Dragon's Mouth.
+
+| Value | Commitment |
+|---|---|
+| `0` | Processed |
+| `1` | Confirmed |
+| `2` | Finalized |
+
+### Working at processed
+
+Operating at `processed` lets you start processing transactions the moment they arrive. You can do the computation-heavy work early, then surface results in your UI as soon as you observe the `confirmed` or `finalized` slot notification for that slot—giving you the fastest possible user-facing response times.
+
+### Managing confirmed and finalized client-side
+
+To manage commitment on the client side:
+
+1. Buffer incoming events (transactions and account writes) keyed by slot.
+2. Subscribe to slot notifications alongside your other subscriptions.
+3. When you receive a slot notification at your target commitment level, release all buffered events for that slot.
+
+You will always receive all transaction and account write notifications for a slot **before** you receive the corresponding `confirmed` or `finalized` slot notification.
+
+<Warning>
+Due to a known quirk in Geyser on Solana, not every slot finalized notification is issued. When you receive a `finalized` slot notification, you must retroactively mark its ancestors as finalized too, even if you never received notifications for them.
+</Warning>
+
+## Intra-slot update events
+
+Dragon's Mouth exposes slot lifecycle events that let you observe the state of a slot in real time, before it completes.
+
+| Event | Description |
+|---|---|
+| `SLOT_FIRST_SHRED_RECEIVED` | The RPC node received the first shred for this slot. The slot has not been replayed yet. |
+| `SLOT_CREATED_BANK` | A bank (isolated execution environment) has been created for this slot on the RPC node. |
+| `SLOT_COMPLETED` | All shreds for this slot have been received. Replay may not be complete yet. |
+| `SLOT_DEAD` | The slot was rejected—invalid signatures, incorrect entry hashes, or wrong entry count. Dead slots are skipped by the network. |
+
+These events allow latency-sensitive systems to begin acting on slot state changes hundreds of milliseconds before the slot finalizes.
+
+## Deshred transactions (beta)
+
+`SubscribeDeshred` is a separate gRPC stream that delivers transactions reconstructed from shreds **before the validator executes them**. This is the earliest usable on-chain signal exposed by Dragon's Mouth.
+
+A deshred update includes:
+
+- `slot`
+- `signature`
+- Vote flag
+- Raw transaction
+- `loaded_writable_addresses`
+- `loaded_readonly_addresses`
+
+Because addresses from Address Lookup Tables (ALTs) are resolved, deshred filters match both static account keys and dynamically loaded addresses.
+
+### Deshred filters
+
+`SubscribeDeshred` supports the following filters:
+
+- `vote`
+- `account_include`
+- `account_exclude`
+- `account_required`
+
+### Limitations
+
+<Warning>
+Deshred data has no execution metadata—no status, logs, inner instructions, balance changes, compute units, or `TransactionStatusMeta`. A deshred transaction may fail, land on a dead fork, or never confirm. If you need execution results, combine `SubscribeDeshred` with the normal `transactions` stream.
+</Warning>
+
+- `SubscribeDeshred` is a separate RPC, not a field on `SubscribeRequest`.
+- Available only on Triton One gRPC servers. It depends on a Triton validator-side extension and does not work on stock Agave nodes.
+- Currently in paid beta.
+
+For architecture details and tradeoffs, see the [Deshred transactions blog post](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/). For the wire format, see [`geyser.proto`](https://github.com/rpcpool/yellowstone-grpc/blob/236ebd7b0616dd88407a7a2b61f903a56b92b186/yellowstone-grpc-proto/proto/geyser.proto).
+
+## Replaying from a slot
+
+Dragon's Mouth supports replaying recently buffered updates by setting `from_slot` on `SubscribeRequest`. This is primarily used to recover from short disconnections without missing any updates.
+
+When you subscribe with `from_slot`, the server first replays buffered updates starting from that slot, then continues streaming live updates on the same connection.
+
+<Steps>
+  <Step title="Track your latest processed slot">
+    Your application should maintain a record of the last slot it successfully processed.
+  </Step>
+  <Step title="Reconnect with from_slot">
+    On disconnect, reconnect and resubscribe with `from_slot` set to that slot number.
+  </Step>
+  <Step title="Handle deduplication">
+    Replay starts at a slot boundary. You may receive duplicate updates from the last processed slot—deduplicate on your end.
+  </Step>
+  <Step title="Handle unavailable slots">
+    If the requested slot is older than the server's replay window, the request will fail. Fall back to a fresh live subscription or your own backfill path. Call the unary `SubscribeReplayInfo` RPC and read `first_available` to check what slots are replayable.
+  </Step>
+</Steps>
+
+<Note>
+Replay only covers the server's retained replay window. For persistent backfill across arbitrary outages, use [Fumarole](/streaming/fumarole) instead.
+</Note>
+
+## Modifying a subscription
+
+Dragon's Mouth uses a bidirectional stream. To change your subscription filters, send an updated subscription request on the same stream. The new request **entirely replaces** the previous one.
+
+<Warning>
+Maintain a local copy of your full subscription config at all times. When you send a modified request, any filters not included in the new request will be cancelled.
+</Warning>
+
+## Keeping streams alive
+
+Some cloud providers (such as Cloudflare) close idle streams. Send periodic pings to prevent this. The server responds with a `pong` message every 15 seconds.
+
+A Rust ping example is available at [this gist](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88).
+
+## Excluded programs
+
+The following programs are excluded from all Dragon's Mouth gRPC streams and are also unavailable via `getProgramAccounts`.
+
+| Program | Address |
+|---|---|
+| Light Protocol / ZK Compression | `compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq` |
+
+The ZK Compression program generates extremely high-volume account updates. Each update produces a ~10 MB blob, resulting in several gigabits per second of data, making it impractical to include in standard streams. Most consumers of this data are interested in the end result processed by the [Photon indexer](https://github.com/helius-labs/photon). Triton One provides a [hosted Photon service](/solana/photon) if you need ZK Compression data.
+
+## Unsubscribing
+
+To unsubscribe from all streams while keeping the connection open, send an empty subscription request:
+
+<Tabs>
+  <Tab title="gRPC JSON">
+    ```json
+    {
+      "slots": {},
+      "accounts": {},
+      "transactions": {},
+      "blocks": {},
+      "blocks_meta": {}
+    }
+    ```
+  </Tab>
+  <Tab title="TypeScript">
+    ```typescript
+    await new Promise<void>((resolve, reject) => {
+      stream.write(
+        {
+          slots: {},
+          accounts: {},
+          transactions: {},
+          blocks: {},
+          blocks_meta: {},
+        },
+        (err) => {
+          if (err === null || err === undefined) {
+            resolve();
+          } else {
+            reject(err);
+          }
+        }
+      );
+    });
+    ```
+  </Tab>
+</Tabs>
+
+This clears all current subscriptions but keeps the connection open for future use.

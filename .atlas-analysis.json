@@ -1,0 +1,133 @@
+{
+  "projectType": "saas",
+  "projectName": "Triton One",
+  "projectDescription": "Triton One is a high-performance blockchain RPC infrastructure platform providing Solana developers with reliable endpoints, real-time data streaming, historical archives, and advanced trading APIs.",
+  "theme": "luma",
+  "primaryColor": "#da10e4",
+  "lightColor": "#ede5f9",
+  "darkColor": null,
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "getting-started",
+              "core-features"
+            ]
+          },
+          {
+            "group": "Streaming",
+            "pages": [
+              "streaming/overview",
+              "streaming/dragons-mouth-grpc",
+              "streaming/whirligig-websockets",
+              "streaming/fumarole",
+              "streaming/vixen-program-streams"
+            ]
+          },
+          {
+            "group": "Solana",
+            "pages": [
+              "solana/overview",
+              "solana/cascade-transactions",
+              "solana/digital-assets-api",
+              "solana/old-faithful-archive",
+              "solana/steamboat-indexes",
+              "solana/shield-policies",
+              "solana/photon"
+            ]
+          },
+          {
+            "group": "Trading APIs",
+            "pages": [
+              "trading-apis/overview",
+              "trading-apis/metis-swap",
+              "trading-apis/titan-swap",
+              "trading-apis/jito-bundles",
+              "trading-apis/pyth-hermes"
+            ]
+          },
+          {
+            "group": "Other Chains",
+            "pages": [
+              "chains/sui",
+              "chains/monad",
+              "chains/pythnet"
+            ]
+          },
+          {
+            "group": "Validators",
+            "pages": [
+              "validators/overview",
+              "validators/vote-account-setup",
+              "validators/node-identity-protection"
+            ]
+          },
+          {
+            "group": "Support",
+            "pages": [
+              "support/faq",
+              "support/security",
+              "support/streaming-troubleshooting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Account Management API",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "account-api/introduction",
+              "account-api/authentication"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "account-api/accounts",
+              "account-api/subscriptions",
+              "account-api/endpoints",
+              "account-api/tokens",
+              "account-api/rate-tiers",
+              "account-api/address-watch-lists",
+              "account-api/payments"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Dragon's Mouth gRPC streaming with intra-slot updates up to 400ms faster than standard WebSockets",
+    "Whirligig WebSocket proxy — drop-in Solana WebSocket replacement powered by gRPC",
+    "Fumarole reliable streaming with persistence, replay, and consumer groups",
+    "Old Faithful — full Solana historical archive from genesis via JSON-RPC and gRPC",
+    "Cascade transaction network using Stake-Weighted Quality of Service (SWQoS)",
+    "Steamboat custom indexes reducing getProgramAccounts from seconds to milliseconds",
+    "Digital Assets API (DAS) for NFTs, compressed NFTs, and fungible tokens",
+    "Yellowstone Shield — on-chain validator allowlist/blocklist for MEV protection",
+    "Vixen modular parsing framework for program-aware real-time data pipelines",
+    "Metis and Titan swap APIs for DEX aggregation and routing on Solana",
+    "Multi-chain support: Solana, Sui, Monad, Pythnet",
+    "GeoDNS and BGP Anycast global routing with instantaneous failover"
+  ],
+  "publicApiSurface": [
+    "gRPC: Geyser/Subscribe (Dragon's Mouth account/transaction/slot/block streams)",
+    "gRPC: Geyser/SubscribeDeshred (pre-execution transaction stream)",
+    "gRPC: getLatestBlockhash, getBlockHeight, getSlot, isValidBlockhash, subscribeReplayInfo",
+    "WebSocket: accountSubscribe, blockSubscribe, logsSubscribe, programSubscribe, signatureSubscribe, slotSubscribe, transactionSubscribe (Whirligig)",
+    "JSON-RPC: full Solana mainnet/testnet/devnet API compatibility",
+    "REST: /metis/quote, /metis/swap, /metis/swap-instructions (Metis Swap API)",
+    "DAS API: getAsset, getAssets, getAssetProof, getAssetProofs, getAssetSignatures, getAssetsByAuthority, getAssetsByCreator, getAssetsByGroup, getAssetsByOwner, searchAssets, getTokenAccounts, getNftEditions, getTokenLargestAccounts",
+    "Old Faithful gRPC: GetTransaction, GetBlock, GetBlocktime, SearchForSlot, StreamTransactions, StreamBlocks",
+    "Account Management REST API: GET/POST/PUT /api/v1/accounts, /api/v1/subscriptions, /api/v1/endpoints, /api/v1/tokens",
+    "Yellowstone Shield CLI: policy create, policy show, identities add/update/remove",
+    "sendTransaction with forwardingPolicies parameter (Shield-enabled RPCs)"
+  ]
+}

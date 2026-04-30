@@ -1,0 +1,91 @@
+---
+title: "Core Platform Features: Routing, Security & Rate Limits"
+description: "How Triton One routes requests globally via GeoDNS and BGP Anycast, enforces rate limits, prevents abuse, and handles data privacy across all endpoints."
+---
+
+Every Triton One endpoint comes with a set of platform-level features that operate automatically — no configuration required. This page explains how global routing, rate limiting, abuse prevention, security, and privacy work so you can build with confidence and handle edge cases correctly in your application.
+
+## Request routing
+
+Triton routes your API requests through a multi-layered architecture designed to minimize latency for users anywhere in the world.
+
+**GeoDNS (default)**
+
+By default, your endpoint's domain name resolves to the geographically closest Triton datacenter via GeoDNS. Your requests reach a high-availability cluster of load balancers within that datacenter, which distribute traffic across healthy RPC nodes. If a backend node fails, the load balancers redirect traffic instantly — no DNS change, no downtime for your application.
+
+**BGP Anycast (high-performance)**
+
+For the lowest possible latency, Triton also offers routing via BGP Anycast. Instead of relying on DNS resolution, BGP Anycast uses the internet's core routing protocols to direct your traffic to the nearest Triton network entry point. From there, your request travels over Triton's private dedicated backbone rather than the public internet.
+
+BGP Anycast provides:
+
+- Lower latency than DNS-based routing
+- Improved reliability without dependence on DNS for failover
+- A faster, more consistent network path for your data
+
+<Note>
+  BGP Anycast is available for clients who require the highest level of performance. Contact [support@triton.one](mailto:support@triton.one) to enable it on your endpoint.
+</Note>
+
+**Proxying and routing**
+
+If you route traffic through a third-party proxy (such as Cloudflare), GeoDNS and BGP Anycast effectiveness will be significantly reduced or broken entirely. Proxies mask the originating IP address that Triton's routing depends on, and can delay failover by caching DNS records. Triton's infrastructure already handles DDoS protection, rate limiting, and abuse prevention natively — adding a proxy in front typically degrades performance without adding meaningful protection.
+
+<Warning>
+  Placing a third-party proxy in front of your Triton endpoint is strongly discouraged. If you believe you need a proxy for a specific reason, contact [support@triton.one](mailto:support@triton.one) first — there is almost always a better solution.
+</Warning>
+
+## Rate limits
+
+Triton enforces rate limits on all endpoints to keep the platform stable and protect against abusive traffic.
+
+**Default limits**
+
+- The standard limit for most methods is **1,200 requests per 10 seconds** per IP address.
+- Computationally expensive methods like `getProgramAccounts` have significantly lower limits.
+
+**Handling a `429` response**
+
+When you exceed the rate limit, the server responds with `HTTP 429 Too Many Requests`. Your application must pause all requests from that IP for **10 seconds** before retrying. Retrying immediately will not succeed and will continue to return `429` errors.
+
+**Monitoring your usage**
+
+You can check the specific rate limits for your endpoint at any time:
+
+```
+https://<your-endpoint>.rpcpool.com/ratelimits
+```
+
+Shared pool responses also include `X-Ratelimit-*` HTTP headers so you can monitor your real-time usage programmatically and back off before hitting the limit.
+
+<Tip>
+  If you're on a dedicated node, Triton can customize rate limits to match your specific workload. Contact [support@triton.one](mailto:support@triton.one) to discuss your requirements.
+</Tip>
+
+## Abuse prevention
+
+Triton uses a multi-layered defense system to protect your endpoint from malicious traffic while allowing legitimate requests through without friction.
+
+- **Access control:** Public endpoint URLs are secured by an allowlist of web origins you provide. Secret tokens authenticate backend services and must be kept private.
+- **Intelligent rate limiting:** Per-IP and per-origin rate limits prevent any single actor from overwhelming the service.
+- **Traffic filtering:** Load balancers inspect incoming requests and deny malformed traffic or anything that doesn't conform to valid JSON-RPC specifications — before it reaches backend nodes.
+- **Advanced fingerprinting:** Sophisticated fingerprinting identifies and blocks actors attempting to spoof authentication credentials or web origins.
+
+Your most important role in security is keeping your token private. Never expose a secret token in frontend JavaScript, mobile app code, or any publicly accessible source. If you need help designing a secure setup for a mobile or desktop app, contact [support@triton.one](mailto:support@triton.one).
+
+## Security & privacy
+
+**Infrastructure security**
+
+Triton operates with a defense-in-depth security model. All internal traffic travels over a private encrypted network backbone. Every host runs a firewall with minimal exposure policies, and all data in transit is encrypted by default — both over internal networks and over public HTTPS connections.
+
+**Data privacy**
+
+Triton does not log request contents beyond what is operationally necessary. Specific privacy behavior depends on your service type:
+
+- **Shared services:** All data collection is limited to abuse prevention and operational stability. Individual end-users are not identified or de-anonymized. Standard log retention is four weeks.
+- **Dedicated services:** You have direct control over your logging policy. Options range from Max Privacy (no request parameters or payloads logged) to Enhanced Privacy (method parameters may be logged, but transaction signers cannot be linked to IPs) to GDPR Privacy (full parameter logging for compliance, handled in a GDPR-compliant manner).
+
+Sensitive billing information is never stored on Triton systems — all payments are handled by dedicated third-party processors.
+
+For privacy or security questions, contact [support@triton.one](mailto:support@triton.one). For urgent security reports, contact [noc@triton.one](mailto:noc@triton.one).

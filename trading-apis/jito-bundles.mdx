@@ -1,0 +1,127 @@
+---
+title: "Jito Bundle Simulation on Dedicated Solana Nodes"
+sidebarTitle: "Jito Bundles"
+description: "Simulate multi-transaction Jito bundles against Triton's Jito-enabled RPC nodes before submitting to the block engine. Available on all plans."
+---
+
+Triton One provides Jito-enabled RPC nodes on all plans, giving you access to Jito's enhanced transaction simulation capabilities. The key addition over standard Solana RPC is the `simulateBundle` method, which lets you test a sequence of transactions atomically before committing them — an essential tool for atomic arbitrage strategies, MEV workflows, and any use case where you need to verify that a bundle will execute correctly as a unit.
+
+<Note>
+Triton provides the Jito-enabled RPC node. To use `sendBundle` and submit bundles to the Jito Block Engine, you must have your IP address whitelisted with Jito separately. Contact Jito for details on their [Block Engine access](https://docs.jito.wtf/lowlatencytxnsend).
+</Note>
+
+## What bundle simulation gives you
+
+Standard `simulateTransaction` tests one transaction in isolation. Bundle simulation tests a sequence of transactions as if they were executed atomically in a single slot. This lets you:
+
+- Verify that all transactions in an atomic arbitrage sequence will succeed together
+- Check pre- and post-execution account states for each transaction in the bundle
+- Catch failures before paying fees or exposing your strategy to the mempool
+- Test MEV bundles against the current working bank state (`Tip` slot config)
+
+## The `simulateBundle` method
+
+**Endpoint:** `POST https://xyz.mainnet.rpcpool.com/`
+
+Replace `xyz` with your Triton subdomain and include your private token as needed.
+
+### Request body
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `transactions` | array | Yes | List of base64-encoded transactions to simulate as a bundle. |
+| `config` | object | No | `RpcSimulateBundleConfig` object to control simulation behavior. |
+
+### Example request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "simulateBundle",
+  "params": [
+    {
+      "transactions": ["<base64-encoded-tx-1>", "<base64-encoded-tx-2>"]
+    },
+    {
+      "simulationBank": "tip",
+      "skipSigVerify": false,
+      "replaceRecentBlockhash": false
+    }
+  ]
+}
+```
+
+### Response: `RpcSimulateBundleResult`
+
+The response contains a summary of whether the bundle succeeded or failed, plus per-transaction results:
+
+```rust
+pub struct RpcSimulateBundleResult {
+    pub summary: RpcBundleSimulationSummary,
+    pub transaction_results: Vec<RpcSimulateBundleTransactionResult>,
+}
+```
+
+`summary` is one of:
+
+- **`Succeeded`** — All transactions in the bundle executed without error.
+- **`Failed`** — One or more transactions failed. The response includes the error type and, where applicable, the offending transaction signature.
+
+Each entry in `transaction_results` contains:
+
+```rust
+pub struct RpcSimulateBundleTransactionResult {
+    pub err: Option<TransactionError>,
+    pub logs: Option<Vec<String>>,
+    pub pre_execution_accounts: Option<Vec<UiAccount>>,
+    pub post_execution_accounts: Option<Vec<UiAccount>>,
+    pub units_consumed: Option<u64>,
+    pub return_data: Option<UiTransactionReturnData>,
+}
+```
+
+### Bundle error types
+
+If the bundle fails, the `error` field in `RpcBundleSimulationSummary::Failed` will be one of the following:
+
+| Error | Meaning |
+|---|---|
+| `BankProcessingTimeLimitReached` | The bank hit the maximum allotted processing time. |
+| `BundleLockError` | A transaction in the bundle is malformed and could not be locked. |
+| `BundleExecutionTimeout` | Bundle execution timed out. |
+| `ExceedsCostModel` | The bundle exceeds the cost model for the slot. |
+| `InvalidPreOrPostAccounts` | The pre- or post-execution account config is invalid. |
+| `PohRecordError` | A PoH record error occurred during simulation. |
+| `TipError` | An error occurred processing the tip payment transaction. |
+| `TransactionFailure` | A specific transaction in the bundle failed. Includes the signature and error message. |
+
+## Configuration options
+
+Pass an optional `RpcSimulateBundleConfig` to control how simulation runs:
+
+```rust
+pub struct RpcSimulateBundleConfig {
+    pub pre_execution_accounts_configs: Vec<Option<RpcSimulateTransactionAccountsConfig>>,
+    pub post_execution_accounts_configs: Vec<Option<RpcSimulateTransactionAccountsConfig>>,
+    pub transaction_encoding: Option<UiTransactionEncoding>,
+    pub simulation_bank: Option<SimulationSlotConfig>,
+    pub skip_sig_verify: bool,
+    pub replace_recent_blockhash: bool,
+}
+```
+
+**`simulation_bank`** controls which bank state the simulation runs against:
+
+| Value | Behavior |
+|---|---|
+| `Commitment(CommitmentConfig)` | Simulate on the bank at the specified commitment level (e.g., `confirmed`, `finalized`). |
+| `Slot(Slot)` | Simulate on the bank at a specific slot number. |
+| `Tip` | Simulate on the RPC's highest slot bank (the working bank). Recommended for MEV simulation. |
+
+Set `skip_sig_verify: true` to skip signature verification for faster simulation. Set `replace_recent_blockhash: true` to simulate older transactions without re-signing.
+
+## Resources
+
+- [Jito Searcher Examples](https://github.com/jito-labs/searcher-examples) — reference implementations for bundle construction and submission
+- [Jito documentation — low latency transactions](https://docs.jito.wtf/lowlatencytxnsend) — full details on Block Engine access and `sendBundle`

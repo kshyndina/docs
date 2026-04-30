@@ -1,0 +1,50 @@
+---
+title: "Account Management API Overview"
+sidebarTitle: "Overview"
+description: "REST API for programmatically managing your Triton One accounts, subscriptions, endpoints, and tokens — designed for operators and resellers."
+---
+
+The Account Management API is a REST API that lets you manage every aspect of your Triton One infrastructure without touching the Customer Portal UI. You can create and update subscriptions, provision endpoints, rotate RPC tokens, configure rate tiers, and manage billing accounts — all through authenticated HTTP requests against `https://customers.triton.one/api/v1`.
+
+This API is intended for **operators** and **resellers**: teams that manage multiple users, accounts, or downstream customers on top of Triton infrastructure. Standard end-user accounts cannot access most write operations. If you need Operator or Reseller role access, contact Triton support at [support@triton.one](mailto:support@triton.one) or reach out through your dedicated support channel.
+
+## Base URL
+
+All API endpoints are relative to the following base URL:
+
+```
+https://customers.triton.one/api/v1
+```
+
+## Two separate authentication concerns
+
+The Account Management API uses its own set of API tokens, separate from the RPC tokens your clients use to make blockchain requests. You generate Account Management API tokens in the Customer Portal after receiving Operator or Reseller access. RPC tokens — the credentials your applications embed to call a Solana RPC endpoint — are created and managed through this API itself (see [Tokens](/account-api/tokens)).
+
+<Note>
+  Never use an RPC token to call the Account Management API, or vice versa. They serve different authentication surfaces and will not work interchangeably.
+</Note>
+
+## Prerequisites
+
+Before making API requests, you need:
+
+1. A Triton One account — sign in or request one at [customers.triton.one](https://customers.triton.one).
+2. Operator or Reseller role access granted by Triton — email [support@triton.one](mailto:support@triton.one) to request this.
+3. An Account Management API token generated from the Customer Portal.
+
+## Explore the API
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock" href="/account-api/authentication">
+    Learn how to pass your token and required headers on every request.
+  </Card>
+  <Card title="Accounts" icon="building" href="/account-api/accounts">
+    List, retrieve, and update billing accounts.
+  </Card>
+  <Card title="Subscriptions" icon="layer-group" href="/account-api/subscriptions">
+    Create and manage RPC subscriptions, including activation and deactivation.
+  </Card>
+  <Card title="Endpoints" icon="link" href="/account-api/endpoints">
+    Provision the RPC endpoint URLs your clients connect to.
+  </Card>
+</CardGroup>

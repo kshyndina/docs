@@ -1,0 +1,125 @@
+---
+title: "Rate Tiers: Configure Endpoint Rate Limits"
+sidebarTitle: "Rate Tiers"
+description: "Understand how rate tiers control request throughput and pricing for Triton One endpoints and tokens, and how to fetch available tiers via the API."
+---
+
+A rate tier is assigned to every endpoint and token in Triton One. It defines the request rate limits that Triton enforces for that resource and directly determines what that resource costs. Higher rate tiers allow more requests per second and are priced accordingly. Choosing the right rate tier is a key part of planning your infrastructure costs.
+
+Endpoints accessed via a valid RPC token receive a more favorable effective rate limit than the same endpoint accessed purely through allowed origins (browser-based, tokenless access). If you have performance-critical backend workloads, always use token-based access rather than allowed origins.
+
+Fetching the list of available rate tiers requires a **Reseller** role token. Assigning or changing a rate tier on an endpoint also requires a Reseller role token.
+
+---
+
+## Get rate tiers
+
+`GET /api/v1/rate_tiers`
+
+<Note>
+  This endpoint requires a **Reseller** role token.
+</Note>
+
+Returns all rate tier types that can be assigned to an endpoint or token.
+
+### Request
+
+```bash
+curl 'https://customers.triton.one/api/v1/rate_tiers' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json"
+```
+
+### Response
+
+<ResponseField name="rate_tiers" type="object[]">
+  Array of available rate tier objects.
+  <Expandable title="properties">
+    <ResponseField name="name" type="string">Name of the rate tier, used when creating or updating endpoints and tokens.</ResponseField>
+  </Expandable>
+</ResponseField>
+
+```json
+{
+  "rate_tiers": [
+    { "name": "free" },
+    { "name": "tier1" },
+    { "name": "tier2" },
+    { "name": "tier3" },
+    { "name": "dedi" }
+  ]
+}
+```
+
+---
+
+## Rate tier descriptions
+
+| Tier | Typical use |
+|---|---|
+| `free` | Development and low-volume testing. No cost, lowest rate limits. |
+| `tier1` | Low-traffic production workloads. |
+| `tier2` | Medium-traffic production workloads. |
+| `tier3` | High-traffic production workloads. |
+| `dedi` | Dedicated pool access with the highest throughput. |
+
+<Note>
+  The exact requests-per-second limits and pricing for each tier are set at the account level based on your agreement with Triton. Contact [support@triton.one](mailto:support@triton.one) for tier-specific pricing details.
+</Note>
+
+---
+
+## Assigning a rate tier to an endpoint
+
+Pass the rate tier name as the `rate_tier` parameter when creating or updating an endpoint. The value must exactly match a name returned by `GET /api/v1/rate_tiers`.
+
+**On creation:**
+
+```bash
+curl -X POST 'https://customers.triton.one/api/v1/subscriptions/74ea9d9a-4b2a-4f01-af47-1c175f8a2af6/endpoints' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "endpoint": {
+      "name": "My Production Endpoint",
+      "rate_tier": "tier2"
+    }
+  }'
+```
+
+**On update (Reseller role only):**
+
+```bash
+curl -X PUT 'https://customers.triton.one/api/v1/endpoints/a5131884-1ce4-4415-98f8-d040901ecbd0' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "endpoint": {
+      "rate_tier": "tier3"
+    }
+  }'
+```
+
+## Assigning a rate tier to a token
+
+Pass the rate tier name as `rate_tier` when creating a token:
+
+```bash
+curl -X POST 'https://customers.triton.one/api/v1/subscriptions/74ea9d9a-4b2a-4f01-af47-1c175f8a2af6/tokens' \
+  -H "Authorization: secret-api-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "token": {
+      "name": "Production Token",
+      "rate_tier": "tier2"
+    }
+  }'
+```
+
+<Tip>
+  Each endpoint and token you provision incurs costs independently, based on its assigned rate tier. If you have endpoints you are not actively using, consider deactivating them to avoid unnecessary charges.
+</Tip>

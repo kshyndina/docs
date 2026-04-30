@@ -1,0 +1,35 @@
+---
+title: "Trading APIs: Swaps, Bundles & Price Feeds on Solana"
+sidebarTitle: "Overview"
+description: "Triton One exposes four trading APIs for Solana: Metis swap routing, Titan streaming quotes, Jito bundle simulation, and Pyth Hermes price feeds."
+---
+
+Triton One bundles four production-ready trading APIs into your existing RPC subscription. Whether you need optimal swap routing, real-time quote streams, atomic bundle simulation, or low-latency price data, each API is accessible from the same Triton endpoint infrastructure you already use — with no separate accounts or third-party tokens required.
+
+<CardGroup cols={2}>
+  <Card title="Metis Swap API" icon="arrows-rotate" href="/trading-apis/metis-swap">
+    Jupiter's routing and quote engine, self-hosted on Triton. Aggregates liquidity from 20+ DEXes and AMMs on Solana. Supports platform fees, ExactOut mode, and circular arbitrage.
+  </Card>
+  <Card title="Titan Swap API" icon="bolt" href="/trading-apis/titan-swap">
+    WebSocket-based meta-aggregator that streams live quotes from multiple DEX aggregators and RFQ sources. Powered by the Argos routing engine with DART real-time re-optimization.
+  </Card>
+  <Card title="Jito Bundle Simulation" icon="layer-group" href="/trading-apis/jito-bundles">
+    Simulate multi-transaction bundles against Jito-enabled RPC nodes before submission. Available on all Triton plans for testing atomic arbitrage, MEV strategies, and complex transaction sequences.
+  </Card>
+  <Card title="Pyth Hermes" icon="satellite-dish" href="/trading-apis/pyth-hermes">
+    Low-latency Pyth price feed access via Triton's dedicated Pythnet nodes. Query the latest prices over REST or subscribe to a live WebSocket stream.
+  </Card>
+</CardGroup>
+
+## Supported chains
+
+| API | Chain |
+|---|---|
+| Metis Swap | Solana |
+| Titan Swap | Solana |
+| Jito Bundle Simulation | Solana |
+| Pyth Hermes | Pythnet (price data consumed on Solana and other chains) |
+
+<Note>
+All four APIs require an active Triton subscription. Metis, Titan, and Jito bundle simulation require a Solana subscription. Pyth Hermes requires a Pythnet endpoint.
+</Note>

@@ -1,0 +1,108 @@
+---
+title: "Old Faithful: Full Solana Historical Archive Access"
+sidebarTitle: "Old Faithful"
+description: "Access the complete Solana ledger from genesis via standard JSON-RPC or gRPC streams. Automatically integrated into every Triton One endpoint."
+---
+
+Old Faithful is Triton One's open-source solution for the Solana historical ledger, sponsored by the Solana Foundation. It makes the entire history of the Solana blockchain — every block and transaction from genesis to the present — available to anyone, either through the familiar JSON-RPC interface or through high-performance gRPC streams for bulk data access. You don't need a separate endpoint, a special configuration, or any changes to your application code to use it.
+
+## How it works
+
+When you call `getBlock`, `getTransaction`, or `getSignaturesForAddress` for historical data, Triton One's routing layer automatically detects that the requested slot is no longer in the local ledger and forwards the request to the Old Faithful archive backend. This happens transparently. From your application's perspective, you make a standard Solana RPC call and get back a standard Solana RPC response.
+
+<Tip>
+  Old Faithful will progressively replace the BigTable archive backend as the primary source for historical data. In the meantime, both systems are available. BigTable lookups incur additional charges ($25 per million queries); Old Faithful routing does not.
+</Tip>
+
+## JSON-RPC access
+
+You can call any standard historical Solana RPC method against your existing endpoint. No changes required.
+
+```bash
+# Fetch a transaction from an old epoch
+curl -X POST https://your-endpoint.mainnet.rpcpool.com/your-token \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "getTransaction",
+    "params": [
+      "3Jq3QsGPYrZoF6LF3oBo7YYsMXvZhKq1WQMKR4XJb2pKNJzRAbcMG4TvwxbTHn1wTPcVv2BmZP1FshF4TnV8Jqb",
+      {
+        "encoding": "json",
+        "maxSupportedTransactionVersion": 0
+      }
+    ]
+  }'
+```
+
+```bash
+# Fetch a historical block by slot
+curl -X POST https://your-endpoint.mainnet.rpcpool.com/your-token \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "getBlock",
+    "params": [
+      100000000,
+      {
+        "encoding": "json",
+        "maxSupportedTransactionVersion": 0,
+        "transactionDetails": "full",
+        "rewards": false
+      }
+    ]
+  }'
+```
+
+## gRPC streaming access
+
+For workloads that need to process large amounts of historical data — backfilling indexes, auditing transaction history, building analytics — standard JSON-RPC is not efficient. Old Faithful also exposes a gRPC interface with two streaming methods designed specifically for this use case.
+
+**StreamTransactions** lets you request a range of slots and receive only the transactions that match your filters, processed server-side. You never have to receive and discard irrelevant data.
+
+**StreamBlocks** gives you full block data for a slot range, again with server-side filtering.
+
+This is particularly useful when you need to process millions of historical transactions without loading your network or client with unnecessary data.
+
+```bash
+# Full gRPC method documentation and examples
+# https://docs.old-faithful.net/references/grpc-methods/examples#streaming-methods
+```
+
+<Note>
+  Most standard JSON-RPC methods can also be called via gRPC. The streaming methods are the main advantage for bulk historical access. See the [gRPC examples](https://docs.old-faithful.net/usage-and-installation/grpc-methods) for connection setup and authentication.
+</Note>
+
+## Key features
+
+<CardGroup cols={2}>
+  <Card title="Full historical access" icon="clock-rotate-left">
+    Every block from every epoch, including the earliest epochs immediately after genesis, is available.
+  </Card>
+  <Card title="Automatic routing" icon="route">
+    No endpoint changes needed. Historical requests are detected and routed transparently.
+  </Card>
+  <Card title="Flexible APIs" icon="code">
+    Use standard JSON-RPC for individual lookups or high-performance gRPC streams for bulk data.
+  </Card>
+  <Card title="Open source" icon="github">
+    Built in the open under the Yellowstone Faithful project. Inspect the code, run your own instance, or contribute.
+  </Card>
+</CardGroup>
+
+## Self-hosted option
+
+Old Faithful is fully open source. If you want to run your own archive node — for example, to keep all historical data on-premises — you can do so. Be aware that storing the full Solana history requires significant storage capacity. Triton One's managed endpoints are the easiest path for most teams.
+
+## Resources
+
+- [Yellowstone Faithful on GitHub](https://github.com/rpcpool/yellowstone-faithful)
+- [JSON-RPC method reference and examples](https://docs.old-faithful.net/usage-and-installation/rpc-methods)
+- [gRPC method reference and examples](https://docs.old-faithful.net/usage-and-installation/grpc-methods)
+- [Old Faithful documentation site](https://docs.old-faithful.net)
+
+## Support
+
+For questions about access or configuration, contact [support@triton.one](mailto:support@triton.one) or reach out via the support chat in your customer dashboard.

@@ -1,0 +1,81 @@
+---
+title: "Sui on Triton One: RPC Nodes and Walrus Storage"
+sidebarTitle: "Sui"
+description: "Access Sui mainnet and testnet via Triton's RPC nodes, gRPC streaming beta, and Walrus decentralized storage and Seal infrastructure."
+---
+
+Triton was part of Sui's original validator set and has run one of the most stable RPC stacks in the Sui ecosystem since launch. You get production-ready access to Sui mainnet and testnet, covering the full range of APIs — from JSON-RPC and gRPC to Walrus storage and Seal, with GraphQL alpha support on the roadmap for Q1–Q2 2026.
+
+## Supported networks
+
+<CardGroup cols={2}>
+  <Card title="Mainnet" icon="circle-check">
+    - JSON-RPC (deprecated in 2026)
+    - gRPC beta (replacing JSON-RPC)
+    - Walrus Publisher, Aggregator, and Storage nodes
+    - Seal permissioned server
+  </Card>
+  <Card title="Testnet" icon="flask">
+    - JSON-RPC (deprecated in 2026)
+    - gRPC beta (replacing JSON-RPC)
+    - Walrus Publisher, Aggregator, and Storage nodes
+    - Seal open and permissioned servers
+  </Card>
+</CardGroup>
+
+<Note>
+  The Sui WebSocket API is officially deprecated and is being retired by Mysten Labs. Use gRPC streaming for real-time data access.
+</Note>
+
+## API access
+
+### JSON-RPC
+
+Sui's JSON-RPC interface is the current standard for querying chain state and submitting transactions. Triton provides access on both mainnet and testnet. Note that Mysten Labs has announced JSON-RPC deprecation for 2026 — gRPC will replace it as the primary interface.
+
+### gRPC (beta)
+
+Triton provides low-latency gRPC endpoints for Sui mainnet and testnet. gRPC offers persistent streaming connections for subscribing to object updates, transaction commits, and event logs. This interface is currently in beta and will become the primary API as JSON-RPC is retired.
+
+<Tip>
+  gRPC is the recommended interface for indexers, explorers, and reactive frontends that depend on real-time data. Subscribe to object updates and transaction events with minimal delay.
+</Tip>
+
+### GraphQL (coming Q1–Q2 2026)
+
+Sui is rolling out a GraphQL alpha backed by an indexing layer. Triton will support the GraphQL API as it becomes available, giving you a structured query surface for complex object and transaction lookups.
+
+## Walrus decentralized storage
+
+[Walrus](https://walrus.xyz/) is Sui's decentralized, scalable, distributed, and fault-tolerant storage layer, optimized for storing large binary blobs. Sui is used for coordination between Walrus nodes.
+
+Triton hosts all three Walrus components:
+
+<CardGroup cols={3}>
+  <Card title="Publisher" icon="upload">
+    Write data on-chain via the Walrus Publisher endpoint.
+  </Card>
+  <Card title="Aggregator" icon="download">
+    Read and retrieve stored blobs via the Walrus Aggregator endpoint.
+  </Card>
+  <Card title="Storage nodes" icon="database">
+    Triton operates Walrus Storage nodes as part of the decentralized storage network.
+  </Card>
+</CardGroup>
+
+For a full description of Walrus components and how they interact, see the [official Walrus documentation](https://docs.wal.app/dev-guide/components.html).
+
+## Seal
+
+Seal is Sui's content-addressed data model layer. Triton provides:
+
+- **Open server** on Testnet — available for early indexing experiments, proofs, and developer workflows that need flexible, verifiable storage access.
+- **Permissioned server** on Mainnet and Testnet — enterprise-grade endpoints with controlled access and higher throughput for production applications that require trusted, authenticated storage operations.
+
+## Infrastructure
+
+Triton deploys dedicated nodes across North America, Europe, and APAC, with built-in load balancing and regional failover. Traffic is routed to the closest healthy region and balanced across available nodes automatically — no manual intervention required when individual servers go offline.
+
+## Get access
+
+To get your Sui RPC or Walrus endpoint, [start your onboarding](https://customers.triton.one/onboarding) or contact [help@triton.one](mailto:help@triton.one).

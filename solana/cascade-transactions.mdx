@@ -1,0 +1,150 @@
+---
+title: "Cascade: High-Performance Solana Transaction Delivery"
+sidebarTitle: "Cascade"
+description: "Send transactions through Triton's SWQoS network for a more reliable path to Solana block leaders, especially during periods of high network congestion."
+---
+
+Cascade is Triton One's transaction delivery network for Solana. Instead of sending your transactions through the public TPU ports that every standard RPC uses — and that are frequently saturated by bots and spam — Cascade routes them through the reserved, private connection pools available to staked validators via Solana's Stake-Weighted Quality of Service (SWQoS) mechanism. This gives your transactions a significantly higher probability of landing on-chain, particularly when the network is under load.
+
+## How Cascade works
+
+Solana provides multiple pathways for transaction delivery. Public ports are free and permissionless, which makes them targets for bot traffic and congestion. SWQoS is different: validators with stake have a reserved bandwidth allocation proportional to their stake weight, and those connections are not available to arbitrary senders.
+
+Cascade places your transactions on the SWQoS pathway by forwarding them through Triton's network of staked validators. The forwarding software (Yellowstone Jet) receives your transaction via your endpoint's gRPC connection and sends it directly to the current leader over that validator's reserved QUIC connection — bypassing the public queue entirely.
+
+<Note>
+  SWQoS bandwidth is added to your endpoint at no extra cost. Contact support via your customer dashboard to request it, then follow the best practices below to get the most out of it.
+</Note>
+
+## Getting access
+
+<Steps>
+  <Step title="Create a Triton One account">
+    If you don't have an account yet, sign up at [customers.triton.one/onboarding](https://customers.triton.one/onboarding).
+  </Step>
+  <Step title="Request transaction bandwidth">
+    Log in to your [customer dashboard](https://customers.triton.one) and click the **Talk to Support** button in the lower-right corner. Request SWQoS transaction bandwidth in the chat.
+  </Step>
+  <Step title="Follow sending best practices">
+    Once bandwidth is enabled, configure your client correctly. The steps below are critical for getting reliable delivery.
+  </Step>
+</Steps>
+
+## Best practices for sending transactions
+
+Getting transactions to land on Solana requires more than just a good network path. Your client-side behaviour matters just as much. These practices apply regardless of whether you're using Cascade or a standard RPC.
+
+### Handle retries in your own code
+
+The RPC node should not manage retries on your behalf. When a node queues and retries transactions during high traffic, it creates backpressure that saturates queues and causes widespread failures for everyone. Take full control in your own application instead.
+
+- Build async retry logic that re-fetches a recent blockhash and re-signs the transaction every few seconds.
+- Set `maxRetries: 0` in your `sendTransaction` options so the RPC node does not use its legacy retry queue.
+
+```typescript
+import { Connection, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
+
+const connection = new Connection("https://your-endpoint.mainnet.rpcpool.com/your-token");
+
+async function sendWithRetry(
+  transaction: Transaction,
+  signers: Signer[],
+  maxAttempts = 10
+): Promise<string> {
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const { blockhash, lastValidBlockHeight } =
+      await connection.getLatestBlockhash("confirmed");
+
+    transaction.recentBlockhash = blockhash;
+    transaction.feePayer = signers[0].publicKey;
+    transaction.sign(...signers);
+
+    const signature = await connection.sendRawTransaction(
+      transaction.serialize(),
+      {
+        skipPreflight: true,
+        maxRetries: 0,
+      }
+    );
+
+    // Poll for confirmation until the blockhash expires
+    const status = await connection.confirmTransaction({
+      signature,
+      blockhash,
+      lastValidBlockHeight,
+    });
+
+    if (!status.value.err) {
+      return signature;
+    }
+  }
+  throw new Error("Transaction failed after maximum retry attempts");
+}
+```
+
+### Simulate first, then send separately
+
+Cascade has more delivery pathways available for transactions that do not require preflight simulation. Separate simulation from execution for the best results.
+
+1. Call `simulateTransaction()` when you need to verify correctness.
+2. When sending for real, use `skipPreflight: true` on `sendTransaction`.
+
+```typescript
+// Simulate first (optional — only if you need to verify the outcome)
+const simulation = await connection.simulateTransaction(transaction);
+if (simulation.value.err) {
+  console.error("Simulation failed:", simulation.value.err);
+  return;
+}
+
+// Then send without preflight
+const signature = await connection.sendRawTransaction(transaction.serialize(), {
+  skipPreflight: true,
+  maxRetries: 0,
+});
+```
+
+### Set a tight compute unit budget and a competitive priority fee
+
+A well-tuned compute budget and priority fee are critical for block inclusion.
+
+**Compute budget:** The default CU limit is often far too high. A simple SOL transfer uses roughly 500 CUs. Validators pack blocks more efficiently when they can predict exactly how much compute a transaction needs. Simulate your transaction first to measure its actual CU consumption, then set a budget that adds a small safety margin.
+
+**Priority fee:** Use Triton's [Improved Priority Fees API](/solana/overview#developer-guides) to request a percentile-based estimate for the specific accounts your transaction write-locks. This gives you a realistic market rate without overpaying.
+
+```typescript
+import {
+  ComputeBudgetProgram,
+  TransactionInstruction,
+} from "@solana/web3.js";
+
+function buildPriorityInstructions(
+  computeUnitLimit: number,
+  priorityFeeMicroLamports: number
+): TransactionInstruction[] {
+  return [
+    ComputeBudgetProgram.setComputeUnitLimit({ units: computeUnitLimit }),
+    ComputeBudgetProgram.setComputeUnitPrice({
+      microLamports: priorityFeeMicroLamports,
+    }),
+  ];
+}
+```
+
+### Use a `confirmed` or `finalized` blockhash
+
+Always request your recent blockhash at the `confirmed` or `finalized` commitment level. A blockhash fetched at `processed` may be rolled back, making your transaction immediately invalid.
+
+```typescript
+const { blockhash } = await connection.getLatestBlockhash("confirmed");
+```
+
+## Shield integration
+
+Cascade is fully integrated with [Yellowstone Shield](/solana/shield-policies), Triton's on-chain MEV protection layer. You can attach a Shield policy address to any transaction sent through Cascade, and the network will only forward it to validators that match your allowlist or blocklist.
+
+## Resources
+
+- [Optimized Transactions Examples on GitHub](https://github.com/rpcpool/optimized-txs-examples) — sample client-side retry logic
+- [How to optimize compute usage on Solana](https://solana.com/developers/guides/advanced/how-to-optimize-compute)
+- [Jordan from Anza Labs on transaction delivery](https://x.com/jordaaash/status/1774892862049800524?s=20)

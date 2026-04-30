@@ -1,0 +1,105 @@
+---
+title: "Pyth Hermes: Low-Latency Price Feeds via Triton"
+sidebarTitle: "Pyth Hermes"
+description: "Access Pyth Network price feeds through Triton's dedicated Pythnet endpoints. Query prices over REST or subscribe to live updates via WebSocket."
+---
+
+Pyth Hermes is a web service that listens to both Pythnet and the Wormhole Network for Pyth price updates and exposes them through a simple web API. It delivers Pyth's latest price update format, which is optimized for on-chain verification and usage. Triton hosts Hermes as part of your Pythnet endpoint — no separate signup or infrastructure required.
+
+## How Hermes works
+
+Hermes sits between you and the Pyth Network. It aggregates price attestations from Pythnet validators, verifies them through the Wormhole guardian network, and serves the resulting signed price updates to your application. The Pyth JavaScript SDKs use Hermes under the hood, so if you're already using `@pythnetwork/price-service-client`, you're already using this protocol.
+
+You can use Hermes in two ways:
+
+- **REST API** — Query the latest price for one or more price feeds on demand.
+- **WebSocket** — Subscribe to a live stream of price updates as they are published.
+
+<Note>
+To use the Hermes API, you need a Pythnet endpoint from Triton. Contact [support@triton.one](mailto:support@triton.one) or provision a Pythnet endpoint through the [Customer Portal](https://customers.triton.one).
+</Note>
+
+## Endpoint formats
+
+### Frontend REST access
+
+Use this URL format for browser-based or public-facing clients. No token is required in the path:
+
+```
+https://<unique-subdomain>.mainnet.pythnet.rpcpool.com/hermes
+```
+
+### Backend REST access
+
+For server-side clients, include your secret RPC token before `/hermes` to authenticate:
+
+```
+https://<unique-subdomain>.mainnet.pythnet.rpcpool.com/<secret-token>/hermes
+```
+
+### WebSocket access
+
+For live price streams from frontend clients:
+
+```
+wss://<unique-subdomain>.mainnet.pythnet.rpcpool.com/hermes
+```
+
+For backend clients with token authentication:
+
+```
+wss://<unique-subdomain>.mainnet.pythnet.rpcpool.com/<secret-token>/hermes
+```
+
+### Base Pythnet RPC access
+
+Your underlying Pythnet RPC (without the `/hermes` path) is available at:
+
+```
+https://<unique-subdomain>.mainnet.pythnet.rpcpool.com/<secret-token>
+```
+
+## Example requests
+
+### Get the latest price for a feed
+
+Fetch the latest Pyth price update for a specific price feed ID:
+
+```bash
+curl 'https://<unique-subdomain>.mainnet.pythnet.rpcpool.com/<secret-token>/hermes/v2/updates/price/latest?ids[]=0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43'
+```
+
+The response contains a signed `PriceFeed` object ready for on-chain submission.
+
+### Subscribe to price updates over WebSocket
+
+Connect to the WebSocket endpoint and send a subscription message to start receiving live updates:
+
+```typescript
+import { HermesClient } from "@pythnetwork/hermes-client";
+
+const client = new HermesClient(
+  "wss://<unique-subdomain>.mainnet.pythnet.rpcpool.com/<secret-token>/hermes"
+);
+
+const priceIds = [
+  "0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43", // BTC/USD
+];
+
+const eventSource = await client.getPriceUpdatesStream(priceIds, {
+  encoding: "hex",
+  parsed: true,
+});
+
+eventSource.onmessage = (event) => {
+  console.log(JSON.parse(event.data));
+};
+```
+
+<Tip>
+You can find price feed IDs for all supported assets on the [Pyth price feed catalog](https://pyth.network/price-feeds).
+</Tip>
+
+## API reference
+
+Full documentation for all Hermes REST and WebSocket endpoints — including query parameters, response schemas, and available price feeds — is available at the [official Pyth Hermes documentation](https://docs.pyth.network/documentation/pythnet-price-feeds/hermes).

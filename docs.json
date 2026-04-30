@@ -1,0 +1,121 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Docs Triton",
+  "theme": "luma",
+  "favicon": "https://media.brand.dev/03e74411-3b32-42eb-a2a6-b14206dcf5e4.png",
+  "colors": {
+    "primary": "#7A4BA0",
+    "light": "#F2EDF6",
+    "dark": "#492D60"
+  },
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/rpcpool"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "getting-started",
+              "core-features"
+            ]
+          },
+          {
+            "group": "Streaming",
+            "pages": [
+              "streaming/overview",
+              "streaming/dragons-mouth-grpc",
+              "streaming/whirligig-websockets",
+              "streaming/fumarole",
+              "streaming/vixen-program-streams"
+            ]
+          },
+          {
+            "group": "Solana",
+            "pages": [
+              "solana/overview",
+              "solana/cascade-transactions",
+              "solana/digital-assets-api",
+              "solana/old-faithful-archive",
+              "solana/steamboat-indexes",
+              "solana/shield-policies",
+              "solana/photon"
+            ]
+          },
+          {
+            "group": "Trading APIs",
+            "pages": [
+              "trading-apis/overview",
+              "trading-apis/metis-swap",
+              "trading-apis/titan-swap",
+              "trading-apis/jito-bundles",
+              "trading-apis/pyth-hermes"
+            ]
+          },
+          {
+            "group": "Other Chains",
+            "pages": [
+              "chains/sui",
+              "chains/monad",
+              "chains/pythnet"
+            ]
+          },
+          {
+            "group": "Validators",
+            "pages": [
+              "validators/overview",
+              "validators/vote-account-setup",
+              "validators/node-identity-protection"
+            ]
+          },
+          {
+            "group": "Support",
+            "pages": [
+              "support/faq",
+              "support/security",
+              "support/streaming-troubleshooting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Account Management API",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "account-api/introduction",
+              "account-api/authentication"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "account-api/accounts",
+              "account-api/subscriptions",
+              "account-api/endpoints",
+              "account-api/tokens",
+              "account-api/rate-tiers",
+              "account-api/address-watch-lists",
+              "account-api/payments"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "background": {
+    "color": {
+      "light": "#F7F7F7",
+      "dark": "#171717"
+    },
+    "decoration": "gradient"
+  }
+}

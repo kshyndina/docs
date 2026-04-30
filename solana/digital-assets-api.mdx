@@ -1,0 +1,211 @@
+---
+title: "Digital Assets API: Query NFTs & Tokens on Solana"
+sidebarTitle: "Digital Assets API"
+description: "Indexed JSON-RPC API for querying NFTs, compressed NFTs, SPL tokens, and Token-2022 assets. Available on all Triton endpoints at $50 per million requests."
+---
+
+The Digital Assets API (DAS API) gives you a fast, indexed way to query any digital asset on Solana — regular NFTs, compressed NFTs, SPL tokens, and Token-2022 (Token Extensions) — through a single, consistent JSON-RPC interface. Triton One actively contributes to the Metaplex DAS standard and runs a production-grade indexing and caching layer behind all its endpoints. Compressed NFT decompression and metadata caching happen server-side, so you get clean, structured responses without any extra work.
+
+## How to use it
+
+The DAS API is enabled by default on every shared and dedicated Triton One endpoint — no separate signup, no code changes, and no different endpoint URL. Any `getAsset`, `searchAssets`, or other DAS method you send to your standard Solana mainnet endpoint is automatically routed to the indexer.
+
+<Note>
+  DAS API calls are billed at **$50 per million requests**. Standard rate limits for your RPC plan apply. Check your account panel at [customers.triton.one](https://customers.triton.one) for detailed billing information.
+</Note>
+
+All requests follow the JSON-RPC 2.0 spec:
+
+```bash
+curl -X POST https://your-endpoint.mainnet.rpcpool.com/your-token \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "getAsset",
+    "params": {
+      "id": "EKpQLNFP6DQ2YiXrD5f2eRkNfxFnrQWpxdLHa7xGmN3x"
+    }
+  }'
+```
+
+## Available methods
+
+<CardGroup cols={2}>
+  <Card title="getAsset" icon="magnifying-glass">
+    Retrieve full metadata, collection, creators, authorities, compression status, and ownership for a single asset by its public key.
+  </Card>
+  <Card title="getAssets" icon="layer-group">
+    Batch version of `getAsset`. Retrieve details for multiple assets in a single request. Alias: `getAssetBatch`.
+  </Card>
+  <Card title="getAssetProof" icon="file-certificate">
+    Fetch the Merkle proof path for a compressed NFT. Required when you need to submit changes to the asset's compressed Merkle tree.
+  </Card>
+  <Card title="getAssetProofs" icon="files">
+    Retrieve Merkle proofs for multiple compressed assets in a single request.
+  </Card>
+  <Card title="getAssetSignatures" icon="pen-line">
+    Fetch all transaction signatures associated with a specific compressed asset.
+  </Card>
+  <Card title="getAssetsByAuthority" icon="shield-check">
+    List all assets controlled by a specific update authority address.
+  </Card>
+  <Card title="getAssetsByCreator" icon="paintbrush">
+    List all assets created by a specified creator address.
+  </Card>
+  <Card title="getAssetsByGroup" icon="object-group">
+    Get all assets belonging to a group (e.g., a collection), identified by a key-value pair. Currently temporarily disabled for performance optimization.
+  </Card>
+  <Card title="getAssetsByOwner" icon="user">
+    Retrieve all assets — fungible and non-fungible — associated with a given owner public key.
+  </Card>
+  <Card title="searchAssets" icon="filter">
+    Search across all assets with a flexible set of filters: owner, creator, collection, compression status, token type, and more.
+  </Card>
+  <Card title="getNftEditions" icon="copy">
+    Retrieve all printed editions for a master edition NFT mint.
+  </Card>
+  <Card title="getTokenAccounts" icon="wallet">
+    Retrieve all token accounts linked to a specific mint or owner address.
+  </Card>
+  <Card title="getTokenLargestAccounts" icon="chart-bar">
+    Retrieve the 20 largest token accounts for a specific SPL token mint.
+  </Card>
+</CardGroup>
+
+<Warning>
+  `getAssetsByGroup` is currently temporarily disabled for scheduled performance optimizations. Avoid calling this method until further notice.
+</Warning>
+
+## Example requests
+
+<CodeGroup>
+
+```json getAsset
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "getAsset",
+  "params": {
+    "id": "7k7YqWc85BtyTx5UyvNnogv2jPHVe4BZ9HQsFLM8VnoJ"
+  }
+}
+```
+
+```json getAssets
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "getAssets",
+  "params": {
+    "ids": [
+      "7k7YqWc85BtyTx5UyvNnogv2jPHVe4BZ9HQsFLM8VnoJ",
+      "HP2QQgwfTgHNRcX7g3HHMNKxXjAEvQsr1wComqbPfWAR"
+    ]
+  }
+}
+```
+
+```json getAssetProof
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "getAssetProof",
+  "params": {
+    "id": "EZsmgudhX6EFVfrdxmShDiNj365E85x7kpLJCVvPLVSH"
+  }
+}
+```
+
+```json getAssetsByOwner
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "getAssetsByOwner",
+  "params": [
+    "9kPPbeBAvCtJCZ98EFKabxp7wTeFQRseCYDRdovyfUfz",
+    { "sortBy": "created", "sortDirection": "desc" },
+    50,
+    1,
+    null,
+    null
+  ]
+}
+```
+
+```json searchAssets
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "searchAssets",
+  "params": {
+    "ownerAddress": "Ewb8XmZ4RbSAxnFY4P4XMtjz5EccYn12bnUF6T4SSvVq",
+    "page": 1,
+    "limit": 50
+  }
+}
+```
+
+```json getTokenAccounts
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "getTokenAccounts",
+  "params": {
+    "mintAddress": "BUaiggSfm81ZRAeW572dNf1BhXCzZxaWrGNRm5PjSQzY",
+    "ownerAddress": "BiKcVb6t6YDZczYjWLjXKwdgAUecdQrp1EJXAfRmu3VR",
+    "page": 1,
+    "limit": 100
+  }
+}
+```
+
+</CodeGroup>
+
+## Fungible tokens
+
+The DAS API indexes all mints and token accounts for both the original SPL Token Program and the Token Extensions Program (Token-2022). You can query token balances, metadata, and program details through the same interface you use for NFTs.
+
+To retrieve all tokens held by a wallet — SPL, Token-2022, regular NFTs, and compressed NFTs — use `searchAssets` with `tokenType: "All"`:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "searchAssets",
+  "params": {
+    "ownerAddress": "5aZZ4duJUKiMsJN9vRsoAn4SDX7agvKu7Q3QdFWRfWze",
+    "tokenType": "All"
+  }
+}
+```
+
+The response for fungible assets includes a `token_info` block with balance, supply, decimals, and the associated token address. Token-2022 assets additionally include a `mint_extensions` field when applicable:
+
+```json
+{
+  "mint_extensions": {
+    "transfer_fee_config": {
+      "withheld_amount": 0,
+      "newer_transfer_fee": {
+        "epoch": 500,
+        "maximum_fee": 1000000000,
+        "transfer_fee_basis_points": 500
+      },
+      "withdraw_withheld_authority": "AuthorityPublicKey",
+      "transfer_fee_config_authority": "AuthorityPublicKey"
+    }
+  }
+}
+```
+
+## Compressed NFTs and Merkle proofs
+
+When you query a compressed NFT through `getAsset`, the response includes a `compression` field indicating the asset's tree address, leaf index, and current data hash. To make changes to a compressed asset (transfers, burns, etc.), you need the Merkle proof path. Use `getAssetProof` with the asset's public key to retrieve it.
+
+The proof is required when constructing the transaction instruction that calls the Bubblegum program to verify the asset's position in the concurrent Merkle tree.
+
+## Resources
+
+- [Metaplex DAS API specification](https://developers.metaplex.com/das-api)
+- [Digital Asset Standard API client and examples on GitHub](https://github.com/metaplex-foundation/digital-asset-standard-api)
