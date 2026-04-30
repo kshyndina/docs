@@ -41,6 +41,15 @@ div.prose:has(> p:only-child:empty) {
   display: none !important;
 }
 
+
+/* ---- 0e. Page header → body gap ----
+   Mintlify's <mdx-content> has Tailwind mt-8 (32px). docs.triton.one
+   uses ~16px. Tighten the gap so titles sit closer to body text. */
+.mdx-content,
+mdx-content {
+  margin-top: 1rem !important;
+}
+
 /* ---- 0b. Hide the floating AI assistant input at the bottom of every page.
    The top "Ask AI" button stays; we don't want a second input drifting on
    top of body content. Mintlify's CSS hook for the floating input is the
