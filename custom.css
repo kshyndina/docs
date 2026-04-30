@@ -67,56 +67,9 @@ html.dark :not(pre) > code {
   border-color: rgba(181, 145, 211, 0.25);
 }
 
-/* ---- 4. Code blocks: GLOBAL WRAP TOGGLE ----
-   Mintlify ships a per-block wrap toggle (the `wrap` keyword after the
-   language tag in a fenced code block, e.g. ```rust wrap). It applies the
-   `.code-block-wrap` class which they style internally. We mimic that same
-   behaviour SITE-WIDE on desktop, and fall back to native horizontal scroll
-   on mobile (where wrapping ruins multi-line config files).
-
-   To turn this off everywhere: delete this whole `---- 4. Code blocks ----`
-   block. To turn off for one block: use Mintlify's per-block opt-out (none
-   exists today; would need to inline-style the specific block). */
-@media (min-width: 768px) {
-  /* Mintlify's own wrap rules, applied without requiring the .code-block-wrap class */
-  [data-component-part="code-block-root"] {
-    --code-padding-right: 0px !important;
-  }
-  [data-component-part="code-block-root"] [data-fade-overlay] {
-    opacity: 0 !important;
-  }
-  /* Force the inner pre/code to wrap WITHIN the container -- never spill outside.
-     Key: overflow-x: hidden on the scroll container + pre-wrap on the line spans.
-     `overflow-x: visible` was the previous mistake -- it lets text bleed past the
-     rounded corners of the code-block frame. */
-  [data-component-part="code-block-root"] pre,
-  [data-component-part="code-block-root"] pre code,
-  [data-component-part="code-block-root"] pre code .line,
-  [data-component-part="code-block-root"] pre code .line span,
-  [data-component-part="code-block-root"] .font-mono,
-  pre.shiki,
-  pre.shiki code,
-  pre.shiki .line,
-  pre.shiki .line span {
-    white-space: pre-wrap !important;
-    word-break: break-word !important;
-    overflow-wrap: anywhere !important;
-  }
-  [data-component-part="code-block-root"] pre,
-  [data-component-part="code-block-root"] .font-mono {
-    overflow-x: hidden !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-}
-@media (max-width: 767px) {
-  [data-component-part="code-block-root"] pre,
-  [data-component-part="code-block-root"] .font-mono {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-}
+/* ---- 4. Code blocks: native Mintlify horizontal scroll (no override).
+   Per-block wrap is still available via Mintlify's `wrap` keyword after the
+   language tag in a fenced code block, e.g. ```rust wrap. */
 
 /* ---- 5. Copy page (page-context-menu): align with the page title ----
    The container is a flex row at sm+ with items-center. ml-auto pushes
