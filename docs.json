@@ -92,12 +92,10 @@
             "group": "Solana",
             "root": "chains/solana/solana",
             "pages": [
-              "chains/solana/solana",
               {
                 "group": "Streaming",
                 "root": "chains/solana/streaming/streaming",
                 "pages": [
-                  "chains/solana/streaming/streaming",
                   "chains/solana/streaming/streaming-troubleshooting-checklist"
                 ]
               },
@@ -108,7 +106,6 @@
                 "group": "Improved Priority Fees API",
                 "root": "chains/solana/improved-priority-fees-api/improved-priority-fees-api",
                 "pages": [
-                  "chains/solana/improved-priority-fees-api/improved-priority-fees-api",
                   "chains/solana/improved-priority-fees-api/for-rpc-providers"
                 ]
               },
@@ -116,7 +113,6 @@
                 "group": "Cascade",
                 "root": "chains/solana/cascade/cascade",
                 "pages": [
-                  "chains/solana/cascade/cascade",
                   "chains/solana/sending-txs",
                   "chains/solana/buying-transaction-bandwidth",
                   "chains/solana/providing-transaction-bandwidth"
@@ -126,7 +122,6 @@
                 "group": "Photon",
                 "root": "chains/solana/photon/photon",
                 "pages": [
-                  "chains/solana/photon/photon",
                   "chains/solana/photon/api-methods"
                 ]
               },
@@ -139,7 +134,6 @@
             "group": "SUI",
             "root": "chains/sui/sui",
             "pages": [
-              "chains/sui/sui",
               "chains/sui/walrus"
             ]
           },
@@ -157,7 +151,6 @@
             "group": "API Methods",
             "root": "digital-assets-api/metaplex-digital-assets-api/metaplex-digital-assets-api",
             "pages": [
-              "digital-assets-api/metaplex-digital-assets-api/metaplex-digital-assets-api",
               "digital-assets-api/metaplex-digital-assets-api/get-asset",
               "digital-assets-api/metaplex-digital-assets-api/get-assets",
               "digital-assets-api/metaplex-digital-assets-api/get-asset-proof",
@@ -184,7 +177,6 @@
             "group": "Old Faithful Historical Archive",
             "root": "project-yellowstone/old-faithful-historical-archive/old-faithful-historical-archive",
             "pages": [
-              "project-yellowstone/old-faithful-historical-archive/old-faithful-historical-archive",
               "project-yellowstone/old-faithful-historical-archive/public-report-epoch-208"
             ]
           },
@@ -197,7 +189,6 @@
             "group": "Vixen Parsing Framework",
             "root": "project-yellowstone/vixen-parsing-framework/vixen-parsing-framework",
             "pages": [
-              "project-yellowstone/vixen-parsing-framework/vixen-parsing-framework",
               "project-yellowstone/vixen-parsing-framework/generate-parsers-with-codama"
             ]
           }
@@ -211,7 +202,6 @@
             "group": "Account management API",
             "root": "account-management/api-access/api-access",
             "pages": [
-              "account-management/api-access/api-access",
               "account-management/api-access/introduction",
               "account-management/api-access/auth-and-headers",
               "account-management/api-access/accounts",
