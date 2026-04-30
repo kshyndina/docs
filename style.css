@@ -73,3 +73,105 @@ pre.shiki .line {
   font-weight: 500 !important;
   font-size: 0.75rem !important;
 }
+
+/* ---- Tables: Triton blog look ----
+   Match the styling on blog.triton.one (rounded corners, light purple
+   header wash, generous padding, DM Sans heading row, Work Sans body). */
+.mdx-content table,
+mdx-content table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  background: none;
+  -webkit-overflow-scrolling: touch;
+}
+.mdx-content table th,
+mdx-content table th {
+  background: rgba(122, 75, 160, 0.1);
+  color: rgba(23, 23, 23, 0.78);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 10px 20px;
+  border: 1px solid rgba(23, 23, 23, 0.1);
+  border-right: 0;
+}
+.mdx-content table th:last-child,
+mdx-content table th:last-child {
+  border-right: 1px solid rgba(23, 23, 23, 0.1);
+}
+.mdx-content table th:first-child,
+mdx-content table th:first-child {
+  border-top-left-radius: 12px;
+}
+.mdx-content table th:last-child,
+mdx-content table th:last-child {
+  border-top-right-radius: 12px;
+}
+.mdx-content table td,
+mdx-content table td {
+  background: rgba(247, 247, 247, 0.5);
+  color: rgba(23, 23, 23, 0.78);
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 12px 20px;
+  border: 1px solid rgba(23, 23, 23, 0.1);
+  border-right: 0;
+  border-top: 0;
+  word-break: keep-all;
+}
+.mdx-content table td:last-child,
+mdx-content table td:last-child {
+  border-right: 1px solid rgba(23, 23, 23, 0.1);
+}
+.mdx-content table tr:last-child td:first-child,
+mdx-content table tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+.mdx-content table tr:last-child td:last-child,
+mdx-content table tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+/* Dark mode */
+html.dark .mdx-content table th,
+.dark .mdx-content table th,
+html.dark mdx-content table th,
+.dark mdx-content table th {
+  background: rgba(181, 145, 211, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+html.dark .mdx-content table th:last-child,
+.dark .mdx-content table th:last-child,
+html.dark mdx-content table th:last-child,
+.dark mdx-content table th:last-child {
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+html.dark .mdx-content table td,
+.dark .mdx-content table td,
+html.dark mdx-content table td,
+.dark mdx-content table td {
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(255, 255, 255, 0.78);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+html.dark .mdx-content table td:last-child,
+.dark .mdx-content table td:last-child,
+html.dark mdx-content table td:last-child,
+.dark mdx-content table td:last-child {
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+/* Inline code inside table cells: smaller, no double padding */
+.mdx-content table td code,
+mdx-content table td code {
+  font-size: 0.85em;
+  word-break: break-all;
+}
