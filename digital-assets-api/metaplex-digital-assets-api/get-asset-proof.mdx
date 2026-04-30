@@ -1,0 +1,28 @@
+---
+title: "Get Asset Proof"
+---
+
+Fetches the proof path for a given compressed asset/NFT. This method is required for submitting changes to a compressed merkle tree which requires the proof path for the tree it belongs to.
+
+### Parameters [(Source)](https://developers.metaplex.com/das-api/methods/get-asset-proof)
+
+| Name | Description                                 | Required |
+| ---- | ------------------------------------------- | -------- |
+| id   | The unique identifier of the compressed asset.| Yes      |
+
+<details>
+
+<summary>Request (POST)</summary>
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "123",
+  "method": "getAssetProof",
+  "params": {
+    "id": "EZsmgudhX6EFVfrdxmShDiNj365E85x7kpLJCVvPLVSH"
+  }
+} 
+```
+
+</details>
