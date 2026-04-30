@@ -1,0 +1,9 @@
+---
+title: "Transaction prioritisation"
+---
+
+The new QUIC protocol for Solana transactions introduces a limited number of connection slots and rate limits for anonymous and un-staked RPC nodes. This means that an un-staked node might see slower transaction propagation during periods of high contention.
+
+On the network layer, we can forward your transactions via staked nodes to increase the bandwidth to all QUICports, ensuring your transaction reaches the validator. With access to all QUIC bandwidth, your RPC node will not be rate-limited.
+
+We also recommend adding TX prioritization fees or utilizing systems like Jito for your transaction forwarding; these work together with our TX prioritization to improve your transaction speed during network contention.

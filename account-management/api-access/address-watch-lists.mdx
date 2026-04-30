@@ -1,0 +1,29 @@
+---
+title: "Address Watch Lists"
+---
+
+This feature is only limited to account management API tokens created with the operator or reseller role.
+
+### Add watch list
+
+`POST /api/v1/subscriptions/:subscription-uuid/address_watch_lists`
+
+**Parameters**
+
+<table><thead><tr><th width="263.3333333333333">Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>variant</code> *required</td><td><code>string</code></td><td>Must be either <code>collection</code> or <code>tree</code></td></tr><tr><td><code>encoded_value</code> *required</td><td><code>string</code></td><td></td></tr></tbody></table>
+
+### List watch lists
+
+`GET /api/v1/address_watch_lists`
+
+**Query parameters**
+
+| Name                | Type     | Description |
+| ------------------- | -------- | ----------- |
+| `variant`           | `string` |             |
+| `subscription_uuid` | `string` |             |
+| `subscription_type` | `string` |             |
+
+### Delete watch list
+
+`DELETE /api/v1/address_watch_lists/:uuid`

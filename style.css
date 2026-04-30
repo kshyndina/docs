@@ -2,6 +2,22 @@
    Mintlify's "element selectors" (nav-logo, eyebrow, code-block, etc.)
    are actually CLASSES on regular HTML elements -- target with `.` prefix. */
 
+/* ---- 0. Top navbar: a touch more vertical breathing room ---- */
+#navbar {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* ---- 0b. Hide the floating AI assistant input at the bottom of every page.
+   The top "Ask AI" button stays; we don't want a second input drifting on
+   top of body content. Mintlify's CSS hook for the floating input is the
+   `.chat-assistant-floating-input` class. */
+.chat-assistant-floating-input,
+chat-assistant-floating-input,
+[class*="chat-assistant-floating"] {
+  display: none !important;
+}
+
 /* ---- 1. Logo: 2x bigger (h-6 = 24px -> 48px) ---- */
 img.nav-logo,
 .nav-logo {
