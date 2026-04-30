@@ -5,8 +5,6 @@ description: "We apply rate limits to all our nodes to ensure service stability 
 
 ## Why We Have Rate Limits
 
-We apply rate limits to all our nodes to ensure service stability and protect our infrastructure from abusive traffic. Our goal is to allow legitimate application traffic to flow smoothly while mitigating the impact of aggressive bots.
-
 ## How It Works
 
 Rate limits are primarily based on your originating IP address. If you exceed the request limit in a given time window, our server will reply with an `HTTP 429 Too Many Requests` status code.

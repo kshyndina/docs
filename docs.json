@@ -59,7 +59,12 @@
       "display": "interactive"
     },
     "examples": {
-      "languages": ["curl", "javascript", "python", "rust"],
+      "languages": [
+        "curl",
+        "javascript",
+        "python",
+        "rust"
+      ],
       "defaults": "required"
     }
   },
