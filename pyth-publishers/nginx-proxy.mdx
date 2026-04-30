@@ -1,11 +1,10 @@
 ---
 title: "NGINX proxy"
-description: "Source: https://github.com/pyth-network/pyth-client/blob/main/doc/example-nginx-triton1.conf arrow-up-right"
 ---
 
 For your pythd to communicate with our servers over an encrypted channel, it is recommended that you set up an NGINX proxy. This also allows for token authentication, meaning we do not need to manually maintain IP whitelists for your nodes. Sample NGINX configurations have been provided by the Pyth team:
 
-```
+```nginx
 # replace YOUR_NODE and YOUR_AUTH_TOKEN_HERE
 # docker run -v /path/to/nginx-triton1.conf:/etc/nginx/nginx.conf:ro -p 7899:7899 -p 7900:7900 -d docker.io/nginx
 

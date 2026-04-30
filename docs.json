@@ -32,101 +32,120 @@
     }
   },
   "styling": {
-    "codeblocks": "dark"
+    "codeblocks": {
+      "theme": {
+        "light": "github-light",
+        "dark": "github-dark"
+      }
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "navbar": {
+    "links": [
+      {
+        "label": "Website",
+        "href": "https://triton.one"
+      }
+    ],
     "primary": {
-      "type": "github",
-      "href": "https://github.com/rpcpool"
+      "type": "button",
+      "label": "Customer Portal",
+      "href": "https://customers.triton.one"
     }
   },
   "navigation": {
-    "tabs": [
+    "groups": [
       {
-        "tab": "Documentation",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "getting-started"
-            ]
-          },
-          {
-            "group": "Core features",
-            "pages": [
-              "core-features/introduction",
-              "core-features/geodns",
-              "core-features/proxying",
-              "core-features/ratelimits",
-              "core-features/abuse-prevention",
-              "core-features/privacy-and-security",
-              "core-features/data-privacy",
-              "core-features/support-faqs"
-            ]
-          },
-          {
-            "group": "Chains",
-            "pages": [
-              "chains/solana",
-              "chains/sui",
-              "chains/monad",
-              "chains/pythnet",
-              "chains/others"
-            ]
-          },
-          {
-            "group": "Digital Assets API",
-            "pages": [
-              "digital-assets-api/introduction",
-              "digital-assets-api/fungible-assets",
-              "digital-assets-api/metaplex-digital-assets-api"
-            ]
-          },
-          {
-            "group": "Yellowstone (streaming)",
-            "pages": [
-              "project-yellowstone/introduction",
-              "project-yellowstone/dragons-mouth-grpc-subscriptions",
-              "project-yellowstone/fumarole",
-              "project-yellowstone/whirligig-websockets",
-              "project-yellowstone/program-data-streams",
-              "project-yellowstone/steamboat-custom-indexes",
-              "project-yellowstone/shield-transaction-policies",
-              "project-yellowstone/old-faithful-historical-archive"
-            ]
-          },
-          {
-            "group": "Account management",
-            "pages": [
-              "account-management/api-access",
-              "account-management/payments"
-            ]
-          },
-          {
-            "group": "Trading APIs",
-            "pages": [
-              "trading-apis/introduction",
-              "trading-apis/hermes",
-              "trading-apis/metis-swap-api",
-              "trading-apis/titan-swap-api",
-              "trading-apis/bundle-simulation-with-jito"
-            ]
-          },
-          {
-            "group": "Validators",
-            "pages": [
-              "validators/introduction",
-              "validators/vote-account-setup",
-              "validators/node-identity-protection"
-            ]
-          },
-          {
-            "group": "Pyth publishers",
-            "pages": [
-              "pyth-publishers/nginx-proxy",
-              "pyth-publishers/testnet-devnet-and-pythnet"
-            ]
-          }
+        "group": "Get Started",
+        "pages": [
+          "getting-started"
+        ]
+      },
+      {
+        "group": "Core features",
+        "pages": [
+          "core-features/introduction",
+          "core-features/geodns",
+          "core-features/proxying",
+          "core-features/ratelimits",
+          "core-features/abuse-prevention",
+          "core-features/privacy-and-security",
+          "core-features/data-privacy",
+          "core-features/support-faqs"
+        ]
+      },
+      {
+        "group": "Chains",
+        "pages": [
+          "chains/solana",
+          "chains/sui",
+          "chains/monad",
+          "chains/pythnet",
+          "chains/others"
+        ]
+      },
+      {
+        "group": "Digital Assets API",
+        "pages": [
+          "digital-assets-api/introduction",
+          "digital-assets-api/fungible-assets",
+          "digital-assets-api/metaplex-digital-assets-api"
+        ]
+      },
+      {
+        "group": "Yellowstone (streaming)",
+        "pages": [
+          "project-yellowstone/introduction",
+          "project-yellowstone/dragons-mouth-grpc-subscriptions",
+          "project-yellowstone/fumarole",
+          "project-yellowstone/whirligig-websockets",
+          "project-yellowstone/program-data-streams",
+          "project-yellowstone/steamboat-custom-indexes",
+          "project-yellowstone/shield-transaction-policies",
+          "project-yellowstone/old-faithful-historical-archive"
+        ]
+      },
+      {
+        "group": "Account management",
+        "pages": [
+          "account-management/api-access",
+          "account-management/payments"
+        ]
+      },
+      {
+        "group": "Trading APIs",
+        "pages": [
+          "trading-apis/introduction",
+          "trading-apis/hermes",
+          "trading-apis/metis-swap-api",
+          "trading-apis/titan-swap-api",
+          "trading-apis/bundle-simulation-with-jito"
+        ]
+      },
+      {
+        "group": "Validators",
+        "pages": [
+          "validators/introduction",
+          "validators/vote-account-setup",
+          "validators/node-identity-protection"
+        ]
+      },
+      {
+        "group": "Pyth publishers",
+        "pages": [
+          "pyth-publishers/nginx-proxy",
+          "pyth-publishers/testnet-devnet-and-pythnet"
         ]
       }
     ]

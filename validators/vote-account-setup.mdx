@@ -1,6 +1,6 @@
 ---
 title: "Vote account setup"
-description: "NOTE: Should we host your validator, we will set up the vote account for you. The information below is for transparency and educational purposes."
+description: "NOTE: Should we host your validator, we will set up the vote account for you. The rmation below is for transparency and educational purposes."
 ---
 
 NOTE: Should we host your validator, we will set up the vote account for you. The rmation below is for transparency and educational purposes.
@@ -29,7 +29,7 @@ solana-keygen new -o ~/authorized-withdrawer-keypair.json
 
 The final step involves setting up the vote account. You will generate a keypair for the vote account, but once it is configured, only the public key of the vote account matters. The withdrawal keypair is the one that will be used to control the vote account:
 
-```
+```bash
 $ solana-keygen new -o ~/vote-account-keypair.json
 $ solana create-vote-account ~/vote-account-keypair.json <pubkey for node identity> ~/authorized-withdrawer-keypair.json
 ```

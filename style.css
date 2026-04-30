@@ -1,0 +1,41 @@
+/* Triton One docs -- custom styling overrides */
+
+/* ---- Logo: match triton.one website size ---- */
+nav-logo,
+nav-logo img,
+nav-logo svg,
+#navbar nav-logo {
+  height: 2.5rem !important;
+  max-height: 2.5rem !important;
+}
+nav-logo img,
+nav-logo svg {
+  width: auto !important;
+}
+
+/* ---- Eyebrow: Geist Mono, uppercase, tracking ---- */
+eyebrow,
+eyebrow a,
+eyebrow span {
+  font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  font-weight: 500 !important;
+  font-size: 0.75rem !important;
+}
+
+/* ---- Navbar primary CTA: match website "Start building" button ---- */
+#topbar-cta-button {
+  background-color: #7A4BA0 !important;
+  color: #ffffff !important;
+  border-radius: 0.5rem !important;
+  font-weight: 500 !important;
+}
+#topbar-cta-button:hover {
+  background-color: #492D60 !important;
+}
+
+/* ---- Code block: more contrast on the dark theme ---- */
+code-block {
+  border-radius: 0.5rem;
+}
