@@ -51,23 +51,6 @@
       "vscode"
     ]
   },
-  "api": {
-    "mdx": {
-      "server": "https://api.mainnet-beta.solana.com"
-    },
-    "playground": {
-      "display": "interactive"
-    },
-    "examples": {
-      "languages": [
-        "curl",
-        "javascript",
-        "python",
-        "rust"
-      ],
-      "defaults": "required"
-    }
-  },
   "navbar": {
     "links": [
       {
@@ -87,17 +70,6 @@
         "group": "Get Started",
         "pages": [
           "getting-started"
-        ]
-      },
-      {
-        "group": "Solana RPC playground",
-        "pages": [
-          "solana-rpc/overview",
-          "solana-rpc/get-balance",
-          "solana-rpc/get-slot",
-          "solana-rpc/get-block-height",
-          "solana-rpc/get-latest-blockhash",
-          "solana-rpc/get-account-info"
         ]
       },
       {
