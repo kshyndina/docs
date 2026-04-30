@@ -1,3 +1,10 @@
+/*! purgecss start ignore */
+/* SMOKE TEST: if this rule is in the bundled CSS, custom CSS is loading */
+body[data-banner-state] {
+  --triton-css-loaded: yes;
+}
+/*! purgecss end ignore */
+
 /* Triton One docs -- custom styling overrides
    Mintlify's "element selectors" (nav-logo, eyebrow, code-block, etc.)
    are actually CLASSES on regular HTML elements -- target with `.` prefix. */
