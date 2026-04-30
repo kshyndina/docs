@@ -1,0 +1,6 @@
+---
+title: "Fungible Assets"
+description: "Digital Assets API Fungible Assets Overview The DAS API indexes all mints and token accounts for the Solana Token Program and Token Extensions Program."
+---
+
+Digital Assets API Fungible Assets Overview The DAS API indexes all mints and token accounts for the Solana Token Program and Token Extensions Program. It allows querying token balances, metadata, and associated program details. Supported Queries GetAsset: Fetch details of a specific token mint. GetAssetsByOwner: Retrieve all tokens (fungible and non-fungible) held by an account. SearchAssets: Search for assets using filters, including token type. Querying Token Balances DAS API supports querying token balances across: SPL Tokens Token22 Tokens NFTs (regular and compressed NFTs) Example Request { " jsonrpc ": " 2.0 ", " id ": " string ", " method ": " searchAssets ", " params ": { " ownerAddress ": " 5aZZ4duJUKiMsJN9vRsoAn4SDX7agvKu7Q3QdFWRfWze ", " tokenType ": " All " } } Example Response The DAS API supports Token22 tokens and their extensions. The response includes the mint_extensions field when applicable. Example Token22 Response Conclusion The DAS API allows querying of fungible tokens, SPL and Token22, including metadata, balances, and associated program details.

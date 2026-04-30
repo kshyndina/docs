@@ -1,49 +1,18 @@
 ---
-title: "Protect Your Solana Validator Node Identity"
-sidebarTitle: "Identity protection"
-description: "How Triton keeps your Solana validator's node identity key secure: in-memory-only deployment, encrypted storage, and authenticated key transit."
+title: "Node identity protection"
+description: "The public-private key pair of the node identity enables the node to vote on behalf of your vote account."
 ---
 
-The node identity key pair is what enables your validator to cast votes on behalf of your vote account. Because Triton manages the validator infrastructure, Triton holds this key pair and deploys it to the node. This page explains the security model Triton uses to protect it.
+The public-private key pair of the node identity enables the node to vote on behalf of your vote account. We hold this key pair and deploy it to the node.
 
-## Why the node identity key matters
+This key pairs account must have a sufficient balance to pay voting fees. This key also accrues rewards that help to offset vote fees (or entirely cover them, depending on stake). Therefore, the balance of the node identity may need to be maintained and topped up regularly.
 
-The node identity account must maintain a SOL balance to pay voting transaction fees. It also accrues rewards that help offset those fees over time. Beyond the balance, the key has operational significance: anyone who possesses the node identity key pair could spin up a second validator that conflicts with yours — and in future Solana protocol upgrades, this could potentially result in slashing. A compromised node identity could also redirect accrued rewards or drain the account balance.
+The node identity must be kept safe and secure. Anyone possessing the node identity could set up a second validator that creates issues for your primary validator (and, in the future, potentially slashing). Malicious parties could also receive the rewards the key accrues or empty its balance.
 
-## How Triton protects the node identity
+To protect the node identity, we adopt a setup that ensures in-memory-only keys. When our validators boot, they use a temporary node identity that cannot vote for your vote account. This means that once the validator has started up and caught up with the network, it will be in voting-disabled mode.
 
-Triton uses an in-memory-only key management approach. The node identity key is never stored in an unencrypted form on the validator node itself.
+One of our node operators will then authenticate with our secured, encrypted secret storage and enable the validator node to perform a one-time fetch of the real node identity, which is then activated in the Solana validator's memory.
 
-The process works as follows:
+This ensures that the node identity is never stored in an unencrypted form anywhere. It is also never transferred anywhere between the validator node and our encrypted storage. This transit of the node key happens over an entirely authenticated and encrypted stream.
 
-<Steps>
-  <Step title="Validator boots with a temporary identity">
-    When the validator starts, it uses a temporary node identity that cannot vote on behalf of your vote account. The validator catches up with the network in this state and enters voting-disabled mode.
-  </Step>
-
-  <Step title="Operator fetches the real key from encrypted storage">
-    Once the node is synced and ready, a Triton operator authenticates with the secured, encrypted secret storage system and authorizes a one-time fetch of the real node identity key.
-  </Step>
-
-  <Step title="Key is activated in memory only">
-    The real node identity is fetched and activated directly in the Solana validator's memory. It is never written to disk. The transit between encrypted storage and the validator occurs over a fully authenticated and encrypted channel.
-  </Step>
-</Steps>
-
-## What this means in practice
-
-- The node identity key is never present on disk in an unencrypted form.
-- The key is not stored anywhere on the validator node persistently — only in the validator process's memory space.
-- Without direct access to the validator's memory, the key cannot be retrieved from the node.
-- Key transit between Triton's encrypted storage and the node is protected end-to-end.
-
-## Responsibility split
-
-| Responsibility | Held by |
-| -------------- | ------- |
-| Node identity key pair | Triton |
-| Vote account withdrawal authority | You |
-| Funding the node identity account (minimum 10 SOL) | You |
-| Withdrawing vote account rewards | You |
-
-Your withdrawal key pair is the only key that controls the vote account itself — including withdrawals, commission changes, and authorized voter updates. Triton has no access to your withdrawal authority. For guidance on creating and securing your withdrawal key pair, see [Vote Account Setup](/validators/vote-account-setup).
+Without access to the validator memory space, you would be unable to retrieve the node identity, and there is no durable storage of the identity on the node itself.

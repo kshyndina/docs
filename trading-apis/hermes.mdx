@@ -1,0 +1,8 @@
+---
+title: "Pyth Hermes"
+description: "Trading APIs Pyth Hermes Hermes is a web service that listens to both Pythnet and the Wormhole Network for Pyth price updates, and exposes them through a simple web API."
+---
+
+Trading APIs Pyth Hermes Hermes is a web service that listens to both Pythnet and the Wormhole Network for Pyth price updates, and exposes them through a simple web API. It delivers Pyth’s latest price update format, optimized for on-chain verification and usage.
+
+To access the Hermes API, you’ll need a Pythnet endpoint provided by Triton. API Access Hermes allows clients to: Query recent price updates via a REST API Subscribe to live price updates via WebSocket The Pyth Network's JavaScript SDKs use Hermes under the hood to fetch price data. Usage Frontend REST Access Use this format for frontend clients: https://<unique-subdomain>.mainnet.pythnet.rpcpool.com/hermes Backend REST Access For backend access, include your RPC token before /hermes: https://<unique-subdomain>.mainnet.pythnet.rpcpool.com/<secret-token>/hermes WebSocket Access WebSocket access is available at: or, for backend: Additional Pythnet RPC Access Your other Pythnet RPC services are available at: (Note: this is the base endpoint without the /hermes path.) Documentation For full Hermes API details, refer to the official docs: 👉 https://docs.pyth.network/documentation/pythnet-price-feeds/hermes

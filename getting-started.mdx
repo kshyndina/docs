@@ -1,80 +1,48 @@
 ---
-title: "Get Started with Triton One RPC Endpoints"
-description: "Create your account, understand endpoints and tokens, configure your application, and make your first Triton One RPC call in minutes."
+title: "Getting Started"
+description: "To get started with using Triton One you will need access to a customer account with an active subscription."
 ---
 
-Connecting your application to Triton One takes just a few minutes. This guide covers everything from creating your account to making your first API call — including the important distinction between public endpoints and secret tokens.
+Welcome to Triton One! This guide will walk you through the essential first steps to get your application connected to our RPC services.
 
-<Steps>
-  <Step title="Create an account">
-    To use Triton One, you need an account with an active subscription. You have two options:
+## Step 1: Create an Account
 
-    - **Self sign-up:** Visit [customers.triton.one/onboarding](https://customers.triton.one/onboarding) and make a deposit to activate your account immediately.
-    - **Contact us directly:** For custom plans or dedicated node deployments, email [support@triton.one](mailto:support@triton.one) or reach out via [Telegram](https://t.me/tritonone).
+To get started with using Triton One you will need access to a customer account with an active subscription. Self sign up: You can sign up following this link and make a deposit to activate your account. Contact us directly: For custom inquiries, you can email us at [email protected] or reach out via Telegram.
 
-    The Triton team will help you choose between a shared service or a dedicated node based on your traffic and latency requirements.
-  </Step>
+Our team will work with you to understand your needs and recommend the best plan, whether it's our shared service or a dedicated node deployment.
 
-  <Step title="Understand endpoints vs. tokens">
-    Once your account is active, the [Customer Portal](https://customers.triton.one) gives you access to two types of credentials: **Endpoints** and **Tokens**. Understanding the difference is critical before you configure your application.
+## Step 2: Understand Your Endpoint vs. Your Token
 
-    **Endpoint URL — for frontend and dApps**
+Once your account is created, you will receive access to Endpoints and Tokens through the Customer Portal. It is critical to understand the difference:
 
-    Your endpoint URL is a public-facing address you can safely integrate into a website or dApp:
+**Endpoint URL (For Frontend / dApps)**
 
-    ```
-    https://your-app.mainnet.rpcpool.com
-    ```
+This is the URL you integrate directly into your public-facing dApp or website (e.g., https://your-app.mainnet.rpcpool.com).
 
-    Traffic to this URL is rate-limited by IP address and origin domain to protect against abuse. You can embed this URL in frontend code.
+Traffic from these endpoints is typically rate-limited by IP and origin domain to protect against abuse.
 
-    **Secret token — for backend services**
+Never embed a secret token in your frontend code.
 
-    A token is a secret key for authenticating requests from backend servers, scripts, or trading bots. You append it directly to your endpoint URL:
+**Secret Token (For Backend Services)**
 
-    ```
-    https://your-app.mainnet.rpcpool.com/your-secret-token
-    ```
+A token is a secret key used to authenticate requests from your backend servers, scripts, or trading bots.
 
-    Backend traffic authenticated with a token has higher rate limits than unauthenticated frontend traffic.
+You append it to your endpoint URL (e.g., https://your-app.mainnet.rpcpool.com/your-secret-token).
 
-    <Warning>
-      Never embed a secret token in frontend code, mobile app bundles, or any publicly accessible source. If you suspect a token has been compromised, contact [support@triton.one](mailto:support@triton.one) immediately to have it rotated.
-    </Warning>
-  </Step>
+Backend traffic with a token usually has higher rate limits.
 
-  <Step title="Configure your application">
-    With your endpoint URL in hand, point your Solana SDK or HTTP client at the appropriate URL format for your use case.
+This token must be kept secret.
 
-    **JSON-RPC over HTTPS**
+If you suspect it has been leaked, contact us immediately to have it rotated.
 
-    Use your HTTPS endpoint for standard RPC calls:
+## Step 3: Configure Your Application
 
-    ```
-    https://your-app.mainnet.rpcpool.com
-    ```
+With your endpoint URL, you can now configure your application.
 
-    **WebSocket subscriptions**
+For standard RPC calls, use the HTTPS URL (e.g., https://...).
 
-    For real-time subscriptions, replace `https` with `wss`:
+For WebSocket subscriptions, replace https with wss (e.g., wss://...).
 
-    ```
-    wss://your-app.mainnet.rpcpool.com
-    ```
+## Step 4: Explore the Documentation
 
-    If you're using a backend token, append it the same way for both HTTPS and WebSocket URLs.
-
-    <Tip>
-      For high-throughput use cases or real-time data pipelines, consider using [Dragon's Mouth gRPC](/streaming/dragons-mouth-grpc) instead of WebSocket subscriptions. gRPC streams deliver intra-slot updates up to 400ms faster.
-    </Tip>
-  </Step>
-
-  <Step title="Explore the documentation">
-    You're ready to build. Here are the most useful next steps depending on what you're working on:
-
-    - **Understand platform behavior:** Read the [Core Features](/core-features) guide to learn about request routing, rate limits, and abuse prevention.
-    - **Solana-specific features:** Explore [Cascade transaction delivery](/solana/cascade-transactions), the [Digital Assets API](/solana/digital-assets-api), and the [Old Faithful historical archive](/solana/old-faithful-archive).
-    - **Real-time streaming:** Get started with [Dragon's Mouth gRPC](/streaming/dragons-mouth-grpc) or [Whirligig WebSockets](/streaming/whirligig-websockets).
-    - **Trading tools:** Discover [Metis swap routing](/trading-apis/metis-swap), [Jito bundle simulation](/trading-apis/jito-bundles), and [Pyth Hermes price feeds](/trading-apis/pyth-hermes).
-  </Step>
-</Steps>
+You're all set! Now you can explore the rest of our documentation to make the most of our service: Learn about our Core Features like GeoDNS and Rate Limiting. Read our guide on Best Practices for Sending Solana Transactions. Discover our Advanced Data & Streaming services for real-time insights.

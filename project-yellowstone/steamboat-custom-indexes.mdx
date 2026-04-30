@@ -1,0 +1,24 @@
+---
+title: "Steamboat Custom Indexes"
+description: "Steamboat is our high-performance backend solution for getProgramAccounts (gPA) queries."
+---
+
+Steamboat is our high-performance backend solution for getProgramAccounts (gPA) queries. By creating custom database indexes tailored to your specific application's needs, Steamboat can dramatically improve performance, reducing gPA query times from seconds to milliseconds. Because it uses the standard JSON-RPC API, no changes are needed to your application code.
+
+The screenshot below shows a test where filtered getProgramAccounts requests for the Stake program were reduced from ~1700ms to ~30ms. How It Works Instead of scanning the entire chain state for every request, Steamboat serves getProgramAccounts queries from a dedicated database. This database is populated with indexes that are optimized for your application's specific query patterns.
+
+Enabling Steamboat requires us to deploy the Steamboat Geyser plugin on your dedicated node. This plugin feeds on-chain data into a separate indexer database. This setup requires a node with sufficient hardware resources to handle the additional computational load. Index Configuration To ensure the best performance, the database indexes must be tailored to your workload. We offer two ways to configure them:
+
+**Client-Provided Indexes**
+
+You can provide us with a list of the specific memcmp or other filters your application uses for getProgramAccounts. We will then create a set of custom indexes designed precisely for those queries.
+
+**Traffic Analysis**
+
+Alternatively, our team can analyze your application's RPC traffic to automatically identify your most common and performance-critical getProgramAccounts queries. We then build the optimal set of indexes based on this real-world usage.
+
+It is important to note that these indexes are tuned for your existing traffic. If your query patterns change significantly over time, the indexes may need to be refreshed periodically to maintain optimal performance. Limitation: SPL Token Program Steamboat is designed for custom programs and does not support getProgramAccounts queries for the standard SPL Token Program ( TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA). Performance for SPL token queries is already highly optimized by the built-in indexes included in the standard Agave validator software that our nodes run.
+
+## How to Enable Steamboat
+
+Steamboat is available for dedicated node customers. Because it requires a custom setup and index configuration, please contact our support team to discuss your application's needs and get started.

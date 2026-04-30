@@ -1,0 +1,8 @@
+---
+title: "API Methods"
+description: "Digital Assets API API Methods The API follows the JSON-RPC 2.0 specification, requiring requests to include a method name, parameters, and a unique ID."
+---
+
+Digital Assets API API Methods The API follows the JSON-RPC 2.0 specification, requiring requests to include a method name, parameters, and a unique ID. Method Description getAsset Retrieve detailed information about an asset using its unique ID. getAssets Retrieve detailed information about multiple assets using theirs unique IDs. getAssetProof Obtain a Merkle proof for verifying the integrity of a compressed asset. getAssetProofs Fetch Merkle proofs for multiple compressed assets in a single request. getAssetSignatures Fetch transaction signatures associated with a compressed asset. getAssetsByAuthority Fetch a list of assets controlled by a specific authority. getAssetsByCreator List all assets that were created by a specified address. getAssetsByGroup [TEMPORARILY DISABLED] Get assets that belong to a specified group, identified by a key and value. This method is currently unavailable due to scheduled performance optimizations. getAssetsByOwner Retrieve all assets associated with a given owner’s public key. searchAssets Perform a search and apply filters to find assets based on various criteria. getNftEditions Retrieve all printable editions for a master edition NFT mint. getTokenAccounts Retrieve details of all token accounts associated with a given mint or owner. getTokenLargestAccounts Retrieve 20 largest token accounts for a specific SPL Token.
+
+Each API method is explained in detail on its own page, including required parameters and example requests. Navigate through the documentation to explore each method’s capabilities.

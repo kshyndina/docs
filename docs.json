@@ -48,89 +48,83 @@
           {
             "group": "Get Started",
             "pages": [
-              "introduction",
-              "getting-started",
-              "core-features"
+              "getting-started"
             ]
           },
           {
-            "group": "Streaming",
+            "group": "Core features",
             "pages": [
-              "streaming/overview",
-              "streaming/dragons-mouth-grpc",
-              "streaming/whirligig-websockets",
-              "streaming/fumarole",
-              "streaming/vixen-program-streams"
+              "core-features/introduction",
+              "core-features/geodns",
+              "core-features/proxying",
+              "core-features/ratelimits",
+              "core-features/abuse-prevention",
+              "core-features/privacy-and-security",
+              "core-features/data-privacy",
+              "core-features/support-faqs"
             ]
           },
           {
-            "group": "Solana",
+            "group": "Chains",
             "pages": [
-              "solana/overview",
-              "solana/cascade-transactions",
-              "solana/digital-assets-api",
-              "solana/old-faithful-archive",
-              "solana/steamboat-indexes",
-              "solana/shield-policies",
-              "solana/photon"
+              "chains/solana",
+              "chains/sui",
+              "chains/monad",
+              "chains/pythnet",
+              "chains/others"
+            ]
+          },
+          {
+            "group": "Digital Assets API",
+            "pages": [
+              "digital-assets-api/introduction",
+              "digital-assets-api/fungible-assets",
+              "digital-assets-api/metaplex-digital-assets-api"
+            ]
+          },
+          {
+            "group": "Yellowstone (streaming)",
+            "pages": [
+              "project-yellowstone/introduction",
+              "project-yellowstone/dragons-mouth-grpc-subscriptions",
+              "project-yellowstone/fumarole",
+              "project-yellowstone/whirligig-websockets",
+              "project-yellowstone/program-data-streams",
+              "project-yellowstone/steamboat-custom-indexes",
+              "project-yellowstone/shield-transaction-policies",
+              "project-yellowstone/old-faithful-historical-archive"
+            ]
+          },
+          {
+            "group": "Account management",
+            "pages": [
+              "account-management/api-access",
+              "account-management/payments"
             ]
           },
           {
             "group": "Trading APIs",
             "pages": [
-              "trading-apis/overview",
-              "trading-apis/metis-swap",
-              "trading-apis/titan-swap",
-              "trading-apis/jito-bundles",
-              "trading-apis/pyth-hermes"
-            ]
-          },
-          {
-            "group": "Other Chains",
-            "pages": [
-              "chains/sui",
-              "chains/monad",
-              "chains/pythnet"
+              "trading-apis/introduction",
+              "trading-apis/hermes",
+              "trading-apis/metis-swap-api",
+              "trading-apis/titan-swap-api",
+              "trading-apis/bundle-simulation-with-jito"
             ]
           },
           {
             "group": "Validators",
             "pages": [
-              "validators/overview",
-              "validators/vote-account-setup",
-              "validators/node-identity-protection"
+              "validators/introduction",
+              "validators/node-identity-protection",
+              "validators/vote-account-setup"
             ]
           },
           {
-            "group": "Support",
+            "group": "Pyth publishers",
             "pages": [
-              "support/faq",
-              "support/security",
-              "support/streaming-troubleshooting"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Account Management API",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "account-api/introduction",
-              "account-api/authentication"
-            ]
-          },
-          {
-            "group": "Resources",
-            "pages": [
-              "account-api/accounts",
-              "account-api/subscriptions",
-              "account-api/endpoints",
-              "account-api/tokens",
-              "account-api/rate-tiers",
-              "account-api/address-watch-lists",
-              "account-api/payments"
+              "pyth-publishers/nginx-proxy",
+              "pyth-publishers/testnet-devnet-and-pythnet"
             ]
           }
         ]
