@@ -1,49 +1,75 @@
-/* Triton One docs -- custom styling overrides */
+/* Triton One docs -- custom styling overrides
+   Mintlify's "element selectors" (nav-logo, eyebrow, code-block, etc.)
+   are actually CLASSES on regular HTML elements -- target with `.` prefix. */
 
-/* ---- Logo: match triton.one website size ---- */
-nav-logo,
-nav-logo img,
-nav-logo svg,
-#navbar nav-logo {
-  height: 2.5rem !important;
-  max-height: 2.5rem !important;
-}
-nav-logo img,
-nav-logo svg {
+/* ---- 1. Logo: 2x bigger (h-6 = 24px -> 48px) ---- */
+img.nav-logo,
+.nav-logo {
+  height: 3rem !important;
+  max-height: 3rem !important;
   width: auto !important;
 }
 
+/* ---- 2. Customer Portal button: same height as Website link (h-9 = 36px) ---- */
+#topbar-cta-button > a {
+  height: 2.25rem !important;
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+}
+
+/* ---- 3. Inline code: visible against page background ----
+   Bare <code> outside <pre> renders as inline code. Without styling, it
+   blends into the page. Wash it in light purple, with a thin border. */
+:not(pre) > code {
+  background-color: rgba(122, 75, 160, 0.08);
+  color: #492D60;
+  border: 1px solid rgba(122, 75, 160, 0.18);
+  padding: 0.125rem 0.4rem;
+  border-radius: 0.375rem;
+  font-size: 0.875em;
+  font-weight: 500;
+  word-break: break-word;
+}
+.dark :not(pre) > code,
+html.dark :not(pre) > code {
+  background-color: rgba(181, 145, 211, 0.12);
+  color: #D6BFE8;
+  border-color: rgba(181, 145, 211, 0.25);
+}
+
+/* ---- 4. Code blocks: wrap instead of horizontal scroll ----
+   Mintlify wraps shiki <pre> in a div with .whitespace-pre that forces
+   single-line rendering. Override at every level so long URLs / lines
+   flow to the next line. */
+[data-component-part="code-block-root"],
+[data-component-part="code-block-root"] .font-mono,
+[data-component-part="code-block-root"] pre,
+[data-component-part="code-block-root"] code,
+pre.shiki,
+pre.shiki code,
+pre.shiki .line {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+}
+[data-component-part="code-block-root"] {
+  overflow-x: hidden !important;
+}
+
+/* ---- 5. Copy page (page-context-menu): align with the page title ----
+   The container is a flex row at sm+ with items-center. ml-auto pushes
+   right. Lock vertical alignment so it doesn't drift when the title
+   wraps. */
+#page-context-menu {
+  align-self: center !important;
+  margin-top: 0 !important;
+}
+
 /* ---- Eyebrow: Geist Mono, uppercase, tracking ---- */
-eyebrow,
-eyebrow a,
-eyebrow span {
+.eyebrow {
   font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace !important;
   text-transform: uppercase !important;
   letter-spacing: 0.08em !important;
   font-weight: 500 !important;
   font-size: 0.75rem !important;
-}
-
-/* ---- Navbar primary CTA: match website "Start building" button ---- */
-/* Pill shape, generous padding, matches the rounded buttons on triton.one */
-#topbar-cta-button {
-  background-color: #7A4BA0 !important;
-  color: #ffffff !important;
-  border-radius: 9999px !important;
-  padding: 0.5rem 1.25rem !important;
-  font-weight: 500 !important;
-}
-#topbar-cta-button:hover {
-  background-color: #492D60 !important;
-}
-
-/* Secondary nav links (e.g. "Website") -- pill outline style */
-navbar-link,
-.navbar-link {
-  border-radius: 9999px !important;
-}
-
-/* ---- Code block: more contrast on the dark theme ---- */
-code-block {
-  border-radius: 0.5rem;
 }
