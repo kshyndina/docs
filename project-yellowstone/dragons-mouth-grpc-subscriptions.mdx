@@ -1,7 +1,7 @@
 ---
 title: "Dragon's Mouth gRPC Subscriptions"
-description: "Streaming Account Updates for Backend Applications."
 ---
+Streaming Account Updates for Backend Applications.
 
 Dragon's Mouth is our Geyser-fed gRPC interface that supports streaming:
 
@@ -26,7 +26,7 @@ Dragon's Mouth also streams transactions as they are processed in real-time. You
 
 Use Dragon's Mouth to stream data directly to your application middle-layer hosted on a cloud service provider. Update your backend database with the lowest possible latency.
 
-gRPC is unsupported by web browsers, so Dragon's Mouth is entirely targeted at backend software. Another Yellowstone project, [Whirligig](https://docs.triton.one/project-yellowstone/whirligig-websockets), provides a WebSocket interface to replace the current Solana WebSocket implementation.
+gRPC is unsupported by web browsers, so Dragon's Mouth is entirely targeted at backend software. Another Yellowstone project, [Whirligig](/project-yellowstone/whirligig-websockets), provides a WebSocket interface to replace the current Solana WebSocket implementation.
 
 ### Protocol files
 
@@ -218,7 +218,7 @@ The benefit of working on processed is that you can process transactions as soon
 
 To manage confirmed and finalized you need to buffer events by slot. Each event (transaction or account write) will have a slot attached to it. You store these events in a buffer ordered by slot.
 
-You then also make sure you subscribe to [slot notifications](https://docs.triton.one/project-yellowstone/dragons-mouth-grpc-subscriptions#subscribe-to-slots). This will give you rmation about when a slot is confirmed or finalized. Depending on the commitment level you are interested in, you should release your buffer when you receive the slot notification for a particular slot at a particular commitment level.
+You then also make sure you subscribe to [slot notifications](/project-yellowstone/dragons-mouth-grpc-subscriptions#subscribe-to-slots). This will give you rmation about when a slot is confirmed or finalized. Depending on the commitment level you are interested in, you should release your buffer when you receive the slot notification for a particular slot at a particular commitment level.
 
 You will receive all the transaction notifications or account write notifications for the slot **before** you receive the "confirmed" and "finalized" notification for that slot.
 
