@@ -916,6 +916,26 @@ html body main,
 html body [class*="lg:max-w-[696px"] {
   min-height: 0 !important;
 }
+
+/* The REAL culprit for "page scrolls past content": Mintlify ships
+   two `<span class="absolute inset-0 h-[64rem]">` gradient
+   backgrounds (one for light, one for dark theme). At 64rem (1024px)
+   tall and `position: absolute` inside a `position: relative` parent
+   with `overflow: visible`, they extend the document scroll area to
+   1024px regardless of how short the actual page content is.
+   Pin to viewport via `position: fixed` so they stop contributing
+   to document height — the visual effect is identical. */
+html body [class*="absolute"][class*="h-[64rem"],
+html body span[class*="h-[64rem"] {
+  position: fixed !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  top: 0 !important;
+  inset: 0 auto auto 0 !important;
+  width: 100vw !important;
+  z-index: -10 !important;
+  pointer-events: none !important;
+}
 /* Inner sheet fills the now-fixed wrapper. Its own .sheet-content
    keeps overflow-y-auto for the message-list scroll. */
 #chat-assistant-sheet,
