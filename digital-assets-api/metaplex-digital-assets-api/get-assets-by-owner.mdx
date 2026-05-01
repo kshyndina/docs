@@ -1,0 +1,43 @@
+---
+title: "Get Assets By Owner"
+---
+
+The method returns a list of assets owned by a certain address or account. You can query the API for all assets associated with that owner by supplying the owner's pubkey as a parameter.
+
+This is the more efficient version of \`getTokenAccountsByOwner\` in the standard Solana RPC API and allows you to access and retrieve the assets owned by a specific address, enabling functionalities like displaying a user's NFT collection, managing ownership, or facilitating transactions involving the owner's assets.
+
+### Parameters [(Source)](https://developers.metaplex.com/das-api/methods/get-asset-by-owner)
+
+| Name         | Description | Required |
+| ------------ | ----------- | -------- |
+| ownerAddress | Address of the asset authority | Yes      |
+| sortBy       | The Sorting Criteria: Defined as an object `{ sortBy: , sortDirection: }`, where `sortBy` can be `"created", "updated", "recentAction", or "none"`, and `sortDirection` can be `"asc" or "desc"`. | Yes      |
+| limit        | The maximum number of assets to retrieve. | No      |
+| page         | The index of the "page" to retrieve. | No      |
+| before       | Fetch assets before the given ID. | No       |
+| after        | Fetch assets after the given ID. | No       |
+
+<details>
+
+<summary>Request (POST)</summary>
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123",
+    "method": "getAssetsByOwner",
+    "params": [
+        "9kPPbeBAvCtJCZ98EFKabxp7wTeFQRseCYDRdovyfUfz",
+        {
+            "sortBy": "created",
+            "sortDirection": "desc"
+        },
+        50,
+        1,
+        null,
+        null
+    ]
+}
+```
+
+</details>

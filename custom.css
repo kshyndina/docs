@@ -1,0 +1,277 @@
+/* Triton One docs -- custom styling overrides */
+
+/*! purgecss start ignore */
+
+/* ---- 0. Top navbar: a touch more vertical breathing room ---- */
+#navbar {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* ---- 0-bis. Hide the navbar's hairline bottom border ----
+   Mintlify renders an absolutely-positioned div inside #navbar with
+   `border-b border-gray-100` (gray-800 in dark). Against our light page
+   background it shows as a visible horizontal line just below the
+   navbar. Kill it. */
+#navbar > div.absolute.border-b,
+#navbar > div[class*="border-b"][class*="absolute"] {
+  border: 0 !important;
+}
+
+/* ---- 0a. Sidebar: a touch wider so long titles don't break onto two lines.
+   Mintlify default is ~17rem; bump to ~19rem to fit "Solana v2.0: Deprecated
+   RPC Methods" and "Agave - AccountsDB: Storage Files shrinking process". */
+#sidebar {
+  width: 19rem !important;
+  max-width: 19rem !important;
+}
+@media (min-width: 1024px) {
+  #sidebar {
+    width: 19rem !important;
+    flex-basis: 19rem !important;
+  }
+}
+
+/* ---- 0c. Sidebar top padding ----
+   Mintlify positions the sidebar at top: calc(3rem + banner) (default
+   navbar height). Our navbar is taller (bigger logo + 0.5rem padding both
+   sides ≈ 4rem), so the first group label crashes into the navbar's
+   bottom edge. Add padding to give "Get Started" the same gap as
+   docs.triton.one. */
+#sidebar-content {
+  padding-top: 1.25rem !important;
+}
+
+/* ---- 0d. Page title: collapse empty description container ----
+   When frontmatter has no `description`, Mintlify still renders a
+   `prose` container with an empty <p> placeholder, leaving an awkward
+   gap between the H1 and the body. Hide it. Pages WITH a real
+   description are unaffected because their <p> isn't empty. */
+div.prose:has(> p:only-child:empty) {
+  display: none !important;
+}
+
+
+/* ---- 0e. Page header → body gap ----
+   Mintlify wraps content in `mdx-content` with Tailwind mt-8 (32px) AND
+   uses Tailwind's prose plugin which adds another ~1.25em margin-top to
+   the first visible paragraph. Combined, that's ~50-60px of gap. Kill
+   both: zero out the container's top margin AND the first visible
+   child's top margin (the leading <blockquote class="sr-only"> doesn't
+   count as the first prose child for this purpose). */
+.mdx-content,
+mdx-content {
+  margin-top: 0.5rem !important;
+}
+.mdx-content > blockquote.sr-only + *,
+mdx-content > blockquote.sr-only + * {
+  margin-top: 0 !important;
+}
+/* Belt-and-braces: even if no sr-only blockquote, force the very first
+   visible child to start without its prose top margin. */
+.mdx-content > *:first-child,
+mdx-content > *:first-child {
+  margin-top: 0 !important;
+}
+
+/* ---- 0b. Hide the floating AI assistant input at the bottom of every page.
+   The top "Ask AI" button stays; we don't want a second input drifting on
+   top of body content. Mintlify's CSS hook for the floating input is the
+   `.chat-assistant-floating-input` class. */
+.chat-assistant-floating-input,
+chat-assistant-floating-input,
+[class*="chat-assistant-floating"] {
+  display: none !important;
+}
+
+/* ---- 1. Logo: 2x bigger (h-6 = 24px -> 48px) ---- */
+img.nav-logo,
+.nav-logo {
+  height: 3rem !important;
+  max-height: 3rem !important;
+  width: auto !important;
+}
+
+/* ---- 2. Customer Portal button: same height as Website link (h-9 = 36px) ---- */
+#topbar-cta-button > a {
+  height: 2.25rem !important;
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+}
+
+/* ---- 3. Inline code: visible against page background ----
+   Bare <code> outside <pre> renders as inline code. Without styling, it
+   blends into the page. Wash it in light purple, with a thin border. */
+:not(pre) > code {
+  background-color: rgba(122, 75, 160, 0.08);
+  color: #492D60;
+  border: 1px solid rgba(122, 75, 160, 0.18);
+  padding: 0.125rem 0.4rem;
+  border-radius: 0.375rem;
+  font-size: 0.875em;
+  font-weight: 500;
+  word-break: break-word;
+}
+.dark :not(pre) > code,
+html.dark :not(pre) > code {
+  background-color: rgba(181, 145, 211, 0.12);
+  color: #D6BFE8;
+  border-color: rgba(181, 145, 211, 0.25);
+}
+
+/* ---- 3-bis. Horizontal rules: Triton purple wash, applied globally
+   to every <hr> (Markdown `***` / `---`). Mintlify/Tailwind prose
+   defaults to a near-invisible gray; bump opacity so the line reads
+   clearly against both light and dark backgrounds, while staying
+   on-brand with the inline-code colour. Single rule, easy to tune. */
+hr,
+.mdx-content hr,
+mdx-content hr {
+  border: 0 !important;
+  border-top: 1px solid rgba(122, 75, 160, 0.35) !important;
+  margin: 2rem 0 !important;
+  background: none !important;
+  height: 0 !important;
+}
+.dark hr,
+.dark .mdx-content hr,
+html.dark hr,
+html.dark mdx-content hr {
+  border-top-color: rgba(181, 145, 211, 0.35) !important;
+}
+
+/* ---- 4. Code blocks: native Mintlify horizontal scroll (no override).
+   Per-block wrap is still available via Mintlify's `wrap` keyword after the
+   language tag in a fenced code block, e.g. ```rust wrap. */
+
+/* ---- 5. Copy page (page-context-menu): align with the page title ----
+   The container is a flex row at sm+ with items-center. ml-auto pushes
+   right. Lock vertical alignment so it doesn't drift when the title
+   wraps. */
+#page-context-menu {
+  align-self: center !important;
+  margin-top: 0 !important;
+}
+
+/* ---- Eyebrow: Geist Mono, uppercase, tracking ----
+   docs.json has styling.eyebrows="breadcrumbs", so this <eyebrow> renders
+   as a multi-segment breadcrumb (e.g. "Chains > Solana"). docs.triton.one
+   only shows the top-level section ("CHAINS"). Trim to the first segment
+   via CSS. */
+.eyebrow {
+  font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  font-weight: 500 !important;
+  font-size: 0.75rem !important;
+}
+.eyebrow [data-breadcrumb-title]:not(:first-child) {
+  display: none !important;
+}
+.eyebrow [data-breadcrumb-title]:first-child svg {
+  display: none !important;
+}
+
+/* ---- Tables: Triton blog look ----
+   Match the styling on blog.triton.one (rounded corners, light purple
+   header wash, generous padding, DM Sans heading row, Work Sans body). */
+.mdx-content table,
+mdx-content table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  background: none;
+  -webkit-overflow-scrolling: touch;
+}
+.mdx-content table th,
+mdx-content table th {
+  background: rgba(122, 75, 160, 0.1);
+  color: rgba(23, 23, 23, 0.78);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 10px 20px;
+  border: 1px solid rgba(23, 23, 23, 0.1);
+  border-right: 0;
+}
+.mdx-content table th:last-child,
+mdx-content table th:last-child {
+  border-right: 1px solid rgba(23, 23, 23, 0.1);
+}
+.mdx-content table th:first-child,
+mdx-content table th:first-child {
+  border-top-left-radius: 12px;
+}
+.mdx-content table th:last-child,
+mdx-content table th:last-child {
+  border-top-right-radius: 12px;
+}
+.mdx-content table td,
+mdx-content table td {
+  background: rgba(247, 247, 247, 0.5);
+  color: rgba(23, 23, 23, 0.78);
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 12px 20px;
+  border: 1px solid rgba(23, 23, 23, 0.1);
+  border-right: 0;
+  border-top: 0;
+  word-break: keep-all;
+}
+.mdx-content table td:last-child,
+mdx-content table td:last-child {
+  border-right: 1px solid rgba(23, 23, 23, 0.1);
+}
+.mdx-content table tr:last-child td:first-child,
+mdx-content table tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+.mdx-content table tr:last-child td:last-child,
+mdx-content table tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+/* Dark mode */
+html.dark .mdx-content table th,
+.dark .mdx-content table th,
+html.dark mdx-content table th,
+.dark mdx-content table th {
+  background: rgba(181, 145, 211, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+html.dark .mdx-content table th:last-child,
+.dark .mdx-content table th:last-child,
+html.dark mdx-content table th:last-child,
+.dark mdx-content table th:last-child {
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+html.dark .mdx-content table td,
+.dark .mdx-content table td,
+html.dark mdx-content table td,
+.dark mdx-content table td {
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(255, 255, 255, 0.78);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+html.dark .mdx-content table td:last-child,
+.dark .mdx-content table td:last-child,
+html.dark mdx-content table td:last-child,
+.dark mdx-content table td:last-child {
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+/* Inline code inside table cells: smaller, no double padding */
+.mdx-content table td code,
+mdx-content table td code {
+  font-size: 0.85em;
+  word-break: break-all;
+}
+
+/*! purgecss end ignore */

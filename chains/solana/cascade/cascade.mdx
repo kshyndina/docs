@@ -1,0 +1,20 @@
+---
+title: "Cascade"
+description: "Transaction Delivery Network"
+---
+
+Cascade is our high-performance transaction delivery network for Solana, designed to provide a more reliable and predictable path for your transactions to land on-chain, especially during periods of high network congestion.
+
+#### How It Works
+
+Cascade utilizes Solana's **Stake-Weighted Quality of Service (SWQoS)**, allowing transactions to be sent through the reserved, private connection pools of staked validators. This bypasses the often-congested public TPU ports that standard RPC services use, resulting in a higher delivery success rate.
+
+#### Key Components
+
+* **Bandwidth Marketplace** ~~A marketplace where application developers can~~ [~~buy reserved transaction bandwidth~~](/../buying-transaction-bandwidth) ~~and validators can~~ [~~sell their excess bandwidth~~](/../providing-transaction-bandwidth)~~, creating a fair market price for priority access.~~ The marketplace has been sunset, we now add SWQoS transaction bandwidth for free at your request.
+* **Best Practices for Sending** To get the most out of Cascade, it's crucial to structure your transactions correctly. Following our [Transaction Sending Advice](/../sending-txs) for client-side retries, compute budgets, and priority fees will significantly improve performance.
+* **Yellowstone Shield Integration** Cascade is fully integrated with [Yellowstone Shield](/../../../project-yellowstone/shield-transaction-policies), allowing you to apply on-chain policies to control exactly which validators are allowed to process your transactions, protecting you from MEV and other risks.
+
+#### Getting Access
+
+To start sending transactions through the Cascade network, please contact our support team to get set up.
