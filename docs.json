@@ -66,29 +66,191 @@
     }
   },
   "navigation": {
-    "groups": [
+    "dropdowns": [
       {
-        "group": "Get Started",
-        "pages": [
-          "getting-started"
+        "dropdown": "Documentation",
+        "icon": "book-open",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "getting-started"
+            ]
+          },
+          {
+            "group": "Core Features",
+            "pages": [
+              "core-features/introduction",
+              "core-features/geodns",
+              "core-features/abuse-prevention",
+              "core-features/ratelimits",
+              "core-features/proxying",
+              "core-features/support-faqs",
+              "core-features/privacy-and-security",
+              "core-features/data-privacy"
+            ]
+          },
+          {
+            "group": "Chains",
+            "pages": [
+              {
+                "group": "Solana",
+                "root": "chains/solana/solana",
+                "pages": [
+                  {
+                    "group": "Streaming",
+                    "root": "chains/solana/streaming/streaming",
+                    "pages": [
+                      "chains/solana/streaming/streaming-troubleshooting-checklist"
+                    ]
+                  },
+                  "chains/solana/geyser",
+                  "chains/solana/token-program",
+                  "chains/solana/old-faithful-historical-archive-1",
+                  {
+                    "group": "Improved Priority Fees API",
+                    "root": "chains/solana/improved-priority-fees-api/improved-priority-fees-api",
+                    "pages": [
+                      "chains/solana/improved-priority-fees-api/for-rpc-providers"
+                    ]
+                  },
+                  {
+                    "group": "Cascade",
+                    "root": "chains/solana/cascade/cascade",
+                    "pages": [
+                      "chains/solana/sending-txs",
+                      "chains/solana/buying-transaction-bandwidth",
+                      "chains/solana/providing-transaction-bandwidth"
+                    ]
+                  },
+                  {
+                    "group": "Photon",
+                    "root": "chains/solana/photon/photon",
+                    "pages": [
+                      "chains/solana/photon/api-methods"
+                    ]
+                  },
+                  "chains/solana/web3js-socket-connection-issues",
+                  "chains/solana/deprecated-calls-solana-2.0",
+                  "chains/solana/agave-accountsdb-storage-files-shrinking-process"
+                ]
+              },
+              {
+                "group": "SUI",
+                "root": "chains/sui/sui",
+                "pages": [
+                  "chains/sui/walrus"
+                ]
+              },
+              "chains/monad",
+              "chains/pythnet",
+              "chains/others"
+            ]
+          },
+          {
+            "group": "Digital Assets API",
+            "pages": [
+              "digital-assets-api/introduction",
+              "digital-assets-api/fungible-assets",
+              {
+                "group": "API Methods",
+                "root": "digital-assets-api/metaplex-digital-assets-api/metaplex-digital-assets-api",
+                "pages": [
+                  "digital-assets-api/metaplex-digital-assets-api/get-asset",
+                  "digital-assets-api/metaplex-digital-assets-api/get-assets",
+                  "digital-assets-api/metaplex-digital-assets-api/get-asset-proof",
+                  "digital-assets-api/metaplex-digital-assets-api/get-asset-proofs",
+                  "digital-assets-api/metaplex-digital-assets-api/get-asset-signatures",
+                  "digital-assets-api/metaplex-digital-assets-api/get-assets-by-authority",
+                  "digital-assets-api/metaplex-digital-assets-api/get-assets-by-creator",
+                  "digital-assets-api/metaplex-digital-assets-api/get-assets-by-group",
+                  "digital-assets-api/metaplex-digital-assets-api/get-assets-by-owner",
+                  "digital-assets-api/metaplex-digital-assets-api/search-assets",
+                  "digital-assets-api/metaplex-digital-assets-api/get-nft-editions",
+                  "digital-assets-api/metaplex-digital-assets-api/get-token-accounts",
+                  "digital-assets-api/metaplex-digital-assets-api/get-token-largest-accounts"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Project Yellowstone",
+            "pages": [
+              "project-yellowstone/introduction",
+              "project-yellowstone/dragons-mouth-grpc-subscriptions",
+              {
+                "group": "Old Faithful Historical Archive",
+                "root": "project-yellowstone/old-faithful-historical-archive/old-faithful-historical-archive",
+                "pages": [
+                  "project-yellowstone/old-faithful-historical-archive/public-report-epoch-208"
+                ]
+              },
+              "project-yellowstone/steamboat-custom-indexes",
+              "project-yellowstone/whirligig-websockets",
+              "project-yellowstone/fumarole",
+              "project-yellowstone/program-data-streams",
+              "project-yellowstone/shield-transaction-policies",
+              {
+                "group": "Vixen Parsing Framework",
+                "root": "project-yellowstone/vixen-parsing-framework/vixen-parsing-framework",
+                "pages": [
+                  "project-yellowstone/vixen-parsing-framework/generate-parsers-with-codama"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Account Management",
+            "pages": [
+              "account-management/payments",
+              {
+                "group": "Account management API",
+                "root": "account-management/api-access/api-access",
+                "pages": [
+                  "account-management/api-access/introduction",
+                  "account-management/api-access/auth-and-headers",
+                  "account-management/api-access/accounts",
+                  "account-management/api-access/address-watch-lists",
+                  "account-management/api-access/subscriptions",
+                  "account-management/api-access/subscription-types",
+                  "account-management/api-access/endpoints",
+                  "account-management/api-access/tokens",
+                  "account-management/api-access/rate-tiers"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Trading APIs",
+            "pages": [
+              "trading-apis/introduction",
+              "trading-apis/hermes",
+              "trading-apis/bundle-simulation-with-jito",
+              "trading-apis/metis-swap-api",
+              "trading-apis/titan-swap-api"
+            ]
+          },
+          {
+            "group": "Validators",
+            "pages": [
+              "validators/introduction",
+              "validators/vote-account-setup",
+              "validators/node-identity-protection"
+            ]
+          },
+          {
+            "group": "Pyth Publishers",
+            "pages": [
+              "pyth-publishers/nginx-proxy",
+              "pyth-publishers/testnet-devnet-and-pythnet"
+            ]
+          }
         ]
       },
       {
-        "group": "Core Features",
-        "pages": [
-          "core-features/introduction",
-          "core-features/geodns",
-          "core-features/abuse-prevention",
-          "core-features/ratelimits",
-          "core-features/proxying",
-          "core-features/support-faqs",
-          "core-features/privacy-and-security",
-          "core-features/data-privacy"
-        ]
-      },
-      {
-        "group": "Chains",
-        "pages": [
+        "dropdown": "Solana",
+        "icon": "/logo/chains/solana.svg",
+        "groups": [
           {
             "group": "Solana",
             "root": "chains/solana/solana",
@@ -132,113 +294,114 @@
             ]
           },
           {
+            "group": "Project Yellowstone",
+            "pages": [
+              "project-yellowstone/introduction",
+              "project-yellowstone/dragons-mouth-grpc-subscriptions",
+              {
+                "group": "Old Faithful Historical Archive",
+                "root": "project-yellowstone/old-faithful-historical-archive/old-faithful-historical-archive",
+                "pages": [
+                  "project-yellowstone/old-faithful-historical-archive/public-report-epoch-208"
+                ]
+              },
+              "project-yellowstone/steamboat-custom-indexes",
+              "project-yellowstone/whirligig-websockets",
+              "project-yellowstone/fumarole",
+              "project-yellowstone/program-data-streams",
+              "project-yellowstone/shield-transaction-policies",
+              {
+                "group": "Vixen Parsing Framework",
+                "root": "project-yellowstone/vixen-parsing-framework/vixen-parsing-framework",
+                "pages": [
+                  "project-yellowstone/vixen-parsing-framework/generate-parsers-with-codama"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Digital Assets API",
+            "pages": [
+              "digital-assets-api/introduction",
+              "digital-assets-api/fungible-assets",
+              {
+                "group": "API Methods",
+                "root": "digital-assets-api/metaplex-digital-assets-api/metaplex-digital-assets-api",
+                "pages": [
+                  "digital-assets-api/metaplex-digital-assets-api/get-asset",
+                  "digital-assets-api/metaplex-digital-assets-api/get-assets",
+                  "digital-assets-api/metaplex-digital-assets-api/get-asset-proof",
+                  "digital-assets-api/metaplex-digital-assets-api/get-asset-proofs",
+                  "digital-assets-api/metaplex-digital-assets-api/get-asset-signatures",
+                  "digital-assets-api/metaplex-digital-assets-api/get-assets-by-authority",
+                  "digital-assets-api/metaplex-digital-assets-api/get-assets-by-creator",
+                  "digital-assets-api/metaplex-digital-assets-api/get-assets-by-group",
+                  "digital-assets-api/metaplex-digital-assets-api/get-assets-by-owner",
+                  "digital-assets-api/metaplex-digital-assets-api/search-assets",
+                  "digital-assets-api/metaplex-digital-assets-api/get-nft-editions",
+                  "digital-assets-api/metaplex-digital-assets-api/get-token-accounts",
+                  "digital-assets-api/metaplex-digital-assets-api/get-token-largest-accounts"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Trading APIs",
+            "pages": [
+              "trading-apis/introduction",
+              "trading-apis/hermes",
+              "trading-apis/bundle-simulation-with-jito",
+              "trading-apis/metis-swap-api",
+              "trading-apis/titan-swap-api"
+            ]
+          },
+          {
+            "group": "Validators",
+            "pages": [
+              "validators/introduction",
+              "validators/vote-account-setup",
+              "validators/node-identity-protection"
+            ]
+          }
+        ]
+      },
+      {
+        "dropdown": "SUI",
+        "icon": "/logo/chains/sui.svg",
+        "groups": [
+          {
             "group": "SUI",
             "root": "chains/sui/sui",
             "pages": [
               "chains/sui/walrus"
             ]
-          },
-          "chains/monad",
-          "chains/pythnet",
-          "chains/others"
-        ]
-      },
-      {
-        "group": "Digital Assets API",
-        "pages": [
-          "digital-assets-api/introduction",
-          "digital-assets-api/fungible-assets",
-          {
-            "group": "API Methods",
-            "root": "digital-assets-api/metaplex-digital-assets-api/metaplex-digital-assets-api",
-            "pages": [
-              "digital-assets-api/metaplex-digital-assets-api/get-asset",
-              "digital-assets-api/metaplex-digital-assets-api/get-assets",
-              "digital-assets-api/metaplex-digital-assets-api/get-asset-proof",
-              "digital-assets-api/metaplex-digital-assets-api/get-asset-proofs",
-              "digital-assets-api/metaplex-digital-assets-api/get-asset-signatures",
-              "digital-assets-api/metaplex-digital-assets-api/get-assets-by-authority",
-              "digital-assets-api/metaplex-digital-assets-api/get-assets-by-creator",
-              "digital-assets-api/metaplex-digital-assets-api/get-assets-by-group",
-              "digital-assets-api/metaplex-digital-assets-api/get-assets-by-owner",
-              "digital-assets-api/metaplex-digital-assets-api/search-assets",
-              "digital-assets-api/metaplex-digital-assets-api/get-nft-editions",
-              "digital-assets-api/metaplex-digital-assets-api/get-token-accounts",
-              "digital-assets-api/metaplex-digital-assets-api/get-token-largest-accounts"
-            ]
           }
         ]
       },
       {
-        "group": "Project Yellowstone",
-        "pages": [
-          "project-yellowstone/introduction",
-          "project-yellowstone/dragons-mouth-grpc-subscriptions",
+        "dropdown": "Pyth",
+        "icon": "/logo/chains/pyth.svg",
+        "groups": [
           {
-            "group": "Old Faithful Historical Archive",
-            "root": "project-yellowstone/old-faithful-historical-archive/old-faithful-historical-archive",
+            "group": "Pythnet",
             "pages": [
-              "project-yellowstone/old-faithful-historical-archive/public-report-epoch-208"
+              "chains/pythnet"
             ]
           },
-          "project-yellowstone/steamboat-custom-indexes",
-          "project-yellowstone/whirligig-websockets",
-          "project-yellowstone/fumarole",
-          "project-yellowstone/program-data-streams",
-          "project-yellowstone/shield-transaction-policies",
           {
-            "group": "Vixen Parsing Framework",
-            "root": "project-yellowstone/vixen-parsing-framework/vixen-parsing-framework",
+            "group": "Pyth Publishers",
             "pages": [
-              "project-yellowstone/vixen-parsing-framework/generate-parsers-with-codama"
+              "pyth-publishers/nginx-proxy",
+              "pyth-publishers/testnet-devnet-and-pythnet"
             ]
           }
         ]
       },
       {
-        "group": "Account Management",
+        "dropdown": "Monad",
+        "icon": "circle",
         "pages": [
-          "account-management/payments",
-          {
-            "group": "Account management API",
-            "root": "account-management/api-access/api-access",
-            "pages": [
-              "account-management/api-access/introduction",
-              "account-management/api-access/auth-and-headers",
-              "account-management/api-access/accounts",
-              "account-management/api-access/address-watch-lists",
-              "account-management/api-access/subscriptions",
-              "account-management/api-access/subscription-types",
-              "account-management/api-access/endpoints",
-              "account-management/api-access/tokens",
-              "account-management/api-access/rate-tiers"
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Trading APIs",
-        "pages": [
-          "trading-apis/introduction",
-          "trading-apis/hermes",
-          "trading-apis/bundle-simulation-with-jito",
-          "trading-apis/metis-swap-api",
-          "trading-apis/titan-swap-api"
-        ]
-      },
-      {
-        "group": "Validators",
-        "pages": [
-          "validators/introduction",
-          "validators/vote-account-setup",
-          "validators/node-identity-protection"
-        ]
-      },
-      {
-        "group": "Pyth Publishers",
-        "pages": [
-          "pyth-publishers/nginx-proxy",
-          "pyth-publishers/testnet-devnet-and-pythnet"
+          "chains/monad"
         ]
       }
     ]
