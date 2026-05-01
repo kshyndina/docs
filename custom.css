@@ -19,17 +19,42 @@
 }
 
 /* ---- 0a. Sidebar: a touch wider so long titles don't break onto two lines.
-   Mintlify default is ~17rem; bump to ~19rem to fit "Solana v2.0: Deprecated
+   Mintlify default is ~17rem; bump to ~20rem to fit "Solana v2.0: Deprecated
    RPC Methods" and "Agave - AccountsDB: Storage Files shrinking process". */
 #sidebar {
-  width: 19rem !important;
-  max-width: 19rem !important;
+  width: 20rem !important;
+  max-width: 20rem !important;
 }
 @media (min-width: 1024px) {
   #sidebar {
-    width: 19rem !important;
-    flex-basis: 19rem !important;
+    width: 20rem !important;
+    flex-basis: 20rem !important;
   }
+}
+
+/* ---- 0a-bis. Group labels: keep the case as written + sexy styling ----
+   Mintlify's default sidebar group label uses uppercase + extra letter
+   spacing which fights our sentence-case requirement. Force the label
+   to render as authored, then add a subtle Triton-purple accent so the
+   header reads as a section divider rather than just text. */
+#sidebar-content #sidebar-group > [data-component-part="sidebar-group-header"],
+#sidebar-content [id^="sidebar-group"] > div[class*="text-xs"]:first-child,
+sidebar-group-header,
+.sidebar-group-header {
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: 'DM Sans', system-ui, sans-serif !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  color: rgba(122, 75, 160, 0.85) !important;
+  padding-top: 0.85rem !important;
+  padding-bottom: 0.35rem !important;
+}
+.dark sidebar-group-header,
+html.dark sidebar-group-header,
+.dark .sidebar-group-header,
+html.dark .sidebar-group-header {
+  color: rgba(181, 145, 211, 0.95) !important;
 }
 
 /* ---- 0c. Sidebar top padding ----
@@ -74,13 +99,16 @@ mdx-content > *:first-child {
   margin-top: 0 !important;
 }
 
-/* ---- 0b. Hide the floating AI assistant input at the bottom of every page.
-   The top "Ask AI" button stays; we don't want a second input drifting on
-   top of body content. Mintlify's CSS hook for the floating input is the
-   `.chat-assistant-floating-input` class. */
-.chat-assistant-floating-input,
-chat-assistant-floating-input,
-[class*="chat-assistant-floating"] {
+/* ---- 0b. (Removed) The floating AI "Ask a question" input is the
+   primary AI surface — keep it visible at the bottom of every page. */
+
+/* ---- 0d. Hide bottom-of-page Previous/Next pagination (Kate request).
+   Discourages serial reading; users should navigate via sidebar. */
+#pagination,
+pagination-prev,
+pagination-next,
+.pagination-prev,
+.pagination-next {
   display: none !important;
 }
 

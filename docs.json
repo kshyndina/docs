@@ -95,7 +95,8 @@
                 "group": " ",
                 "pages": [
                   "solana/welcome"
-                ]
+                ],
+                "root": "solana/welcome"
               },
               {
                 "group": "Get started",
@@ -112,9 +113,11 @@
                       "solana/get-started/account-management/how-to-top-up-credits",
                       "solana/get-started/account-management/reach-out-to-support",
                       "solana/get-started/account-management/account-management-api"
-                    ]
+                    ],
+                    "root": "solana/get-started/account-management/platform-overview"
                   }
-                ]
+                ],
+                "root": "solana/get-started/quickstart"
               },
               {
                 "group": "Dedicated nodes",
@@ -122,7 +125,8 @@
                   "solana/dedicated-nodes/overview",
                   "solana/dedicated-nodes/quickstart",
                   "solana/dedicated-nodes/best-practices"
-                ]
+                ],
+                "root": "solana/dedicated-nodes/overview"
               },
               {
                 "group": "Streaming data",
@@ -132,15 +136,17 @@
                   {
                     "group": "Dragon's Mouth gRPC",
                     "pages": [
-                      "solana/streaming/dragons-mouth/overview-and-architecture",
+                      "solana/streaming/dragons-mouth/overview-and-quickstart",
                       "solana/streaming/dragons-mouth/sdks-and-client-libraries",
                       "solana/streaming/dragons-mouth/deshred-transactions"
-                    ]
+                    ],
+                    "root": "solana/streaming/dragons-mouth/overview-and-quickstart"
                   },
                   "solana/streaming/whirligig-websockets",
                   "solana/streaming/fumarole-reliable-streams",
                   "solana/streaming/old-faithful-streams"
-                ]
+                ],
+                "root": "solana/streaming/overview"
               },
               {
                 "group": "Reading Solana state",
@@ -150,7 +156,8 @@
                   "solana/reading-state/metaplex-das-api",
                   "solana/reading-state/zk-compression-photon",
                   "solana/reading-state/account-sync"
-                ]
+                ],
+                "root": "solana/reading-state/overview"
               },
               {
                 "group": "Sending transactions",
@@ -162,7 +169,8 @@
                   "solana/sending-transactions/jito-bundles",
                   "solana/sending-transactions/metis-swap-api",
                   "solana/sending-transactions/titan-swap-api"
-                ]
+                ],
+                "root": "solana/sending-transactions/overview-and-quickstart"
               },
               {
                 "group": "Agents / MCP",
@@ -170,7 +178,8 @@
                   "solana/agents-mcp/overview",
                   "solana/agents-mcp/mcp-server",
                   "solana/agents-mcp/quickstart"
-                ]
+                ],
+                "root": "solana/agents-mcp/overview"
               },
               {
                 "group": "Validators",
@@ -178,7 +187,8 @@
                   "solana/validators/introduction",
                   "solana/validators/vote-account-setup",
                   "solana/validators/node-identity-protection"
-                ]
+                ],
+                "root": "solana/validators/introduction"
               }
             ]
           },
@@ -191,7 +201,8 @@
                   "solana-api/api-overview",
                   "solana-api/authentication",
                   "solana-api/endpoints"
-                ]
+                ],
+                "root": "solana-api/api-overview"
               },
               {
                 "group": "HTTP RPC methods",
@@ -211,7 +222,8 @@
                       "solana-api/http/accounts/getLargestAccounts",
                       "solana-api/http/accounts/getMinimumBalanceForRentExemption",
                       "solana-api/http/accounts/getStakeMinimumDelegation"
-                    ]
+                    ],
+                    "root": "solana-api/http/accounts/getAccountInfo"
                   },
                   {
                     "group": "History",
@@ -230,7 +242,8 @@
                       "solana-api/http/history/getFirstAvailableBlock",
                       "solana-api/http/history/getRecentPerformanceSamples",
                       "solana-api/http/history/getRecentPrioritizationFees"
-                    ]
+                    ],
+                    "root": "solana-api/http/history/getBlock"
                   },
                   {
                     "group": "Standard",
@@ -261,9 +274,11 @@
                       "solana-api/http/standard/requestAirdrop",
                       "solana-api/http/standard/sendTransaction",
                       "solana-api/http/standard/simulateTransaction"
-                    ]
+                    ],
+                    "root": "solana-api/http/standard/getClusterNodes"
                   }
-                ]
+                ],
+                "root": "solana-api/http/accounts/getAccountInfo"
               },
               {
                 "group": "Whirligig WebSocket",
@@ -280,7 +295,8 @@
                   "solana-api/websocket/signatureUnsubscribe",
                   "solana-api/websocket/slotSubscribe",
                   "solana-api/websocket/slotUnsubscribe"
-                ]
+                ],
+                "root": "solana-api/websocket/accountSubscribe"
               },
               {
                 "group": "Yellowstone gRPC",
@@ -293,7 +309,8 @@
                   "solana-api/grpc/getVersion",
                   "solana-api/grpc/isBlockhashValid",
                   "solana-api/grpc/ping"
-                ]
+                ],
+                "root": "solana-api/grpc/subscribe"
               },
               {
                 "group": "DAS API",
@@ -312,7 +329,8 @@
                   "solana-api/das/getNftEditions",
                   "solana-api/das/getTokenLargestAccounts",
                   "solana-api/das/getAssets"
-                ]
+                ],
+                "root": "solana-api/das/getAsset"
               },
               {
                 "group": "Transactions",
@@ -322,7 +340,8 @@
                     "pages": [
                       "solana-api/transactions/standard/getRecentPrioritizationFees",
                       "solana-api/transactions/standard/sendTransaction"
-                    ]
+                    ],
+                    "root": "solana-api/transactions/standard/getRecentPrioritizationFees"
                   },
                   {
                     "group": "Metis",
@@ -330,16 +349,19 @@
                       "solana-api/transactions/metis/quote",
                       "solana-api/transactions/metis/swap",
                       "solana-api/transactions/metis/price"
-                    ]
+                    ],
+                    "root": "solana-api/transactions/metis/quote"
                   },
                   {
                     "group": "Titan",
                     "pages": [
                       "solana-api/transactions/titan/quote",
                       "solana-api/transactions/titan/swap"
-                    ]
+                    ],
+                    "root": "solana-api/transactions/titan/quote"
                   }
-                ]
+                ],
+                "root": "solana-api/transactions/standard/getRecentPrioritizationFees"
               }
             ]
           },
@@ -356,7 +378,8 @@
                   "solana-guides/transaction-guides",
                   "solana-guides/industry-use-cases",
                   "solana-guides/nfts-and-digital-assets"
-                ]
+                ],
+                "root": "solana-guides/error-handling"
               }
             ]
           },
@@ -376,7 +399,8 @@
                   "solana-faqs/pyth-oracle",
                   "solana-faqs/validator",
                   "solana-faqs/transactions"
-                ]
+                ],
+                "root": "solana-faqs/general"
               }
             ]
           }
@@ -393,7 +417,8 @@
               "pyth/pyth-hermes",
               "pyth/publisher-setup-nginx-proxy",
               "pyth/testnet-devnet-and-pythnet"
-            ]
+            ],
+            "root": "pyth/overview-and-getting-started"
           }
         ]
       },
@@ -407,7 +432,8 @@
               "sui/overview-and-getting-started",
               "sui/walrus",
               "sui/seal"
-            ]
+            ],
+            "root": "sui/overview-and-getting-started"
           }
         ]
       },
@@ -419,7 +445,8 @@
             "group": "Monad",
             "pages": [
               "monad/overview-and-getting-started"
-            ]
+            ],
+            "root": "monad/overview-and-getting-started"
           }
         ]
       }
