@@ -101,6 +101,7 @@
                   "solana/get-started/plans-and-billing",
                   {
                     "group": "Account management",
+                    "root": "solana/get-started/account-management/platform-overview",
                     "expanded": true,
                     "pages": [
                       "solana/get-started/account-management/platform-overview",
@@ -128,6 +129,7 @@
                   "solana/streaming/quickstart",
                   {
                     "group": "Dragon's Mouth gRPC",
+                    "root": "solana/streaming/dragons-mouth/overview-and-quickstart",
                     "expanded": true,
                     "pages": [
                       "solana/streaming/dragons-mouth/overview-and-quickstart",
@@ -144,10 +146,21 @@
                 "group": "Reading Solana state",
                 "pages": [
                   "solana/reading-state/overview",
+                  "solana/reading-state/account-sync",
                   "solana/reading-state/standard-rpc",
+                  "solana/reading-state/steamboat-indexed-accounts",
                   "solana/reading-state/metaplex-das-api",
-                  "solana/reading-state/zk-compression-photon",
-                  "solana/reading-state/account-sync"
+                  "solana/reading-state/zk-compression-photon"
+                ]
+              },
+              {
+                "group": "Historical data",
+                "pages": [
+                  "solana/history/overview",
+                  "solana/history/quickstart",
+                  "solana/history/hydrant",
+                  "solana/history/old-faithful",
+                  "solana/history/faithful-streams"
                 ]
               },
               {
@@ -197,6 +210,7 @@
                 "pages": [
                   {
                     "group": "Accounts",
+                    "root": "solana-api/http/accounts/getAccountInfo",
                     "expanded": true,
                     "pages": [
                       "solana-api/http/accounts/getAccountInfo",
@@ -215,6 +229,7 @@
                   },
                   {
                     "group": "History",
+                    "root": "solana-api/http/history/getBlock",
                     "expanded": true,
                     "pages": [
                       "solana-api/http/history/getBlock",
@@ -235,6 +250,7 @@
                   },
                   {
                     "group": "Standard",
+                    "root": "solana-api/http/standard/getClusterNodes",
                     "expanded": true,
                     "pages": [
                       "solana-api/http/standard/getClusterNodes",
@@ -321,6 +337,7 @@
                 "pages": [
                   {
                     "group": "Standard",
+                    "root": "solana-api/transactions/standard/getRecentPrioritizationFees",
                     "expanded": true,
                     "pages": [
                       "solana-api/transactions/standard/getRecentPrioritizationFees",
@@ -329,6 +346,7 @@
                   },
                   {
                     "group": "Metis",
+                    "root": "solana-api/transactions/metis/quote",
                     "expanded": true,
                     "pages": [
                       "solana-api/transactions/metis/quote",
@@ -338,6 +356,7 @@
                   },
                   {
                     "group": "Titan",
+                    "root": "solana-api/transactions/titan/quote",
                     "expanded": true,
                     "pages": [
                       "solana-api/transactions/titan/quote",

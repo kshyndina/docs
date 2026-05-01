@@ -101,14 +101,13 @@ html body div[class~="lg:w-56"] {
   }
 }
 
-/* ---- 0a-tris. Flat sidebar groups (no dropdown affordance) ----
-   By default Mintlify renders every sidebar group as a collapsible
-   accordion with a chevron. Kate wants them to read as flat section
-   labels (the GitBook / Vagrant docs look). Hide the chevron, force
-   every group expanded, and remove the click-to-collapse behaviour --
-   the group label still navigates to its `root` page on click. */
-#sidebar-content [data-component-part="sidebar-group-header"] svg,
-#navigation-items [data-component-part="sidebar-group-header"] svg {
+/* ---- 0a-tris. Flat top-level sections, dropdown nested groups ----
+   Top-level groups are <div data-component-part="sidebar-group-header">
+   (no button, no chevron). Nested groups are <button aria-label="Toggle
+   X section"> with their own chevron — Kate wants those visible.
+   Hide chevron only on the top-level header, leave nested buttons. */
+#sidebar-content [data-component-part="sidebar-group-header"] > svg,
+#navigation-items [data-component-part="sidebar-group-header"] > svg {
   display: none !important;
 }
 /* Hide the entire button/header for groups whose label is empty or
@@ -120,15 +119,6 @@ html body div[class~="lg:w-56"] {
   height: 0 !important;
   padding: 0 !important;
   margin: 0 !important;
-}
-/* Force-expand every group container in case Mintlify collapses it
-   on initial load. The `[hidden]` attr is the standard collapse hook;
-   common Tailwind hidden classes are belt-and-braces. */
-#sidebar-content [data-component-part="sidebar-group"] > [hidden],
-#sidebar-content [data-component-part="sidebar-group"] [aria-hidden="true"] {
-  display: block !important;
-  visibility: visible !important;
-  height: auto !important;
 }
 
 /* ---- 0a-bis. Group labels: Geist Mono, gray, medium ----
@@ -150,16 +140,15 @@ sidebar-group-header {
 }
 
 /* Group dividers: only between groups, not above the first one.
-   Use the general sibling combinator (`~`): a `mt-6` group div
+   Use the general sibling combinator (`~`) so a `mt-6` group div
    gets a top border ONLY if it's preceded by another `mt-6` div.
-   The first group has no preceding `mt-6` sibling, so it stays
-   clean. (`:first-of-type` doesn't work here because the chain
-   selector is also a sibling div, making the first group not the
-   first-of-type.) */
+   Symmetric spacing: 1.25rem on either side of the divider so the
+   gap above and below the line is identical. */
 #navigation-items div[class*="mt-6"] ~ div[class*="mt-6"],
 #navigation-items div[class*="mt-8"] ~ div[class*="mt-8"] {
-  border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
   padding-top: 1.25rem !important;
+  margin-top: 1.25rem !important;
 }
 
 /* Dark-mode tones */
@@ -169,9 +158,11 @@ html.dark .sidebar-group-header,
 html.dark .sidebar-group-header h5 {
   color: rgba(180, 180, 180, 0.7) !important;
 }
-.dark #navigation-items > div[class*="mt-6"]:not(:first-of-type),
-html.dark #navigation-items > div[class*="mt-6"]:not(:first-of-type) {
-  border-top-color: rgba(255, 255, 255, 0.06) !important;
+.dark #navigation-items div[class*="mt-6"] ~ div[class*="mt-6"],
+html.dark #navigation-items div[class*="mt-6"] ~ div[class*="mt-6"],
+.dark #navigation-items div[class*="mt-8"] ~ div[class*="mt-8"],
+html.dark #navigation-items div[class*="mt-8"] ~ div[class*="mt-8"] {
+  border-top-color: rgba(255, 255, 255, 0.18) !important;
 }
 
 /* ---- 0a-quater. Sidebar pages: keep them indented relative to
@@ -546,23 +537,24 @@ html.dark #page-context-menu-button:hover {
   border-color: rgba(181, 145, 211, 0.4) !important;
 }
 
-/* ---- 8. Hide chevrons on collapsible sidebar items ----
-   Verified DOM: nested-group buttons (Account management, Dragon's
-   Mouth gRPC, etc.) render as
-       <button>
-         <div class="flex-1 ...">Account management</div>
+/* ---- 8. Nested group dropdown buttons: keep chevron, brand the hover.
+   Nested groups (Account management, Dragon's Mouth gRPC, Accounts in
+   HTTP RPC, Standard, Metis, Titan, etc.) render as
+       <button aria-label="Toggle X section">
+         <div class="flex-1 ...">X</div>
          <div class="h-[1lh] ...">
-           <svg class="transition-transform...">  <-- chevron
+           <svg class="transition-transform...">  <-- chevron, KEEP
          </div>
        </button>
-   The chevron is inside a wrapping div, NOT a direct child of the
-   button. Target the SVG that lives inside the button's last child
-   div. */
-#sidebar-content button > div:last-child > svg,
-#navigation-items button > div:last-child > svg,
-#sidebar-content button svg[class*="transition-transform"],
-#sidebar-content [class*="sidebar-group-header"] svg {
-  display: none !important;
+   The chevron is intentional dropdown affordance Kate asked for.
+   Click navigates to root via Mintlify's `root` config. */
+#sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:hover,
+#navigation-items button[aria-label^="Toggle "][aria-label$=" section"]:hover {
+  background: rgba(122, 75, 160, 0.06) !important;
+}
+.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:hover,
+html.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:hover {
+  background: rgba(181, 145, 211, 0.08) !important;
 }
 
 /* ---- 9. Navbar: pin tabs LEFT (right next to the logo) ----
@@ -720,6 +712,113 @@ footer a:has(span):not(:has(div)) {
   box-shadow: none !important;
   border-top: 0 !important;
 }
+/* Center the floating chat input within the content column instead
+   of stretching edge-to-edge. Cap width and centre. */
+.chat-assistant-floating-input {
+  max-width: 600px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* Kill the hairline divider drawn just ABOVE the chat input bar.
+   Mintlify renders a separator either as a `<hr>` or a sibling div
+   with `border-t` immediately before `.chat-assistant-floating-input`.
+   Hide both. Also hide the brand "Powered by Mintlify" disclaimer
+   row (already covered globally below, but belt-and-braces). */
+hr + .chat-assistant-floating-input,
+.chat-assistant-floating-input {
+  border-top: 0 !important;
+}
+.chat-assistant-floating-input + hr,
+hr:has(+ .chat-assistant-floating-input),
+hr ~ .chat-assistant-disclaimer-text {
+  display: none !important;
+}
+/* "Powered by Mintlify" disclaimer that lives inside the chat
+   panel and inside the floating bar. Hide everywhere. */
+.chat-assistant-disclaimer-text,
+[class*="chat-assistant"] [class*="disclaimer"],
+[class*="chat-assistant"] a[href*="mintlify.com"] {
+  display: none !important;
+}
+
+/* ---- 15-bis. Search/AI: lock as 36×36 circles via stable selectors.
+   Mintlify's IDs (#search-bar-entry, #assistant-entry) toggle when the
+   AI panel opens. The aria-labels are stable: "Open search" and
+   "Toggle assistant panel". Target both. */
+#navbar button[aria-label="Open search"],
+#navbar button[aria-label="Toggle assistant panel"],
+button#search-bar-entry,
+button#assistant-entry {
+  width: 2.25rem !important;
+  min-width: 2.25rem !important;
+  max-width: 2.25rem !important;
+  height: 2.25rem !important;
+  padding: 0 !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background: transparent !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  border-radius: 0.5rem !important;
+  gap: 0 !important;
+  flex: 0 0 auto !important;
+}
+#navbar button[aria-label="Open search"] *:not(svg):not(:has(svg)),
+#navbar button[aria-label="Toggle assistant panel"] *:not(svg):not(:has(svg)) {
+  display: none !important;
+}
+#navbar button[aria-label="Open search"] svg,
+#navbar button[aria-label="Toggle assistant panel"] svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  flex-shrink: 0 !important;
+  display: block !important;
+}
+.dark #navbar button[aria-label="Open search"],
+.dark #navbar button[aria-label="Toggle assistant panel"],
+html.dark #navbar button[aria-label="Open search"],
+html.dark #navbar button[aria-label="Toggle assistant panel"] {
+  border-color: rgba(181, 145, 211, 0.25) !important;
+}
+
+/* ---- 15-ter. Search modal/dialog: focus state, light-gray fill,
+   matched corner radius. When user clicks the search icon a dialog
+   opens; the input inside it gets a subtle outline + #f7f7f7 fill. */
+input[type="search"],
+[role="dialog"] input[placeholder*="earch" i],
+[role="combobox"] input,
+.search-bar input,
+[class*="search"] input[type="text"] {
+  background: #f7f7f7 !important;
+  border-radius: 0.625rem !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  outline: none !important;
+}
+input[type="search"]:focus,
+[role="dialog"] input[placeholder*="earch" i]:focus,
+[role="combobox"] input:focus,
+.search-bar input:focus,
+[class*="search"] input[type="text"]:focus {
+  border-color: rgba(122, 75, 160, 0.55) !important;
+  box-shadow: 0 0 0 3px rgba(122, 75, 160, 0.12) !important;
+  outline: none !important;
+}
+.dark input[type="search"],
+.dark [role="dialog"] input[placeholder*="earch" i],
+html.dark input[type="search"] {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(181, 145, 211, 0.25) !important;
+}
+
+/* ---- 19. Quickstart "Next" / Step-cluster Next button rounding ----
+   The Steps component's "Next step" / final CTA can render as a
+   button with `rounded-lg` or higher. Lock to 0.5rem to match the
+   secondary button family. */
+a[href*="quickstart"][class*="rounded"],
+.mdx-content a[class*="rounded-xl"][href],
+.mdx-content button[class*="rounded-xl"],
+.mdx-content [class*="rounded-2xl"] {
+  border-radius: 0.5rem !important;
+}
 
 /* ---- 16. Copy page split button: lock both halves to same height ----
    DOM showed the two halves render at 34px and 33px. Force both to
@@ -731,27 +830,44 @@ footer a:has(span):not(:has(div)) {
 }
 
 /* ---- 17. Sidebar->content gap: always 44px margin + 24px padding ----
-   When the AI assistant panel toggles, Mintlify recomputes the
-   centring math and the gap collapses. Lock it. */
+   When the AI assistant panel opens, Mintlify applies the Tailwind
+   class `[[data-assistant-state=open]_&]:!mx-auto` which compiles to
+   `[data-assistant-state="open"] .target { margin: auto !important }`.
+   To beat it we need higher specificity. Stack three attribute
+   selectors on `html body` so we win on every state. */
 @media (min-width: 1024px) {
-  html body [class*="lg:max-w-[696px"] {
+  html body [class*="lg:max-w-[696px"],
+  html body [class*="lg:max-w-[696px"][class*="lg:ml-[max"],
+  html body [data-assistant-state="open"] [class*="lg:max-w-[696px"],
+  html body [data-assistant-state="closed"] [class*="lg:max-w-[696px"] {
     margin-left: 44px !important;
+    margin-right: 0 !important;
     padding-left: 24px !important;
     padding-right: 24px !important;
   }
 }
 
-/* ---- 18. AI assistant panel: sticky so it doesn't scroll with page
-   When the panel is open (`[data-assistant-state=open]`), the panel
-   sits in a flex column on the right that scrolls with the document.
-   Stick it so it stays in view as the page scrolls. */
-[data-assistant-state="open"] aside[class*="assistant" i],
-[data-assistant-state="open"] [data-component-part*="assistant" i],
-[data-assistant-state="open"] div[class*="assistant-container" i] {
+/* ---- 18. AI assistant panel: sticky so it doesn't scroll with page.
+   Verified DOM: the panel is a `<div class="... chat-assistant-sheet">`
+   with `h-full overflow-hidden`. It needs `position: sticky; top: 0;
+   height: 100vh` on itself. The internal scroll lives in
+   `.chat-assistant-sheet-content` (overflow-y-auto) — leave that. */
+.chat-assistant-sheet,
+div.chat-assistant-sheet,
+[data-assistant-state="open"] .chat-assistant-sheet {
   position: sticky !important;
   top: 0 !important;
   height: 100vh !important;
+  max-height: 100vh !important;
   align-self: flex-start !important;
+  flex-shrink: 0 !important;
+}
+/* Ensure the sheet's parent flex container allows sticky to work
+   (parent must not have overflow hidden / scroll). */
+.chat-assistant-sheet-parent,
+div:has(> .chat-assistant-sheet) {
+  overflow: visible !important;
+  align-items: flex-start !important;
 }
 
 /*! purgecss end ignore */
