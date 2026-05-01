@@ -25,19 +25,29 @@ html.dark #navbar {
 }
 
 /* ---- 0-ter. Focus + text selection: no clipped corners ----
-   When tabbing through links or selecting text inside elements with
-   `overflow: hidden` + `border-radius` (cards, code blocks, table
-   cells), the focus outline gets clipped. Two fixes:
-   1) Use `outline` (not box-shadow) with offset so it floats outside.
-   2) Brand-coloured ::selection that renders cleanly. */
+   Sidebar uses `overflow-y: auto` which clips outlines that extend
+   outside the link bounds. Use INSET outline (negative offset) so the
+   ring is drawn inside the focused element -- never gets clipped by
+   the scroll container even when the link is at the visible edge of
+   the viewport. */
 *:focus-visible {
-  outline: 2px solid rgba(122, 75, 160, 0.7) !important;
-  outline-offset: 2px !important;
-  border-radius: 4px;
+  outline: 2px solid rgba(122, 75, 160, 0.6) !important;
+  outline-offset: -2px !important;
+  border-radius: 6px;
+}
+/* Sidebar links specifically: tighter inset radius matches the link
+   pill. Inset outlines render INSIDE the element's box and so cannot
+   clip even inside an `overflow:hidden` scrollable parent. */
+#sidebar a:focus-visible,
+#sidebar button:focus-visible,
+#sidebar [role="link"]:focus-visible {
+  outline: 2px solid rgba(122, 75, 160, 0.6) !important;
+  outline-offset: -2px !important;
+  border-radius: 8px !important;
 }
 .dark *:focus-visible,
 html.dark *:focus-visible {
-  outline-color: rgba(181, 145, 211, 0.85) !important;
+  outline-color: rgba(181, 145, 211, 0.7) !important;
 }
 ::selection {
   background: rgba(122, 75, 160, 0.25);
@@ -47,18 +57,58 @@ html.dark *:focus-visible {
 html.dark ::selection {
   background: rgba(181, 145, 211, 0.35);
 }
-
-/* ---- 0a. Sidebar: match GitBook docs.triton.one width (~24rem).
-   Tried 20rem and 22rem, both still felt narrow next to GitBook. 24rem
-   matches the GitBook reference and gives long titles room to breathe. */
-#sidebar {
-  width: 24rem !important;
-  max-width: 24rem !important;
+/* Make sure the sidebar scroll container doesn't clip focus rings on
+   the y-axis -- only x-axis hidden if needed. */
+#sidebar,
+#sidebar-content {
+  overflow-x: visible !important;
 }
+
+/* ---- 0a. Sidebar width: aggressive override of Mintlify + Tailwind ----
+   Previous attempts (20rem, 22rem, 24rem on `#sidebar`) didn't actually
+   resize the rendered sidebar -- Mintlify also applies Tailwind utility
+   classes (`lg:w-72`, `w-72`, `flex-basis-72`) directly on the sidebar
+   element which were overriding our `#sidebar` rule even with `!important`
+   because of class-vs-id specificity ties. Override every plausible
+   wrapper, the Tailwind utilities, AND the parent flex container. */
+:root {
+  --sidebar-w: 24rem;
+}
+html body #sidebar,
+html body aside#sidebar,
+html body nav#sidebar,
+html body [id="sidebar"],
+html body aside[class*="sidebar" i],
+html body nav[aria-label*="sidebar" i],
+html body div#sidebar-container,
+html body aside.fixed,
+html body aside[class~="lg:w-72"],
+html body aside[class~="w-72"],
+html body aside[class~="lg:w-64"],
+html body [class~="lg:w-72"][class~="lg:fixed"] {
+  width: var(--sidebar-w) !important;
+  min-width: var(--sidebar-w) !important;
+  max-width: var(--sidebar-w) !important;
+  flex-basis: var(--sidebar-w) !important;
+  flex-shrink: 0 !important;
+}
+/* Push the main content area over so it doesn't sit underneath the
+   wider sidebar (Mintlify uses `lg:ml-72` on the content wrapper). */
 @media (min-width: 1024px) {
-  #sidebar {
-    width: 24rem !important;
-    flex-basis: 24rem !important;
+  html body main,
+  html body main[class*="ml-72"],
+  html body div[class~="lg:ml-72"],
+  html body div[class~="lg:pl-72"],
+  html body #content-container,
+  html body #content-area {
+    margin-left: var(--sidebar-w) !important;
+  }
+  /* If Mintlify uses padding instead of margin for the gutter, override
+     that too. (Some Mintlify versions wrap content in a flex parent and
+     use `lg:pl-[18rem]`.) */
+  html body div[class*="lg:pl-72"],
+  html body div[class*="lg:pl-["] {
+    padding-left: var(--sidebar-w) !important;
   }
 }
 
@@ -92,11 +142,14 @@ html.dark ::selection {
   height: auto !important;
 }
 
-/* ---- 0a-bis. Group labels: Geist Mono, ALL CAPS, Triton purple ----
-   Sidebar group labels are visual section dividers, not titles. Use
-   the same monospace + uppercase + tracking treatment we use for the
-   page eyebrow so the sidebar reads consistently with the body
-   typography. */
+/* ---- 0a-bis. Group labels: Geist Mono, gray, medium, dividers ----
+   Mirrors the reference sidebars Kate sent (Notion / Linear / Raycast):
+   - All-caps section labels in muted gray (not brand purple)
+   - Slightly LESS left indent than child items so they read as
+     section markers, not nested entries
+   - Hairline divider above each group (except the first one) so the
+     sidebar groups feel separated like the reference designs
+   - Geist Mono mono treatment matches the page eyebrow */
 #sidebar-content [data-component-part="sidebar-group-header"],
 #sidebar-content #sidebar-group > [data-component-part="sidebar-group-header"],
 #sidebar-content [id^="sidebar-group"] > div[class*="text-xs"]:first-child,
@@ -105,19 +158,41 @@ sidebar-group-header,
   font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace !important;
   text-transform: uppercase !important;
   letter-spacing: 0.06em !important;
-  font-size: 0.7rem !important;
+  font-size: 0.68rem !important;
   font-weight: 500 !important;
-  color: rgba(122, 75, 160, 0.85) !important;
-  padding-top: 0.85rem !important;
-  padding-bottom: 0.35rem !important;
+  color: rgba(115, 115, 115, 0.85) !important;
+  padding-left: 0.5rem !important;
+  padding-top: 1.25rem !important;
+  padding-bottom: 0.5rem !important;
+  margin-top: 0.75rem !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
+/* First group in any tab: drop the divider above (nothing to separate
+   from). Targets both the very first group and the implicit "first
+   visible" after a tab switch. */
+#sidebar-content [data-component-part="sidebar-group"]:first-of-type [data-component-part="sidebar-group-header"],
+#sidebar-content > nav > [data-component-part="sidebar-group"]:first-child [data-component-part="sidebar-group-header"] {
+  border-top: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0.5rem !important;
+}
+/* Dark-mode tones */
 .dark sidebar-group-header,
 html.dark sidebar-group-header,
 .dark .sidebar-group-header,
 html.dark .sidebar-group-header,
 .dark #sidebar-content [data-component-part="sidebar-group-header"],
 html.dark #sidebar-content [data-component-part="sidebar-group-header"] {
-  color: rgba(181, 145, 211, 0.95) !important;
+  color: rgba(180, 180, 180, 0.7) !important;
+  border-top-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* ---- 0a-quater. Sidebar pages: keep them indented relative to
+   labels so the hierarchy reads (label slightly left, items slightly
+   right). Matches the Notion-style sidebar reference Kate sent. */
+#sidebar-content a[href][data-component-part="sidebar-page"],
+#sidebar-content [data-component-part="sidebar-group"] > ul > li > a {
+  padding-left: 0.875rem !important;
 }
 
 /* ---- 0c. Sidebar top padding ----
@@ -471,6 +546,109 @@ html.dark #page-context-menu-button:hover {
 #sidebar-content button[aria-expanded] svg.lucide,
 #sidebar-content [data-component-part="sidebar-group-header"] [class*="chevron"] {
   display: none !important;
+}
+
+/* ---- 9. Navbar: pin tabs LEFT (right next to the logo) ----
+   Mintlify default centres the tab row in the navbar. Override the
+   flex layout so logo + tabs sit hard against the left, and the
+   right-side cluster (search, ai, links, primary button) gets pushed
+   to the far right via `margin-left: auto`. */
+#navbar > div,
+#navbar > nav {
+  justify-content: flex-start !important;
+}
+/* The tabs container -- targets common Mintlify wrappers */
+#navbar [data-component-part="navbar-tabs"],
+#navbar nav[aria-label*="tab" i],
+#navbar > div > nav,
+#navbar [class*="navbar-tabs"] {
+  margin-right: auto !important;
+  margin-left: 1.25rem !important;
+  justify-content: flex-start !important;
+}
+/* Right cluster gets its margin-left auto to push it to the right */
+#navbar [data-component-part="navbar-actions"],
+#navbar [data-component-part="search-bar"] ~ *,
+#navbar > div > div:last-child {
+  margin-left: auto !important;
+}
+/* Logo: smaller mark since it's now circular only */
+img.nav-logo,
+.nav-logo,
+#navbar img[alt*="logo" i] {
+  height: 2.25rem !important;
+  max-height: 2.25rem !important;
+  width: 2.25rem !important;
+  border-radius: 50% !important;
+}
+
+/* ---- 10. Tab icons: ensure they render at consistent size ---- */
+#navbar [data-component-part="navbar-tab"] svg,
+#navbar [role="tab"] svg,
+#navbar a[role="tab"] svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  margin-right: 0.4rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* ---- 11. Solana chain dropdown: purple hover (was gray) ----
+   The chain selector in the sidebar header was rendering with a gray
+   hover/active wash from Mintlify defaults. Override to match the
+   Triton secondary-button family (Copy page, pagination). */
+#sidebar-content button[aria-haspopup],
+#sidebar [data-component-part="sidebar-chain-selector"],
+#sidebar button:has(img[alt*="Solana" i]),
+#sidebar button:has(img[alt*="Pyth" i]),
+#sidebar button:has(img[alt*="SUI" i]),
+#sidebar button:has(img[alt*="Monad" i]) {
+  background: transparent !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  border-radius: 0.5rem !important;
+  transition: background 120ms ease, border-color 120ms ease !important;
+}
+#sidebar-content button[aria-haspopup]:hover,
+#sidebar [data-component-part="sidebar-chain-selector"]:hover,
+#sidebar button:has(img[alt*="Solana" i]):hover,
+#sidebar button:has(img[alt*="Pyth" i]):hover,
+#sidebar button:has(img[alt*="SUI" i]):hover,
+#sidebar button:has(img[alt*="Monad" i]):hover {
+  background: rgba(122, 75, 160, 0.06) !important;
+  border-color: rgba(122, 75, 160, 0.3) !important;
+}
+.dark #sidebar-content button[aria-haspopup],
+html.dark #sidebar [data-component-part="sidebar-chain-selector"] {
+  border-color: rgba(181, 145, 211, 0.25) !important;
+}
+.dark #sidebar-content button[aria-haspopup]:hover,
+html.dark #sidebar [data-component-part="sidebar-chain-selector"]:hover {
+  background: rgba(181, 145, 211, 0.08) !important;
+  border-color: rgba(181, 145, 211, 0.4) !important;
+}
+
+/* ---- 12. Corner-radius alignment for ALL secondary buttons ----
+   Lock the entire family (Solana dropdown, Copy page, pagination, AI
+   icon button) to the same 0.5rem radius so they read as one design
+   system. Earlier styles set radii inconsistently. */
+#page-context-menu,
+#page-context-menu > button:first-child,
+#page-context-menu > button:last-child,
+#pagination a,
+.pagination-prev a,
+.pagination-next a,
+#topbar-ai-chat-button,
+#sidebar-content button[aria-haspopup] {
+  border-radius: 0.5rem !important;
+}
+/* The split Copy-page button has two halves -- chevron half should
+   share the right-side rounding, copy half the left-side. */
+#page-context-menu > button:first-child {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+#page-context-menu > button:last-child {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 
 /*! purgecss end ignore */

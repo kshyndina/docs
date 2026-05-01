@@ -4,8 +4,8 @@
   "theme": "luma",
   "favicon": "/favicon.png",
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg",
+    "light": "/logo/mark.svg",
+    "dark": "/logo/mark.svg",
     "href": "https://triton.one"
   },
   "colors": {
@@ -90,6 +90,7 @@
         "tabs": [
           {
             "tab": "Documentation",
+            "icon": "book-open",
             "groups": [
               {
                 "group": "Get started",
@@ -181,6 +182,7 @@
           },
           {
             "tab": "API reference",
+            "icon": "code",
             "groups": [
               {
                 "group": "Overview and auth",
@@ -348,6 +350,7 @@
           },
           {
             "tab": "Guides",
+            "icon": "compass",
             "pages": [
               "solana-guides/error-handling",
               "solana-guides/getting-started",
@@ -360,6 +363,7 @@
           },
           {
             "tab": "FAQs",
+            "icon": "circle-help",
             "pages": [
               "solana-faqs/general",
               "solana-faqs/rpc",
