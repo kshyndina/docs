@@ -399,7 +399,7 @@
       },
       {
         "dropdown": "Monad",
-        "icon": "circle",
+        "icon": "/logo/chains/monad.svg",
         "pages": [
           "chains/monad"
         ]
