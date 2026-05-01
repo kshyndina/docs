@@ -526,20 +526,32 @@ html.dark #page-context-menu-button:hover {
 }
 
 /* ---- 9. Navbar: pin tabs LEFT (right next to the logo) ----
-   Verified via DOM inspection: the tab row is a `<nav>` element with
-   class `@[600px]/navbar:flex justify-center`. The `justify-center`
-   class is what's centring the tabs. Override to flex-start AND give
-   it `margin-right: auto` so the right-side cluster gets pushed to
-   the far right. */
+   Two pieces:
+   (a) Tab `<nav>` has `justify-center` baked in -- override to
+       flex-start.
+   (b) The DIV that wraps the logo has Tailwind `flex-1` on it,
+       which makes it expand and push the tab nav far to the right
+       (~400px from the logo). Kill `flex-grow` on that wrapper so
+       it shrinks to fit the logo + the tabs sit right next to it.
+   The right cluster (`.topbar-right-container`) already has
+   `flex-1 justify-end` so it gets all the leftover space. */
 #navbar nav[class*="justify-center"],
 #navbar nav.justify-center,
 #navbar > div > nav,
 #navbar nav[class*="navbar"] {
   justify-content: flex-start !important;
-  margin-right: auto !important;
-  margin-left: 0.75rem !important;
+  margin-left: 0.5rem !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
+}
+/* Logo wrapper (`<div class="flex-1 flex items-center gap-x-4 h-full pr-2 min-w-0">`)
+   -- override `flex-1` so it doesn't grow. */
+#navbar div[class~="flex-1"][class~="gap-x-4"][class~="pr-2"],
+#navbar div.flex-1.flex.items-center.gap-x-4,
+#navbar div:has(> a.select-none) {
+  flex-grow: 0 !important;
+  flex-basis: auto !important;
+  flex-shrink: 0 !important;
 }
 /* Logo: 1.5x bigger circular mark to match triton.one navbar size */
 img.nav-logo,
