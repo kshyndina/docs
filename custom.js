@@ -82,9 +82,10 @@
   }
 
   function replaceTabTriggerInsideDrawer() {
-    const drawer = findOpenDrawer();
-    if (!drawer) return;
-    const triggers = drawer.querySelectorAll(
+    // Mobile only — at lg+ the sidebar shows the same trigger and we
+    // leave it alone (Mintlify's tab pill row covers it).
+    if (window.innerWidth >= 1024) return;
+    const triggers = document.querySelectorAll(
       'button.nav-dropdown-trigger, button[aria-haspopup="menu"][class*="nav-dropdown"]'
     );
     triggers.forEach(function (btn) {

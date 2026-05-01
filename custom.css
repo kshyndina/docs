@@ -1126,21 +1126,23 @@ html body #sidebar-content button[aria-haspopup="menu"][class*="nav-dropdown"] {
     padding: 0 !important;
     margin: 0 !important;
     border: 0 !important;
-    border-radius: 50% !important;
-    background: rgba(0, 0, 0, 0.04) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
     color: rgba(73, 45, 96, 0.95) !important;
     overflow: hidden !important;
     pointer-events: auto !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+    box-shadow: none !important;
   }
   html.dark body button[class*="lg:hidden"][class*="h-14"] {
-    background: rgba(255, 255, 255, 0.06) !important;
+    background: transparent !important;
     color: rgba(214, 191, 232, 0.95) !important;
   }
   html body button[class*="lg:hidden"][class*="h-14"]:hover {
-    background: rgba(122, 75, 160, 0.12) !important;
+    background: transparent !important;
+    opacity: 0.7 !important;
   }
   /* Hide the breadcrumb-text + chevron child — keep only the menu icon */
   html body button[class*="lg:hidden"][class*="h-14"] > div:nth-child(2) {
