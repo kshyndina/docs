@@ -119,6 +119,27 @@ html.dark :not(pre) > code {
   border-color: rgba(181, 145, 211, 0.25);
 }
 
+/* ---- 3-bis. Horizontal rules: Triton purple wash, applied globally
+   to every <hr> (Markdown `***` / `---`). Mintlify/Tailwind prose
+   defaults to a near-invisible gray; bump opacity so the line reads
+   clearly against both light and dark backgrounds, while staying
+   on-brand with the inline-code colour. Single rule, easy to tune. */
+hr,
+.mdx-content hr,
+mdx-content hr {
+  border: 0 !important;
+  border-top: 1px solid rgba(122, 75, 160, 0.35) !important;
+  margin: 2rem 0 !important;
+  background: none !important;
+  height: 0 !important;
+}
+.dark hr,
+.dark .mdx-content hr,
+html.dark hr,
+html.dark mdx-content hr {
+  border-top-color: rgba(181, 145, 211, 0.35) !important;
+}
+
 /* ---- 4. Code blocks: native Mintlify horizontal scroll (no override).
    Per-block wrap is still available via Mintlify's `wrap` keyword after the
    language tag in a fenced code block, e.g. ```rust wrap. */
