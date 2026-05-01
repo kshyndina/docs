@@ -874,27 +874,35 @@ a[href*="quickstart"][class*="rounded"],
   }
 }
 
-/* ---- 18. AI assistant panel: sticky so it doesn't scroll with page.
-   Verified DOM: the panel is a `<div class="... chat-assistant-sheet">`
-   with `h-full overflow-hidden`. It needs `position: sticky; top: 0;
-   height: 100vh` on itself. The internal scroll lives in
-   `.chat-assistant-sheet-content` (overflow-y-auto) — leave that. */
-.chat-assistant-sheet,
-div.chat-assistant-sheet,
-[data-assistant-state="open"] .chat-assistant-sheet {
-  position: sticky !important;
-  top: 0 !important;
-  height: 100vh !important;
-  max-height: 100vh !important;
-  align-self: flex-start !important;
-  flex-shrink: 0 !important;
+/* ---- 18. AI assistant panel: pinned to viewport, removed from flow.
+   Verified DOM: Mintlify renders the panel as
+       <div class="sticky ... h-[calc(100vh-banner)]"
+            style="width:var(--assistant-sheet-width, 0px);overflow:hidden">
+         <div id="chat-assistant-sheet" class="... h-full chat-assistant-sheet">
+   The outer wrapper IS already position:sticky, but `position: sticky`
+   only sticks WITHIN its parent's bounds. Worse, its `h-[calc(100vh-banner)]`
+   forces the flex parent to be ≥ 100vh tall, so on short pages you can
+   scroll into a giant empty void below the actual content.
+   Fix: switch the wrapper to `position: fixed` so it's pulled out of
+   the flow entirely. The flex parent now sizes to main content only;
+   the panel is glued to the right edge of the viewport. */
+[data-assistant-state="open"] div[style*="--assistant-sheet-width"],
+body div.sticky[style*="assistant-sheet-width"] {
+  position: fixed !important;
+  right: 0 !important;
+  top: var(--banner-height, 0px) !important;
+  bottom: 0 !important;
+  margin-top: 0 !important;
+  height: calc(100vh - var(--banner-height, 0px)) !important;
+  max-height: calc(100vh - var(--banner-height, 0px)) !important;
 }
-/* Ensure the sheet's parent flex container allows sticky to work
-   (parent must not have overflow hidden / scroll). */
-.chat-assistant-sheet-parent,
-div:has(> .chat-assistant-sheet) {
-  overflow: visible !important;
-  align-items: flex-start !important;
+/* Inner sheet fills the now-fixed wrapper. Its own .sheet-content
+   keeps overflow-y-auto for the message-list scroll. */
+#chat-assistant-sheet,
+.chat-assistant-sheet {
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
 }
 
 /*! purgecss end ignore */
