@@ -149,12 +149,15 @@ sidebar-group-header {
   border-top: 0 !important;
 }
 
-/* Group dividers: hairline border on each group wrapper EXCEPT the
-   first one. Verified DOM: `#navigation-items` has ONE direct child
-   div, and the actual group wrappers (`<div class="mt-6 lg:mt-8">`)
-   are children of THAT inner div. */
-#navigation-items > div > div[class*="mt-6"]:not(:first-of-type),
-#navigation-items > div > div[class*="mt-8"]:not(:first-of-type) {
+/* Group dividers: only between groups, not above the first one.
+   Use the general sibling combinator (`~`): a `mt-6` group div
+   gets a top border ONLY if it's preceded by another `mt-6` div.
+   The first group has no preceding `mt-6` sibling, so it stays
+   clean. (`:first-of-type` doesn't work here because the chain
+   selector is also a sibling div, making the first group not the
+   first-of-type.) */
+#navigation-items div[class*="mt-6"] ~ div[class*="mt-6"],
+#navigation-items div[class*="mt-8"] ~ div[class*="mt-8"] {
   border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
   padding-top: 1.25rem !important;
 }
