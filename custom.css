@@ -92,20 +92,21 @@ html.dark ::selection {
   height: auto !important;
 }
 
-/* ---- 0a-bis. Group labels: keep the case as written + sexy styling ----
-   Mintlify's default sidebar group label uses uppercase + extra letter
-   spacing which fights our sentence-case requirement. Force the label
-   to render as authored, then add a subtle Triton-purple accent so the
-   header reads as a section divider rather than just text. */
+/* ---- 0a-bis. Group labels: Geist Mono, ALL CAPS, Triton purple ----
+   Sidebar group labels are visual section dividers, not titles. Use
+   the same monospace + uppercase + tracking treatment we use for the
+   page eyebrow so the sidebar reads consistently with the body
+   typography. */
+#sidebar-content [data-component-part="sidebar-group-header"],
 #sidebar-content #sidebar-group > [data-component-part="sidebar-group-header"],
 #sidebar-content [id^="sidebar-group"] > div[class*="text-xs"]:first-child,
 sidebar-group-header,
 .sidebar-group-header {
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-  font-family: 'DM Sans', system-ui, sans-serif !important;
+  font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
   font-size: 0.7rem !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   color: rgba(122, 75, 160, 0.85) !important;
   padding-top: 0.85rem !important;
   padding-bottom: 0.35rem !important;
@@ -113,7 +114,9 @@ sidebar-group-header,
 .dark sidebar-group-header,
 html.dark sidebar-group-header,
 .dark .sidebar-group-header,
-html.dark .sidebar-group-header {
+html.dark .sidebar-group-header,
+.dark #sidebar-content [data-component-part="sidebar-group-header"],
+html.dark #sidebar-content [data-component-part="sidebar-group-header"] {
   color: rgba(181, 145, 211, 0.95) !important;
 }
 
@@ -162,14 +165,39 @@ mdx-content > *:first-child {
 /* ---- 0b. (Removed) The floating AI "Ask a question" input is the
    primary AI surface — keep it visible at the bottom of every page. */
 
-/* ---- 0d. Hide bottom-of-page Previous/Next pagination (Kate request).
-   Discourages serial reading; users should navigate via sidebar. */
-#pagination,
-pagination-prev,
-pagination-next,
-.pagination-prev,
-.pagination-next {
-  display: none !important;
+/* ---- 0d. Bottom Previous/Next pagination: keep, restyle in Triton look.
+   (Was hidden previously; restored.) Match the secondary-button styling
+   used by the Solana chain dropdown / Copy page button -- transparent
+   background, thin Triton-purple border, hover wash. */
+#pagination a,
+.pagination-prev a,
+.pagination-next a,
+pagination-prev a,
+pagination-next a {
+  background: transparent !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  border-radius: 0.5rem !important;
+  color: rgba(73, 45, 96, 0.85) !important;
+  font-family: 'Work Sans', system-ui, sans-serif !important;
+  transition: background 120ms ease, border-color 120ms ease !important;
+}
+#pagination a:hover,
+.pagination-prev a:hover,
+.pagination-next a:hover,
+pagination-prev a:hover,
+pagination-next a:hover {
+  background: rgba(122, 75, 160, 0.06) !important;
+  border-color: rgba(122, 75, 160, 0.3) !important;
+}
+.dark #pagination a,
+html.dark #pagination a {
+  border-color: rgba(181, 145, 211, 0.25) !important;
+  color: rgba(214, 191, 232, 0.9) !important;
+}
+.dark #pagination a:hover,
+html.dark #pagination a:hover {
+  background: rgba(181, 145, 211, 0.08) !important;
+  border-color: rgba(181, 145, 211, 0.4) !important;
 }
 
 /* ---- 1. Logo: 2x bigger (h-6 = 24px -> 48px) ---- */
@@ -362,36 +390,13 @@ mdx-content table td code {
   word-break: break-all;
 }
 
-/* ---- 6. Navbar buttons: shrink and icon-ify ----
-   Search bar + Ask AI button take up too much navbar real estate when
-   they show their full label and ⌘K / ⌘I shortcut chips. Vagrant /
-   Gemini collapse them to small icon buttons; do the same. */
-
-/* Search bar entry: collapse to icon-only square button */
-#search-bar-entry,
-button#search-bar-entry,
-[id="search-bar-entry"] {
-  width: 2.25rem !important;
-  min-width: 2.25rem !important;
-  max-width: 2.25rem !important;
-  padding: 0 !important;
-  justify-content: center !important;
-  background: transparent !important;
-  border: 1px solid rgba(122, 75, 160, 0.18) !important;
-  border-radius: 0.5rem !important;
-}
-#search-bar-entry > span,
-#search-bar-entry kbd,
-#search-bar-entry [class*="kbd"],
-#search-bar-entry [class*="shortcut"] {
-  display: none !important;
-}
-.dark #search-bar-entry,
-html.dark #search-bar-entry {
-  border-color: rgba(181, 145, 211, 0.25) !important;
-}
-
-/* Ask AI button: icon-only square (matches search), no shortcut chip */
+/* ---- 6. Ask AI button: collapse to a small icon-only star button.
+   (Search is intentionally LEFT ALONE -- our previous attempt to
+   shrink it produced a triple-bordered render. Search stays as the
+   Mintlify default inline-bar widget.) The "Ask AI" button currently
+   shows a "✦ Ask AI ⌘I" full-width pill; reduce to just the sparkle
+   icon, no label, no shortcut chip, transparent + thin purple border
+   so it matches the Solana chain dropdown / Copy page styling. */
 #topbar-ai-chat-button,
 button#topbar-ai-chat-button,
 button[aria-label*="Ask AI" i],
@@ -404,11 +409,14 @@ button[aria-label*="ai chat" i] {
   background: transparent !important;
   border: 1px solid rgba(122, 75, 160, 0.18) !important;
   border-radius: 0.5rem !important;
+  gap: 0 !important;
 }
 #topbar-ai-chat-button > span:not(:has(svg)),
 #topbar-ai-chat-button kbd,
+#topbar-ai-chat-button [class*="kbd"],
 button[aria-label*="Ask AI" i] > span:not(:has(svg)),
-button[aria-label*="Ask AI" i] kbd {
+button[aria-label*="Ask AI" i] kbd,
+button[aria-label*="Ask AI" i] [class*="kbd"] {
   display: none !important;
 }
 .dark #topbar-ai-chat-button,

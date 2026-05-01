@@ -92,19 +92,15 @@
             "tab": "Documentation",
             "groups": [
               {
-                "group": "",
-                "pages": [
-                  "solana/welcome"
-                ]
-              },
-              {
                 "group": "Get started",
                 "pages": [
+                  "solana/welcome",
                   "solana/get-started/quickstart",
                   "solana/get-started/rate-and-connection-limits",
                   "solana/get-started/plans-and-billing",
                   {
                     "group": "Account management",
+                    "expanded": true,
                     "pages": [
                       "solana/get-started/account-management/platform-overview",
                       "solana/get-started/account-management/set-up-your-account-and-add-users",
@@ -131,6 +127,7 @@
                   "solana/streaming/quickstart",
                   {
                     "group": "Dragon's Mouth gRPC",
+                    "expanded": true,
                     "pages": [
                       "solana/streaming/dragons-mouth/overview-and-quickstart",
                       "solana/streaming/dragons-mouth/sdks-and-client-libraries",
@@ -186,7 +183,7 @@
             "tab": "API reference",
             "groups": [
               {
-                "group": "Overview & auth",
+                "group": "Overview and auth",
                 "pages": [
                   "solana-api/api-overview",
                   "solana-api/authentication",
@@ -198,6 +195,7 @@
                 "pages": [
                   {
                     "group": "Accounts",
+                    "expanded": true,
                     "pages": [
                       "solana-api/http/accounts/getAccountInfo",
                       "solana-api/http/accounts/getBalance",
@@ -215,6 +213,7 @@
                   },
                   {
                     "group": "History",
+                    "expanded": true,
                     "pages": [
                       "solana-api/http/history/getBlock",
                       "solana-api/http/history/getBlockCommitment",
@@ -234,6 +233,7 @@
                   },
                   {
                     "group": "Standard",
+                    "expanded": true,
                     "pages": [
                       "solana-api/http/standard/getClusterNodes",
                       "solana-api/http/standard/getEpochInfo",
@@ -319,6 +319,7 @@
                 "pages": [
                   {
                     "group": "Standard",
+                    "expanded": true,
                     "pages": [
                       "solana-api/transactions/standard/getRecentPrioritizationFees",
                       "solana-api/transactions/standard/sendTransaction"
@@ -326,6 +327,7 @@
                   },
                   {
                     "group": "Metis",
+                    "expanded": true,
                     "pages": [
                       "solana-api/transactions/metis/quote",
                       "solana-api/transactions/metis/swap",
@@ -334,6 +336,7 @@
                   },
                   {
                     "group": "Titan",
+                    "expanded": true,
                     "pages": [
                       "solana-api/transactions/titan/quote",
                       "solana-api/transactions/titan/swap"
@@ -345,39 +348,29 @@
           },
           {
             "tab": "Guides",
-            "groups": [
-              {
-                "group": "Categories",
-                "pages": [
-                  "solana-guides/error-handling",
-                  "solana-guides/getting-started",
-                  "solana-guides/solana-dev",
-                  "solana-guides/streaming-guides",
-                  "solana-guides/transaction-guides",
-                  "solana-guides/industry-use-cases",
-                  "solana-guides/nfts-and-digital-assets"
-                ]
-              }
+            "pages": [
+              "solana-guides/error-handling",
+              "solana-guides/getting-started",
+              "solana-guides/solana-dev",
+              "solana-guides/streaming-guides",
+              "solana-guides/transaction-guides",
+              "solana-guides/industry-use-cases",
+              "solana-guides/nfts-and-digital-assets"
             ]
           },
           {
             "tab": "FAQs",
-            "groups": [
-              {
-                "group": "Categories",
-                "pages": [
-                  "solana-faqs/general",
-                  "solana-faqs/rpc",
-                  "solana-faqs/streaming",
-                  "solana-faqs/das",
-                  "solana-faqs/account",
-                  "solana-faqs/billing",
-                  "solana-faqs/trading",
-                  "solana-faqs/pyth-oracle",
-                  "solana-faqs/validator",
-                  "solana-faqs/transactions"
-                ]
-              }
+            "pages": [
+              "solana-faqs/general",
+              "solana-faqs/rpc",
+              "solana-faqs/streaming",
+              "solana-faqs/das",
+              "solana-faqs/account",
+              "solana-faqs/billing",
+              "solana-faqs/trading",
+              "solana-faqs/pyth-oracle",
+              "solana-faqs/validator",
+              "solana-faqs/transactions"
             ]
           }
         ]
