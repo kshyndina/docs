@@ -874,27 +874,47 @@ a[href*="quickstart"][class*="rounded"],
   }
 }
 
-/* ---- 18. AI assistant panel: pinned to viewport, removed from flow.
-   Verified DOM: Mintlify renders the panel as
-       <div class="sticky ... h-[calc(100vh-banner)]"
-            style="width:var(--assistant-sheet-width, 0px);overflow:hidden">
-         <div id="chat-assistant-sheet" class="... h-full chat-assistant-sheet">
-   The outer wrapper IS already position:sticky, but `position: sticky`
-   only sticks WITHIN its parent's bounds. Worse, its `h-[calc(100vh-banner)]`
-   forces the flex parent to be ≥ 100vh tall, so on short pages you can
-   scroll into a giant empty void below the actual content.
-   Fix: switch the wrapper to `position: fixed` so it's pulled out of
-   the flow entirely. The flex parent now sizes to main content only;
-   the panel is glued to the right edge of the viewport. */
-[data-assistant-state="open"] div[style*="--assistant-sheet-width"],
-body div.sticky[style*="assistant-sheet-width"] {
+/* ---- 18. Kill the empty-void scroll: any sticky 100vh sidebar is
+   pulled out of flow entirely.
+
+   Two Mintlify elements live in the main flex layout with
+   `position: sticky` AND `h-[calc(100vh-banner)]`:
+   (a) the chat-panel wrapper `<div class="sticky..."
+       style="width:var(--assistant-sheet-width, 0px)">`
+   (b) the TOC sidebar `<div id="content-side-layout">`
+
+   `position: sticky` keeps the element in flow, so its 100vh height
+   forces the flex parent to be ≥ 100vh on every page. On a short
+   page (wireframe placeholders, etc.) that creates a scrollable
+   empty void below the real content.
+
+   Switch BOTH to `position: fixed`. They keep their viewport-pinned
+   visual behaviour but no longer contribute to layout height. */
+body div.sticky[style*="assistant-sheet-width"],
+body div[style*="--assistant-sheet-width"],
+html body #content-side-layout {
   position: fixed !important;
   right: 0 !important;
   top: var(--banner-height, 0px) !important;
-  bottom: 0 !important;
   margin-top: 0 !important;
   height: calc(100vh - var(--banner-height, 0px)) !important;
   max-height: calc(100vh - var(--banner-height, 0px)) !important;
+}
+/* TOC sits above the chat panel when both are present. Slide TOC
+   left by the chat panel width so they don't overlap. (When the
+   chat panel is closed, --assistant-sheet-width is 0px so this is a
+   no-op.) Plus offset top by 3rem for the navbar gap matching what
+   Mintlify originally had. */
+html body #content-side-layout {
+  right: var(--assistant-sheet-width, 0px) !important;
+  top: calc(3rem + var(--banner-height, 0px)) !important;
+  height: calc(100vh - 3rem - var(--banner-height, 0px)) !important;
+}
+/* Belt-and-braces: kill any leftover h-screen / 100vh height on
+   anything still in flex flow that isn't the real content. */
+html body main,
+html body [class*="lg:max-w-[696px"] {
+  min-height: 0 !important;
 }
 /* Inner sheet fills the now-fixed wrapper. Its own .sheet-content
    keeps overflow-y-auto for the message-list scroll. */
