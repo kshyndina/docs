@@ -938,26 +938,59 @@ html body span[style*="radial-gradient"] {
   pointer-events: none !important;
 }
 
-/* Final sledgehammer: Mintlify's footer is 7rem (112px) of pb-28
-   padding plus border + content. Since "Powered by Mintlify" is
-   hidden, the footer is purely empty pixels — kill it. Also force
-   key layout wrappers to size to content, not to a viewport-tied
-   minimum, on every page. */
-footer#footer {
-  display: none !important;
-}
+/* Force key layout wrappers to size to content, not to a viewport-
+   tied minimum. Combined with the gradient-pin above, this is what
+   actually killed the scroll-past-content on short pages. */
 html, body {
   min-height: 0 !important;
-  height: auto !important;
 }
 html body #body-content,
 html body #body-content > div,
 html body div[class*="flex-1"][class*="flex-col"] {
   min-height: 0 !important;
 }
-/* Cap padding-top contributions so short pages stay short. */
-html body [class*="pt-[6.5rem"] {
-  padding-top: 1.5rem !important;
+
+/* ---- 19. Mobile/tablet pagination + chat input ----------------
+   Below lg, Mintlify's pagination is `<div id="pagination" class="grid
+   lg:grid-cols-2 gap-4">` — single column = Previous on its own row,
+   Next below it. Force 2 columns at all sizes so they sit side-by-side. */
+#pagination {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+/* The "Ask a question" floating input needs to be pinned to the
+   viewport bottom (not tucked right under pagination), with a proper
+   gap above it, the same 0.5rem rounding as every other rectangle,
+   and side padding so it doesn't crash into the viewport edges. */
+html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  padding: 0 1.5rem 1rem !important;
+  z-index: 30 !important;
+}
+@media (min-width: 1024px) {
+  /* Desktop: respect the sidebar so the input doesn't slide under it */
+  html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
+    left: var(--sidebar-w, 18rem) !important;
+    right: var(--assistant-sheet-width, 0px) !important;
+  }
+}
+.chat-assistant-floating-input,
+.chat-assistant-floating-input [class*="rounded-2xl"],
+.chat-assistant-floating-input [class*="rounded-xl"] {
+  border-radius: 0.5rem !important;
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* Prevent content (especially pagination) from sliding under the
+   fixed chat input bar. Reserve ~96px at the bottom of the page. */
+html body [class*="lg:max-w-[696px"],
+html body .mdx-content {
+  padding-bottom: 96px !important;
 }
 /* Inner sheet fills the now-fixed wrapper. Its own .sheet-content
    keeps overflow-y-auto for the message-list scroll. */
