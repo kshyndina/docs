@@ -590,6 +590,15 @@ html.dark #sidebar-content li[data-group-tag] li[data-active="true"]:not([data-g
   font-weight: 500 !important;
 }
 
+/* Kill Mintlify's faux-bold text-shadow trick on every active link.
+   That trick (`text-shadow:-0.2px,0.2px,...`) was making active pages
+   look almost bold-black; Kate wanted only +100 over body weight at
+   most. With text-shadow gone, active = purple `text-primary` colour
+   alone, which already differentiates it from inactive gray text. */
+#sidebar-content a[class*="text-shadow"] {
+  text-shadow: none !important;
+}
+
 /* ---- 9. Navbar: pin tabs LEFT (right next to the logo) ----
    Two pieces:
    (a) Tab `<nav>` has `justify-center` baked in -- override to
@@ -692,22 +701,47 @@ html.dark #navbar kbd {
   opacity: 0.6 !important;
 }
 
-/* ---- 12. Corner-radius alignment for ALL secondary buttons ----
-   Lock the entire family (Solana dropdown, Copy page, pagination, AI
-   icon button) to the same 0.5rem radius so they read as one design
-   system. Earlier styles set radii inconsistently. */
+/* ---- 12. Corner-radius family lock: ONE radius across all chrome ----
+   Mintlify ships with rounded-md (6px), rounded-lg (8px), rounded-xl
+   (12px), and rounded-2xl (16px) sprinkled across navbar buttons,
+   sidebar dropdowns, popover panels, chain selector items, copy-page
+   dropdowns, and pagination. Lock every one of them to 0.5rem so the
+   design system reads as a single radius family.
+   Excluded on purpose: rounded-full (circles like search/AI/profile),
+   rounded-l / rounded-r (split-button halves), rounded-none. */
+#navbar [class*="rounded-md"],
+#navbar [class*="rounded-lg"],
+#navbar [class*="rounded-xl"],
+#navbar [class*="rounded-2xl"],
+#sidebar-content [class*="rounded-md"],
+#sidebar-content [class*="rounded-lg"],
+#sidebar-content [class*="rounded-xl"],
+#sidebar-content [class*="rounded-2xl"],
 #page-context-menu,
-#page-context-menu > button:first-child,
-#page-context-menu > button:last-child,
-#pagination a,
-.pagination-prev a,
-.pagination-next a,
-#topbar-ai-chat-button,
-#sidebar-content button[aria-haspopup] {
+#page-context-menu [class*="rounded-md"],
+#page-context-menu [class*="rounded-lg"],
+#page-context-menu [class*="rounded-xl"],
+#page-context-menu [class*="rounded-2xl"],
+[role="menu"],
+[role="menu"] [class*="rounded-md"],
+[role="menu"] [class*="rounded-lg"],
+[role="menu"] [class*="rounded-xl"],
+[role="menu"] [class*="rounded-2xl"],
+[role="dialog"][class*="rounded-2xl"],
+[role="dialog"][class*="rounded-xl"],
+[data-state="open"][class*="rounded-2xl"],
+[data-state="open"][class*="rounded-xl"],
+[data-radix-popper-content-wrapper] [class*="rounded-md"],
+[data-radix-popper-content-wrapper] [class*="rounded-lg"],
+[data-radix-popper-content-wrapper] [class*="rounded-xl"],
+[data-radix-popper-content-wrapper] [class*="rounded-2xl"],
+.grid.lg\:grid-cols-2.gap-4 > a,
+.grid.lg\:grid-cols-2.gap-4 > a[class*="rounded-xl"] {
   border-radius: 0.5rem !important;
 }
-/* The split Copy-page button has two halves -- chevron half should
-   share the right-side rounding, copy half the left-side. */
+/* Split Copy-page button halves: kill the inner-edge corner radius
+   so the seam is straight (left half rounds left, right half rounds
+   right; let the family rule above set the outer-edge radius). */
 #page-context-menu > button:first-child {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
@@ -715,11 +749,6 @@ html.dark #navbar kbd {
 #page-context-menu > button:last-child {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
-}
-/* Pagination: also override Tailwind `rounded-xl` directly */
-.grid.lg\:grid-cols-2.gap-4 > a,
-.grid.lg\:grid-cols-2.gap-4 > a[class*="rounded-xl"] {
-  border-radius: 0.5rem !important;
 }
 
 /* ---- 14. Hide "Powered by Mintlify" footer line ----

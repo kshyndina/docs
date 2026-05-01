@@ -405,7 +405,8 @@
           {
             "group": "Pyth",
             "pages": [
-              "pyth/overview-and-getting-started",
+              "pyth/overview",
+              "pyth/quickstart",
               "pyth/pyth-hermes",
               "pyth/publisher-setup-nginx-proxy",
               "pyth/testnet-devnet-and-pythnet"
@@ -420,7 +421,8 @@
           {
             "group": "SUI",
             "pages": [
-              "sui/overview-and-getting-started",
+              "sui/overview",
+              "sui/quickstart",
               "sui/walrus",
               "sui/seal"
             ]
@@ -434,7 +436,8 @@
           {
             "group": "Monad",
             "pages": [
-              "monad/overview-and-getting-started"
+              "monad/overview",
+              "monad/quickstart"
             ]
           }
         ]
