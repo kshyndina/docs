@@ -992,6 +992,74 @@ html body [class*="lg:max-w-[696px"],
 html body .mdx-content {
   padding-bottom: 96px !important;
 }
+
+/* ---- 20. Tablet + mobile navbar layout ----------------------------
+   Mintlify's navbar uses `@container/navbar` queries to hide things
+   below 1100px (the entire CTA cluster goes into a 3-dots menu) and
+   shows the tab nav at @[600px]+. We want a different cut:
+   - Tablet (md, 768px+): show CTAs (Get an endpoint, Log in), show
+     the tab nav, drop the 3-dots overflow.
+   - Mobile (< md): keep the tab nav as a 4-button row (each with
+     icon + label). CTAs stay hidden behind hamburger.
+   The CTA `<li>` has `hidden lg:flex` (hides below 1024px). Override. */
+@media (min-width: 768px) {
+  /* Show Log in + Get an endpoint buttons on tablet+ */
+  html body #navbar #topbar-cta-button,
+  html body #navbar li[id*="topbar-cta"],
+  html body #navbar a[href*="customers.triton.one/users/sign-in"] {
+    display: flex !important;
+  }
+  /* Hide the 3-dots overflow menu — CTAs are now visible */
+  html body #navbar button[aria-label="More actions"] {
+    display: none !important;
+  }
+}
+/* Show the tab nav (Documentation / API reference / Guides / FAQs)
+   at every viewport. Mintlify's `hidden @[600px]/navbar:flex` only
+   shows it ≥ 600px navbar width — force it visible always so mobile
+   gets the same icon-pill row. */
+html body #navbar nav.hidden,
+html body #navbar nav[class*="hidden"][class*="600px"] {
+  display: flex !important;
+}
+@media (max-width: 767px) {
+  /* On true mobile, shrink the tab pills to icon + tight label so
+     all four fit. No fancy 4-equal-square buttons (would need a JS
+     restructure) — but the icon-first row is what Mintlify already
+     ships and it's compact enough at 4 items. */
+  html body #navbar nav ul.flex {
+    gap: 0.25rem !important;
+  }
+  html body #navbar nav ul.flex a.link {
+    padding-left: 0.625rem !important;
+    padding-right: 0.625rem !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+/* ---- 21. Hide page-header breadcrumb on mobile -----------------
+   The `Metis › Metis /quote` breadcrumb shows at the top of every
+   page. On desktop it sits as a small eyebrow above the title; on
+   mobile it visually crashes into the navbar and reads as part of
+   the navbar. Hide it < md so the page leads with the H1 instead. */
+@media (max-width: 767px) {
+  html body .breadcrumb-list,
+  html body header#header .breadcrumb-list {
+    display: none !important;
+  }
+}
+
+/* ---- 22. Sidebar dropdowns: equal-width pill triggers -----------
+   The chain selector (Solana) and tab selector (API reference) both
+   use `nav-dropdown-trigger` — should both be w-full inside their
+   container. Lock width + matching radius so they read as a pair. */
+html body #sidebar-content button.nav-dropdown-trigger,
+html body #sidebar-content button[aria-haspopup="menu"][class*="nav-dropdown"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
 /* Inner sheet fills the now-fixed wrapper. Its own .sheet-content
    keeps overflow-y-auto for the message-list scroll. */
 #chat-assistant-sheet,
