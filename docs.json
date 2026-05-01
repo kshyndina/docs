@@ -363,7 +363,7 @@
           },
           {
             "tab": "FAQs",
-            "icon": "circle-help",
+            "icon": "messages-square",
             "pages": [
               "solana-faqs/general",
               "solana-faqs/rpc",

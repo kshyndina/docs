@@ -38,9 +38,9 @@ html.dark #navbar {
 /* Sidebar links specifically: tighter inset radius matches the link
    pill. Inset outlines render INSIDE the element's box and so cannot
    clip even inside an `overflow:hidden` scrollable parent. */
-#sidebar a:focus-visible,
-#sidebar button:focus-visible,
-#sidebar [role="link"]:focus-visible {
+#sidebar-content a:focus-visible,
+#sidebar-content button:focus-visible,
+#sidebar-content [role="link"]:focus-visible {
   outline: 2px solid rgba(122, 75, 160, 0.6) !important;
   outline-offset: -2px !important;
   border-radius: 8px !important;
@@ -59,55 +59,36 @@ html.dark ::selection {
 }
 /* Make sure the sidebar scroll container doesn't clip focus rings on
    the y-axis -- only x-axis hidden if needed. */
-#sidebar,
-#sidebar-content {
+#sidebar-content,
+#navigation-items {
   overflow-x: visible !important;
 }
 
-/* ---- 0a. Sidebar width: aggressive override of Mintlify + Tailwind ----
-   Previous attempts (20rem, 22rem, 24rem on `#sidebar`) didn't actually
-   resize the rendered sidebar -- Mintlify also applies Tailwind utility
-   classes (`lg:w-72`, `w-72`, `flex-basis-72`) directly on the sidebar
-   element which were overriding our `#sidebar` rule even with `!important`
-   because of class-vs-id specificity ties. Override every plausible
-   wrapper, the Tailwind utilities, AND the parent flex container. */
+/* ---- 0a. Sidebar width: target #sidebar-content (the real selector) ----
+   Verified via DOM inspection: Mintlify uses `<div id="sidebar-content">`
+   with Tailwind class `w-56` (14rem = 224px) for the sidebar. Earlier
+   attempts targeting `#sidebar` did nothing because that ID does not
+   exist. Override `w-56` and stamp the new width on `#sidebar-content`
+   directly. The content area auto-adjusts because the sidebar is
+   `position: fixed` and the page wrapper uses `lg:pl-56` to make room
+   for it -- override that gutter too. */
 :root {
-  --sidebar-w: 24rem;
+  --sidebar-w: 22rem;
 }
-html body #sidebar,
-html body aside#sidebar,
-html body nav#sidebar,
-html body [id="sidebar"],
-html body aside[class*="sidebar" i],
-html body nav[aria-label*="sidebar" i],
-html body div#sidebar-container,
-html body aside.fixed,
-html body aside[class~="lg:w-72"],
-html body aside[class~="w-72"],
-html body aside[class~="lg:w-64"],
-html body [class~="lg:w-72"][class~="lg:fixed"] {
+html body #sidebar-content,
+html body div#sidebar-content,
+html body [id="sidebar-content"],
+html body div[class~="w-56"][class~="fixed"],
+html body div[class~="lg:w-56"] {
   width: var(--sidebar-w) !important;
-  min-width: var(--sidebar-w) !important;
   max-width: var(--sidebar-w) !important;
-  flex-basis: var(--sidebar-w) !important;
-  flex-shrink: 0 !important;
+  min-width: var(--sidebar-w) !important;
 }
-/* Push the main content area over so it doesn't sit underneath the
-   wider sidebar (Mintlify uses `lg:ml-72` on the content wrapper). */
+/* Page content has `lg:pl-56` to make room for the fixed sidebar.
+   Bump that gutter so content lines up with the new sidebar width. */
 @media (min-width: 1024px) {
-  html body main,
-  html body main[class*="ml-72"],
-  html body div[class~="lg:ml-72"],
-  html body div[class~="lg:pl-72"],
-  html body #content-container,
-  html body #content-area {
-    margin-left: var(--sidebar-w) !important;
-  }
-  /* If Mintlify uses padding instead of margin for the gutter, override
-     that too. (Some Mintlify versions wrap content in a flex parent and
-     use `lg:pl-[18rem]`.) */
-  html body div[class*="lg:pl-72"],
-  html body div[class*="lg:pl-["] {
+  html body [class~="lg:pl-56"],
+  html body div[class*="lg:pl-56"] {
     padding-left: var(--sidebar-w) !important;
   }
 }
@@ -118,15 +99,15 @@ html body [class~="lg:w-72"][class~="lg:fixed"] {
    labels (the GitBook / Vagrant docs look). Hide the chevron, force
    every group expanded, and remove the click-to-collapse behaviour --
    the group label still navigates to its `root` page on click. */
-#sidebar [data-component-part="sidebar-group-header"] svg,
-#sidebar-content [data-component-part="sidebar-group-header"] svg {
+#sidebar-content [data-component-part="sidebar-group-header"] svg,
+#navigation-items [data-component-part="sidebar-group-header"] svg {
   display: none !important;
 }
 /* Hide the entire button/header for groups whose label is empty or
    whitespace-only -- e.g. the Welcome standalone entry that has no
    meaningful section title above it. */
 #sidebar-content [data-component-part="sidebar-group-header"]:empty,
-#sidebar [data-component-part="sidebar-group-header"]:empty {
+#navigation-items [data-component-part="sidebar-group-header"]:empty {
   display: none !important;
   height: 0 !important;
   padding: 0 !important;
@@ -240,15 +221,13 @@ mdx-content > *:first-child {
 /* ---- 0b. (Removed) The floating AI "Ask a question" input is the
    primary AI surface — keep it visible at the bottom of every page. */
 
-/* ---- 0d. Bottom Previous/Next pagination: keep, restyle in Triton look.
-   (Was hidden previously; restored.) Match the secondary-button styling
-   used by the Solana chain dropdown / Copy page button -- transparent
-   background, thin Triton-purple border, hover wash. */
-#pagination a,
-.pagination-prev a,
-.pagination-next a,
-pagination-prev a,
-pagination-next a {
+/* ---- 0d. Bottom Previous/Next pagination: Triton secondary button.
+   Verified DOM: pagination is `<div class="grid lg:grid-cols-2 gap-4">`
+   with link children carrying `border border-gray-200/70 rounded-xl`.
+   Target the actual pattern (no #pagination ID exists). */
+.mdx-content + .grid.gap-4 > a,
+.grid.lg\:grid-cols-2.gap-4 > a,
+[class*="grid-cols-2"] > a[class*="rounded-xl"] {
   background: transparent !important;
   border: 1px solid rgba(122, 75, 160, 0.18) !important;
   border-radius: 0.5rem !important;
@@ -256,21 +235,19 @@ pagination-next a {
   font-family: 'Work Sans', system-ui, sans-serif !important;
   transition: background 120ms ease, border-color 120ms ease !important;
 }
-#pagination a:hover,
-.pagination-prev a:hover,
-.pagination-next a:hover,
-pagination-prev a:hover,
-pagination-next a:hover {
+.mdx-content + .grid.gap-4 > a:hover,
+.grid.lg\:grid-cols-2.gap-4 > a:hover,
+[class*="grid-cols-2"] > a[class*="rounded-xl"]:hover {
   background: rgba(122, 75, 160, 0.06) !important;
   border-color: rgba(122, 75, 160, 0.3) !important;
 }
-.dark #pagination a,
-html.dark #pagination a {
+.dark .grid.lg\:grid-cols-2.gap-4 > a,
+html.dark .grid.lg\:grid-cols-2.gap-4 > a {
   border-color: rgba(181, 145, 211, 0.25) !important;
   color: rgba(214, 191, 232, 0.9) !important;
 }
-.dark #pagination a:hover,
-html.dark #pagination a:hover {
+.dark .grid.lg\:grid-cols-2.gap-4 > a:hover,
+html.dark .grid.lg\:grid-cols-2.gap-4 > a:hover {
   background: rgba(181, 145, 211, 0.08) !important;
   border-color: rgba(181, 145, 211, 0.4) !important;
 }
@@ -549,36 +526,29 @@ html.dark #page-context-menu-button:hover {
 }
 
 /* ---- 9. Navbar: pin tabs LEFT (right next to the logo) ----
-   Mintlify default centres the tab row in the navbar. Override the
-   flex layout so logo + tabs sit hard against the left, and the
-   right-side cluster (search, ai, links, primary button) gets pushed
-   to the far right via `margin-left: auto`. */
-#navbar > div,
-#navbar > nav {
-  justify-content: flex-start !important;
-}
-/* The tabs container -- targets common Mintlify wrappers */
-#navbar [data-component-part="navbar-tabs"],
-#navbar nav[aria-label*="tab" i],
+   Verified via DOM inspection: the tab row is a `<nav>` element with
+   class `@[600px]/navbar:flex justify-center`. The `justify-center`
+   class is what's centring the tabs. Override to flex-start AND give
+   it `margin-right: auto` so the right-side cluster gets pushed to
+   the far right. */
+#navbar nav[class*="justify-center"],
+#navbar nav.justify-center,
 #navbar > div > nav,
-#navbar [class*="navbar-tabs"] {
-  margin-right: auto !important;
-  margin-left: 1.25rem !important;
+#navbar nav[class*="navbar"] {
   justify-content: flex-start !important;
+  margin-right: auto !important;
+  margin-left: 0.75rem !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
-/* Right cluster gets its margin-left auto to push it to the right */
-#navbar [data-component-part="navbar-actions"],
-#navbar [data-component-part="search-bar"] ~ *,
-#navbar > div > div:last-child {
-  margin-left: auto !important;
-}
-/* Logo: smaller mark since it's now circular only */
+/* Logo: 1.5x bigger circular mark to match triton.one navbar size */
 img.nav-logo,
 .nav-logo,
-#navbar img[alt*="logo" i] {
-  height: 2.25rem !important;
-  max-height: 2.25rem !important;
-  width: 2.25rem !important;
+#navbar img[alt*="logo" i],
+#navbar img[src*="mark.svg"] {
+  height: 3.25rem !important;
+  max-height: 3.25rem !important;
+  width: 3.25rem !important;
   border-radius: 50% !important;
 }
 
@@ -592,38 +562,56 @@ img.nav-logo,
   flex-shrink: 0 !important;
 }
 
-/* ---- 11. Solana chain dropdown: purple hover (was gray) ----
-   The chain selector in the sidebar header was rendering with a gray
-   hover/active wash from Mintlify defaults. Override to match the
-   Triton secondary-button family (Copy page, pagination). */
+/* ---- 11. Solana chain dropdown: purple hover (was gray) ---- */
 #sidebar-content button[aria-haspopup],
-#sidebar [data-component-part="sidebar-chain-selector"],
-#sidebar button:has(img[alt*="Solana" i]),
-#sidebar button:has(img[alt*="Pyth" i]),
-#sidebar button:has(img[alt*="SUI" i]),
-#sidebar button:has(img[alt*="Monad" i]) {
+#sidebar-content button:has(img[alt*="Solana" i]),
+#sidebar-content button:has(img[alt*="Pyth" i]),
+#sidebar-content button:has(img[alt*="SUI" i]),
+#sidebar-content button:has(img[alt*="Monad" i]) {
   background: transparent !important;
   border: 1px solid rgba(122, 75, 160, 0.18) !important;
   border-radius: 0.5rem !important;
   transition: background 120ms ease, border-color 120ms ease !important;
 }
 #sidebar-content button[aria-haspopup]:hover,
-#sidebar [data-component-part="sidebar-chain-selector"]:hover,
-#sidebar button:has(img[alt*="Solana" i]):hover,
-#sidebar button:has(img[alt*="Pyth" i]):hover,
-#sidebar button:has(img[alt*="SUI" i]):hover,
-#sidebar button:has(img[alt*="Monad" i]):hover {
+#sidebar-content button:has(img[alt*="Solana" i]):hover,
+#sidebar-content button:has(img[alt*="Pyth" i]):hover,
+#sidebar-content button:has(img[alt*="SUI" i]):hover,
+#sidebar-content button:has(img[alt*="Monad" i]):hover {
   background: rgba(122, 75, 160, 0.06) !important;
   border-color: rgba(122, 75, 160, 0.3) !important;
 }
 .dark #sidebar-content button[aria-haspopup],
-html.dark #sidebar [data-component-part="sidebar-chain-selector"] {
+html.dark #sidebar-content button[aria-haspopup] {
   border-color: rgba(181, 145, 211, 0.25) !important;
 }
 .dark #sidebar-content button[aria-haspopup]:hover,
-html.dark #sidebar [data-component-part="sidebar-chain-selector"]:hover {
+html.dark #sidebar-content button[aria-haspopup]:hover {
   background: rgba(181, 145, 211, 0.08) !important;
   border-color: rgba(181, 145, 211, 0.4) !important;
+}
+
+/* ---- 13. Kbd shortcut chips (⌘K, ⌘I): remove white pill fill ----
+   Default Mintlify renders the keyboard hint inside a `<kbd>` element
+   with a white/grey rounded background pill. Kate wants the shortcut
+   text kept but with no fill -- just half-transparent text. */
+#search-bar-entry kbd,
+#topbar-ai-chat-button kbd,
+button[aria-label*="Ask AI" i] kbd,
+#navbar kbd {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  opacity: 0.55 !important;
+  font-weight: 400 !important;
+}
+.dark #search-bar-entry kbd,
+.dark #topbar-ai-chat-button kbd,
+.dark #navbar kbd,
+html.dark #search-bar-entry kbd,
+html.dark #topbar-ai-chat-button kbd,
+html.dark #navbar kbd {
+  opacity: 0.6 !important;
 }
 
 /* ---- 12. Corner-radius alignment for ALL secondary buttons ----
@@ -649,6 +637,11 @@ html.dark #sidebar [data-component-part="sidebar-chain-selector"]:hover {
 #page-context-menu > button:last-child {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
+}
+/* Pagination: also override Tailwind `rounded-xl` directly */
+.grid.lg\:grid-cols-2.gap-4 > a,
+.grid.lg\:grid-cols-2.gap-4 > a[class*="rounded-xl"] {
+  border-radius: 0.5rem !important;
 }
 
 /*! purgecss end ignore */
