@@ -102,7 +102,7 @@
                   {
                     "group": "Account management",
                     "root": "solana/get-started/account-management/platform-overview",
-                    "expanded": true,
+                    "expanded": false,
                     "pages": [
                       "solana/get-started/account-management/platform-overview",
                       "solana/get-started/account-management/set-up-your-account-and-add-users",
@@ -130,7 +130,7 @@
                   {
                     "group": "Dragon's Mouth gRPC",
                     "root": "solana/streaming/dragons-mouth/overview-and-quickstart",
-                    "expanded": true,
+                    "expanded": false,
                     "pages": [
                       "solana/streaming/dragons-mouth/overview-and-quickstart",
                       "solana/streaming/dragons-mouth/sdks-and-client-libraries",
@@ -211,7 +211,7 @@
                   {
                     "group": "Accounts",
                     "root": "solana-api/http/accounts/getAccountInfo",
-                    "expanded": true,
+                    "expanded": false,
                     "pages": [
                       "solana-api/http/accounts/getAccountInfo",
                       "solana-api/http/accounts/getBalance",
@@ -230,7 +230,7 @@
                   {
                     "group": "History",
                     "root": "solana-api/http/history/getBlock",
-                    "expanded": true,
+                    "expanded": false,
                     "pages": [
                       "solana-api/http/history/getBlock",
                       "solana-api/http/history/getBlockCommitment",
@@ -251,7 +251,7 @@
                   {
                     "group": "Standard",
                     "root": "solana-api/http/standard/getClusterNodes",
-                    "expanded": true,
+                    "expanded": false,
                     "pages": [
                       "solana-api/http/standard/getClusterNodes",
                       "solana-api/http/standard/getEpochInfo",
@@ -338,7 +338,7 @@
                   {
                     "group": "Standard",
                     "root": "solana-api/transactions/standard/getRecentPrioritizationFees",
-                    "expanded": true,
+                    "expanded": false,
                     "pages": [
                       "solana-api/transactions/standard/getRecentPrioritizationFees",
                       "solana-api/transactions/standard/sendTransaction"
@@ -347,7 +347,7 @@
                   {
                     "group": "Metis",
                     "root": "solana-api/transactions/metis/quote",
-                    "expanded": true,
+                    "expanded": false,
                     "pages": [
                       "solana-api/transactions/metis/quote",
                       "solana-api/transactions/metis/swap",
@@ -357,7 +357,7 @@
                   {
                     "group": "Titan",
                     "root": "solana-api/transactions/titan/quote",
-                    "expanded": true,
+                    "expanded": false,
                     "pages": [
                       "solana-api/transactions/titan/quote",
                       "solana-api/transactions/titan/swap"

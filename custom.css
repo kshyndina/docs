@@ -446,59 +446,27 @@ mdx-content table td code {
   word-break: break-all;
 }
 
-/* ---- 6. Search + AI: always small icon-only circles ----
-   Verified DOM: search trigger is `#search-bar-entry`, AI trigger is
-   `#assistant-entry`. Mintlify auto-shrinks both to circles when the
-   assistant panel opens; user wants that compact look ALWAYS. Both
-   become 36x36 squares with just the icon, transparent + thin purple
-   border. Hide the placeholder text and shortcut chip. */
+/* ---- 6. Search + AI buttons: trust Mintlify's defaults ----
+   Mintlify already renders these as `rounded-full !w-9 bg-gray-950/[0.03]
+   border-none` (perfect 36×36 circles, soft gray fill, no border) at
+   viewports below 1500px. Force the narrow form even at wider viewports
+   so they stay circles always — but DON'T re-style colours or radius. */
 #search-bar-entry,
 #assistant-entry {
   width: 2.25rem !important;
   min-width: 2.25rem !important;
   max-width: 2.25rem !important;
-  height: 2.25rem !important;
-  padding: 0 !important;
-  justify-content: center !important;
-  align-items: center !important;
-  background: transparent !important;
-  border: 1px solid rgba(122, 75, 160, 0.18) !important;
-  border-radius: 0.5rem !important;
-  gap: 0 !important;
   flex: 0 0 auto !important;
 }
-#search-bar-entry:hover,
-#assistant-entry:hover {
-  background: rgba(122, 75, 160, 0.06) !important;
-  border-color: rgba(122, 75, 160, 0.3) !important;
-}
-/* Hide the inner text + shortcut chip; keep only the icon. */
-#search-bar-entry > div,
-#assistant-entry > div,
-#search-bar-entry > span,
-#assistant-entry > span {
-  display: contents !important;
-}
-#search-bar-entry > div > :not(svg):not(:has(svg)),
-#assistant-entry > div > :not(svg):not(:has(svg)),
+/* Hide the "Search..." placeholder + ⌘K kbd that appear at @[1500px]/navbar
+   wider screens. Keep the SVG icon untouched. */
+#search-bar-entry > div > div.truncate,
+#search-bar-entry > span.flex-none,
+#assistant-entry > div.truncate,
+#assistant-entry > span.flex-none,
 #search-bar-entry kbd,
-#assistant-entry kbd,
-#search-bar-entry [class*="kbd"],
-#assistant-entry [class*="kbd"] {
+#assistant-entry kbd {
   display: none !important;
-}
-/* Keep the icon visible at a sensible size */
-#search-bar-entry svg,
-#assistant-entry svg {
-  width: 1rem !important;
-  height: 1rem !important;
-  flex-shrink: 0 !important;
-}
-.dark #search-bar-entry,
-.dark #assistant-entry,
-html.dark #search-bar-entry,
-html.dark #assistant-entry {
-  border-color: rgba(181, 145, 211, 0.25) !important;
 }
 
 /* ---- 7. "Copy page" button: secondary style matching Solana dropdown
@@ -537,7 +505,7 @@ html.dark #page-context-menu-button:hover {
   border-color: rgba(181, 145, 211, 0.4) !important;
 }
 
-/* ---- 8. Nested group dropdown buttons: keep chevron, brand the hover.
+/* ---- 8. Nested group dropdown buttons: chevron + branded states.
    Nested groups (Account management, Dragon's Mouth gRPC, Accounts in
    HTTP RPC, Standard, Metis, Titan, etc.) render as
        <button aria-label="Toggle X section">
@@ -548,6 +516,11 @@ html.dark #page-context-menu-button:hover {
        </button>
    The chevron is intentional dropdown affordance Kate asked for.
    Click navigates to root via Mintlify's `root` config. */
+#sidebar-content button[aria-label^="Toggle "][aria-label$=" section"],
+#navigation-items button[aria-label^="Toggle "][aria-label$=" section"] {
+  border-radius: 0.5rem !important;
+  transition: background 120ms ease !important;
+}
 #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:hover,
 #navigation-items button[aria-label^="Toggle "][aria-label$=" section"]:hover {
   background: rgba(122, 75, 160, 0.06) !important;
@@ -555,6 +528,57 @@ html.dark #page-context-menu-button:hover {
 .dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:hover,
 html.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:hover {
   background: rgba(181, 145, 211, 0.08) !important;
+}
+/* Active-group highlight: when the nested group contains the
+   currently-viewed page (Mintlify marks it as <li data-active="true">),
+   keep the toggle button looking "selected". */
+#sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:has(+ ul li[data-active="true"]),
+#sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:has(+ div li[data-active="true"]) {
+  background: rgba(122, 75, 160, 0.08) !important;
+  color: rgba(73, 45, 96, 1) !important;
+}
+.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:has(+ ul li[data-active="true"]),
+html.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:has(+ ul li[data-active="true"]) {
+  background: rgba(181, 145, 211, 0.12) !important;
+  color: rgba(214, 191, 232, 1) !important;
+}
+
+/* ---- 8a. Vertical guide line for nested group children -----------
+   The <ul> following a nested-group toggle button contains the child
+   pages. Run a single thin line down the left so the children read as
+   a tree branch. Active page gets a thicker, brand-coloured segment of
+   that line plus a slightly bolder weight. */
+#sidebar-content button[aria-label^="Toggle "][aria-label$=" section"] + ul {
+  border-left: 1px solid rgba(122, 75, 160, 0.16) !important;
+  margin-left: 0.875rem !important;
+  padding-left: 0 !important;
+}
+.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"] + ul,
+html.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"] + ul {
+  border-left-color: rgba(181, 145, 211, 0.18) !important;
+}
+/* Active page in nested group: brand-purple stripe replacing the
+   guide-line on its row + medium weight. The stripe is drawn with a
+   pseudo so we don't fight the guide-line border. */
+#sidebar-content li[data-active="true"] {
+  position: relative !important;
+}
+#sidebar-content li[data-active="true"]::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(122, 75, 160, 0.85);
+  border-radius: 2px;
+}
+.dark #sidebar-content li[data-active="true"]::before,
+html.dark #sidebar-content li[data-active="true"]::before {
+  background: rgba(181, 145, 211, 0.9);
+}
+#sidebar-content li[data-active="true"] > a {
+  font-weight: 600 !important;
 }
 
 /* ---- 9. Navbar: pin tabs LEFT (right next to the logo) ----
@@ -739,45 +763,6 @@ hr ~ .chat-assistant-disclaimer-text {
 [class*="chat-assistant"] [class*="disclaimer"],
 [class*="chat-assistant"] a[href*="mintlify.com"] {
   display: none !important;
-}
-
-/* ---- 15-bis. Search/AI: lock as 36×36 circles via stable selectors.
-   Mintlify's IDs (#search-bar-entry, #assistant-entry) toggle when the
-   AI panel opens. The aria-labels are stable: "Open search" and
-   "Toggle assistant panel". Target both. */
-#navbar button[aria-label="Open search"],
-#navbar button[aria-label="Toggle assistant panel"],
-button#search-bar-entry,
-button#assistant-entry {
-  width: 2.25rem !important;
-  min-width: 2.25rem !important;
-  max-width: 2.25rem !important;
-  height: 2.25rem !important;
-  padding: 0 !important;
-  justify-content: center !important;
-  align-items: center !important;
-  background: transparent !important;
-  border: 1px solid rgba(122, 75, 160, 0.18) !important;
-  border-radius: 0.5rem !important;
-  gap: 0 !important;
-  flex: 0 0 auto !important;
-}
-#navbar button[aria-label="Open search"] *:not(svg):not(:has(svg)),
-#navbar button[aria-label="Toggle assistant panel"] *:not(svg):not(:has(svg)) {
-  display: none !important;
-}
-#navbar button[aria-label="Open search"] svg,
-#navbar button[aria-label="Toggle assistant panel"] svg {
-  width: 1rem !important;
-  height: 1rem !important;
-  flex-shrink: 0 !important;
-  display: block !important;
-}
-.dark #navbar button[aria-label="Open search"],
-.dark #navbar button[aria-label="Toggle assistant panel"],
-html.dark #navbar button[aria-label="Open search"],
-html.dark #navbar button[aria-label="Toggle assistant panel"] {
-  border-color: rgba(181, 145, 211, 0.25) !important;
 }
 
 /* ---- 15-ter. Search modal/dialog: focus state, light-gray fill,
