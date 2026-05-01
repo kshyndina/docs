@@ -150,11 +150,11 @@ sidebar-group-header {
 }
 
 /* Group dividers: hairline border on each group wrapper EXCEPT the
-   first one. Putting the border on the wrapper (not the header)
-   means we naturally skip the chain selector at the top, and the
-   `:not(:first-of-type)` keeps the very first group label clean. */
-#navigation-items > div[class*="mt-6"]:not(:first-of-type),
-#navigation-items > div[class*="mt-8"]:not(:first-of-type) {
+   first one. Verified DOM: `#navigation-items` has ONE direct child
+   div, and the actual group wrappers (`<div class="mt-6 lg:mt-8">`)
+   are children of THAT inner div. */
+#navigation-items > div > div[class*="mt-6"]:not(:first-of-type),
+#navigation-items > div > div[class*="mt-8"]:not(:first-of-type) {
   border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
   padding-top: 1.25rem !important;
 }
@@ -525,15 +525,20 @@ html.dark #page-context-menu-button:hover {
 }
 
 /* ---- 8. Hide chevrons on collapsible sidebar items ----
-   Verified DOM: nested groups (e.g. "Account management") render
-   as <button class="group flex items-start..."> with a chevron SVG
-   as the last child. The SVG has `transition-transform` for the
-   expand/collapse rotation. Hide all such trailing SVGs in sidebar
-   buttons -- they look like dropdown affordances which Kate doesn't
-   want in this layout. */
-#sidebar-content button > svg:last-child,
-#navigation-items button > svg:last-child,
-#sidebar-content button > svg:only-of-type ~ svg,
+   Verified DOM: nested-group buttons (Account management, Dragon's
+   Mouth gRPC, etc.) render as
+       <button>
+         <div class="flex-1 ...">Account management</div>
+         <div class="h-[1lh] ...">
+           <svg class="transition-transform...">  <-- chevron
+         </div>
+       </button>
+   The chevron is inside a wrapping div, NOT a direct child of the
+   button. Target the SVG that lives inside the button's last child
+   div. */
+#sidebar-content button > div:last-child > svg,
+#navigation-items button > div:last-child > svg,
+#sidebar-content button svg[class*="transition-transform"],
 #sidebar-content [class*="sidebar-group-header"] svg {
   display: none !important;
 }
