@@ -926,7 +926,8 @@ html body [class*="lg:max-w-[696px"] {
    Pin to viewport via `position: fixed` so they stop contributing
    to document height — the visual effect is identical. */
 html body [class*="absolute"][class*="h-[64rem"],
-html body span[class*="h-[64rem"] {
+html body span[class*="h-[64rem"],
+html body span[style*="radial-gradient"] {
   position: fixed !important;
   height: 100vh !important;
   max-height: 100vh !important;
@@ -935,6 +936,28 @@ html body span[class*="h-[64rem"] {
   width: 100vw !important;
   z-index: -10 !important;
   pointer-events: none !important;
+}
+
+/* Final sledgehammer: Mintlify's footer is 7rem (112px) of pb-28
+   padding plus border + content. Since "Powered by Mintlify" is
+   hidden, the footer is purely empty pixels — kill it. Also force
+   key layout wrappers to size to content, not to a viewport-tied
+   minimum, on every page. */
+footer#footer {
+  display: none !important;
+}
+html, body {
+  min-height: 0 !important;
+  height: auto !important;
+}
+html body #body-content,
+html body #body-content > div,
+html body div[class*="flex-1"][class*="flex-col"] {
+  min-height: 0 !important;
+}
+/* Cap padding-top contributions so short pages stay short. */
+html body [class*="pt-[6.5rem"] {
+  padding-top: 1.5rem !important;
 }
 /* Inner sheet fills the now-fixed wrapper. Its own .sheet-content
    keeps overflow-y-auto for the message-list scroll. */
