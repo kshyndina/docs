@@ -1102,66 +1102,67 @@ html body #sidebar-content button[aria-haspopup="menu"][class*="nav-dropdown"] {
   overflow: hidden !important;
 }
 
-/* ---- 23. Mobile chrome: hamburger on the right of #navbar ---------
+/* ---- 23. Mobile chrome: hamburger pinned to top-right of viewport --
    Mintlify ships the mobile drawer-trigger as a separate row BELOW
    the navbar — `<button class="flex items-center h-14 py-4 px-5
-   lg:hidden">` containing the icon + a breadcrumb div. Kate wants the
-   hamburger sitting INSIDE the navbar on the right (Triton One mobile
-   layout), not below the logo.
+   lg:hidden">`. Kate wants it sitting inside (or over) the navbar on
+   the right, not below the logo.
 
-   custom.js inserts a `.triton-mobile-menu-btn` proxy inside #navbar
-   and forwards clicks to the original. Here we (a) hide the original
-   wrapper row entirely on mobile so it stops adding 56px of empty
-   space, (b) style the proxy as a 36×36 icon circle that aligns with
-   the search/AI circles. */
+   Approach: position: fixed over the navbar's top-right corner. Keeps
+   the React click handler intact (no DOM mutation, no proxy
+   forwarding). The button's parent row collapses because the button
+   no longer participates in flow layout. */
 @media (max-width: 1023px) {
-  /* Hide the standalone hamburger row. The proxy inside #navbar
-     forwards clicks to the original, so functionality is preserved. */
   html body button[class*="lg:hidden"][class*="h-14"] {
-    position: absolute !important;
-    left: -9999px !important;
-    top: 0 !important;
-    width: 1px !important;
-    height: 1px !important;
+    position: fixed !important;
+    top: 0.5rem !important;
+    right: 1rem !important;
+    left: auto !important;
+    bottom: auto !important;
+    z-index: 40 !important;
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+    min-width: 2.75rem !important;
     padding: 0 !important;
     margin: 0 !important;
     border: 0 !important;
+    border-radius: 50% !important;
+    background: rgba(0, 0, 0, 0.04) !important;
+    color: rgba(73, 45, 96, 0.95) !important;
     overflow: hidden !important;
-    pointer-events: none !important;
-  }
-  /* Proxy hamburger button — matches search/AI circle style */
-  html body #navbar .triton-mobile-menu-btn {
+    pointer-events: auto !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 2.25rem !important;
-    height: 2.25rem !important;
-    margin-left: 0.25rem !important;
-    border-radius: 50% !important;
-    border: 0 !important;
-    background: rgba(0, 0, 0, 0.03) !important;
-    color: rgba(73, 45, 96, 0.9) !important;
-    cursor: pointer !important;
-    flex: 0 0 auto !important;
-    order: 99 !important;
   }
-  html.dark body #navbar .triton-mobile-menu-btn {
-    background: rgba(255, 255, 255, 0.05) !important;
-    color: rgba(214, 191, 232, 0.9) !important;
+  html.dark body button[class*="lg:hidden"][class*="h-14"] {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: rgba(214, 191, 232, 0.95) !important;
   }
-  html body #navbar .triton-mobile-menu-btn:hover {
-    background: rgba(122, 75, 160, 0.1) !important;
+  html body button[class*="lg:hidden"][class*="h-14"]:hover {
+    background: rgba(122, 75, 160, 0.12) !important;
   }
-  html body #navbar .triton-mobile-menu-btn svg {
-    width: 1.125rem !important;
-    height: 1.125rem !important;
-  }
-}
-/* Hide the proxy at desktop width — the sidebar replaces the drawer */
-@media (min-width: 1024px) {
-  html body .triton-mobile-menu-btn {
+  /* Hide the breadcrumb-text + chevron child — keep only the menu icon */
+  html body button[class*="lg:hidden"][class*="h-14"] > div:nth-child(2) {
     display: none !important;
   }
+  html body button[class*="lg:hidden"][class*="h-14"] > div:nth-child(1) {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  html body button[class*="lg:hidden"][class*="h-14"] svg {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+  /* Reserve right padding inside #navbar so logo/search/AI don't
+     slide under the floating hamburger button. */
+  html body #navbar {
+    padding-right: 3.5rem !important;
+  }
+}
+/* Hide the legacy proxy if it's still in DOM from earlier deploys */
+html body .triton-mobile-menu-btn {
+  display: none !important;
 }
 
 /* ---- 24. Mobile Sign-up link: parallel styling to Log-in icon ----
@@ -1233,11 +1234,39 @@ html body div:has(> footer:only-child:empty) {
   display: none !important;
 }
 
-/* ---- 26. Mobile copy-page: icon + chevron only, no "Copy page" ----
-   The page-context-menu split button is two halves: left = Copy +
-   "Copy page" label, right = chevron dropdown. On mobile we want only
-   the icons (smaller footprint, sits next to the page title). */
+/* ---- 26. Mobile copy-page: icon + chevron only, on the RIGHT of H1
+   Mintlify renders TWO copies of #page-context-menu on mobile:
+     A) Inside the title row (sibling of H1#page-title) inside a
+        `flex flex-col sm:flex-row` parent — this is the desktop-style
+        version that stacks below H1 on xs because flex-col.
+     B) A second one as a direct #header child with `sm:hidden` —
+        the mobile-only DUPLICATE that stacks under the title.
+   Kate wants the menu on the right of the H1, not below.
+   Strategy: hide (B), force (A)'s flex container to flex-row at all
+   widths, shrink the buttons to icon-only. */
 @media (max-width: 767px) {
+  /* Hide duplicate B (the sm:hidden mobile-only version below title) */
+  html body #header > #page-context-menu[class*="sm:hidden"],
+  html body #header > div#page-context-menu[class*="sm:hidden"] {
+    display: none !important;
+  }
+  /* Force the title-row flex container into row at xs */
+  html body div[class*="flex-col"][class*="sm:flex-row"]:has(> h1#page-title),
+  html body div.flex.flex-col:has(> h1#page-title):has(> #page-context-menu) {
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 0.5rem !important;
+  }
+  html body div.flex:has(> h1#page-title) > h1#page-title {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  html body div.flex:has(> h1#page-title) > #page-context-menu {
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+    margin-top: 0 !important;
+  }
   /* Hide the "Copy page" text inside the first half. Keep the icon. */
   html body #page-context-menu > button:first-child > span,
   html body #page-context-menu-button > span,
@@ -1245,7 +1274,7 @@ html body div:has(> footer:only-child:empty) {
   html body #page-context-menu > button:first-child > div > span:not(:has(svg)) {
     display: none !important;
   }
-  /* Tighten the first-half button to icon-only width */
+  /* Tighten both halves to icon-only width */
   html body #page-context-menu > button:first-child,
   html body #page-context-menu-button {
     padding-left: 0.5rem !important;
@@ -1253,17 +1282,16 @@ html body div:has(> footer:only-child:empty) {
     min-width: 2.25rem !important;
     gap: 0 !important;
   }
-  /* Tighten the chevron half */
   html body #page-context-menu > button:last-child {
     padding-left: 0.4rem !important;
     padding-right: 0.4rem !important;
     min-width: 1.75rem !important;
   }
-  /* Lift the menu so it sits inline with the H1 instead of below */
-  html body #page-context-menu {
-    margin-top: 0 !important;
-    margin-left: auto !important;
-    flex-shrink: 0 !important;
+  /* Override the min-w-[156px] Tailwind class on the mobile-duplicate
+     when it's the in-row variant (we hid the sm:hidden one, this only
+     touches the desktop-variant we forced into row). */
+  html body #page-context-menu[class*="min-w-["] {
+    min-width: 0 !important;
   }
 }
 
