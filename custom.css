@@ -446,26 +446,30 @@ mdx-content table td code {
   word-break: break-all;
 }
 
-/* ---- 6. Search + AI buttons: trust Mintlify's defaults ----
-   Mintlify already renders these as `rounded-full !w-9 bg-gray-950/[0.03]
-   border-none` (perfect 36×36 circles, soft gray fill, no border) at
-   viewports below 1500px. Force the narrow form even at wider viewports
-   so they stay circles always — but DON'T re-style colours or radius. */
-#search-bar-entry,
-#assistant-entry {
+/* ---- 6. Search + AI buttons: trust Mintlify defaults, force narrow.
+   Mintlify renders both as `rounded-full !w-9 bg-gray-950/[0.03]
+   border-none` — a perfect 36×36 circle below 1500px navbar width.
+   ABOVE 1500px the @[1500px]/navbar: container query expands to a
+   pill with "Search..." / "Ask AI" + kbd hint. Kate wants icon-only
+   ALWAYS. Override width + padding with higher specificity than
+   Tailwind's `.!w-auto` arbitrary class, and hide the inner spans. */
+html body button#search-bar-entry,
+html body button#assistant-entry {
   width: 2.25rem !important;
   min-width: 2.25rem !important;
   max-width: 2.25rem !important;
+  padding: 0 !important;
   flex: 0 0 auto !important;
+  justify-content: center !important;
 }
-/* Hide the "Search..." placeholder + ⌘K kbd that appear at @[1500px]/navbar
-   wider screens. Keep the SVG icon untouched. */
-#search-bar-entry > div > div.truncate,
-#search-bar-entry > span.flex-none,
-#assistant-entry > div.truncate,
-#assistant-entry > span.flex-none,
-#search-bar-entry kbd,
-#assistant-entry kbd {
+/* Hide everything inside except the SVG icon. AI button: two direct
+   <span>s ("Ask AI" + ⌘I). Search button: nested divs + a flex-none
+   span for the kbd. */
+html body button#assistant-entry > span,
+html body button#search-bar-entry > div > div,
+html body button#search-bar-entry > span,
+html body button#search-bar-entry kbd,
+html body button#assistant-entry kbd {
   display: none !important;
 }
 
