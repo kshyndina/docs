@@ -586,7 +586,11 @@ html.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]
 html.dark #sidebar-content li[data-group-tag] li[data-active="true"]:not([data-group-tag])::before {
   background: rgba(181, 145, 211, 0.9);
 }
-#sidebar-content li[data-group-tag] li[data-active="true"]:not([data-group-tag]) > a {
+/* Active link weight: +100 over body for ALL active sidebar links
+   (top-level AND nested). Stripe stays nested-only above; this rule
+   handles the weight bump independently so Quickstart, Welcome, etc.
+   read at the same medium weight as nested-page active state. */
+#sidebar-content li[data-active="true"]:not([data-group-tag]) > a {
   font-weight: 500 !important;
 }
 
