@@ -1102,4 +1102,209 @@ html body #sidebar-content button[aria-haspopup="menu"][class*="nav-dropdown"] {
   overflow: hidden !important;
 }
 
+/* ---- 23. Mobile chrome: hamburger on the right of #navbar ---------
+   Mintlify ships the mobile drawer-trigger as a separate row BELOW
+   the navbar — `<button class="flex items-center h-14 py-4 px-5
+   lg:hidden">` containing the icon + a breadcrumb div. Kate wants the
+   hamburger sitting INSIDE the navbar on the right (Triton One mobile
+   layout), not below the logo.
+
+   custom.js inserts a `.triton-mobile-menu-btn` proxy inside #navbar
+   and forwards clicks to the original. Here we (a) hide the original
+   wrapper row entirely on mobile so it stops adding 56px of empty
+   space, (b) style the proxy as a 36×36 icon circle that aligns with
+   the search/AI circles. */
+@media (max-width: 1023px) {
+  /* Hide the standalone hamburger row. The proxy inside #navbar
+     forwards clicks to the original, so functionality is preserved. */
+  html body button[class*="lg:hidden"][class*="h-14"] {
+    position: absolute !important;
+    left: -9999px !important;
+    top: 0 !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+  }
+  /* Proxy hamburger button — matches search/AI circle style */
+  html body #navbar .triton-mobile-menu-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    margin-left: 0.25rem !important;
+    border-radius: 50% !important;
+    border: 0 !important;
+    background: rgba(0, 0, 0, 0.03) !important;
+    color: rgba(73, 45, 96, 0.9) !important;
+    cursor: pointer !important;
+    flex: 0 0 auto !important;
+    order: 99 !important;
+  }
+  html.dark body #navbar .triton-mobile-menu-btn {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: rgba(214, 191, 232, 0.9) !important;
+  }
+  html body #navbar .triton-mobile-menu-btn:hover {
+    background: rgba(122, 75, 160, 0.1) !important;
+  }
+  html body #navbar .triton-mobile-menu-btn svg {
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+  }
+}
+/* Hide the proxy at desktop width — the sidebar replaces the drawer */
+@media (min-width: 1024px) {
+  html body .triton-mobile-menu-btn {
+    display: none !important;
+  }
+}
+
+/* ---- 24. Mobile Sign-up link: parallel styling to Log-in icon ----
+   docs.json `navbar.links` now contains both Log in and Sign up. On
+   desktop they render as text links; on mobile we collapse both to
+   icon-circle CTAs sitting before the hamburger. Sign up gets a
+   distinct user-plus icon so it's visually separable from Log in. */
+@media (max-width: 767px) {
+  html body #navbar a[href*="customers.triton.one/users/sign-up"] {
+    display: inline-flex !important;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    min-width: 2.25rem !important;
+    padding: 0 !important;
+    margin: 0 0.125rem !important;
+    border-radius: 50% !important;
+    border: 0 !important;
+    background: rgba(122, 75, 160, 0.85) !important;
+    color: transparent !important;
+    overflow: hidden !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+  }
+  html body #navbar a[href*="customers.triton.one/users/sign-up"]::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background-color: white !important;
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>') no-repeat center / 1.125rem 1.125rem !important;
+    mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>') no-repeat center / 1.125rem 1.125rem !important;
+  }
+  html.dark body #navbar a[href*="customers.triton.one/users/sign-up"] {
+    background: rgba(181, 145, 211, 0.95) !important;
+  }
+  html.dark body #navbar a[href*="customers.triton.one/users/sign-up"]::before {
+    background-color: rgba(23, 23, 23, 0.95) !important;
+  }
+}
+/* Tablet+: render Sign up as a text link beside Log in (Mintlify
+   default), don't apply the icon-circle treatment. */
+@media (min-width: 768px) {
+  html body #navbar a[href*="customers.triton.one/users/sign-up"] {
+    display: inline-flex !important;
+  }
+}
+
+/* ---- 25. Footer: kill the empty wrapper entirely ------------------
+   Mintlify renders a <footer> at the bottom of the layout even when no
+   footer config is set. The wrapper has its own padding/min-height,
+   creating a tall white slab below the content. Hide the whole
+   element + zero out any layout contribution. */
+html body footer,
+html body footer[class*="border-t"],
+html body footer[class*="px-"],
+html body div[class*="footer"]:not(:has(*)) {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+/* If the footer is wrapped (some Mintlify layouts), kill the wrapper
+   too so it doesn't keep its own padding. */
+html body main + div:has(> footer:only-child),
+html body div:has(> footer:only-child:empty) {
+  display: none !important;
+}
+
+/* ---- 26. Mobile copy-page: icon + chevron only, no "Copy page" ----
+   The page-context-menu split button is two halves: left = Copy +
+   "Copy page" label, right = chevron dropdown. On mobile we want only
+   the icons (smaller footprint, sits next to the page title). */
+@media (max-width: 767px) {
+  /* Hide the "Copy page" text inside the first half. Keep the icon. */
+  html body #page-context-menu > button:first-child > span,
+  html body #page-context-menu-button > span,
+  html body #page-context-menu > button:first-child [class*="text"]:not([class*="text-"]),
+  html body #page-context-menu > button:first-child > div > span:not(:has(svg)) {
+    display: none !important;
+  }
+  /* Tighten the first-half button to icon-only width */
+  html body #page-context-menu > button:first-child,
+  html body #page-context-menu-button {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    min-width: 2.25rem !important;
+    gap: 0 !important;
+  }
+  /* Tighten the chevron half */
+  html body #page-context-menu > button:last-child {
+    padding-left: 0.4rem !important;
+    padding-right: 0.4rem !important;
+    min-width: 1.75rem !important;
+  }
+  /* Lift the menu so it sits inline with the H1 instead of below */
+  html body #page-context-menu {
+    margin-top: 0 !important;
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* ---- 27. Mobile floating chat input: stay visible always ----------
+   Kate flagged that "Ask a question" disappears when scrolling on
+   mobile. Section 19 already pins the wrapper as `position: fixed`,
+   but Mintlify can hide the input itself via opacity/transform on
+   scroll. Force it visible at all viewport sizes. */
+html body div.sticky.bottom-0:has(> .chat-assistant-floating-input),
+html body .chat-assistant-floating-input {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+@media (max-width: 1023px) {
+  /* Below desktop: always pinned to viewport bottom, full width, no
+     left/right offsets (no sidebar at this width). */
+  html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    padding: 0.5rem 1rem 0.75rem !important;
+    z-index: 40 !important;
+    background: linear-gradient(
+      to bottom,
+      rgba(247, 247, 247, 0) 0%,
+      rgba(247, 247, 247, 0.85) 30%,
+      rgba(247, 247, 247, 1) 100%
+    ) !important;
+  }
+  html.dark body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
+    background: linear-gradient(
+      to bottom,
+      rgba(23, 23, 23, 0) 0%,
+      rgba(23, 23, 23, 0.85) 30%,
+      rgba(23, 23, 23, 1) 100%
+    ) !important;
+  }
+}
+
 /*! purgecss end ignore */

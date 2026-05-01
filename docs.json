@@ -74,6 +74,10 @@
       {
         "label": "Log in",
         "href": "https://customers.triton.one/users/sign-in"
+      },
+      {
+        "label": "Sign up",
+        "href": "https://customers.triton.one/users/sign-up"
       }
     ],
     "primary": {
