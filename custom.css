@@ -73,7 +73,7 @@ html.dark ::selection {
    `position: fixed` and the page wrapper uses `lg:pl-56` to make room
    for it -- override that gutter too. */
 :root {
-  --sidebar-w: 22rem;
+  --sidebar-w: 18rem;
 }
 html body #sidebar-content,
 html body div#sidebar-content,
@@ -84,12 +84,20 @@ html body div[class~="lg:w-56"] {
   max-width: var(--sidebar-w) !important;
   min-width: var(--sidebar-w) !important;
 }
-/* Page content has `lg:pl-56` to make room for the fixed sidebar.
-   Bump that gutter so content lines up with the new sidebar width. */
 @media (min-width: 1024px) {
   html body [class~="lg:pl-56"],
   html body div[class*="lg:pl-56"] {
     padding-left: var(--sidebar-w) !important;
+  }
+  /* Mintlify's content area uses an arbitrary Tailwind class:
+     `lg:ml-[max(0px,calc(50vw-348px-14rem))]`. The `14rem` in that
+     calc references the OLD `w-56` sidebar -- with our resized
+     sidebar the formula adds a ghost 178px left margin to the
+     content. Override to zero; the page wrapper's pl gutter
+     already handles spacing. */
+  html body [class*="lg:ml-[max"],
+  html body div[class*="lg:ml-[max"] {
+    margin-left: 0 !important;
   }
 }
 
@@ -123,19 +131,14 @@ html body div[class~="lg:w-56"] {
   height: auto !important;
 }
 
-/* ---- 0a-bis. Group labels: Geist Mono, gray, medium, dividers ----
-   Mirrors the reference sidebars Kate sent (Notion / Linear / Raycast):
-   - All-caps section labels in muted gray (not brand purple)
-   - Slightly LESS left indent than child items so they read as
-     section markers, not nested entries
-   - Hairline divider above each group (except the first one) so the
-     sidebar groups feel separated like the reference designs
-   - Geist Mono mono treatment matches the page eyebrow */
-#sidebar-content [data-component-part="sidebar-group-header"],
-#sidebar-content #sidebar-group > [data-component-part="sidebar-group-header"],
-#sidebar-content [id^="sidebar-group"] > div[class*="text-xs"]:first-child,
-sidebar-group-header,
-.sidebar-group-header {
+/* ---- 0a-bis. Group labels: Geist Mono, gray, medium ----
+   Verified DOM: Mintlify renders sidebar group labels as
+   `<div class="sidebar-group-header ...">` containing `<h5>`.
+   Each group is wrapped in `<div class="mt-6 lg:mt-8">` which is a
+   direct child of `#navigation-items`. */
+.sidebar-group-header,
+.sidebar-group-header h5,
+sidebar-group-header {
   font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace !important;
   text-transform: uppercase !important;
   letter-spacing: 0.06em !important;
@@ -143,28 +146,28 @@ sidebar-group-header,
   font-weight: 500 !important;
   color: rgba(115, 115, 115, 0.85) !important;
   padding-left: 0.5rem !important;
-  padding-top: 1.25rem !important;
-  padding-bottom: 0.5rem !important;
-  margin-top: 0.75rem !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
-}
-/* First group in any tab: drop the divider above (nothing to separate
-   from). Targets both the very first group and the implicit "first
-   visible" after a tab switch. */
-#sidebar-content [data-component-part="sidebar-group"]:first-of-type [data-component-part="sidebar-group-header"],
-#sidebar-content > nav > [data-component-part="sidebar-group"]:first-child [data-component-part="sidebar-group-header"] {
   border-top: 0 !important;
-  margin-top: 0 !important;
-  padding-top: 0.5rem !important;
 }
+
+/* Group dividers: hairline border on each group wrapper EXCEPT the
+   first one. Putting the border on the wrapper (not the header)
+   means we naturally skip the chain selector at the top, and the
+   `:not(:first-of-type)` keeps the very first group label clean. */
+#navigation-items > div[class*="mt-6"]:not(:first-of-type),
+#navigation-items > div[class*="mt-8"]:not(:first-of-type) {
+  border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+  padding-top: 1.25rem !important;
+}
+
 /* Dark-mode tones */
-.dark sidebar-group-header,
-html.dark sidebar-group-header,
 .dark .sidebar-group-header,
 html.dark .sidebar-group-header,
-.dark #sidebar-content [data-component-part="sidebar-group-header"],
-html.dark #sidebar-content [data-component-part="sidebar-group-header"] {
+.dark .sidebar-group-header h5,
+html.dark .sidebar-group-header h5 {
   color: rgba(180, 180, 180, 0.7) !important;
+}
+.dark #navigation-items > div[class*="mt-6"]:not(:first-of-type),
+html.dark #navigation-items > div[class*="mt-6"]:not(:first-of-type) {
   border-top-color: rgba(255, 255, 255, 0.06) !important;
 }
 
@@ -322,21 +325,28 @@ html.dark mdx-content hr {
 }
 
 /* ---- Eyebrow: Geist Mono, uppercase, tracking ----
-   docs.json has styling.eyebrows="breadcrumbs", so this <eyebrow> renders
-   as a multi-segment breadcrumb (e.g. "Chains > Solana"). docs.triton.one
-   only shows the top-level section ("CHAINS"). Trim to the first segment
-   via CSS. */
-.eyebrow {
+   Mintlify renders the page eyebrow as a `.breadcrumb-list` row
+   containing one or more `.breadcrumb-item` segments. Earlier CSS
+   targeted a non-existent `.eyebrow` class -- update to the real
+   selectors. */
+.breadcrumb-list,
+.breadcrumb-item,
+.breadcrumb-list a,
+.breadcrumb-item a,
+.breadcrumb-list span,
+.breadcrumb-item span {
   font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace !important;
   text-transform: uppercase !important;
   letter-spacing: 0.08em !important;
   font-weight: 500 !important;
   font-size: 0.75rem !important;
 }
-.eyebrow [data-breadcrumb-title]:not(:first-child) {
+/* Trim to the first breadcrumb segment only -- matches GitBook
+   docs.triton.one which shows only the top section. */
+.breadcrumb-list .breadcrumb-item:not(:first-child) {
   display: none !important;
 }
-.eyebrow [data-breadcrumb-title]:first-child svg {
+.breadcrumb-list .breadcrumb-item:first-child svg {
   display: none !important;
 }
 
@@ -514,14 +524,17 @@ html.dark #page-context-menu-button:hover {
   border-color: rgba(181, 145, 211, 0.4) !important;
 }
 
-/* ---- 8. Belt-and-braces: also kill chevrons on sidebar group headers
-   via a wider selector net. Mintlify's chevron may render as <svg>,
-   <span> with mask, or a Lucide icon -- target all reasonable shapes. */
-#sidebar-content [data-component-part="sidebar-group-header"] svg,
-#sidebar-content [data-component-part="sidebar-group-header"] [aria-hidden="true"]:last-child,
-#sidebar-content [data-component-part="sidebar-group-header"] > *:last-child:not(span):not(div),
-#sidebar-content button[aria-expanded] svg.lucide,
-#sidebar-content [data-component-part="sidebar-group-header"] [class*="chevron"] {
+/* ---- 8. Hide chevrons on collapsible sidebar items ----
+   Verified DOM: nested groups (e.g. "Account management") render
+   as <button class="group flex items-start..."> with a chevron SVG
+   as the last child. The SVG has `transition-transform` for the
+   expand/collapse rotation. Hide all such trailing SVGs in sidebar
+   buttons -- they look like dropdown affordances which Kate doesn't
+   want in this layout. */
+#sidebar-content button > svg:last-child,
+#navigation-items button > svg:last-child,
+#sidebar-content button > svg:only-of-type ~ svg,
+#sidebar-content [class*="sidebar-group-header"] svg {
   display: none !important;
 }
 
@@ -544,14 +557,15 @@ html.dark #page-context-menu-button:hover {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
-/* Logo wrapper (`<div class="flex-1 flex items-center gap-x-4 h-full pr-2 min-w-0">`)
-   -- override `flex-1` so it doesn't grow. */
-#navbar div[class~="flex-1"][class~="gap-x-4"][class~="pr-2"],
-#navbar div.flex-1.flex.items-center.gap-x-4,
-#navbar div:has(> a.select-none) {
+/* Kill flex-grow on the logo wrapper so it shrinks to the logo
+   width and the tab nav sits flush against it.
+   Selectors using bare Tailwind class names get stripped by the
+   build pipeline; use `:has(> a > img)` (a tag-only selector)
+   which survives. The logo wrapper is a div whose direct child is
+   an anchor whose direct child is the logo img. */
+#navbar div:has(> a > img) {
   flex-grow: 0 !important;
   flex-basis: auto !important;
-  flex-shrink: 0 !important;
 }
 /* Logo: 1.5x bigger circular mark to match triton.one navbar size */
 img.nav-logo,
