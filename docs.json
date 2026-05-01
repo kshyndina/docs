@@ -92,11 +92,10 @@
             "tab": "Documentation",
             "groups": [
               {
-                "group": " ",
+                "group": "",
                 "pages": [
                   "solana/welcome"
-                ],
-                "root": "solana/welcome"
+                ]
               },
               {
                 "group": "Get started",

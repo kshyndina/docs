@@ -8,28 +8,91 @@
   padding-bottom: 0.5rem !important;
 }
 
-/* ---- 0-bis. Hide the navbar's hairline bottom border ----
-   Mintlify renders an absolutely-positioned div inside #navbar with
-   `border-b border-gray-100` (gray-800 in dark). Against our light page
-   background it shows as a visible horizontal line just below the
-   navbar. Kill it. */
+/* ---- 0-bis. Replace the navbar's hairline bottom border with a soft
+   shadow (Gemini-style mini-bar lift). The hairline reads as a hard
+   line against the gradient background; a subtle shadow gives the
+   navbar a slight elevation that feels modern without being heavy. */
 #navbar > div.absolute.border-b,
 #navbar > div[class*="border-b"][class*="absolute"] {
   border: 0 !important;
 }
+#navbar {
+  box-shadow: 0 1px 0 rgba(122, 75, 160, 0.08), 0 6px 16px -8px rgba(73, 45, 96, 0.18) !important;
+}
+.dark #navbar,
+html.dark #navbar {
+  box-shadow: 0 1px 0 rgba(181, 145, 211, 0.10), 0 6px 16px -8px rgba(0, 0, 0, 0.5) !important;
+}
 
-/* ---- 0a. Sidebar: a touch wider so long titles don't break onto two lines.
-   Mintlify default is ~17rem; bump to ~20rem to fit "Solana v2.0: Deprecated
-   RPC Methods" and "Agave - AccountsDB: Storage Files shrinking process". */
+/* ---- 0-ter. Focus + text selection: no clipped corners ----
+   When tabbing through links or selecting text inside elements with
+   `overflow: hidden` + `border-radius` (cards, code blocks, table
+   cells), the focus outline gets clipped. Two fixes:
+   1) Use `outline` (not box-shadow) with offset so it floats outside.
+   2) Brand-coloured ::selection that renders cleanly. */
+*:focus-visible {
+  outline: 2px solid rgba(122, 75, 160, 0.7) !important;
+  outline-offset: 2px !important;
+  border-radius: 4px;
+}
+.dark *:focus-visible,
+html.dark *:focus-visible {
+  outline-color: rgba(181, 145, 211, 0.85) !important;
+}
+::selection {
+  background: rgba(122, 75, 160, 0.25);
+  color: inherit;
+}
+.dark ::selection,
+html.dark ::selection {
+  background: rgba(181, 145, 211, 0.35);
+}
+
+/* ---- 0a. Sidebar: match GitBook docs.triton.one width (~22rem / ~352px).
+   Mintlify default is ~17rem; previous bump to 20rem still felt narrow next
+   to the GitBook reference. 22rem accommodates the longest titles
+   ("Solana v2.0: Deprecated RPC Methods", "Agave - AccountsDB: Storage Files
+   shrinking process") with margin to spare. Push the main content over by
+   the extra 2rem so layout stays balanced. */
 #sidebar {
-  width: 20rem !important;
-  max-width: 20rem !important;
+  width: 22rem !important;
+  max-width: 22rem !important;
 }
 @media (min-width: 1024px) {
   #sidebar {
-    width: 20rem !important;
-    flex-basis: 20rem !important;
+    width: 22rem !important;
+    flex-basis: 22rem !important;
   }
+}
+
+/* ---- 0a-tris. Flat sidebar groups (no dropdown affordance) ----
+   By default Mintlify renders every sidebar group as a collapsible
+   accordion with a chevron. Kate wants them to read as flat section
+   labels (the GitBook / Vagrant docs look). Hide the chevron, force
+   every group expanded, and remove the click-to-collapse behaviour --
+   the group label still navigates to its `root` page on click. */
+#sidebar [data-component-part="sidebar-group-header"] svg,
+#sidebar-content [data-component-part="sidebar-group-header"] svg {
+  display: none !important;
+}
+/* Hide the entire button/header for groups whose label is empty or
+   whitespace-only -- e.g. the Welcome standalone entry that has no
+   meaningful section title above it. */
+#sidebar-content [data-component-part="sidebar-group-header"]:empty,
+#sidebar [data-component-part="sidebar-group-header"]:empty {
+  display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+/* Force-expand every group container in case Mintlify collapses it
+   on initial load. The `[hidden]` attr is the standard collapse hook;
+   common Tailwind hidden classes are belt-and-braces. */
+#sidebar-content [data-component-part="sidebar-group"] > [hidden],
+#sidebar-content [data-component-part="sidebar-group"] [aria-hidden="true"] {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
 }
 
 /* ---- 0a-bis. Group labels: keep the case as written + sexy styling ----
