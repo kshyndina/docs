@@ -48,20 +48,17 @@ html.dark ::selection {
   background: rgba(181, 145, 211, 0.35);
 }
 
-/* ---- 0a. Sidebar: match GitBook docs.triton.one width (~22rem / ~352px).
-   Mintlify default is ~17rem; previous bump to 20rem still felt narrow next
-   to the GitBook reference. 22rem accommodates the longest titles
-   ("Solana v2.0: Deprecated RPC Methods", "Agave - AccountsDB: Storage Files
-   shrinking process") with margin to spare. Push the main content over by
-   the extra 2rem so layout stays balanced. */
+/* ---- 0a. Sidebar: match GitBook docs.triton.one width (~24rem).
+   Tried 20rem and 22rem, both still felt narrow next to GitBook. 24rem
+   matches the GitBook reference and gives long titles room to breathe. */
 #sidebar {
-  width: 22rem !important;
-  max-width: 22rem !important;
+  width: 24rem !important;
+  max-width: 24rem !important;
 }
 @media (min-width: 1024px) {
   #sidebar {
-    width: 22rem !important;
-    flex-basis: 22rem !important;
+    width: 24rem !important;
+    flex-basis: 24rem !important;
   }
 }
 
@@ -363,6 +360,109 @@ html.dark mdx-content table td:last-child,
 mdx-content table td code {
   font-size: 0.85em;
   word-break: break-all;
+}
+
+/* ---- 6. Navbar buttons: shrink and icon-ify ----
+   Search bar + Ask AI button take up too much navbar real estate when
+   they show their full label and ⌘K / ⌘I shortcut chips. Vagrant /
+   Gemini collapse them to small icon buttons; do the same. */
+
+/* Search bar entry: collapse to icon-only square button */
+#search-bar-entry,
+button#search-bar-entry,
+[id="search-bar-entry"] {
+  width: 2.25rem !important;
+  min-width: 2.25rem !important;
+  max-width: 2.25rem !important;
+  padding: 0 !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  border-radius: 0.5rem !important;
+}
+#search-bar-entry > span,
+#search-bar-entry kbd,
+#search-bar-entry [class*="kbd"],
+#search-bar-entry [class*="shortcut"] {
+  display: none !important;
+}
+.dark #search-bar-entry,
+html.dark #search-bar-entry {
+  border-color: rgba(181, 145, 211, 0.25) !important;
+}
+
+/* Ask AI button: icon-only square (matches search), no shortcut chip */
+#topbar-ai-chat-button,
+button#topbar-ai-chat-button,
+button[aria-label*="Ask AI" i],
+button[aria-label*="ai chat" i] {
+  width: 2.25rem !important;
+  min-width: 2.25rem !important;
+  max-width: 2.25rem !important;
+  padding: 0 !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  border-radius: 0.5rem !important;
+}
+#topbar-ai-chat-button > span:not(:has(svg)),
+#topbar-ai-chat-button kbd,
+button[aria-label*="Ask AI" i] > span:not(:has(svg)),
+button[aria-label*="Ask AI" i] kbd {
+  display: none !important;
+}
+.dark #topbar-ai-chat-button,
+html.dark #topbar-ai-chat-button,
+.dark button[aria-label*="Ask AI" i],
+html.dark button[aria-label*="Ask AI" i] {
+  border-color: rgba(181, 145, 211, 0.25) !important;
+}
+
+/* ---- 7. "Copy page" button: secondary style matching Solana dropdown
+   Currently rendered with a solid #f7 fill (like a primary). Kate wants
+   it muted -- transparent with a thin border, the same look as the
+   chain-selector dropdown ("Solana"). */
+#page-context-menu-button,
+#page-context-menu > button:first-child {
+  background: transparent !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  color: rgba(73, 45, 96, 0.85) !important;
+  font-weight: 500 !important;
+}
+#page-context-menu-button:hover,
+#page-context-menu > button:first-child:hover {
+  background: rgba(122, 75, 160, 0.06) !important;
+  border-color: rgba(122, 75, 160, 0.3) !important;
+}
+#page-context-menu > button:last-child {
+  background: transparent !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  border-left: 0 !important;
+  color: rgba(73, 45, 96, 0.85) !important;
+}
+.dark #page-context-menu-button,
+html.dark #page-context-menu-button,
+.dark #page-context-menu > button,
+html.dark #page-context-menu > button {
+  background: transparent !important;
+  border-color: rgba(181, 145, 211, 0.25) !important;
+  color: rgba(214, 191, 232, 0.9) !important;
+}
+.dark #page-context-menu-button:hover,
+html.dark #page-context-menu-button:hover {
+  background: rgba(181, 145, 211, 0.08) !important;
+  border-color: rgba(181, 145, 211, 0.4) !important;
+}
+
+/* ---- 8. Belt-and-braces: also kill chevrons on sidebar group headers
+   via a wider selector net. Mintlify's chevron may render as <svg>,
+   <span> with mask, or a Lucide icon -- target all reasonable shapes. */
+#sidebar-content [data-component-part="sidebar-group-header"] svg,
+#sidebar-content [data-component-part="sidebar-group-header"] [aria-hidden="true"]:last-child,
+#sidebar-content [data-component-part="sidebar-group-header"] > *:last-child:not(span):not(div),
+#sidebar-content button[aria-expanded] svg.lucide,
+#sidebar-content [data-component-part="sidebar-group-header"] [class*="chevron"] {
+  display: none !important;
 }
 
 /*! purgecss end ignore */
