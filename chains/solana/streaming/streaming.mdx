@@ -4,7 +4,7 @@ title: "Streaming"
 
 Real-time on-chain data is the lifeblood of modern Web3 applications. We offer a suite of powerful streaming solutions, each tailored to a specific use case—from simple frontend notifications to the high-throughput, low-latency demands of MEV searchers and trading bots.
 
-Streaming data from Solana requires a high-bandwidth Internet connection and a fast client environment. Frequent disconnections are a sign of a weak client setup. See our [Streaming Troubleshooting Checklist](/streaming-troubleshooting-checklist) for helpful tips.
+Streaming data from Solana requires a high-bandwidth Internet connection and a fast client environment. Frequent disconnections are a sign of a weak client setup. See our [Streaming Troubleshooting Checklist](/chains/solana/streaming/streaming-troubleshooting-checklist) for helpful tips.
 
 ***
 
@@ -16,7 +16,7 @@ Streaming data from Solana requires a high-bandwidth Internet connection and a f
 * **Key Feature:** Provides **intra-slot updates**, delivering data up to 400ms faster than standard WebSockets by showing you state changes as they happen, not just at the end of a slot.
 * **Note:** gRPC is not supported in web browsers and is intended for server-to-server communication.
 
-**Learn more about** [**Dragon's Mouth gRPC →**](/../../../project-yellowstone/dragons-mouth-grpc-subscriptions)
+**Learn more about** [**Dragon's Mouth gRPC →**](/project-yellowstone/dragons-mouth-grpc-subscriptions)
 
 ***
 
@@ -27,7 +27,7 @@ Streaming data from Solana requires a high-bandwidth Internet connection and a f
 * **Best for:** Web3 frontends, real-time user interfaces, and easily upgrading existing applications that already use WebSockets.
 * **Key Feature:** Offers the same **intra-slot update** advantages as gRPC but over a browser-compatible WebSocket connection, making your dApp feel significantly more responsive.
 
-**Learn more about** [**Whirligig WebSockets →**](/../../../project-yellowstone/whirligig-websockets)
+**Learn more about** [**Whirligig WebSockets →**](/project-yellowstone/whirligig-websockets)
 
 ***
 
@@ -36,6 +36,6 @@ Streaming data from Solana requires a high-bandwidth Internet connection and a f
 **A persistent, "never miss an event" streaming solution.** Fumarole is designed for applications where guaranteed data delivery is absolutely critical.
 
 * **Best for:** Accounting systems, compliance tools, analytics platforms, and any application that needs a complete and verifiable history of events.
-* **Key Feature:** Allows your client to disconnect and reconnect to the stream at a later time, automatically backfilling any data that was missed. It also supports horizontal scaling via consumer groups.
+* **Key Feature:** Allows your client to disconnect and reconnect to the stream at a later time, automatically backfilling any data that was missed. It also supports horizontal scaling via persistent subscribers.
 
-**Learn more about** [**Fumarole Reliable Streams →**](/../../../project-yellowstone/fumarole)
+**Learn more about** [**Fumarole Reliable Streams →**](/project-yellowstone/fumarole)
