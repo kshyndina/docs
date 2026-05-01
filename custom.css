@@ -8,6 +8,16 @@
   padding-bottom: 0.5rem !important;
 }
 
+/* ---- 0-bis. Hide the navbar's hairline bottom border ----
+   Mintlify renders an absolutely-positioned div inside #navbar with
+   `border-b border-gray-100` (gray-800 in dark). Against our light page
+   background it shows as a visible horizontal line just below the
+   navbar. Kill it. */
+#navbar > div.absolute.border-b,
+#navbar > div[class*="border-b"][class*="absolute"] {
+  border: 0 !important;
+}
+
 /* ---- 0a. Sidebar: a touch wider so long titles don't break onto two lines.
    Mintlify default is ~17rem; bump to ~19rem to fit "Solana v2.0: Deprecated
    RPC Methods" and "Agave - AccountsDB: Storage Files shrinking process". */
