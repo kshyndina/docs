@@ -559,11 +559,14 @@ html.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]
 }
 /* Active page in nested group: brand-purple stripe replacing the
    guide-line on its row + medium weight. The stripe is drawn with a
-   pseudo so we don't fight the guide-line border. */
-#sidebar-content li[data-active="true"] {
+   pseudo so we don't fight the guide-line border. Mintlify marks
+   BOTH the active leaf page AND the wrapper <li> for the parent
+   group with data-active="true" — the wrapper has data-group-tag,
+   exclude it so we only stripe the leaf. */
+#sidebar-content li[data-active="true"]:not([data-group-tag]) {
   position: relative !important;
 }
-#sidebar-content li[data-active="true"]::before {
+#sidebar-content li[data-active="true"]:not([data-group-tag])::before {
   content: "";
   position: absolute;
   left: -1px;
@@ -573,11 +576,11 @@ html.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]
   background: rgba(122, 75, 160, 0.85);
   border-radius: 2px;
 }
-.dark #sidebar-content li[data-active="true"]::before,
-html.dark #sidebar-content li[data-active="true"]::before {
+.dark #sidebar-content li[data-active="true"]:not([data-group-tag])::before,
+html.dark #sidebar-content li[data-active="true"]:not([data-group-tag])::before {
   background: rgba(181, 145, 211, 0.9);
 }
-#sidebar-content li[data-active="true"] > a {
+#sidebar-content li[data-active="true"]:not([data-group-tag]) > a {
   font-weight: 600 !important;
 }
 
