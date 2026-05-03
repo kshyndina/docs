@@ -152,7 +152,17 @@
                       "solana/streaming/whirligig/whirligig-client"
                     ]
                   },
-                  "solana/streaming/fumarole-reliable-streams",
+                  {
+                    "group": "Fumarole reliable streams",
+                    "root": "solana/streaming/fumarole/overview",
+                    "expanded": false,
+                    "pages": [
+                      "solana/streaming/fumarole/overview",
+                      "solana/streaming/fumarole/quickstart",
+                      "solana/streaming/fumarole/sdk-clients-setup",
+                      "solana/streaming/fumarole/migration-from-dragons-mouth"
+                    ]
+                  },
                   "solana/streaming/old-faithful-streams"
                 ]
               },
@@ -181,20 +191,20 @@
                 "pages": [
                   "solana/sending-transactions/overview",
                   "solana/sending-transactions/quickstart",
-                  "solana/sending-transactions/priority-fees-api",
                   "solana/sending-transactions/jet-sender",
-                  "solana/sending-transactions/transaction-sending-best-practices",
-                  "solana/sending-transactions/jito-bundles",
+                  "solana/sending-transactions/priority-fees-api",
                   "solana/sending-transactions/metis-swap-api",
-                  "solana/sending-transactions/titan-swap-api"
+                  "solana/sending-transactions/titan-swap-api",
+                  "solana/sending-transactions/jito-bundles",
+                  "solana/sending-transactions/transaction-sending-best-practices"
                 ]
               },
               {
                 "group": "Agents / MCP",
                 "pages": [
                   "solana/agents-mcp/overview",
-                  "solana/agents-mcp/mcp-server",
-                  "solana/agents-mcp/quickstart"
+                  "solana/agents-mcp/quickstart",
+                  "solana/agents-mcp/mcp-server"
                 ]
               },
               {
