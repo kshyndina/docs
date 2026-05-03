@@ -958,39 +958,64 @@ html body div[class*="flex-1"][class*="flex-col"] {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 }
 
-/* The "Ask a question" floating input needs to be pinned to the
-   viewport bottom (not tucked right under pagination), with a proper
-   gap above it, the same 0.5rem rounding as every other rectangle,
-   and side padding so it doesn't crash into the viewport edges. */
+/* The "Ask a question" floating input.
+   - Desktop (lg+): keep Mintlify's native sticky-inside-body
+     positioning so the bar inherits the body content column's
+     width and follows the AI-panel state automatically. Fixed
+     positioning at this width caused the bar to stretch across
+     the full available-after-sidebar area while the body column
+     was only 696px, so the bar drifted right of the content.
+   - Mobile/tablet (<lg): pinned to viewport bottom (the §27 rule
+     and the rules below). */
 html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
-  position: fixed !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100% !important;
-  padding: 0 1.5rem 1rem !important;
   z-index: 30 !important;
 }
-@media (min-width: 1024px) {
-  /* Desktop: respect the sidebar so the input doesn't slide under it */
+@media (max-width: 1023px) {
   html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
-    left: var(--sidebar-w, 18rem) !important;
-    right: var(--assistant-sheet-width, 0px) !important;
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    padding: 0 1.5rem 1rem !important;
+  }
+}
+@media (min-width: 1024px) {
+  /* Native sticky-inside-body. Inherit width from parent column.
+     Mintlify already handles the AI-panel layout shift via its
+     own [data-assistant-state] cascade. */
+  html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
+    position: sticky !important;
+    bottom: 0 !important;
+    left: auto !important;
+    right: auto !important;
+    width: auto !important;
+    max-width: 100% !important;
+    padding: 0 !important;
   }
 }
 .chat-assistant-floating-input,
 .chat-assistant-floating-input [class*="rounded-2xl"],
 .chat-assistant-floating-input [class*="rounded-xl"] {
   border-radius: 0.5rem !important;
-  max-width: 760px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
 }
-/* Prevent content (especially pagination) from sliding under the
-   fixed chat input bar. Reserve ~96px at the bottom of the page. */
-html body [class*="lg:max-w-[696px"],
-html body .mdx-content {
-  padding-bottom: 96px !important;
+@media (max-width: 1023px) {
+  /* Mobile: cap the input width inside the wrapper so it doesn't
+     stretch edge-to-edge on tablets. */
+  .chat-assistant-floating-input {
+    max-width: 760px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+/* Reserve room at the bottom so the body content + pagination don't
+   sit under the floating bar on mobile (where it's fixed). At
+   desktop the bar is sticky inside the body, no reserve needed. */
+@media (max-width: 1023px) {
+  html body [class*="lg:max-w-[696px"],
+  html body .mdx-content {
+    padding-bottom: 96px !important;
+  }
 }
 
 /* ---- 20. Tablet + mobile navbar layout ----------------------------
