@@ -743,14 +743,20 @@ html.dark #navbar kbd {
 .grid.lg\:grid-cols-2.gap-4 > a[class*="rounded-xl"] {
   border-radius: 0.5rem !important;
 }
-/* Split Copy-page button halves: kill the inner-edge corner radius
-   so the seam is straight (left half rounds left, right half rounds
-   right; let the family rule above set the outer-edge radius). */
+/* Split Copy-page button halves: explicit 0.5rem on the outer
+   corners + 0 on the inner edge so the seam is straight. The
+   family-lock rule (§12) doesn't catch these because the buttons
+   carry no rounded-* class — Mintlify ships them with a higher
+   default (rounded-2xl / 16px), so we pin both corners explicitly. */
 #page-context-menu > button:first-child {
+  border-top-left-radius: 0.5rem !important;
+  border-bottom-left-radius: 0.5rem !important;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
 #page-context-menu > button:last-child {
+  border-top-right-radius: 0.5rem !important;
+  border-bottom-right-radius: 0.5rem !important;
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
