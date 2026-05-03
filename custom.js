@@ -78,53 +78,60 @@
     return row;
   }
 
-  function findTabTrigger() {
-    // Match any <button> at mobile whose plain text equals a tab
-    // label. No class requirement — Mintlify's mobile drawer trigger
-    // doesn't always carry `nav-dropdown-trigger`.
-    const buttons = document.querySelectorAll('button');
+  function isVisible(el) {
+    if (!el) return false;
+    if (el.offsetParent === null && getComputedStyle(el).position !== 'fixed') {
+      return false;
+    }
+    const cs = getComputedStyle(el);
+    return cs.display !== 'none' && cs.visibility !== 'hidden';
+  }
+
+  function findVisibleByText(textPredicate) {
+    const buttons = document.querySelectorAll('button, a[role="button"], [role="button"]');
     for (let i = 0; i < buttons.length; i++) {
       const btn = buttons[i];
       if (btn.hasAttribute(PROCESSED_FLAG)) continue;
       const txt = (btn.textContent || '').trim();
-      if (TAB_LABELS.indexOf(txt) !== -1) return btn;
+      if (!textPredicate(txt)) continue;
+      if (!isVisible(btn)) continue;
+      return btn;
     }
     return null;
+  }
+
+  function findTabTrigger() {
+    return findVisibleByText(function (t) {
+      return TAB_LABELS.indexOf(t) !== -1;
+    });
   }
 
   function findChainTrigger() {
-    // The chain selector ("Solana") sits above the tab selector in
-    // the drawer. We anchor the new button row immediately after it.
-    const buttons = document.querySelectorAll('button');
-    for (let i = 0; i < buttons.length; i++) {
-      const txt = (buttons[i].textContent || '').trim();
-      if (CHAIN_LABELS.indexOf(txt) !== -1) return buttons[i];
+    return findVisibleByText(function (t) {
+      return CHAIN_LABELS.indexOf(t) !== -1;
+    });
+  }
+
+  function findCommonAncestor(a, b) {
+    const seen = new Set();
+    let n = a;
+    while (n) {
+      seen.add(n);
+      n = n.parentNode;
+    }
+    n = b;
+    while (n) {
+      if (seen.has(n)) return n;
+      n = n.parentNode;
     }
     return null;
   }
 
-  function findInsertionAnchor(tabBtn) {
-    // Walk up from the tab trigger to find a sibling-group ancestor
-    // — the wrapper that contains both the chain selector and the
-    // tab selector. We want to insert the row inside that wrapper,
-    // after the chain trigger's row.
-    const chain = findChainTrigger();
-    if (!chain) return null;
-    // Find the closest common ancestor of chain + tabBtn.
-    let node = chain;
-    while (node && node !== document.body) {
-      if (node.contains(tabBtn)) {
-        // node is the common ancestor. Find the chain's direct child
-        // of `node` and insert after it.
-        let chainChild = chain;
-        while (chainChild.parentNode && chainChild.parentNode !== node) {
-          chainChild = chainChild.parentNode;
-        }
-        return { parent: node, after: chainChild };
-      }
+  function findChildOfAncestor(node, ancestor) {
+    while (node && node.parentNode && node.parentNode !== ancestor) {
       node = node.parentNode;
     }
-    return null;
+    return node && node.parentNode === ancestor ? node : null;
   }
 
   function replaceTabTrigger() {
@@ -134,19 +141,29 @@
     const currentLabel = (tabBtn.textContent || '').trim();
     const row = buildTabRow(currentLabel);
 
-    // Hide the original trigger
+    // Mark + hide the original trigger so subsequent passes skip it
     tabBtn.setAttribute(PROCESSED_FLAG, 'hidden');
     tabBtn.style.display = 'none';
 
-    // Insert the 4-button row AFTER the Solana chain trigger (Kate's
-    // requested order). Fallback: in-place where the tab trigger sat.
-    const anchor = findInsertionAnchor(tabBtn);
-    if (anchor) {
-      anchor.parent.insertBefore(row, anchor.after.nextSibling);
-    } else {
+    // Place the row AFTER the chain (Solana) trigger's branch.
+    // Falls back to in-place if no chain trigger or no common ancestor.
+    const chainBtn = findChainTrigger();
+    let placed = false;
+    if (chainBtn) {
+      const cca = findCommonAncestor(chainBtn, tabBtn);
+      if (cca) {
+        const chainBranch = findChildOfAncestor(chainBtn, cca);
+        if (chainBranch) {
+          cca.insertBefore(row, chainBranch.nextSibling);
+          placed = true;
+        }
+      }
+    }
+    if (!placed) {
       tabBtn.parentNode.insertBefore(row, tabBtn);
     }
     window[DEBUG_MARKER + '_replacedAt'] = Date.now();
+    window[DEBUG_MARKER + '_placedAfterChain'] = placed;
   }
 
   /* ---- Persist drawer across navigations ------------------------ */

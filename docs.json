@@ -133,15 +133,25 @@
                   "solana/streaming/quickstart",
                   {
                     "group": "Dragon's Mouth gRPC",
-                    "root": "solana/streaming/dragons-mouth/overview-and-quickstart",
+                    "root": "solana/streaming/dragons-mouth/overview",
                     "expanded": false,
                     "pages": [
-                      "solana/streaming/dragons-mouth/overview-and-quickstart",
+                      "solana/streaming/dragons-mouth/overview",
+                      "solana/streaming/dragons-mouth/quickstart",
                       "solana/streaming/dragons-mouth/sdks-and-client-libraries",
                       "solana/streaming/dragons-mouth/deshred-transactions"
                     ]
                   },
-                  "solana/streaming/whirligig-websockets",
+                  {
+                    "group": "Whirligig WebSockets",
+                    "root": "solana/streaming/whirligig/overview",
+                    "expanded": false,
+                    "pages": [
+                      "solana/streaming/whirligig/overview",
+                      "solana/streaming/whirligig/quickstart",
+                      "solana/streaming/whirligig/whirligig-client"
+                    ]
+                  },
                   "solana/streaming/fumarole-reliable-streams",
                   "solana/streaming/old-faithful-streams"
                 ]
@@ -163,14 +173,14 @@
                   "solana/history/overview",
                   "solana/history/quickstart",
                   "solana/history/hydrant",
-                  "solana/history/old-faithful",
                   "solana/history/faithful-streams"
                 ]
               },
               {
                 "group": "Sending transactions",
                 "pages": [
-                  "solana/sending-transactions/overview-and-quickstart",
+                  "solana/sending-transactions/overview",
+                  "solana/sending-transactions/quickstart",
                   "solana/sending-transactions/priority-fees-api",
                   "solana/sending-transactions/jet-sender",
                   "solana/sending-transactions/transaction-sending-best-practices",
@@ -188,7 +198,7 @@
                 ]
               },
               {
-                "group": "Validators",
+                "group": "White label validator",
                 "pages": [
                   "solana/validators/introduction",
                   "solana/validators/vote-account-setup",
