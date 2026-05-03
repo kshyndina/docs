@@ -458,7 +458,8 @@
                     ]
                   }
                 ]
-              }
+              },
+              "pyth/faqs"
             ]
           }
         ]
@@ -480,7 +481,8 @@
                 "pages": [
                   "sui/api/method-placeholder"
                 ]
-              }
+              },
+              "sui/faqs"
             ]
           }
         ]
@@ -500,7 +502,8 @@
                 "pages": [
                   "monad/api/method-placeholder"
                 ]
-              }
+              },
+              "monad/faqs"
             ]
           }
         ]
