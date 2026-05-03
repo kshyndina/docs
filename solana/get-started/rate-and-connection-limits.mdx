@@ -1,7 +1,5 @@
 ---
 title: "Rate and connection limits"
-description: "How Triton enforces request rate, concurrency, and method-specific limits on Solana endpoints. Where to find your live limits and how to handle 429s."
-keywords: ["solana rate limits", "rpc 429", "getProgramAccounts limit", "X-Ratelimit", "triton concurrency"]
 ---
 
 Every Triton endpoint enforces a rate limit, a concurrency cap, and a separate budget for the most expensive Solana RPC methods. This page shows you where to read the live numbers, how the limits combine, and what to do when you hit one.
@@ -11,9 +9,9 @@ Every Triton endpoint enforces a rate limit, a concurrency cap, and a separate b
 | Limit | Default |
 |---|---|
 | Requests per IP | **1,200 per 10 seconds** |
-| Concurrency per IP | Tied to plan; visible in the portal |
+| Concurrency per IP | Visible per endpoint in the portal |
 | Expensive methods (e.g. `getProgramAccounts`, `getTokenAccountsByOwner` at large `dataSize`) | Significantly lower per-IP cap |
-| Streaming connections (gRPC, WS) | Plan-dependent; see [Plans and billing](/solana/get-started/plans-and-billing) |
+| Streaming connections (gRPC, WS) | Per endpoint; see [Plans and billing](/solana/get-started/plans-and-billing) for limits and how to raise them |
 
 <Info>
 "Per IP" means the IP that makes the request, not the endpoint URL. If you're behind a NAT or sharing an IP across many backends, those all share the budget.
@@ -54,7 +52,7 @@ Every JSON-RPC response carries `X-Ratelimit-*` headers. Watch them in your clie
     Spread bursty workloads across the window using a token-bucket or leaky-bucket limiter on your side. The window is fixed at 10 seconds; sending 1,200 requests in the first second wastes the next 9.
   </Step>
   <Step title="If you're hitting it routinely, scale up">
-    Either raise your plan tier (higher per-IP budget on PAYG / committed) or move the workload to a [dedicated node](/solana/dedicated-nodes/overview). Dedicated nodes have custom rate limits negotiated up front.
+    Either raise the per-IP budget by talking to support (we can tune limits on shared if your traffic profile justifies it) or move the workload to a [dedicated node](/solana/dedicated-nodes/overview). Dedicated nodes have custom rate limits negotiated up front.
   </Step>
 </Steps>
 
@@ -80,7 +78,7 @@ Browsers limit the number of concurrent HTTP/2 streams to a single host. If your
 
 ## Streaming connection limits
 
-For Yellowstone gRPC, Whirligig WebSockets, and Fumarole streams, the limit is on **simultaneous connections**, not requests. Each plan has a default; you can raise it via support or by switching to a dedicated tier.
+For Yellowstone gRPC, Whirligig WebSockets, and Fumarole streams, the limit is on **simultaneous connections**, not requests. Each endpoint has a default; you can raise it via support or by switching to dedicated infrastructure.
 
 <Info>
 A single gRPC connection can multiplex many subscriptions. Don't open one connection per filter -- one connection plus many subscribe messages is the right pattern. See the [Dragon's Mouth quickstart](/solana/streaming/dragons-mouth/quickstart) for the canonical multiplex example.
@@ -90,7 +88,7 @@ A single gRPC connection can multiplex many subscriptions. Don't open one connec
 
 <Columns cols={2}>
   <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
-    What each tier includes and how to scale capacity.
+    Per-service rates, invoicing, when to move to dedicated.
   </Card>
   <Card title="Dedicated nodes" icon="server" href="/solana/dedicated-nodes/overview">
     Custom limits, isolated capacity, and dedicated regions.

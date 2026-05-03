@@ -1,106 +1,90 @@
 ---
 title: "Plans and billing"
-description: "Triton Solana plans: pay-as-you-go, committed, and dedicated. What you get, how you pay, and when to upgrade."
-keywords: ["triton pricing", "solana rpc pricing", "payg", "committed plan", "dedicated node solana", "das api pricing"]
 ---
 
-Triton has three ways to pay: **PAYG** (default), **committed** (pre-paid credit pool, discounted), and **dedicated** (your own node). Pick PAYG to start; switch later without re-provisioning.
+Triton has **two billing methods** and **two infrastructure types**. Pick one of each and you have your setup.
 
-## Compare plans
+| | PAYG | Invoiced |
+|---|---|---|
+| **Shared infrastructure** | Self-onboard, pay as you go. Default for most teams. | Same shared pool, billed monthly via invoice. |
+| **Dedicated infrastructure** | Available on request. | Most dedicated customers are here -- monthly invoice, custom sizing. |
 
-| | PAYG | Committed | Dedicated |
-|---|---|---|---|
-| **Best for** | Trying things out, dev environments, low-volume production | Steady production traffic | Latency-sensitive trading, isolated capacity, custom rate limits |
-| **Billing** | Per-request + per-CU on shared pool | Pre-pay credits monthly at a discount | Hourly per node + add-ons |
-| **Rate limit** | Default 1,200 req / 10s per IP | Higher per-IP budget | Custom (negotiated) |
-| **Streaming connections** | Limited per plan | Higher per plan | Custom |
-| **Region pinning** | Closest available, automatic | Same | You pick |
-| **Setup time** | Instant | Instant | A few hours (provisioning) |
+Either axis can be combined. PAYG is the fastest start; invoicing is the standard for procurement-driven companies. Shared is fine for the vast majority of workloads; dedicated is for trading systems, very high RPS, or custom Geyser configurations.
 
-## How PAYG works
+## Getting started: $125 prepaid deposit
 
-Pay only for what you use. Two meters:
+A $125 prepaid, non-refundable deposit kicks off your account. The deposit is **valid for up to one year** and burns down as you use services. Top up at any time; unused balance carries over until the year is up.
 
-1. **Per request** -- a base price per RPC call, with multipliers for expensive methods (`getProgramAccounts`, `getTokenAccountsByOwner`, etc.).
-2. **Per compute unit** -- some methods scale with the data they process. The portal's billing dashboard shows the cost split.
+There is no free trial. The deposit replaces it -- one $125 deposit gives you a year of testing room with the same account, endpoint, and tokens you'd ship to production.
 
-Add-on pricing for specialised products:
+<Info>
+Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up). The flow walks you through a $125 deposit and provisions your first endpoint automatically.
+</Info>
 
-| Product | Price |
+## What you pay per service
+
+Once your deposit lands, you draw down at these per-service rates. All of them carry the same $0.08 / GB egress charge; the per-query cost varies by service.
+
+| Service | Rate |
 |---|---|
-| **DAS API** (NFTs, compressed assets) | $50 per million requests |
-| **Hydrant Archive** (historical queries) | $10 per million queries; minimum $10/month if used |
+| **All streaming services** (Yellowstone gRPC, Whirligig, Fumarole, Cascade) | `$0.08 / GB` |
+| **Standard RPC calls** (all chains), gTLA, Steamboat (`getProgramAccounts` indexes), recent ledger (last 3 epochs) | `$0.08 / GB` + `$10 / million queries` |
+| **Historical ledger** (Hydrant) | `$0.08 / GB` + `$25 / million queries` |
+| **Account queries** (Metaplex DAS, Photon ZK compression) | `$0.08 / GB` + `$50 / million queries` |
+| **Metis swap API** | `$0.08 / GB` + `$80 / million queries` |
+| **Titan swap API** | `$0.08 / GB` (subject to change) |
 
-## How committed works
+Streaming is genuinely flat -- subscribe at any volume, you pay only for what you consume.
 
-Pre-pay a credit pool monthly at a per-credit discount over PAYG. Credits roll within the month. Good fit when:
+## Invoicing
 
-- Your traffic is predictable.
-- You're doing more than $200--300/month on PAYG (the break-even depends on method mix).
-- You want a higher per-IP rate-limit budget without going to a dedicated node.
+Same pricing, but billed monthly with a **$125 minimum invoice** instead of prepaid drawdown. Use this when:
 
-Switching is one click in the portal. PAYG fallback kicks in if you exhaust your monthly credits.
+- You need a procurement-friendly contract (NET-30, NET-60).
+- Finance prefers monthly invoices over auto-deductions.
+- You're a high-volume customer where prepaid would mean managing very large balances.
 
-## How dedicated works
+Sign up via the same flow and choose **Invoiced** when prompted, or [reach out to support](/solana/get-started/account-management/reach-out-to-support) and we'll switch you over.
 
-Your own validator(s) and edge router(s), rented hourly. Use cases:
+## Dedicated infrastructure
 
-- **Trading systems** that need `<50ms` latency to a specific region and zero noisy-neighbour effects.
-- **Heavy `getProgramAccounts`** workloads that would saturate shared pools.
-- **Custom configurations** -- specific Geyser plugins, larger gRPC fan-out, custom filters.
+A dedicated stack means your own validator(s), edge router(s), and gRPC streamers, sized to your workload. Most dedicated customers are on monthly invoicing, but PAYG dedicated is available on request.
 
-Speak to support for sizing. We'll size based on:
+When to consider dedicated:
 
-- Expected RPS and method mix.
-- Streaming subscription count and filter complexity.
-- Region requirements.
-- Add-ons: SWQoS, Steamboat, Hydrant.
+- **Trading systems** with strict latency budgets (`<50ms`) to a specific region.
+- **Heavy `getProgramAccounts`** workloads that would saturate the shared pool.
+- **High-cardinality streaming** with custom Geyser plugins or filter logic.
+- **Custom rate limits** beyond what the shared pool offers.
+
+Sizing happens with your account manager. Talk to support to start that conversation.
+
+## Cancellation
+
+| | PAYG (shared) | PAYG (dedicated) | Invoiced |
+|---|---|---|---|
+| **Notice period** | None -- credits expire after 1 year if unused, otherwise burn down | 1 calendar month notice | 1 calendar month notice |
+| **Cancel from** | Portal or support | Support | Support |
+
+PAYG on shared is the lightest commitment: stop using the service and the credits eventually expire. Dedicated and invoiced both require a calendar-month notice so we can wind the infrastructure down cleanly.
 
 ## Payment methods
 
-| Method | Notes |
-|---|---|
-| **Credit / debit card** | via Coinflow. Auto-renewal supported. |
-| **USDC** | SPL on Solana, ERC-20 on Ethereum. |
-| **hel.io** | One-click payment widget. |
-| **Wire transfer** | GBP and USD. |
-
-<Info>
-For payment-method changes or invoice queries, open the **Billing** tab in the portal or [reach out to support](/solana/get-started/account-management/reach-out-to-support).
-</Info>
-
-## How to top up credits
-
-Step-by-step in [How to top up credits](/solana/get-started/account-management/how-to-top-up-credits). Auto-top-up is recommended for production accounts.
-
-## Cancellation and notice
-
-Month-to-month billing on PAYG and committed. Dedicated nodes require **one calendar month notice** to cancel. Cancel from the portal or via support.
-
-## When to upgrade
-
-<AccordionGroup>
-  <Accordion title="I'm hitting 429s during traffic spikes" icon="gauge">
-    First, check whether you're hitting the **general** budget or a **method-specific** one (the response headers tell you). If it's general, a higher PAYG / committed tier raises the per-IP budget. If it's method-specific (e.g. `getProgramAccounts`), move that workload to [Steamboat](/solana/reading-state/steamboat-indexed-accounts) or a dedicated node.
-  </Accordion>
-  <Accordion title="My latency is inconsistent under load" icon="zap">
-    Shared endpoints have noisy-neighbour effects. A dedicated node in your closest region eliminates this. Trading systems should usually be dedicated from day one.
-  </Accordion>
-  <Accordion title="I need a Geyser plugin or gRPC config that isn't on shared" icon="puzzle">
-    Dedicated only. Talk to support; we'll provision a node with your config baked in.
-  </Accordion>
-  <Accordion title="My DAS / Hydrant usage is over $500/month" icon="archive">
-    Talk to support about a committed deal -- we typically discount when usage is steady.
-  </Accordion>
-</AccordionGroup>
+Card via Coinflow, USDC (SPL on Solana, ERC-20 on Ethereum), hel.io, and wire (USD / GBP) for invoiced customers. See [How to top up credits](/solana/get-started/account-management/how-to-top-up-credits) for the per-method walkthrough.
 
 ## What's next
 
 <Columns cols={2}>
-  <Card title="Account management" icon="user-cog" href="/solana/get-started/account-management/platform-overview">
-    Add team members, manage tokens, set auth policies.
+  <Card title="Quickstart" icon="rocket" href="/solana/get-started/quickstart">
+    Sign up, deposit, get an endpoint, send your first request.
   </Card>
-  <Card title="Rate limits in detail" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
-    Headers, per-method budgets, and how to read your live limits.
+  <Card title="Account management" icon="user-cog" href="/solana/get-started/account-management/platform-overview">
+    Where everything lives in the portal.
+  </Card>
+  <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
+    Per-endpoint rate limits and 429 handling.
+  </Card>
+  <Card title="Dedicated nodes" icon="server" href="/solana/dedicated-nodes/overview">
+    When and how to move to dedicated.
   </Card>
 </Columns>

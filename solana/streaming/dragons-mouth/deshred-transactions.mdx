@@ -1,7 +1,5 @@
 ---
 title: "Deshred transactions"
-description: "The fastest way to see Solana transactions: reconstruct transactions from validator shreds before the slot finalises."
-keywords: ["deshred", "shred reconstruction", "solana shreds", "lowest latency transactions", "mev"]
 ---
 
 Deshred is a Triton extension to Yellowstone gRPC that delivers transactions reconstructed directly from network shreds, **before** the slot finalises. It's the lowest-latency way to see a transaction on Solana -- typically 100--300ms ahead of a normal `transactions` subscription, and ahead of every WebSocket-based RPC.
@@ -122,7 +120,7 @@ sequenceDiagram
 
 ## Availability
 
-Deshred is enabled on dedicated nodes by default and as an add-on on committed plans. Not available on PAYG. [Contact support](/solana/get-started/account-management/reach-out-to-support) to enable.
+Deshred is available on dedicated by default and as an add-on for high-volume shared customers. [Contact support](/solana/get-started/account-management/reach-out-to-support) to enable.
 
 ## What's next
 

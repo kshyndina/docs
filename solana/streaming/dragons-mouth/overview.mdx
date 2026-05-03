@@ -1,39 +1,45 @@
 ---
-title: "Dragon's Mouth gRPC overview"
-description: "Triton's high-throughput Solana streaming protocol. Intra-slot account and transaction updates over gRPC, powered by Yellowstone Geyser."
-keywords: ["dragons mouth", "yellowstone grpc", "geyser", "solana streaming", "intra-slot updates", "grpc subscribe"]
+title: "Overview"
 ---
 
-Dragon's Mouth is Triton's gRPC stream of Solana account and transaction data. It's the same wire protocol as **Yellowstone gRPC** -- the open-source Geyser plugin Triton wrote and maintains -- with Triton's edge routing and SWQoS layered on top.
+Dragon's Mouth is Triton's gRPC stream of Solana account, transaction, slot, and block data. It's powered by **Yellowstone gRPC** -- the open-source Geyser plugin Triton wrote and maintains, used today by most of the Solana ecosystem (block explorers, MEV searchers, indexers, trading systems, oracle pipelines).
 
-If you need real-time Solana data on a backend, this is what you use.
+If you need real-time Solana data on a backend, this is the lowest-latency, highest-throughput, server-side filterable option Triton offers. It's enabled by default on every Triton subscription -- shared or dedicated.
 
-## What you get
+## Why teams use it
 
-- **Intra-slot updates.** Account and transaction changes stream as they happen, often 200--400ms ahead of what WebSocket-based RPC sees.
-- **Filter at the server.** Subscribe to specific accounts, programs, or transaction signatures. The server only sends what matches.
-- **One connection, many subscriptions.** Multiplex hundreds of filters over a single bidirectional gRPC stream.
-- **Backpressure-aware.** The server respects flow control; slow consumers don't lose updates, they just receive them as they can.
-- **Battle-tested.** Yellowstone is used by most of the Solana ecosystem -- block explorers, MEV searchers, indexers, trading systems.
+- **Intra-slot updates.** Account and transaction changes stream as the leader produces them, often **200--400ms ahead** of what WebSocket-based RPC can see. For trading and MEV, that gap is the difference between catching the move and missing it.
+- **Server-side filters.** Subscribe by account, by program owner, by transaction signature, by `memcmp` / `dataSize` / token-account-state, by inclusion or exclusion of accounts. The server only sends what matches; you don't pay bandwidth for events you'd discard.
+- **One connection, many filters.** A single bidirectional gRPC stream multiplexes hundreds of independent subscriptions. Re-send `SubscribeRequest` at any time to mutate filters without reconnecting.
+- **Compressed wire.** zstd over HTTP/2 keeps even full-chain subscriptions fitting on commodity bandwidth.
+- **Backpressure-aware.** Slow consumers don't lose messages; the server respects flow control.
+- **Replay-from-slot.** Reconnect with `from_slot: <N>` and the stream resumes from the slot you specify, replaying buffered updates up to a recent horizon. Pair with [Fumarole](/solana/streaming/fumarole/overview) for unbounded historical backfill.
 
-## When to use it (and when not to)
+## When to use Dragon's Mouth (and when not to)
 
 <Tabs>
   <Tab title="Use Dragon's Mouth when">
-    - You're on a backend that can run Rust / Go / Node (with the proper client) / Python / Java.
+    - You're on a backend that can run Rust, Go, Node (with the Triton NAPI client), Python, or Java.
     - You need updates faster than WebSocket can deliver.
-    - You're filtering by program, account, or signature, and you want server-side filtering instead of client-side.
-    - You're building: trading bots, MEV searchers, indexers, accounting systems, real-time dashboards (server-rendered).
+    - You want server-side filtering by program / account / signature / `memcmp` instead of pulling everything and filtering client-side.
+    - You're building: trading bots, MEV searchers, indexers, accounting systems, real-time dashboards (server-rendered), oracle pipelines.
   </Tab>
   <Tab title="Use Whirligig WebSocket instead when">
-    - You're in a browser. gRPC isn't browser-friendly; Whirligig is a drop-in replacement for Solana's standard WebSocket API and runs anywhere.
+    - You're in a browser. gRPC isn't browser-friendly. Whirligig is a drop-in replacement for Solana's standard WebSocket API and runs anywhere.
     - You're already using `accountSubscribe` / `signatureSubscribe` / `logsSubscribe` and want to upgrade with zero code changes.
+    - We recommend Whirligig over plain WebSockets even when both work, because Whirligig sits on the same Geyser pipeline as Dragon's Mouth -- same intra-slot advantage.
     - See [Whirligig WebSockets](/solana/streaming/whirligig/overview).
   </Tab>
   <Tab title="Use Fumarole instead when">
-    - You can't afford to lose data on disconnect (compliance, accounting, analytics).
-    - You need historical backfill -- "give me everything since slot N" -- not just live-from-now.
+    - You can't afford to lose data on disconnect (compliance, accounting, full-history analytics).
+    - You need historical backfill -- "give me everything since slot N from a week ago" -- not just live-from-now or near-now replay.
+    - Fumarole tracks a delivery cursor server-side; reconnect from any cursor and pick up exactly where you left off, with no gaps.
     - See [Fumarole reliable streams](/solana/streaming/fumarole/overview).
+  </Tab>
+  <Tab title="Use Deshred when">
+    - You need transactions **before** the slot finalises -- 100--300ms ahead of standard `transactions` filter.
+    - You can handle incomplete information (no execution result, no commitment level).
+    - See [Deshred transactions](/solana/streaming/dragons-mouth/deshred-transactions).
   </Tab>
 </Tabs>
 
@@ -48,30 +54,39 @@ sequenceDiagram
     participant Validator
     Client->>Edge: gRPC connect (zstd, x-token)
     Edge->>Geyser: route by region
-    Client->>Geyser: SubscribeRequest (accounts, transactions, slots, ...)
-    Validator->>Geyser: account / tx update (intra-slot)
+    Client->>Geyser: SubscribeRequest (filters)
+    Validator->>Geyser: account / tx / block / slot update (intra-slot)
     Geyser->>Geyser: apply server-side filters
     Geyser-->>Edge: SubscribeUpdate (matched only)
     Edge-->>Client: SubscribeUpdate
+    Note over Client,Geyser: Send SubscribeRequest again at any<br/>time to mutate filters in place.
 ```
 
-A single bidirectional gRPC stream. The client sends `SubscribeRequest` once, then receives `SubscribeUpdate` messages as matching events occur. The client can re-send `SubscribeRequest` at any time to mutate the filter set without disconnecting.
+A single bidirectional gRPC stream:
+
+1. Client opens `Subscribe()`, sends an initial `SubscribeRequest`.
+2. Server starts pushing `SubscribeUpdate` messages whose contents match the filter.
+3. Client can re-send `SubscribeRequest` mid-stream -- the server applies the new filter immediately without disconnecting.
+4. Client can send `Ping` keep-alives. Server responds with `Pong`.
+5. On reconnect, client can send `from_slot: <N>` to replay from a recent slot.
 
 ## What you can subscribe to
 
-| Filter | What it matches |
+| Filter type | What it matches |
 |---|---|
-| `accounts` | Updates to specific account public keys, or all accounts owned by a program |
-| `transactions` | Transactions touching specific accounts, signed by specific keys, or matching signatures |
+| `accounts` | Updates to specific account public keys, all accounts owned by a program, or accounts matching `memcmp` / `dataSize` / token-account-state filters |
+| `accounts_data_slice` | Bandwidth optimisation -- receive only the offset+length you actually need from each account update |
+| `transactions` | Transactions touching specific accounts (`account_include`), excluding accounts (`account_exclude`), requiring all of (`account_required`), filtered by `vote` / `failed`, or matching a specific `signature` |
+| `transactions_status` | Same filters as `transactions` but pre-execution -- the deshred path. See [Deshred transactions](/solana/streaming/dragons-mouth/deshred-transactions). |
 | `slots` | Slot-progression events (`processed`, `confirmed`, `finalized`) |
-| `blocks` | Full block metadata as slots finalise |
-| `entries` | Lower-level entry / shred metadata (advanced) |
-| `block_meta` | Block-level summary (timestamp, leader, parent, etc.) |
+| `blocks` | Full block payloads with optional `include_transactions`, `include_accounts`, `account_include` filtering |
+| `blocks_meta` | Block summary only -- timestamp, leader, parent, hash. Cheap firehose for "follow tip" pipelines. |
+| `entry` | Lower-level entry / shred metadata (advanced) |
 
 ## Performance and infrastructure requirements
 
 <Warning>
-Yellowstone gRPC is designed for production backends with serious network capacity. Hobby-grade infrastructure will drop messages and lag.
+Yellowstone gRPC is designed for production backends with serious network capacity. Hobby-grade infrastructure will drop messages and lag behind.
 </Warning>
 
 | Requirement | Why |
@@ -79,29 +94,30 @@ Yellowstone gRPC is designed for production backends with serious network capaci
 | **5 Gbps network** for full-chain subscriptions | Solana is high-throughput; an unfiltered stream of all account writes saturates anything less |
 | **RTT to Triton region ≤ 50ms** | gRPC flow control kicks in past this; you see lag and backpressure |
 | **zstd compression enabled** | 4--6x bandwidth reduction; without it you'll saturate even gigabit links |
-| **HTTP/2 adaptive window enabled** | Default tonic / NodeJS settings throttle large streams; adaptive window unsticks them |
+| **HTTP/2 adaptive window enabled** | Default tonic / Node settings throttle large streams; adaptive window unsticks them |
+| **Initial connection / stream window 8 MiB / 4 MiB** | Default 64 KiB window stalls on full-chain volume |
 
-For filtered subscriptions (e.g. one program, a few accounts), bandwidth requirements drop dramatically. Most teams run filtered streams comfortably on 100 Mbps.
+For *filtered* subscriptions (one program, a few accounts), bandwidth requirements drop dramatically. Most teams run filtered streams comfortably on 100 Mbps.
 
 ## Authentication
 
-gRPC connections authenticate with the same `x-token` you use for HTTP RPC. Pass it as a metadata key on the gRPC connection:
+gRPC connections authenticate with the same secret token you use for HTTP RPC. Pass it as an `x-token` metadata key on the connection:
 
 ```
 metadata: { "x-token": "<your-secret-token>" }
 ```
 
-Or for the Yellowstone reference clients, pass `--x-token <token>` on the command line.
+For the Yellowstone reference clients, pass `--x-token <token>` on the command line.
 
 ## Cost
 
-gRPC streaming is included in committed and dedicated plans. PAYG charges per active connection-hour and per delivered byte (zstd-compressed) -- check the live cost in the portal under **Usage → Streaming**.
+Dragon's Mouth is available on **all** Triton subscriptions -- shared and dedicated, PAYG and invoiced. Streaming bills at `$0.08 / GB` of egress (zstd-compressed). Watch the live cost in the portal under **Usage → Streaming**.
 
 ## Where to next
 
 <Columns cols={2}>
   <Card title="Quickstart" icon="rocket" href="/solana/streaming/dragons-mouth/quickstart">
-    Connect and stream your first updates in five minutes.
+    Subscribe end-to-end. Reference client first, then code, with every common filter pattern.
   </Card>
   <Card title="SDK clients setup" icon="package" href="/solana/streaming/dragons-mouth/sdks-and-client-libraries">
     Rust, Go, Node, Python, Java -- install and connect.
@@ -109,7 +125,7 @@ gRPC streaming is included in committed and dedicated plans. PAYG charges per ac
   <Card title="Deshred transactions" icon="zap" href="/solana/streaming/dragons-mouth/deshred-transactions">
     Sub-slot transaction reconstruction for the lowest-latency consumers.
   </Card>
-  <Card title="API reference: gRPC subscribe" icon="code" href="/solana-api/grpc/subscribe">
-    Full subscription schema and method reference.
+  <Card title="Fumarole reliable streams" icon="anchor" href="/solana/streaming/fumarole/overview">
+    Persistent streams with backfill -- no message loss.
   </Card>
 </Columns>

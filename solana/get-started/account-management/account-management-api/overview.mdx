@@ -1,7 +1,5 @@
 ---
-title: "Account management API overview"
-description: "Programmatically provision Triton endpoints, rotate tokens, manage allowlists, and invite teammates over a REST API."
-keywords: ["triton api", "account management api", "provision endpoint", "rotate token api", "allowlist api"]
+title: "Overview"
 ---
 
 Everything you can do in the portal -- create endpoints, rotate tokens, manage origin allowlists, change rate limits, invite teammates -- is also available as a REST API. Use it for IaC, CI pipelines, automated rotation, and provisioning per-customer endpoints in your own product.
@@ -50,7 +48,7 @@ flowchart TB
 - **Members** belong to the organisation.
 - **Endpoints** belong to the organisation; everything below belongs to an endpoint.
 - **Tokens** authenticate RPC requests against an endpoint.
-- **Rate tiers** describe the limits on an endpoint (read-only on PAYG; configurable on committed and above).
+- **Rate tiers** describe the limits on an endpoint (configurable on dedicated; read-only on shared by default).
 - **Subscriptions** + **subscription types** describe what plans are attached.
 - **Address watch lists** are server-side filters for streaming endpoints.
 

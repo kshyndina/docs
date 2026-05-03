@@ -1,7 +1,5 @@
 ---
 title: "Platform overview"
-description: "Tour of the Triton customer portal: organisations, endpoints, tokens, billing, members, and audit log."
-keywords: ["triton portal", "customer dashboard", "endpoint management", "organisation", "team members"]
 ---
 
 The Triton customer portal is where you provision endpoints, manage tokens, monitor usage, and pay invoices. This page is a quick tour so you know where to find each thing.
@@ -12,7 +10,7 @@ Sign in at [customers.triton.one](https://customers.triton.one).
 
 <Columns cols={2}>
   <Card title="Endpoints" icon="link">
-    Provision, monitor, and configure every endpoint your organisation has -- shared, committed, and dedicated.
+    Provision, monitor, and configure every endpoint your organisation has -- shared and dedicated.
   </Card>
   <Card title="Auth" icon="key">
     Manage tokens, public-endpoint origin allowlists, and IP allowlists per endpoint.
@@ -21,7 +19,7 @@ Sign in at [customers.triton.one](https://customers.triton.one).
     Live request count, RPS, error rate, and cost-to-date. Drilldowns by method.
   </Card>
   <Card title="Billing" icon="credit-card">
-    Plans, payment methods, invoices, and credit balance.
+    Deposits, top-ups, payment methods, invoices, and credit balance.
   </Card>
   <Card title="Members" icon="users">
     Invite teammates, set roles (owner, admin, viewer), rotate credentials.
@@ -46,7 +44,7 @@ flowchart TB
 ```
 
 - **Organisation** is the billing root. One payment method, one invoice. Members are scoped here.
-- **Endpoints** belong to the organisation. Each has its own URL, region, plan, and limits.
+- **Endpoints** belong to the organisation. Each has its own URL, region, infrastructure type (shared or dedicated), and limits.
 - **Tokens / allowlists** belong to the endpoint. Multiple tokens per endpoint so you can rotate without downtime.
 
 ## Where to do common things
@@ -61,18 +59,18 @@ flowchart TB
 | Top up credits | **Billing → Credits → Top up** | 1m |
 | See live usage and cost | **Usage** (top-right card on dashboard) | instant |
 | Rotate a token | **Auth → Token → Rotate** | 30s |
-| Lower / raise rate limit (committed and above) | **Endpoints → \<endpoint\> → Limits** | 30s |
+| Lower / raise rate limit (where configurable) | **Endpoints → \<endpoint\> → Limits** | 30s |
 | Open a support ticket | **Help → New request** | 1m |
 
 ## Per-endpoint pages
 
 Each endpoint has six tabs:
 
-1. **Overview** -- region, plan, status, recent uptime.
+1. **Overview** -- region, infrastructure type, status, recent uptime.
 2. **Auth** -- tokens and allowlists.
 3. **Usage** -- per-method counts, error rate, cost.
 4. **Methods** -- which JSON-RPC and gRPC methods are enabled / cost-multiplied.
-5. **Limits** -- rate, concurrency, per-method overrides (read-only on PAYG; editable on committed and above).
+5. **Limits** -- rate, concurrency, per-method overrides (configurable on dedicated; read-only on shared by default -- support can tune).
 6. **Logs** -- recent requests with timestamp, method, status, and latency. Useful for debugging 429s and unusual responses.
 
 ## What's next

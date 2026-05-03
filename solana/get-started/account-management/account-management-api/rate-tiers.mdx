@@ -1,10 +1,8 @@
 ---
 title: "Rate tiers"
-description: "Read or configure per-endpoint rate limits, concurrency, and method-specific overrides via the Account Management API."
-keywords: ["rate tier api", "rate limit configuration", "method override", "concurrency cap"]
 ---
 
-The Rate tiers resource exposes the per-endpoint rate-limit configuration. Read-only on PAYG; configurable on committed and dedicated plans.
+The Rate tiers resource exposes the per-endpoint rate-limit configuration. Configurable on dedicated; read-only on shared by default (support can tune on request).
 
 Resource path: `/v1/endpoints/{endpoint_id}/rate-tier`
 
@@ -49,9 +47,9 @@ curl https://api.triton.one/v1/endpoints/ep_abc123/rate-tier \
 }
 ```
 
-`configurable: false` on PAYG. Use the portal for committed-and-above edits, or the API call below.
+`configurable: false` on shared. Dedicated endpoints have `configurable: true` and accept the PATCH below.
 
-## Update the rate tier (committed and above)
+## Update the rate tier (dedicated)
 
 ```
 PATCH /v1/endpoints/{endpoint_id}/rate-tier
@@ -82,7 +80,7 @@ curl https://api.triton.one/v1/endpoints/ep_abc123/rate-tier \
 The change takes effect within seconds across the edge fleet.
 
 <Warning>
-You can't raise limits beyond what your plan allows. Trying to set `requests_per_window` above the committed-plan ceiling returns `403` with the max value in the error body. Higher limits require a plan upgrade or dedicated.
+You can't raise limits beyond what your endpoint's ceiling allows. Trying to set `requests_per_window` above the ceiling returns `403` with the max value in the error body. Higher limits require a plan upgrade or dedicated.
 </Warning>
 
 ## Reset to plan defaults
@@ -95,7 +93,7 @@ Removes all method-specific overrides and resets `general` and `streaming` to pl
 
 ## Bursting
 
-Some plans include short-burst allowance above the steady-state limit. The `general` object then includes a `burst` block:
+Some endpoints include short-burst allowance above the steady-state limit. The `general` object then includes a `burst` block:
 
 ```json
 {
@@ -125,6 +123,6 @@ The Account Management API exposes the *configuration*. The actual per-second co
     Conceptual overview, headers, 429 handling.
   </Card>
   <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
-    What each plan ceiling actually is.
+    Per-service rates and how to choose between shared and dedicated.
   </Card>
 </Columns>

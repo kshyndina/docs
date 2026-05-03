@@ -1,86 +1,87 @@
 ---
-title: "Solana RPC quickstart"
-description: "Provision a Triton Solana endpoint and send your first request in five minutes. Curl, JavaScript, Python, and Rust examples."
-keywords: ["solana quickstart", "triton endpoint", "first rpc call", "getSlot", "rpcpool"]
+title: "Quickstart"
 ---
 
-From signup to a working `getSlot` call in five minutes. Pick your language at the bottom.
+Five minutes from "I want a Solana endpoint" to "my first `getSlot` call works".
 
 ## Before you start
 
 You need:
 
-- A free [Triton account](https://customers.triton.one/users/sign-up).
-- A payment method (PAYG by default; we'll cover [plans](/solana/get-started/plans-and-billing) later).
+- A signed-up [Triton account](https://customers.triton.one/users/sign-up).
+- A **$125 prepaid deposit** (the minimum, valid for up to one year). The deposit replaces a free trial; it gives you a real production-grade endpoint immediately.
 - A terminal with `curl`, or your language runtime of choice.
 
-## Provision an endpoint
+## Sign up and provision your endpoint
+
+The signup flow at [customers.triton.one](https://customers.triton.one) walks you through deposit and endpoint creation in one go.
 
 <Steps>
-  <Step title="Sign up and verify">
-    Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up). Verify your email. The customer portal opens automatically.
+  <Step title="Sign up">
+    Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up) with your email. You'll verify by clicking the link we send you.
   </Step>
-  <Step title="Add a payment method">
-    Open **Billing** in the portal sidebar. Add a card or set up USDC / wire. PAYG is enabled by default, so you only pay for what you use.
-    <Tip>
-      If you're not sure which plan to start on, leave it on PAYG. You can switch to a committed plan later without re-provisioning the endpoint.
-    </Tip>
+  <Step title="Deposit $125">
+    Pick a payment method (card via Coinflow, USDC, hel.io, or wire). The minimum deposit is $125 and it stays valid for up to one year. Top-ups can be any amount once you're set up.
   </Step>
-  <Step title="Get an endpoint">
-    Click **Get an endpoint**, pick **Solana mainnet**, choose your closest region, and click **Create**. The portal generates two things you need:
-    - **Endpoint URL** in the form `https://<your-app>.mainnet.rpcpool.com`
-    - **Secret token** (a long random string)
+  <Step title="Pick your endpoint">
+    Choose **Solana mainnet** (or devnet for testing), pick the closest region, and the portal provisions instantly. You'll land on the endpoint's page with two things you need:
+    - **Endpoint URL** in the form `<your-endpoint>.mainnet.rpcpool.com`
+    - **Secret token** -- a long random string
 
-    Both are visible in the portal under your endpoint's **Auth** tab.
+    <Info>
+    Standard users can't create new endpoints or tokens themselves -- those actions are admin-only. If you're joining an existing organisation, ask the admin to create the endpoint and share access. If you're the first signup, you're automatically the owner.
+    </Info>
   </Step>
-  <Step title="Decide how to authenticate">
-    You have two ways to call the endpoint:
-    - **Token in URL** (backend only): `https://<your-app>.mainnet.rpcpool.com/<token>`
-    - **Bearer header** (backend or origin-allowlisted browser): send `Authorization: Bearer <token>`
+  <Step title="Pick the right URL pattern for where your code runs">
+    Triton has three canonical URL patterns. Use the one matching your code:
 
-    Use a public endpoint with an origin allowlist for browser apps -- never put a token in frontend code.
+    | Where | URL pattern | Auth |
+    |---|---|---|
+    | **Frontend (browser)** | `https://<endpoint>.mainnet.rpcpool.com` (no token) | Origin allowlist set in portal |
+    | **Backend (Rust, Go, Node, Python)** | `https://<endpoint>.mainnet.rpcpool.com/<token>` | Token in URL path |
+    | **gRPC streaming** | `<endpoint>.mainnet.rpcpool.com:443` + `x-token` metadata | Token in `x-token` gRPC metadata |
+
+    Never put a token in frontend code -- it's visible to anyone with devtools. See [Auth and security](/solana/get-started/account-management/auth-and-security-best-practices) for the full pattern.
   </Step>
 </Steps>
 
 ## Send your first request
 
-The simplest test: call `getSlot`. It returns the current Solana slot number and confirms the endpoint is reachable.
+Call `getSlot`. It returns the current Solana slot number and confirms the endpoint is live.
 
 <CodeGroup>
 
 ```bash curl
-curl https://<your-app>.mainnet.rpcpool.com/<token> \
+curl https://<endpoint>.mainnet.rpcpool.com/<token> \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}'
 ```
 
 ```javascript node-fetch
-const ENDPOINT = 'https://<your-app>.mainnet.rpcpool.com/<token>';
+const ENDPOINT = 'https://<endpoint>.mainnet.rpcpool.com/<token>';
 
 const res = await fetch(ENDPOINT, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'getSlot' })
 });
-const json = await res.json();
-console.log(json.result);
+console.log((await res.json()).result);
 ```
 
 ```javascript web3.js
 import { Connection } from '@solana/web3.js';
 
 const connection = new Connection(
-  'https://<your-app>.mainnet.rpcpool.com/<token>',
+  'https://<endpoint>.mainnet.rpcpool.com/<token>',
   'confirmed'
 );
-const slot = await connection.getSlot();
-console.log(slot);
+console.log(await connection.getSlot());
 ```
 
 ```python python
 import requests
 
-ENDPOINT = 'https://<your-app>.mainnet.rpcpool.com/<token>'
+ENDPOINT = 'https://<endpoint>.mainnet.rpcpool.com/<token>'
 
 r = requests.post(ENDPOINT, json={
     'jsonrpc': '2.0', 'id': 1, 'method': 'getSlot'
@@ -92,57 +93,47 @@ print(r.json()['result'])
 use solana_client::rpc_client::RpcClient;
 
 let client = RpcClient::new(
-    "https://<your-app>.mainnet.rpcpool.com/<token>".to_string()
+    "https://<endpoint>.mainnet.rpcpool.com/<token>".to_string()
 );
-let slot = client.get_slot()?;
-println!("{}", slot);
+println!("{}", client.get_slot()?);
 ```
 
 </CodeGroup>
-
-You should get back a JSON response with the current slot number, e.g.:
 
 ```json
 { "jsonrpc": "2.0", "result": 311340987, "id": 1 }
 ```
 
 <Check>
-You're connected. The slot number changes every ~400ms; run the call again and you'll see it tick.
+You're connected. Slot ticks every ~400ms; run again and the number changes.
 </Check>
 
-## Hook up web3.js with connection pooling
+## Connection pooling for web3.js (Node.js)
 
-If you're using `@solana/web3.js` from Node.js for any meaningful traffic, configure connection pooling at app startup. Without this, the default `undici` client exhausts ephemeral ports under concurrency.
+If you use `@solana/web3.js` from Node.js for any meaningful traffic, configure connection pooling at app startup. Without this, the default `undici` client exhausts ephemeral ports under concurrency. This applies to every Solana RPC provider, not just Triton.
 
 ```javascript
 import { setGlobalDispatcher, Agent } from 'undici';
 
 setGlobalDispatcher(new Agent({
-  connections: 50,        // start small, raise if you saturate
+  connections: 50,
   pipelining: 1,
   keepAliveTimeout: 60_000,
   keepAliveMaxTimeout: 300_000,
 }));
 ```
 
-<Info>
-Same advice applies to Helius and any Solana RPC provider -- it's a `web3.js`/`undici` issue, not a Triton-specific one. We just bring it up here because it bites every team eventually.
-</Info>
-
 ## Common first-call issues
 
 <AccordionGroup>
   <Accordion title="401 Unauthorized" icon="lock">
-    The token is wrong, or you're calling a public endpoint from an origin not on its allowlist. Re-check the token in the portal under **Auth**, or add your origin (e.g. `https://yourapp.com`) to the allowlist.
+    The token is wrong, or you're calling a public endpoint from an origin not on its allowlist. Re-check the token in the portal under your endpoint's **Auth** tab, or add your origin (e.g. `https://yourapp.com`) to the allowlist.
   </Accordion>
   <Accordion title="429 Too Many Requests" icon="gauge">
-    You've hit the rate limit for the endpoint or the calling IP. Pause for 10 seconds, then resume. See [Rate and connection limits](/solana/get-started/rate-and-connection-limits) for the per-plan numbers.
+    You've hit the rate limit on the endpoint or the calling IP. Pause for 10 seconds, then resume. See [Rate and connection limits](/solana/get-started/rate-and-connection-limits) for the full numbers.
   </Accordion>
   <Accordion title="Connection timeout from a browser" icon="globe">
     Public endpoints require an origin allowlist. Open **Auth** in the portal, add the origin you're calling from, save, and retry.
-  </Accordion>
-  <Accordion title="getProgramAccounts is slow or rate-limited" icon="hourglass">
-    `getProgramAccounts` is one of the most expensive RPC methods. On shared endpoints it's heavily throttled. For production scans, use [Steamboat indexed accounts](/solana/reading-state/steamboat-indexed-accounts) or a [dedicated node](/solana/dedicated-nodes/overview).
   </Accordion>
 </AccordionGroup>
 
@@ -159,6 +150,6 @@ Same advice applies to Helius and any Solana RPC provider -- it's a `web3.js`/`u
     Every method we expose, with a live playground.
   </Card>
   <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
-    Understand PAYG, committed, and dedicated tiers.
+    Per-service rates, invoicing, dedicated infrastructure.
   </Card>
 </Columns>
