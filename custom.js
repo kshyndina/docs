@@ -4,17 +4,18 @@
  * What this does:
  *   1. Replaces the tab dropdown ("Documentation / API reference /
  *      Guides / FAQs") inside the open mobile drawer with 4 real
- *      sibling buttons. Each button navigates to the first page of
- *      its tab (Documentation → /solana/welcome, etc.).
+ *      sibling buttons positioned BELOW the Solana chain dropdown.
+ *      Detection: any <button> on mobile whose textContent equals
+ *      one of the 4 known tab labels. No class requirement.
  *
  *   2. Re-opens the mobile drawer after a Next.js client-side
  *      navigation, if the user clicked a link from inside an open
- *      drawer. Lets Kate browse multiple tabs without the menu auto-
- *      collapsing each time. Uses sessionStorage as cross-route
- *      breadcrumb.
+ *      drawer. Lets you browse multiple tabs without the menu
+ *      auto-collapsing each time. Uses sessionStorage as the
+ *      cross-route breadcrumb.
  *
- * Hamburger reposition is handled CSS-only via `position: fixed` on
- * the original Mintlify hamburger button (custom.css §23).
+ * Hamburger reposition is CSS-only via `position: fixed` on
+ * Mintlify's `lg:hidden h-14` button (custom.css §23).
  */
 (function () {
   'use strict';
@@ -22,8 +23,9 @@
   const HAMBURGER_SELECTOR = 'button[class*="lg:hidden"][class*="h-14"]';
   const FLAG = 'triton-drawer-was-open';
 
-  // Mapping of tab label → first page URL. Add other chain dropdowns
-  // here when they grow tabs. Right now only Solana has tabs.
+  // Mapping of tab label → first page URL. Right now only Solana has
+  // tabs; other chains (Pyth/SUI/Monad) ship a single tab so the
+  // dropdown doesn't appear for them.
   const TAB_DESTINATIONS = {
     Documentation: '/solana/welcome',
     'API reference': '/solana-api/api-overview',
@@ -31,7 +33,14 @@
     FAQs: '/solana-faqs/general'
   };
   const TAB_LABELS = Object.keys(TAB_DESTINATIONS);
+
+  // Labels of chain triggers — used to find the Solana button so we
+  // can insert the tab buttons immediately after it.
+  const CHAIN_LABELS = ['Solana', 'Pyth', 'SUI', 'Monad'];
+
   const PROCESSED_FLAG = 'data-triton-tabs-replaced';
+  const DEBUG_MARKER = '__tritonCustomJsLoaded';
+  window[DEBUG_MARKER] = (window[DEBUG_MARKER] || 0) + 1;
 
   function findHamburger() {
     return document.querySelector(HAMBURGER_SELECTOR);
@@ -41,14 +50,9 @@
     if (!el || !el.closest) return false;
     return Boolean(
       el.closest('[data-state="open"][role="dialog"]') ||
-        el.closest('[data-radix-dialog-content][data-state="open"]')
-    );
-  }
-
-  function findOpenDrawer() {
-    return (
-      document.querySelector('[data-state="open"][role="dialog"]') ||
-      document.querySelector('[data-radix-dialog-content][data-state="open"]')
+        el.closest('[data-radix-dialog-content][data-state="open"]') ||
+        el.closest('[data-vaul-drawer][data-state="open"]') ||
+        el.closest('[data-state="open"][aria-modal="true"]')
     );
   }
 
@@ -74,30 +78,75 @@
     return row;
   }
 
-  function isTabTrigger(btn) {
-    if (!btn) return false;
-    const txt = (btn.textContent || '').trim();
-    // Match if the trigger's text is one of the 4 known tab labels.
-    return TAB_LABELS.indexOf(txt) !== -1;
+  function findTabTrigger() {
+    // Match any <button> at mobile whose plain text equals a tab
+    // label. No class requirement — Mintlify's mobile drawer trigger
+    // doesn't always carry `nav-dropdown-trigger`.
+    const buttons = document.querySelectorAll('button');
+    for (let i = 0; i < buttons.length; i++) {
+      const btn = buttons[i];
+      if (btn.hasAttribute(PROCESSED_FLAG)) continue;
+      const txt = (btn.textContent || '').trim();
+      if (TAB_LABELS.indexOf(txt) !== -1) return btn;
+    }
+    return null;
   }
 
-  function replaceTabTriggerInsideDrawer() {
-    // Mobile only — at lg+ the sidebar shows the same trigger and we
-    // leave it alone (Mintlify's tab pill row covers it).
+  function findChainTrigger() {
+    // The chain selector ("Solana") sits above the tab selector in
+    // the drawer. We anchor the new button row immediately after it.
+    const buttons = document.querySelectorAll('button');
+    for (let i = 0; i < buttons.length; i++) {
+      const txt = (buttons[i].textContent || '').trim();
+      if (CHAIN_LABELS.indexOf(txt) !== -1) return buttons[i];
+    }
+    return null;
+  }
+
+  function findInsertionAnchor(tabBtn) {
+    // Walk up from the tab trigger to find a sibling-group ancestor
+    // — the wrapper that contains both the chain selector and the
+    // tab selector. We want to insert the row inside that wrapper,
+    // after the chain trigger's row.
+    const chain = findChainTrigger();
+    if (!chain) return null;
+    // Find the closest common ancestor of chain + tabBtn.
+    let node = chain;
+    while (node && node !== document.body) {
+      if (node.contains(tabBtn)) {
+        // node is the common ancestor. Find the chain's direct child
+        // of `node` and insert after it.
+        let chainChild = chain;
+        while (chainChild.parentNode && chainChild.parentNode !== node) {
+          chainChild = chainChild.parentNode;
+        }
+        return { parent: node, after: chainChild };
+      }
+      node = node.parentNode;
+    }
+    return null;
+  }
+
+  function replaceTabTrigger() {
     if (window.innerWidth >= 1024) return;
-    const triggers = document.querySelectorAll(
-      'button.nav-dropdown-trigger, button[aria-haspopup="menu"][class*="nav-dropdown"]'
-    );
-    triggers.forEach(function (btn) {
-      if (btn.hasAttribute(PROCESSED_FLAG)) return;
-      if (!isTabTrigger(btn)) return;
-      const currentLabel = (btn.textContent || '').trim();
-      const row = buildTabRow(currentLabel);
-      btn.setAttribute(PROCESSED_FLAG, 'hidden');
-      btn.style.display = 'none';
-      // Insert the row right where the trigger sat
-      btn.parentNode.insertBefore(row, btn);
-    });
+    const tabBtn = findTabTrigger();
+    if (!tabBtn) return;
+    const currentLabel = (tabBtn.textContent || '').trim();
+    const row = buildTabRow(currentLabel);
+
+    // Hide the original trigger
+    tabBtn.setAttribute(PROCESSED_FLAG, 'hidden');
+    tabBtn.style.display = 'none';
+
+    // Insert the 4-button row AFTER the Solana chain trigger (Kate's
+    // requested order). Fallback: in-place where the tab trigger sat.
+    const anchor = findInsertionAnchor(tabBtn);
+    if (anchor) {
+      anchor.parent.insertBefore(row, anchor.after.nextSibling);
+    } else {
+      tabBtn.parentNode.insertBefore(row, tabBtn);
+    }
+    window[DEBUG_MARKER + '_replacedAt'] = Date.now();
   }
 
   /* ---- Persist drawer across navigations ------------------------ */
@@ -108,7 +157,7 @@
       function (e) {
         const link = e.target.closest('a[href]');
         if (!link) return;
-        if (!isOpenDrawer(link)) return;
+        if (!isOpenDrawer(link) && window.innerWidth >= 1024) return;
         try {
           sessionStorage.setItem(FLAG, '1');
         } catch (_) {}
@@ -146,7 +195,7 @@
   function init() {
     flagDrawerNavClicks();
     reopenDrawerIfFlagged();
-    replaceTabTriggerInsideDrawer();
+    replaceTabTrigger();
   }
 
   if (document.readyState === 'loading') {
@@ -161,7 +210,7 @@
     scheduled = true;
     requestAnimationFrame(function () {
       scheduled = false;
-      replaceTabTriggerInsideDrawer();
+      replaceTabTrigger();
     });
   });
   obs.observe(document.documentElement, { childList: true, subtree: true });
