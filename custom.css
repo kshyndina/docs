@@ -1482,51 +1482,87 @@ html body .chat-assistant-floating-input {
 }
 
 /* ---- 28. Steps numbered circles: brand-purple fill ---------------
-   Mintlify ships the step-number circle with `bg-gray-50` (almost
-   invisible against the page background). Scope tightly to the
-   Steps `<ol>` so we don't accidentally restyle other small
-   rounded-full elements elsewhere on the page. */
-html body ol > li > div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"],
-html body ol > li > div[class*="size-7"][class*="rounded-full"][class*="shrink-0"]:has(> div:only-child) {
+   LOCKED RULE -- DO NOT REVERT. Mintlify ships the step-number
+   circle with `bg-gray-50 + text-gray-900` (almost invisible
+   against the page background). The size-7 + rounded-full +
+   bg-gray-50 + shrink-0 combo is unique to the Steps component, so
+   no ancestor scoping needed. */
+html body div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"][class*="shrink-0"] {
   background: rgba(122, 75, 160, 0.95) !important;
   color: #F7F7F7 !important;
   border: 0 !important;
   font-weight: 600 !important;
 }
-html body ol > li > div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"] *,
-html body ol > li > div[class*="size-7"][class*="rounded-full"][class*="shrink-0"]:has(> div:only-child) * {
+html body div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"][class*="shrink-0"] * {
   color: #F7F7F7 !important;
 }
+html.dark body div[class*="size-7"][class*="rounded-full"][class*="dark:bg-white"][class*="shrink-0"] {
+  background: rgba(181, 145, 211, 0.95) !important;
+  color: #171717 !important;
+}
 
-/* ---- 28b. Accordion: matched 0.5rem rounding + breathing room ----
-   Mintlify ships AccordionGroup with each Accordion bordered and
-   minimal vertical gap. With our 0.5rem family-lock, items can read
-   as a stuck-together stack. Force matching radius and a small gap. */
-html body .mdx-content > div:has(> [class*="accordion"]),
-html body [class*="AccordionGroup"],
-html body div[class*="border"]:has(> button[aria-expanded]) {
+/* ---- 28b. Accordion: matched 0.5rem rounding + brand border + gap
+   LOCKED RULE -- DO NOT REVERT. Mintlify's <AccordionGroup> applies
+   the Tailwind class `[&>details]:border-0` to every <details>
+   child, stripping per-item borders so they read as one merged
+   block. We want each item to have its own visible border, 0.5rem
+   rounding, and 0.5rem vertical gap.
+
+   Selector: `details.accordion` directly. Force `border: 1px solid
+   <brand-purple-18%>` with !important to beat the [&>details]:border-0
+   rule. Also set border-radius and margin-bottom on the item itself
+   (not on the wrapper) so each item is a self-contained box. */
+html body details.accordion,
+html body div.accordion-group > details.accordion,
+html body div.accordion-group > details {
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
   border-radius: 0.5rem !important;
-}
-html body [class*="AccordionGroup"] > * + *,
-html body .mdx-content [class*="accordion"] + [class*="accordion"] {
-  margin-top: 0.5rem !important;
-}
-/* Each accordion item: its own clean rounded box */
-html body div[class*="accordion"][class*="border"],
-html body [data-component-part*="accordion"] {
-  border-radius: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
   overflow: hidden !important;
 }
+html.dark body details.accordion,
+html.dark body div.accordion-group > details.accordion,
+html.dark body div.accordion-group > details {
+  border-color: rgba(181, 145, 211, 0.22) !important;
+}
+html body div.accordion-group > details.accordion:last-child,
+html body div.accordion-group > details:last-child {
+  margin-bottom: 0 !important;
+}
+/* The summary (header row) shouldn't pull a separate border from
+   the inner Mintlify rule -- the parent <details> owns the border. */
+html body details.accordion > summary {
+  border: 0 !important;
+}
 
-/* ---- 28c. Copy page button: lighter weight, less heavy ----------
-   The §7 rule sets font-weight: 500 (medium). Some Mintlify build
-   states render the button at 600+. Pin to 500 explicitly with
-   higher specificity. */
-html body #page-context-menu > button:first-child,
-html body #page-context-menu > button:first-child *,
+/* ---- 28c. Copy-page button: NEUTRAL grey, not brand purple
+   LOCKED RULE -- DO NOT REVERT. The Copy page button is a
+   SECONDARY action (alongside the page title). Brand purple text
+   was making it read as primary. Switch to neutral grey for both
+   text and icon (icons inherit currentColor). Keep the brand-purple
+   border so it sits in the same chrome family as Solana dropdown
+   etc.; only the text + icon change. Font-weight stays 500. */
 html body #page-context-menu-button,
-html body #page-context-menu-button * {
+html body #page-context-menu > button:first-child,
+html body #page-context-menu > button:last-child {
+  color: rgba(60, 60, 60, 0.85) !important;
   font-weight: 500 !important;
+}
+html body #page-context-menu-button *,
+html body #page-context-menu > button:first-child *,
+html body #page-context-menu > button:last-child * {
+  color: inherit !important;
+  font-weight: 500 !important;
+}
+html.dark body #page-context-menu-button,
+html.dark body #page-context-menu > button:first-child,
+html.dark body #page-context-menu > button:last-child,
+html.dark body #page-context-menu > button {
+  color: rgba(220, 220, 220, 0.9) !important;
+}
+html.dark body #page-context-menu-button *,
+html.dark body #page-context-menu > button * {
+  color: inherit !important;
 }
 
 /* ---- 29. Chat input: revert to native sticky-in-body --------------

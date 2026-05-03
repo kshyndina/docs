@@ -201,6 +201,45 @@ The theme toggle is Mintlify's built-in. Don't reimplement. Both light and dark 
 2. Create the content directory and pages.
 3. Update `TAB_LABELS` and `TAB_DESTINATIONS` in `custom.js` so the mobile drawer 4-button row picks it up. Without this, the new tab will fall back to the original Radix Select dropdown on mobile.
 
+## Locked component rules — DO NOT REVERT
+
+These are component-level decisions Kate has reviewed and approved. Future agents working on the docs **must preserve them**. If a generation reverts one of these, that's a regression.
+
+### Color palette principle
+
+- **Brand purple** (`#7A4BA0` and the `rgba(122, 75, 160, 0.x)` family) is reserved for: primary CTAs, navigation highlights, active states, sidebar dropdown borders, table header washes, code-block themes.
+- **Neutral grey** (`rgba(60, 60, 60, 0.85)` light / `rgba(220, 220, 220, 0.9)` dark) is the default for **secondary buttons, body chrome, copy-page text, eyebrow text colour fallbacks**.
+- Don't use brand purple for secondary actions — it makes them compete with primary.
+
+### Rounding
+
+Single radius family: **0.5rem (8px)** across every box, button, dropdown, accordion, card, code block, popover, tile, callout, pagination link. Exceptions: circles (search, AI, person icons → `rounded-full`), split-button inner edges (must be 0).
+
+### Per-component locked rules
+
+| Component | Rule | Why |
+|---|---|---|
+| **Copy page button** (`#page-context-menu`) | Text + icon = neutral grey (`rgba(60, 60, 60, 0.85)` light / `rgba(220, 220, 220, 0.9)` dark), border = brand purple 18%, font-weight 500. **Never brand purple text.** | Secondary action; brand purple makes it compete with primary CTAs. |
+| **Steps numbered circles** | Background = `rgba(122, 75, 160, 0.95)` (brand purple), text = `#F7F7F7`, font-weight 600, no border. Dark mode: `rgba(181, 145, 211, 0.95)` bg + `#171717` text. | Mintlify's default `bg-gray-50 + text-gray-900` is invisible against the page wash. |
+| **Accordion items** | Each `<details>` inside an `<AccordionGroup>` gets its own border (`1px solid rgba(122, 75, 160, 0.18)` light / `rgba(181, 145, 211, 0.22)` dark) + 0.5rem radius + 0.5rem margin-bottom. Override Mintlify's default `[&>details]:border-0` group rule. Last item = no margin-bottom. | Mintlify's group default merges items into one block; we want each item visually distinct. |
+| **Hamburger** (mobile) | Plain icon, transparent background, no circle. Pinned `position: fixed; top: 0.5rem; right: 1rem` over the navbar's right edge. | Triton One mobile chrome standard. |
+| **Floating chat input** | Desktop: `position: sticky; bottom: 0` inside body column (Mintlify native, no override). Mobile: `position: fixed; bottom: 0` full width with gradient backdrop. **Never `position: fixed` at desktop** — overlaps pagination. | Native Mintlify scroll behaviour (auto-show / auto-hide style). |
+| **Mobile drawer tab row** | 4 buttons in a 2x2 grid (`Docs`, `API methods`, `Guides`, `FAQs`) with lucide icons matching docs.json tabs[].icon. Below the Solana chain dropdown. Replaces Mintlify's Radix Select on mobile. | Kate's preferred mobile nav UX. |
+| **Footer** | Hidden entirely (display: none on the wrapper). | Mintlify renders an empty wrapper that creates a tall white slab. |
+| **Mobile copy-page** | Icon + chevron only, no "Copy page" label, sits to the right of the H1 in the title row. | Tighter mobile chrome. |
+
+### Components Kate has decided NOT to use
+
+| Component | Why removed |
+|---|---|
+| **Tile** | Visual previews aren't needed for Triton docs; Card covers all landing-hub use cases. |
+| **Panel** | Replaces the right-rail ToC, which is too valuable to lose on regular docs pages. |
+| **`tags={[...]}` on `<Update>`** | Triggers Mintlify's changelog-filter UI on the right rail; replaces ToC. Use Update without tags if you need changelog entries. |
+
+### Components confirmed for use
+
+Callouts (all 6 colors), Steps, Tabs, CodeGroup, Cards + Columns, Accordions, Tree, Frames, ParamField + ResponseField (with auto-generated API playground via `api: "..."` frontmatter), RequestExample / ResponseExample (only on API pages), Expandable, Mermaid, Badge (purple BETA / orange EARLY ACCESS / green GA / red DEPRECATED), Tooltips, Update (without tags).
+
 ## What to NOT change without alignment
 
 - Brand colors and primary/light/dark triplet — set across hundreds of CSS rules
