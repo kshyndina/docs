@@ -996,6 +996,16 @@ html body div[class*="flex-1"][class*="flex-col"] {
   min-height: 0 !important;
 }
 
+/* ---- 18b. Hide Mintlify's Previous/Next pagination ----------------
+   Kate: "What's next" Cards on each page replace this. Component
+   stays styled (§19) and the original §27 grid rule still applies --
+   to re-enable, just delete the `display: none !important` rule
+   below and pagination renders again. */
+html body #pagination,
+html body div#pagination {
+  display: none !important;
+}
+
 /* ---- 19. Mobile/tablet pagination + chat input ----------------
    Below lg, Mintlify's pagination is `<div id="pagination" class="grid
    lg:grid-cols-2 gap-4">` — single column = Previous on its own row,

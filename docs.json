@@ -106,11 +106,11 @@
                   "solana/get-started/plans-and-billing",
                   {
                     "group": "Account management",
-                    "root": "solana/get-started/account-management/platform-overview",
+                    "root": "solana/get-started/account-management/set-up-your-account-and-add-users",
                     "expanded": false,
                     "pages": [
-                      "solana/get-started/account-management/platform-overview",
                       "solana/get-started/account-management/set-up-your-account-and-add-users",
+                      "solana/get-started/account-management/platform-overview",
                       "solana/get-started/account-management/auth-and-security-best-practices",
                       "solana/get-started/account-management/how-to-top-up-credits",
                       "solana/get-started/account-management/reach-out-to-support",
