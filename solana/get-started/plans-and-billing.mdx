@@ -1,7 +1,106 @@
 ---
 title: "Plans and billing"
+description: "Triton Solana plans: pay-as-you-go, committed, and dedicated. What you get, how you pay, and when to upgrade."
+keywords: ["triton pricing", "solana rpc pricing", "payg", "committed plan", "dedicated node solana", "das api pricing"]
 ---
 
+Triton has three ways to pay: **PAYG** (default), **committed** (pre-paid credit pool, discounted), and **dedicated** (your own node). Pick PAYG to start; switch later without re-provisioning.
+
+## Compare plans
+
+| | PAYG | Committed | Dedicated |
+|---|---|---|---|
+| **Best for** | Trying things out, dev environments, low-volume production | Steady production traffic | Latency-sensitive trading, isolated capacity, custom rate limits |
+| **Billing** | Per-request + per-CU on shared pool | Pre-pay credits monthly at a discount | Hourly per node + add-ons |
+| **Rate limit** | Default 1,200 req / 10s per IP | Higher per-IP budget | Custom (negotiated) |
+| **Streaming connections** | Limited per plan | Higher per plan | Custom |
+| **Region pinning** | Closest available, automatic | Same | You pick |
+| **Setup time** | Instant | Instant | A few hours (provisioning) |
+
+## How PAYG works
+
+Pay only for what you use. Two meters:
+
+1. **Per request** -- a base price per RPC call, with multipliers for expensive methods (`getProgramAccounts`, `getTokenAccountsByOwner`, etc.).
+2. **Per compute unit** -- some methods scale with the data they process. The portal's billing dashboard shows the cost split.
+
+Add-on pricing for specialised products:
+
+| Product | Price |
+|---|---|
+| **DAS API** (NFTs, compressed assets) | $50 per million requests |
+| **Hydrant Archive** (historical queries) | $10 per million queries; minimum $10/month if used |
+
+## How committed works
+
+Pre-pay a credit pool monthly at a per-credit discount over PAYG. Credits roll within the month. Good fit when:
+
+- Your traffic is predictable.
+- You're doing more than $200--300/month on PAYG (the break-even depends on method mix).
+- You want a higher per-IP rate-limit budget without going to a dedicated node.
+
+Switching is one click in the portal. PAYG fallback kicks in if you exhaust your monthly credits.
+
+## How dedicated works
+
+Your own validator(s) and edge router(s), rented hourly. Use cases:
+
+- **Trading systems** that need `<50ms` latency to a specific region and zero noisy-neighbour effects.
+- **Heavy `getProgramAccounts`** workloads that would saturate shared pools.
+- **Custom configurations** -- specific Geyser plugins, larger gRPC fan-out, custom filters.
+
+Speak to support for sizing. We'll size based on:
+
+- Expected RPS and method mix.
+- Streaming subscription count and filter complexity.
+- Region requirements.
+- Add-ons: SWQoS, Steamboat, Hydrant.
+
+## Payment methods
+
+| Method | Notes |
+|---|---|
+| **Credit / debit card** | via Coinflow. Auto-renewal supported. |
+| **USDC** | SPL on Solana, ERC-20 on Ethereum. |
+| **hel.io** | One-click payment widget. |
+| **Wire transfer** | GBP and USD. |
+
 <Info>
-**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
+For payment-method changes or invoice queries, open the **Billing** tab in the portal or [reach out to support](/solana/get-started/account-management/reach-out-to-support).
 </Info>
+
+## How to top up credits
+
+Step-by-step in [How to top up credits](/solana/get-started/account-management/how-to-top-up-credits). Auto-top-up is recommended for production accounts.
+
+## Cancellation and notice
+
+Month-to-month billing on PAYG and committed. Dedicated nodes require **one calendar month notice** to cancel. Cancel from the portal or via support.
+
+## When to upgrade
+
+<AccordionGroup>
+  <Accordion title="I'm hitting 429s during traffic spikes" icon="gauge">
+    First, check whether you're hitting the **general** budget or a **method-specific** one (the response headers tell you). If it's general, a higher PAYG / committed tier raises the per-IP budget. If it's method-specific (e.g. `getProgramAccounts`), move that workload to [Steamboat](/solana/reading-state/steamboat-indexed-accounts) or a dedicated node.
+  </Accordion>
+  <Accordion title="My latency is inconsistent under load" icon="zap">
+    Shared endpoints have noisy-neighbour effects. A dedicated node in your closest region eliminates this. Trading systems should usually be dedicated from day one.
+  </Accordion>
+  <Accordion title="I need a Geyser plugin or gRPC config that isn't on shared" icon="puzzle">
+    Dedicated only. Talk to support; we'll provision a node with your config baked in.
+  </Accordion>
+  <Accordion title="My DAS / Hydrant usage is over $500/month" icon="archive">
+    Talk to support about a committed deal -- we typically discount when usage is steady.
+  </Accordion>
+</AccordionGroup>
+
+## What's next
+
+<Columns cols={2}>
+  <Card title="Account management" icon="user-cog" href="/solana/get-started/account-management/platform-overview">
+    Add team members, manage tokens, set auth policies.
+  </Card>
+  <Card title="Rate limits in detail" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
+    Headers, per-method budgets, and how to read your live limits.
+  </Card>
+</Columns>

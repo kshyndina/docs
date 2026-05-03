@@ -1,7 +1,89 @@
 ---
 title: "How to top up credits"
+description: "Add credits to your Triton account by card, USDC, hel.io, or wire. Set up auto-top-up so production never runs dry."
+keywords: ["triton top up", "credits", "auto top up", "usdc payment", "wire transfer"]
 ---
 
-<Info>
-**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
-</Info>
+Triton runs on a credit pool. PAYG draws down as you make requests; committed plans pre-pay a monthly pool. Top up before you run out -- and turn on auto-top-up so production never trips over an empty balance.
+
+## Manual top-up
+
+<Steps>
+  <Step title="Open Billing">
+    Sign in at [customers.triton.one](https://customers.triton.one), click **Billing** in the sidebar.
+  </Step>
+  <Step title="Pick a payment method">
+    Click **Top up**. Choose card, USDC, hel.io, or wire (see below).
+  </Step>
+  <Step title="Confirm the amount">
+    Enter the amount in USD. Minimum top-ups: $25 by card, $50 by USDC, $1,000 by wire. Click **Confirm**.
+  </Step>
+  <Step title="Pay and verify">
+    Card / hel.io clear in seconds. USDC clears after the on-chain confirmation. Wire takes 1--3 business days. Your credit balance updates in **Billing → Overview** when the payment lands.
+  </Step>
+</Steps>
+
+## Auto-top-up
+
+Strongly recommended for production. Set a **threshold** (e.g. $50) and a **top-up amount** (e.g. $200). When the balance falls below the threshold, the saved card / USDC wallet is charged the top-up amount automatically.
+
+<Steps>
+  <Step title="Open Billing → Auto top-up">
+    Same Billing page, **Auto top-up** tab.
+  </Step>
+  <Step title="Set the threshold and amount">
+    Pick numbers that match your typical monthly burn. Example: if you spend ~$300/month, threshold $100, top-up $300.
+  </Step>
+  <Step title="Save">
+    Triton charges automatically when the threshold is crossed. You'll get an email per charge with the invoice.
+  </Step>
+</Steps>
+
+<Tip>
+For high-stakes production, use a separate company card with a dedicated limit and email alerts. Auto-top-up failures (declined card, expired card) drop you to a degraded state until you fix it -- you'll still receive the alert email.
+</Tip>
+
+## Payment methods in detail
+
+<Tabs>
+  <Tab title="Card (Coinflow)">
+    Visa, Mastercard, Amex via Coinflow. 3D-Secure supported. Most cards clear instantly. Refunds processed via Coinflow within 3--5 business days.
+  </Tab>
+  <Tab title="USDC">
+    SPL on Solana, ERC-20 on Ethereum. The portal generates a one-time deposit address per top-up. **Send the exact amount** to the displayed address; the credit lands after on-chain confirmation. Don't reuse old deposit addresses.
+  </Tab>
+  <Tab title="hel.io">
+    Click the hel.io widget in the top-up flow, scan / paste your wallet, sign. Same speed as USDC.
+  </Tab>
+  <Tab title="Wire transfer">
+    For large top-ups ($1,000+) or accounting-driven payments. Email [billing@triton.one](mailto:billing@triton.one) for wire details. Supported currencies: USD, GBP. Reference the invoice number on the wire to speed up reconciliation.
+  </Tab>
+</Tabs>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="My card was declined" icon="x-circle">
+    Common causes: 3DS challenge expired, wrong billing address, card-issuer fraud-block (especially for crypto-adjacent merchants). Try a different card, or use USDC. If issuer blocks, call your card issuer and pre-authorise the merchant `Coinflow / Triton One`.
+  </Accordion>
+  <Accordion title="USDC sent but credit didn't arrive" icon="hourglass">
+    Most USDC top-ups clear in `<2 minutes`. If it's been longer, check the deposit address on a block explorer to confirm the tx confirmed. If the on-chain tx is confirmed but the credit hasn't landed, [contact support](/solana/get-started/account-management/reach-out-to-support) with the tx signature.
+  </Accordion>
+  <Accordion title="Auto top-up failed" icon="alert-triangle">
+    Email alert tells you the reason (declined card, expired card, blocked by issuer). Update the payment method, then click **Retry** in **Billing → Auto top-up**. Service is degraded but not stopped during the failure window unless balance hits zero.
+  </Accordion>
+  <Accordion title="I need an invoice for accounting" icon="file-text">
+    Every top-up generates a PDF invoice in **Billing → Invoices**. Custom company name and VAT number are configurable in **Billing → Company details**.
+  </Accordion>
+</AccordionGroup>
+
+## What's next
+
+<Columns cols={2}>
+  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
+    Compare PAYG, committed, and dedicated tiers.
+  </Card>
+  <Card title="Reach out to support" icon="life-buoy" href="/solana/get-started/account-management/reach-out-to-support">
+    Billing questions, refund requests, custom contracts.
+  </Card>
+</Columns>

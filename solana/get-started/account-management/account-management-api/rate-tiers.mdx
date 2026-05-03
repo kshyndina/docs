@@ -1,7 +1,130 @@
 ---
 title: "Rate tiers"
+description: "Read or configure per-endpoint rate limits, concurrency, and method-specific overrides via the Account Management API."
+keywords: ["rate tier api", "rate limit configuration", "method override", "concurrency cap"]
 ---
 
-<Info>
-**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
-</Info>
+The Rate tiers resource exposes the per-endpoint rate-limit configuration. Read-only on PAYG; configurable on committed and dedicated plans.
+
+Resource path: `/v1/endpoints/{endpoint_id}/rate-tier`
+
+## Get the current rate tier
+
+```
+GET /v1/endpoints/{endpoint_id}/rate-tier
+```
+
+```bash
+curl https://api.triton.one/v1/endpoints/ep_abc123/rate-tier \
+  -H "Authorization: Bearer $TRITON_API_TOKEN"
+```
+
+```json
+{
+  "endpoint_id": "ep_abc123",
+  "general": {
+    "requests_per_window": 1200,
+    "window_seconds": 10,
+    "concurrent_requests": 100
+  },
+  "method_overrides": [
+    {
+      "method": "getProgramAccounts",
+      "requests_per_window": 60,
+      "window_seconds": 10
+    },
+    {
+      "method": "getTokenAccountsByOwner",
+      "requests_per_window": 200,
+      "window_seconds": 10,
+      "applies_when": "data_size > 1000000"
+    }
+  ],
+  "streaming": {
+    "max_concurrent_grpc_subs": 10,
+    "max_concurrent_ws_connections": 50
+  },
+  "configurable": false,
+  "plan": "payg"
+}
+```
+
+`configurable: false` on PAYG. Use the portal for committed-and-above edits, or the API call below.
+
+## Update the rate tier (committed and above)
+
+```
+PATCH /v1/endpoints/{endpoint_id}/rate-tier
+```
+
+<ParamField path="general" type="object">
+  Update the general bucket. Send only the fields you want to change.
+</ParamField>
+
+<ParamField path="method_overrides" type="array<object>">
+  Full replace of the method-overrides list. To add one without removing others, fetch first, mutate, send back.
+</ParamField>
+
+<ParamField path="streaming" type="object">
+  Update streaming connection caps.
+</ParamField>
+
+```bash
+curl https://api.triton.one/v1/endpoints/ep_abc123/rate-tier \
+  -H "Authorization: Bearer $TRITON_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -X PATCH -d '{
+    "general": { "requests_per_window": 3000 },
+    "streaming": { "max_concurrent_grpc_subs": 25 }
+  }'
+```
+
+The change takes effect within seconds across the edge fleet.
+
+<Warning>
+You can't raise limits beyond what your plan allows. Trying to set `requests_per_window` above the committed-plan ceiling returns `403` with the max value in the error body. Higher limits require a plan upgrade or dedicated.
+</Warning>
+
+## Reset to plan defaults
+
+```
+DELETE /v1/endpoints/{endpoint_id}/rate-tier/overrides
+```
+
+Removes all method-specific overrides and resets `general` and `streaming` to plan defaults.
+
+## Bursting
+
+Some plans include short-burst allowance above the steady-state limit. The `general` object then includes a `burst` block:
+
+```json
+{
+  "general": {
+    "requests_per_window": 3000,
+    "window_seconds": 10,
+    "concurrent_requests": 200,
+    "burst": {
+      "requests_per_burst": 6000,
+      "burst_window_seconds": 1,
+      "burst_cooldown_seconds": 30
+    }
+  }
+}
+```
+
+Burst means you can briefly hit double the steady-state for one second, then must drop back below steady-state for the cooldown window.
+
+## Read live counts
+
+The Account Management API exposes the *configuration*. The actual per-second counters are on the endpoint itself: `https://<your-endpoint>.mainnet.rpcpool.com/ratelimits` plus the `X-Ratelimit-*` headers on every RPC response. See [Rate and connection limits](/solana/get-started/rate-and-connection-limits) for the runtime view.
+
+## What's next
+
+<Columns cols={2}>
+  <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
+    Conceptual overview, headers, 429 handling.
+  </Card>
+  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
+    What each plan ceiling actually is.
+  </Card>
+</Columns>

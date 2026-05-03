@@ -1,7 +1,164 @@
 ---
-title: "Quickstart"
+title: "Solana RPC quickstart"
+description: "Provision a Triton Solana endpoint and send your first request in five minutes. Curl, JavaScript, Python, and Rust examples."
+keywords: ["solana quickstart", "triton endpoint", "first rpc call", "getSlot", "rpcpool"]
 ---
 
+From signup to a working `getSlot` call in five minutes. Pick your language at the bottom.
+
+## Before you start
+
+You need:
+
+- A free [Triton account](https://customers.triton.one/users/sign-up).
+- A payment method (PAYG by default; we'll cover [plans](/solana/get-started/plans-and-billing) later).
+- A terminal with `curl`, or your language runtime of choice.
+
+## Provision an endpoint
+
+<Steps>
+  <Step title="Sign up and verify">
+    Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up). Verify your email. The customer portal opens automatically.
+  </Step>
+  <Step title="Add a payment method">
+    Open **Billing** in the portal sidebar. Add a card or set up USDC / wire. PAYG is enabled by default, so you only pay for what you use.
+    <Tip>
+      If you're not sure which plan to start on, leave it on PAYG. You can switch to a committed plan later without re-provisioning the endpoint.
+    </Tip>
+  </Step>
+  <Step title="Get an endpoint">
+    Click **Get an endpoint**, pick **Solana mainnet**, choose your closest region, and click **Create**. The portal generates two things you need:
+    - **Endpoint URL** in the form `https://<your-app>.mainnet.rpcpool.com`
+    - **Secret token** (a long random string)
+
+    Both are visible in the portal under your endpoint's **Auth** tab.
+  </Step>
+  <Step title="Decide how to authenticate">
+    You have two ways to call the endpoint:
+    - **Token in URL** (backend only): `https://<your-app>.mainnet.rpcpool.com/<token>`
+    - **Bearer header** (backend or origin-allowlisted browser): send `Authorization: Bearer <token>`
+
+    Use a public endpoint with an origin allowlist for browser apps -- never put a token in frontend code.
+  </Step>
+</Steps>
+
+## Send your first request
+
+The simplest test: call `getSlot`. It returns the current Solana slot number and confirms the endpoint is reachable.
+
+<CodeGroup>
+
+```bash curl
+curl https://<your-app>.mainnet.rpcpool.com/<token> \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}'
+```
+
+```javascript node-fetch
+const ENDPOINT = 'https://<your-app>.mainnet.rpcpool.com/<token>';
+
+const res = await fetch(ENDPOINT, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'getSlot' })
+});
+const json = await res.json();
+console.log(json.result);
+```
+
+```javascript web3.js
+import { Connection } from '@solana/web3.js';
+
+const connection = new Connection(
+  'https://<your-app>.mainnet.rpcpool.com/<token>',
+  'confirmed'
+);
+const slot = await connection.getSlot();
+console.log(slot);
+```
+
+```python python
+import requests
+
+ENDPOINT = 'https://<your-app>.mainnet.rpcpool.com/<token>'
+
+r = requests.post(ENDPOINT, json={
+    'jsonrpc': '2.0', 'id': 1, 'method': 'getSlot'
+})
+print(r.json()['result'])
+```
+
+```rust rust
+use solana_client::rpc_client::RpcClient;
+
+let client = RpcClient::new(
+    "https://<your-app>.mainnet.rpcpool.com/<token>".to_string()
+);
+let slot = client.get_slot()?;
+println!("{}", slot);
+```
+
+</CodeGroup>
+
+You should get back a JSON response with the current slot number, e.g.:
+
+```json
+{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }
+```
+
+<Check>
+You're connected. The slot number changes every ~400ms; run the call again and you'll see it tick.
+</Check>
+
+## Hook up web3.js with connection pooling
+
+If you're using `@solana/web3.js` from Node.js for any meaningful traffic, configure connection pooling at app startup. Without this, the default `undici` client exhausts ephemeral ports under concurrency.
+
+```javascript
+import { setGlobalDispatcher, Agent } from 'undici';
+
+setGlobalDispatcher(new Agent({
+  connections: 50,        // start small, raise if you saturate
+  pipelining: 1,
+  keepAliveTimeout: 60_000,
+  keepAliveMaxTimeout: 300_000,
+}));
+```
+
 <Info>
-**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
+Same advice applies to Helius and any Solana RPC provider -- it's a `web3.js`/`undici` issue, not a Triton-specific one. We just bring it up here because it bites every team eventually.
 </Info>
+
+## Common first-call issues
+
+<AccordionGroup>
+  <Accordion title="401 Unauthorized" icon="lock">
+    The token is wrong, or you're calling a public endpoint from an origin not on its allowlist. Re-check the token in the portal under **Auth**, or add your origin (e.g. `https://yourapp.com`) to the allowlist.
+  </Accordion>
+  <Accordion title="429 Too Many Requests" icon="gauge">
+    You've hit the rate limit for the endpoint or the calling IP. Pause for 10 seconds, then resume. See [Rate and connection limits](/solana/get-started/rate-and-connection-limits) for the per-plan numbers.
+  </Accordion>
+  <Accordion title="Connection timeout from a browser" icon="globe">
+    Public endpoints require an origin allowlist. Open **Auth** in the portal, add the origin you're calling from, save, and retry.
+  </Accordion>
+  <Accordion title="getProgramAccounts is slow or rate-limited" icon="hourglass">
+    `getProgramAccounts` is one of the most expensive RPC methods. On shared endpoints it's heavily throttled. For production scans, use [Steamboat indexed accounts](/solana/reading-state/steamboat-indexed-accounts) or a [dedicated node](/solana/dedicated-nodes/overview).
+  </Accordion>
+</AccordionGroup>
+
+## What's next
+
+<Columns cols={2}>
+  <Card title="Stream account updates" icon="radio" href="/solana/streaming/overview">
+    Subscribe to accounts, signatures, and logs in real time. WebSocket or gRPC.
+  </Card>
+  <Card title="Send transactions" icon="send" href="/solana/sending-transactions/overview">
+    Best practices for `sendTransaction`, priority fees, and SWQoS routing.
+  </Card>
+  <Card title="API reference" icon="code" href="/solana-api/api-overview">
+    Every method we expose, with a live playground.
+  </Card>
+  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
+    Understand PAYG, committed, and dedicated tiers.
+  </Card>
+</Columns>
