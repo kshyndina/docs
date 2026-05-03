@@ -113,7 +113,22 @@
                       "solana/get-started/account-management/auth-and-security-best-practices",
                       "solana/get-started/account-management/how-to-top-up-credits",
                       "solana/get-started/account-management/reach-out-to-support",
-                      "solana/get-started/account-management/account-management-api"
+                      {
+                        "group": "Account management API",
+                        "root": "solana/get-started/account-management/account-management-api/overview",
+                        "expanded": false,
+                        "pages": [
+                          "solana/get-started/account-management/account-management-api/overview",
+                          "solana/get-started/account-management/account-management-api/auth-and-headers",
+                          "solana/get-started/account-management/account-management-api/accounts",
+                          "solana/get-started/account-management/account-management-api/address-watch-lists",
+                          "solana/get-started/account-management/account-management-api/subscriptions",
+                          "solana/get-started/account-management/account-management-api/subscription-types",
+                          "solana/get-started/account-management/account-management-api/endpoints",
+                          "solana/get-started/account-management/account-management-api/tokens",
+                          "solana/get-started/account-management/account-management-api/rate-tiers"
+                        ]
+                      }
                     ]
                   }
                 ]
