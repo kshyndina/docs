@@ -2,6 +2,46 @@
 
 /*! purgecss start ignore */
 
+/* ---- 0. Triton brand palette (CSS variables) --------------------
+   LOCKED -- DO NOT REVERT. The palette is the source of truth for
+   every colour used across docs. Picks for shared components:
+     --triton-light-wash  = purple-50  (#F2EDF6) — hover backgrounds
+     --triton-light-tint  = purple-100 (#E4DBEC) — section washes
+     --triton-border      = purple-200 (#D7C9E3) — borders
+     --triton-primary     = purple-600 (#7A4BA0) — active, brand
+     --triton-dark-bg     = purple-800 (#492D60) — dark-mode primary
+   Use these in new rules instead of hard-coded rgba() values. */
+:root {
+  --triton-purple-50:  #F2EDF6;
+  --triton-purple-100: #E4DBEC;
+  --triton-purple-200: #D7C9E3;
+  --triton-purple-300: #CAB7D9;
+  --triton-purple-400: #AF93C6;
+  --triton-purple-500: #956FB3;
+  --triton-purple-600: #7A4BA0;
+  --triton-purple-700: #623C80;
+  --triton-purple-800: #492D60;
+  --triton-purple-900: #311E40;
+  --triton-purple-950: #251730;
+  --triton-purple-1000: #180F20;
+  --triton-purple-1050: #0C0810;
+
+  --triton-blue:    #259DD0;
+  --triton-gold:    #FFC845;
+  --triton-bg-light: #F7F7F7;
+  --triton-bg-dark:  #171717;
+  --triton-text:    #171717;
+  --triton-success: #73975E;
+  --triton-warning: #FF680A;
+  --triton-error:   #BA2D0B;
+
+  --triton-light-wash: var(--triton-purple-50);
+  --triton-light-tint: var(--triton-purple-100);
+  --triton-border:     var(--triton-purple-200);
+  --triton-primary:    var(--triton-purple-600);
+  --triton-dark-bg:    var(--triton-purple-800);
+}
+
 /* ---- 0. Top navbar: a touch more vertical breathing room ---- */
 #navbar {
   padding-top: 0.5rem !important;
@@ -1501,36 +1541,47 @@ html.dark body div[class*="size-7"][class*="rounded-full"][class*="dark:bg-white
   color: #171717 !important;
 }
 
-/* ---- 28b. Accordion: matched 0.5rem rounding + brand border + gap
-   LOCKED RULE -- DO NOT REVERT. Mintlify's <AccordionGroup> applies
-   the Tailwind class `[&>details]:border-0` to every <details>
-   child, stripping per-item borders so they read as one merged
-   block. We want each item to have its own visible border, 0.5rem
-   rounding, and 0.5rem vertical gap.
+/* ---- 28b. Accordion: kill the wrapper, keep per-item border only
+   LOCKED RULE -- DO NOT REVERT. Two-part fix:
 
-   Selector: `details.accordion` directly. Force `border: 1px solid
-   <brand-purple-18%>` with !important to beat the [&>details]:border-0
-   rule. Also set border-radius and margin-bottom on the item itself
-   (not on the wrapper) so each item is a self-contained box. */
+   (1) The .accordion-group WRAPPER ships with its own 1px border +
+       overflow:hidden + rounded corners. Combined with our per-item
+       border that's a double-wrap, and the wrapper's overflow:hidden
+       clips the inner items' rounded corners. Kill the wrapper's
+       border + clip + radius so it's an invisible container.
+
+   (2) Each <details>.accordion gets its own visible border, 0.5rem
+       radius, and 0.5rem vertical gap. Beat Mintlify's
+       [&>details]:border-0 + [&>details]:rounded-none + [&>details]:mb-0
+       rules with !important. */
+
+html body div.accordion-group {
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
 html body details.accordion,
 html body div.accordion-group > details.accordion,
 html body div.accordion-group > details {
-  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  border: 1px solid var(--triton-border) !important;
   border-radius: 0.5rem !important;
   margin-bottom: 0.5rem !important;
   overflow: hidden !important;
+  background: var(--triton-bg-light) !important;
 }
 html.dark body details.accordion,
 html.dark body div.accordion-group > details.accordion,
 html.dark body div.accordion-group > details {
-  border-color: rgba(181, 145, 211, 0.22) !important;
+  border-color: var(--triton-purple-800) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
 }
 html body div.accordion-group > details.accordion:last-child,
 html body div.accordion-group > details:last-child {
   margin-bottom: 0 !important;
 }
-/* The summary (header row) shouldn't pull a separate border from
-   the inner Mintlify rule -- the parent <details> owns the border. */
 html body details.accordion > summary {
   border: 0 !important;
 }

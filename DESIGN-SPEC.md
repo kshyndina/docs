@@ -4,6 +4,58 @@ The visual contract for [docs.triton.one](https://docs.triton.one) (Mintlify v3,
 
 Current checkpoint: branch [`final-design`](https://github.com/kshyndina/docs/tree/final-design) — frozen reference. Working branch is `proposed-structure`.
 
+## Triton brand palette (LOCKED -- DO NOT REVERT)
+
+The full canonical palette. Every colour used in CSS, components, badges, and diagrams must come from this list. New components should use the CSS variables defined in `custom.css` §0 instead of hard-coding hex values.
+
+### Purple shades (13 stops)
+
+| Variable | Hex | Default use |
+|---|---|---|
+| `--triton-purple-50`  | `#F2EDF6` | Hover backgrounds (light wash) |
+| `--triton-purple-100` | `#E4DBEC` | Section washes, table-header tint |
+| `--triton-purple-200` | `#D7C9E3` | **Borders** (default for chrome, accordions, dropdowns) |
+| `--triton-purple-300` | `#CAB7D9` | Active state border |
+| `--triton-purple-400` | `#AF93C6` | Decorative accents, mermaid `lineColor` |
+| `--triton-purple-500` | `#956FB3` | Mid-emphasis text in dark areas |
+| `--triton-purple-600` | `#7A4BA0` | **PRIMARY** -- CTAs, active states, brand chrome |
+| `--triton-purple-700` | `#623C80` | Dark theme primary, hover-on-active |
+| `--triton-purple-800` | `#492D60` | Dark theme background tint |
+| `--triton-purple-900` | `#311E40` | Deep wash for dark mode |
+| `--triton-purple-950` | `#251730` | (rare) ultra-dark accents |
+| `--triton-purple-1000`| `#180F20` | (rare) |
+| `--triton-purple-1050`| `#0C0810` | (rare) |
+
+### Picked shades for shared components
+
+Use these when adding a new component. Keeps the palette consistent:
+
+- **Light wash** (hover bg, callout bg-tint): `--triton-purple-50` (`#F2EDF6`)
+- **Border** (chrome, dropdowns, accordions): `--triton-purple-200` (`#D7C9E3`)
+- **Primary** (active state, brand fill): `--triton-purple-600` (`#7A4BA0`)
+- **Dark mode primary** (dark theme equivalent): `--triton-purple-800` (`#492D60`)
+
+### Brand + semantic colours
+
+| Variable | Hex | Use |
+|---|---|---|
+| `--triton-blue` | `#259DD0` | **Secondary brand** -- public beta badge, clarity / trust accents |
+| `--triton-gold` | `#FFC845` | **Accent** -- coming soon badge, KPI highlights, mermaid note backgrounds |
+| `--triton-bg-light` | `#F7F7F7` | Body background light theme |
+| `--triton-bg-dark` | `#171717` | Body background dark theme |
+| `--triton-text` | `#171717` | Default body text |
+| `--triton-success` | `#73975E` | Success states, GA badge |
+| `--triton-warning` | `#FF680A` | Warning callouts |
+| `--triton-error` | `#BA2D0B` | Error callouts, deprecated badge |
+
+### Mermaid
+
+Mintlify's default mermaid theme uses generic blues/greys. Every mermaid block in Triton docs **must** start with this `init` directive so the diagram uses brand colours:
+
+```
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7'}}}%%
+```
+
 ## Brand tokens
 
 | Token | Value | Source |
@@ -227,6 +279,28 @@ Single radius family: **0.5rem (8px)** across every box, button, dropdown, accor
 | **Mobile drawer tab row** | 4 buttons in a 2x2 grid (`Docs`, `API methods`, `Guides`, `FAQs`) with lucide icons matching docs.json tabs[].icon. Below the Solana chain dropdown. Replaces Mintlify's Radix Select on mobile. | Kate's preferred mobile nav UX. |
 | **Footer** | Hidden entirely (display: none on the wrapper). | Mintlify renders an empty wrapper that creates a tall white slab. |
 | **Mobile copy-page** | Icon + chevron only, no "Copy page" label, sits to the right of the H1 in the title row. | Tighter mobile chrome. |
+
+### Triton lifecycle badges (LOCKED)
+
+The four product-state badges. Use the exact label + colour mapping below for every product mention in headings, sidebar, or landing cards.
+
+| Label | Colour | Hex (target) | When to use |
+|---|---|---|---|
+| `PRIVATE BETA` | brand violet (purple) | `#7A4BA0` | Invite-only, not yet open to anyone with an account |
+| `PUBLIC BETA` | brand blue | `#259DD0` | Open beta, anyone can use (might still break) |
+| `COMING SOON` | brand gold | `#FFC845` | Announced, not yet shipped |
+| `DEPRECATED` | semantic error red | `#BA2D0B` | Retired or scheduled for retirement |
+
+In MDX:
+
+```mdx
+<Badge color="purple" shape="pill">PRIVATE BETA</Badge>
+<Badge color="blue"   shape="pill">PUBLIC BETA</Badge>
+<Badge color="yellow" shape="pill">COMING SOON</Badge>
+<Badge color="red"    shape="pill">DEPRECATED</Badge>
+```
+
+Mintlify's `purple` / `blue` / `yellow` / `red` are colour-name approximations of the Triton hexes above. If exact-pixel match is needed later, override badge CSS to use the Triton palette variables.
 
 ### Components Kate has decided NOT to use
 

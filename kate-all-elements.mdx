@@ -287,7 +287,10 @@ To see them in action: open [getSlot](/solana-api/http/standard/getSlot) -- the 
 **Where to use:** architecture diagrams, sequence flows.
 **Why it works:** Triton's content has a lot of "request -> router -> validator -> result" pipelines that read perfectly as mermaid.
 
+Mintlify's default Mermaid theme uses generic blues/greys. To match Triton brand purple, prefix every mermaid block with the `init` directive shown below. The colours pull from the Triton palette (purple-50 / purple-200 / purple-600 / purple-800).
+
 ```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7'}}}%%
 sequenceDiagram
     participant Client
     participant Edge as Edge router
@@ -302,6 +305,7 @@ sequenceDiagram
 ```
 
 ```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'}}}%%
 flowchart LR
     A[Client app] --> B{Triton edge}
     B -->|HTTP RPC| C[Solana RPC pool]
@@ -313,10 +317,21 @@ flowchart LR
 
 ### Badge
 
-**Where to use:** status pills next to titles -- BETA, EARLY ACCESS, GA, DEPRECATED.
+**Where to use:** status pills next to product titles -- the four lifecycle states for Triton.
 **Why it works:** scans visually faster than parenthetical text.
 
 Mintlify ships 9 colours: `gray`, `blue`, `green`, `yellow`, `orange`, `red`, `purple`, `white`, `surface`. Two shapes: `rounded` (default) or `pill`. Optional `icon`.
+
+#### Triton lifecycle badges (locked)
+
+These four labels and colours are the standard for every Triton product. Use them everywhere a product is mentioned in a heading, sidebar, or landing card.
+
+- <Badge color="purple" shape="pill">PRIVATE BETA</Badge> &nbsp; invite-only, not yet open. Maps to brand violet (Triton purple).
+- <Badge color="blue" shape="pill">PUBLIC BETA</Badge> &nbsp; open beta, anyone can use. Maps to brand blue (clarity, trustworthiness).
+- <Badge color="yellow" shape="pill">COMING SOON</Badge> &nbsp; announced, not yet shipped. Maps to brand gold (anticipation, KPI highlight).
+- <Badge color="red" shape="pill">DEPRECATED</Badge> &nbsp; retired or scheduled for retirement. Maps to semantic error red.
+
+#### All available Mintlify colours (reference)
 
 <Badge>default</Badge> &nbsp;
 <Badge color="blue">blue</Badge> &nbsp;
@@ -325,13 +340,6 @@ Mintlify ships 9 colours: `gray`, `blue`, `green`, `yellow`, `orange`, `red`, `p
 <Badge color="orange">orange</Badge> &nbsp;
 <Badge color="red">red</Badge> &nbsp;
 <Badge color="purple">purple</Badge>
-
-#### Suggested Triton mapping
-
-- <Badge color="purple" shape="pill">BETA</Badge> &nbsp; for Whirligig, Fumarole, anything pre-GA on the docs side
-- <Badge color="orange" shape="pill" icon="flask">EARLY ACCESS</Badge> &nbsp; for Steamboat, Hydrant if invite-only
-- <Badge color="green" shape="pill" icon="check">GA</Badge> &nbsp; for stable products
-- <Badge color="red" shape="pill">DEPRECATED</Badge> &nbsp; for Cascade, Old Faithful, retired things
 
 ### Tooltips
 
