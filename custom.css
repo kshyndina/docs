@@ -987,28 +987,43 @@ html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
   }
 }
 @media (min-width: 1024px) {
-  /* Native sticky-inside-body at desktop. Wrapper inherits the body
-     column's width and follows the AI-panel state automatically. We
-     also pad-top so the bar isn't glued to the pagination row above
-     it when the page is short enough that the bar reaches its
-     natural bottom position. */
+  /* Desktop: pin to viewport bottom (position: fixed) but match the
+     body column's horizontal extent exactly so the bar lines up with
+     the Previous/Next pagination row.
+
+     Body column's left edge (per §17): sidebar (18rem) + 44px margin
+     + 24px content padding = 356px. Outer body wrapper is 696px max
+     with 24px padding each side, so inner content width = 648px.
+     We follow that here so left edge + width align with .mdx-content.
+
+     When the AI assistant panel opens, Mintlify sets
+     --assistant-sheet-width on its container; subtract that from
+     max-width so the bar doesn't slide under the panel. */
   html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
-    position: sticky !important;
+    position: fixed !important;
     bottom: 0 !important;
-    left: auto !important;
+    left: calc(var(--sidebar-w, 18rem) + 44px + 24px) !important;
     right: auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 1rem 0 1rem !important;
+    top: auto !important;
+    width: 648px !important;
+    max-width: calc(
+      100vw - var(--sidebar-w, 18rem) - 44px - 48px - var(--assistant-sheet-width, 0px)
+    ) !important;
+    padding: 0 0 1rem !important;
+    z-index: 30 !important;
   }
-  /* Override the earlier §15 rule that caps the input at 600px and
-     auto-margins it. We want the input to fill the body column —
-     same width as the Previous/Next pagination row above. */
+  /* Bar fills its wrapper — override §15's max-width: 600px cap. */
   html body .chat-assistant-floating-input {
     max-width: 100% !important;
     width: 100% !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+  }
+  /* Reserve a bit of bottom padding on body content so pagination
+     doesn't sit right against the now-fixed chat bar. */
+  html body [class*="lg:max-w-[696px"],
+  html body .mdx-content {
+    padding-bottom: 88px !important;
   }
 }
 .chat-assistant-floating-input,
