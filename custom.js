@@ -23,16 +23,22 @@
   const HAMBURGER_SELECTOR = 'button[class*="lg:hidden"][class*="h-14"]';
   const FLAG = 'triton-drawer-was-open';
 
-  // Mapping of tab label → first page URL. Right now only Solana has
-  // tabs; other chains (Pyth/SUI/Monad) ship a single tab so the
-  // dropdown doesn't appear for them.
-  const TAB_DESTINATIONS = {
-    Documentation: '/solana/welcome',
-    'API reference': '/solana-api/api-overview',
-    Guides: '/solana-guides/error-handling',
-    FAQs: '/solana-faqs/general'
-  };
-  const TAB_LABELS = Object.keys(TAB_DESTINATIONS);
+  // Tab config:
+  //   key   = exact text of the Mintlify trigger button (what we
+  //          match against in the drawer). DO NOT change without
+  //          checking the Mintlify-rendered text.
+  //   label = what we display in our replacement button (free to
+  //          rename for UX).
+  //   href  = first page of that tab.
+  // Right now only Solana has tabs — other chains ship a single tab
+  // so the dropdown doesn't appear for them.
+  const TAB_CONFIG = [
+    { key: 'Documentation', label: 'Docs', href: '/solana/welcome' },
+    { key: 'API reference', label: 'API methods', href: '/solana-api/api-overview' },
+    { key: 'Guides', label: 'Guides', href: '/solana-guides/error-handling' },
+    { key: 'FAQs', label: 'FAQs', href: '/solana-faqs/general' }
+  ];
+  const TAB_LABELS = TAB_CONFIG.map(function (t) { return t.key; });
 
   // Labels of chain triggers — used to find the Solana button so we
   // can insert the tab buttons immediately after it.
@@ -58,16 +64,17 @@
 
   /* ---- Tab-row replacement -------------------------------------- */
 
-  function buildTabRow(currentLabel) {
+  function buildTabRow(currentKey) {
     const row = document.createElement('div');
     row.className = 'triton-mobile-tab-row';
     row.setAttribute(PROCESSED_FLAG, 'row');
-    TAB_LABELS.forEach(function (label) {
+    TAB_CONFIG.forEach(function (tab) {
       const a = document.createElement('a');
-      a.href = TAB_DESTINATIONS[label];
+      a.href = tab.href;
       a.className = 'triton-mobile-tab-btn';
-      a.textContent = label;
-      if (label === currentLabel) a.setAttribute('aria-current', 'page');
+      a.textContent = tab.label;
+      a.setAttribute('data-tab-key', tab.key);
+      if (tab.key === currentKey) a.setAttribute('aria-current', 'page');
       a.addEventListener('click', function () {
         try {
           sessionStorage.setItem(FLAG, '1');
