@@ -423,7 +423,32 @@
               "pyth/quickstart",
               "pyth/pyth-hermes",
               "pyth/publisher-setup-nginx-proxy",
-              "pyth/testnet-devnet-and-pythnet"
+              "pyth/testnet-devnet-and-pythnet",
+              {
+                "group": "API reference",
+                "expanded": false,
+                "pages": [
+                  {
+                    "group": "HTTP RPC",
+                    "expanded": false,
+                    "pages": [
+                      "pyth/api/http/get-latest-price-feeds",
+                      "pyth/api/http/get-price-feed",
+                      "pyth/api/http/get-price-feed-ids",
+                      "pyth/api/http/get-latest-vaas",
+                      "pyth/api/http/get-vaa"
+                    ]
+                  },
+                  {
+                    "group": "Streaming",
+                    "expanded": false,
+                    "pages": [
+                      "pyth/api/streaming/subscribe-price",
+                      "pyth/api/streaming/unsubscribe-price"
+                    ]
+                  }
+                ]
+              }
             ]
           }
         ]
@@ -438,7 +463,14 @@
               "sui/overview",
               "sui/quickstart",
               "sui/walrus",
-              "sui/seal"
+              "sui/seal",
+              {
+                "group": "API reference",
+                "expanded": false,
+                "pages": [
+                  "sui/api/method-placeholder"
+                ]
+              }
             ]
           }
         ]
@@ -451,7 +483,14 @@
             "group": "Monad",
             "pages": [
               "monad/overview",
-              "monad/quickstart"
+              "monad/quickstart",
+              {
+                "group": "API reference",
+                "expanded": false,
+                "pages": [
+                  "monad/api/method-placeholder"
+                ]
+              }
             ]
           }
         ]

@@ -1184,6 +1184,7 @@ html body .triton-mobile-tab-btn {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  gap: 0.4rem !important;
   width: 100% !important;
   min-width: 0 !important;
   padding: 0.625rem 0.5rem !important;
@@ -1197,6 +1198,24 @@ html body .triton-mobile-tab-btn {
   text-align: center !important;
   text-decoration: none !important;
   transition: background 120ms ease, border-color 120ms ease !important;
+}
+html body .triton-mobile-tab-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  color: currentColor !important;
+}
+html body .triton-mobile-tab-icon svg {
+  width: 1rem !important;
+  height: 1rem !important;
+}
+html body .triton-mobile-tab-label {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 html body .triton-mobile-tab-btn:hover {
   background: rgba(122, 75, 160, 0.06) !important;
