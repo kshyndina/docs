@@ -2693,6 +2693,43 @@ html.dark .triton-try-output {
 }
 
 /* ============================================================
+   0n-bis. Code-block theme: Triton purple
+   ============================================================
+   docs.json sets `styling.codeblocks.theme = "css-variables"`. These
+   variables override Shiki's defaults so all fenced code blocks (and
+   any inline `<code>` token highlights) take on a dark-purple cast in
+   dark mode and a soft purple-on-white look in light mode -- replacing
+   the cool blue/green of the previous github-light/github-dark theme.
+   Reference: docs.mintlify.com/customize/themes
+   ============================================================ */
+:root {
+  --mint-color-text:               #171717;
+  --mint-color-background:         #FAFAFA;
+  --mint-token-keyword:            #623C80;     /* purple-700 */
+  --mint-token-string:             #BA2D0B;     /* triton-error red-orange */
+  --mint-token-string-expression:  #BA2D0B;
+  --mint-token-comment:            #6F6F6F;
+  --mint-token-function:           #492D60;     /* purple-800 */
+  --mint-token-constant:           #7A4BA0;     /* primary */
+  --mint-token-parameter:          #492D60;
+  --mint-token-punctuation:        #171717;
+  --mint-token-link:               #7A4BA0;
+}
+html.dark, .dark {
+  --mint-color-text:               #E5D7F0;
+  --mint-color-background:         #171717;
+  --mint-token-keyword:            #B591D3;     /* light purple */
+  --mint-token-string:             #E0BB75;     /* warm gold */
+  --mint-token-string-expression:  #FFC845;     /* triton gold */
+  --mint-token-comment:            #8B7AA1;     /* muted purple-grey */
+  --mint-token-function:           #CAB7D9;     /* purple-300 */
+  --mint-token-constant:           #FFC845;     /* triton gold */
+  --mint-token-parameter:          #D7C9E3;     /* purple-200 */
+  --mint-token-punctuation:        #E5D7F0;
+  --mint-token-link:               #B591D3;
+}
+
+/* ============================================================
    0p. Dark-mode polish (welcome page + global)
    ============================================================
    Kate flagged: body text too grey, purple links/highlights almost
@@ -2752,6 +2789,21 @@ html.dark .mdx-content strong,
 .dark .mdx-content strong {
   color: #ffffff !important;
 }
+/* Steps component number circle in dark mode.
+   Mintlify's default uses `dark:bg-white/10 dark:text-gray-50` -- the
+   '1' / '2' inside renders nearly-white on a translucent light circle,
+   which gives low contrast in dark mode. Match the styling of the
+   primary CTA button: light-purple circle with DARK text inside. */
+html.dark [data-component-part="step-number"] > div,
+.dark [data-component-part="step-number"] > div {
+  background: rgba(181, 145, 211, 0.55) !important;
+  color: #171717 !important;
+}
+html.dark [data-component-part="step-number"] > div > div,
+.dark [data-component-part="step-number"] > div > div {
+  color: #171717 !important;
+}
+
 /* Headings in dark mode: bump to pure white so 'Triton stack overview'
    etc. doesn't look greyish. */
 html.dark mdx-content h1,

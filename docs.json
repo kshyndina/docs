@@ -33,10 +33,7 @@
   },
   "styling": {
     "codeblocks": {
-      "theme": {
-        "light": "github-light",
-        "dark": "github-dark"
-      }
+      "theme": "css-variables"
     },
     "eyebrows": "breadcrumbs"
   },

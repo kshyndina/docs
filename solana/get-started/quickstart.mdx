@@ -181,53 +181,39 @@ You have an endpoint and a working call. Two ways to navigate from here.
   <Tab title="By use case (I'm not sure yet)">
     Pick the kind of app you're building. Each guide stitches the right Triton products into a working end-to-end flow with code.
 
-    ### Trading or market making
+    <CardGroup cols={2}>
+      <Card title="Trading or market making" icon="coins" href="/solana/guides/trading">
+        Real-time price + liquidity, sub-slot tx submission. **Stack:** Dragon's Mouth, Jet, Priority Fees, Fumarole.
+      </Card>
 
-    <Card icon="coins" href="/solana/guides/trading">
-      Real-time price + liquidity, sub-slot tx submission. **Stack:** Dragon's Mouth, Jet, Priority Fees, Fumarole.
-    </Card>
+      <Card title="DEX or DeFi protocol" icon="git-merge" href="/solana/guides/defi">
+        Pool state, swap activity, tx landing, historical fills. **Stack:** Dragon's Mouth, Jet, Hydrant, Priority Fees.
+      </Card>
 
-    ### DEX or DeFi protocol
+      <Card title="Wallet or consumer app" icon="wallet" href="/solana/guides/wallet">
+        Balances, tx history, NFT portfolio, live updates. **Stack:** Standard RPC, DAS API, Whirligig.
+      </Card>
 
-    <Card icon="git-merge" href="/solana/guides/defi">
-      Pool state, swap activity, tx landing, historical fills. **Stack:** Dragon's Mouth, Jet, Hydrant, Priority Fees.
-    </Card>
+      <Card title="NFT or compressed-asset platform" icon="palette" href="/solana/guides/nft">
+        Mint and metadata queries, collection feeds, sale events. **Stack:** DAS API, ZK Compression, Whirligig.
+      </Card>
 
-    ### Wallet or consumer app
+      <Card title="Indexer or analytics" icon="chart-line" href="/solana/guides/indexer">
+        Custom program indexes, historical backfill, parsed tx. **Stack:** Steamboat, Hydrant, Old Faithful, Vixen.
+      </Card>
 
-    <Card icon="wallet" href="/solana/guides/wallet">
-      Balances, tx history, NFT portfolio, live updates. **Stack:** Standard RPC, DAS API, Whirligig.
-    </Card>
+      <Card title="Institutional or RWA" icon="building" href="/solana/guides/institutional">
+        Dedicated infra, white-label validator, custom regions, SLAs. **Stack:** Dedicated gRPC, White-label validator, dedicated tier.
+      </Card>
 
-    ### NFT or compressed-asset platform
+      <Card title="Gaming or high-throughput consumer" icon="gamepad-2" href="/solana/guides/gaming">
+        On-chain state for games, NFT items, real-time updates. **Stack:** Standard RPC, DAS API, Dragon's Mouth, Whirligig.
+      </Card>
 
-    <Card icon="palette" href="/solana/guides/nft">
-      Mint and metadata queries, collection feeds, sale events. **Stack:** DAS API, ZK Compression, Whirligig.
-    </Card>
-
-    ### Indexer or analytics
-
-    <Card icon="chart-line" href="/solana/guides/indexer">
-      Custom program indexes, historical backfill, parsed tx. **Stack:** Steamboat, Hydrant, Old Faithful, Vixen.
-    </Card>
-
-    ### Institutional or RWA
-
-    <Card icon="building" href="/solana/guides/institutional">
-      Dedicated infra, white-label validator, custom regions, SLAs. **Stack:** Dedicated gRPC, White-label validator, dedicated tier.
-    </Card>
-
-    ### Gaming or high-throughput consumer
-
-    <Card icon="gamepad-2" href="/solana/guides/gaming">
-      On-chain state for games, NFT items, real-time updates. **Stack:** Standard RPC, DAS API, Dragon's Mouth, Whirligig.
-    </Card>
-
-    ### AI agent or LLM app
-
-    <Card icon="bot" href="/solana/guides/ai-agent">
-      MCP-driven access, llms.txt context, autonomous setup. **Stack:** MCP (coming soon), llms.txt, Standard RPC, DAS API.
-    </Card>
+      <Card title="AI agent or LLM app" icon="bot" href="/solana/guides/ai-agent">
+        MCP-driven access, llms.txt context, autonomous setup. **Stack:** MCP (coming soon), llms.txt, Standard RPC, DAS API.
+      </Card>
+    </CardGroup>
   </Tab>
 </Tabs>
 
