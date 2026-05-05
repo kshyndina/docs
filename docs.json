@@ -252,9 +252,19 @@
                 "expanded": false,
                 "pages": [
                   {
-                    "group": "Set up a Triton account",
+                    "group": "Set up your RPC services for...",
                     "pages": [
-                      "solana-guides/getting-started/set-up-account"
+                      "solana-guides/getting-started/set-up-rpc/trading-and-market-making",
+                      "solana-guides/getting-started/set-up-rpc/defi",
+                      "solana-guides/getting-started/set-up-rpc/wallet-or-custodian",
+                      "solana-guides/getting-started/set-up-rpc/indexing-or-portfolio-management",
+                      "solana-guides/getting-started/set-up-rpc/nft-marketplace",
+                      "solana-guides/getting-started/set-up-rpc/consumer-app",
+                      "solana-guides/getting-started/set-up-rpc/rwa-and-tokenisation",
+                      "solana-guides/getting-started/set-up-rpc/depin-infrastructure",
+                      "solana-guides/getting-started/set-up-rpc/gaming",
+                      "solana-guides/getting-started/set-up-rpc/analytics-or-research",
+                      "solana-guides/getting-started/set-up-rpc/agentic-ai"
                     ]
                   },
                   {
@@ -300,13 +310,6 @@
                 "expanded": false,
                 "pages": [
                   "solana-guides/nfts-and-digital-assets"
-                ]
-              },
-              {
-                "group": "Industry use cases",
-                "icon": "briefcase",
-                "pages": [
-                  "solana-guides/industry-use-cases"
                 ]
               }
             ]
