@@ -349,3 +349,260 @@
   });
   obs.observe(document.documentElement, { childList: true, subtree: true });
 })();
+
+/* ============================================================
+   Pricing calculator (plans-and-billing.mdx)
+   ============================================================
+   Drives the [data-triton-calc] block. Mode toggle (simple PAYG /
+   custom PAYG / dedicated nodes), slider updates, total recompute,
+   CTA enable/disable, dedicated-chain switcher.
+   ============================================================ */
+(function () {
+  if (typeof window === 'undefined') return;
+
+  function fmtUSD(n) {
+    return '$' + n.toFixed(2);
+  }
+  function fmtBandwidth(v) {
+    return v >= 1000 ? (v / 1000).toFixed(1) + 'K' : String(v);
+  }
+  function fmtMillions(v) {
+    return v.toFixed(1) + 'M';
+  }
+
+  function initCalc(root) {
+    if (root.__tritonCalcInit) return;
+    root.__tritonCalcInit = true;
+
+    var modeBtns = root.querySelectorAll('[data-mode]');
+    var paygPanel = root.querySelector('[data-panel="payg"]');
+    var dediPanel = root.querySelector('[data-panel="dedicated"]');
+    var simpleBlock = root.querySelector('[data-simple]');
+    var customBlock = root.querySelector('[data-custom]');
+    var deposit = root.querySelector('[data-deposit]');
+    var totalEl = root.querySelector('[data-total]');
+    var ctaEl = root.querySelector('[data-panel="payg"] [data-cta]');
+    var warnEl = root.querySelector('[data-warn]');
+
+    var sliderRows = root.querySelectorAll('[data-slider]');
+
+    function setMode(mode) {
+      modeBtns.forEach(function (b) {
+        b.classList.toggle('active', b.dataset.mode === mode);
+      });
+      if (mode === 'dedicated') {
+        if (paygPanel) paygPanel.hidden = true;
+        if (dediPanel) dediPanel.hidden = false;
+        return;
+      }
+      if (paygPanel) paygPanel.hidden = false;
+      if (dediPanel) dediPanel.hidden = true;
+      if (mode === 'simplified') {
+        if (simpleBlock) simpleBlock.hidden = false;
+        if (customBlock) customBlock.hidden = true;
+        if (deposit) deposit.value = '125';
+        recompute();
+      } else if (mode === 'custom') {
+        if (simpleBlock) simpleBlock.hidden = true;
+        if (customBlock) customBlock.hidden = false;
+        sliderRows.forEach(function (row) {
+          var input = row.querySelector('[data-input]');
+          if (input) {
+            input.value = '0';
+            updateSliderRow(row);
+          }
+        });
+        recompute();
+      }
+    }
+
+    function updateSliderRow(row) {
+      var input = row.querySelector('[data-input]');
+      var fill = row.querySelector('[data-fill]');
+      var label = row.querySelector('[data-label]');
+      var amount = row.querySelector('[data-amount]');
+      if (!input) return;
+      var val = parseFloat(input.value) || 0;
+      var min = parseFloat(input.min) || 0;
+      var max = parseFloat(input.max) || 100;
+      var pct = ((val - min) / (max - min)) * 100;
+      if (fill) fill.style.width = pct + '%';
+      if (label) {
+        if (val > min) {
+          label.hidden = false;
+          var fmt = row.dataset.format;
+          label.textContent = fmt === 'millions' ? fmtMillions(val) : fmtBandwidth(val);
+          label.style.left = 'calc(' + pct + '% + ' + (10 - pct * 0.2) + 'px)';
+        } else {
+          label.hidden = true;
+        }
+      }
+      if (amount) {
+        var price = parseFloat(row.dataset.price) || 0;
+        amount.textContent = fmtUSD(val * price);
+      }
+    }
+
+    function recompute() {
+      var total = 0;
+      var mode = root.querySelector('[data-mode].active');
+      mode = mode ? mode.dataset.mode : 'simplified';
+      if (mode === 'simplified') {
+        var v = parseFloat(deposit && deposit.value) || 0;
+        total = v;
+      } else if (mode === 'custom') {
+        sliderRows.forEach(function (row) {
+          var input = row.querySelector('[data-input]');
+          if (!input) return;
+          var val = parseFloat(input.value) || 0;
+          var price = parseFloat(row.dataset.price) || 0;
+          total += val * price;
+        });
+        if (deposit) deposit.value = total.toFixed(2);
+      }
+      if (totalEl) totalEl.textContent = fmtUSD(total);
+      if (ctaEl && warnEl) {
+        if (total < 125) {
+          ctaEl.classList.add('disabled');
+          ctaEl.setAttribute('aria-disabled', 'true');
+          warnEl.hidden = false;
+        } else {
+          ctaEl.classList.remove('disabled');
+          ctaEl.removeAttribute('aria-disabled');
+          warnEl.hidden = true;
+        }
+      }
+    }
+
+    modeBtns.forEach(function (b) {
+      b.addEventListener('click', function () { setMode(b.dataset.mode); });
+    });
+    sliderRows.forEach(function (row) {
+      var input = row.querySelector('[data-input]');
+      if (input) input.addEventListener('input', function () {
+        updateSliderRow(row);
+        recompute();
+      });
+    });
+    if (deposit) {
+      deposit.addEventListener('input', recompute);
+      deposit.addEventListener('blur', function () {
+        var v = parseFloat(deposit.value) || 0;
+        if (v < 125) deposit.value = '125';
+        recompute();
+      });
+    }
+
+    /* Dedicated-mode chain switcher */
+    var chainData = {
+      solana: {
+        price: '$2,900+',
+        features: [
+          'Unmetered gRPC streaming',
+          'Full access to Yellowstone suite and advanced APIs',
+          'Custom geolocated deployment',
+          'Isolated performance, dedicated to your traffic',
+          'Advanced controls and tuning for your workload',
+          'GeoDNS routing and automatic failover',
+          '1-on-1 support from senior engineers'
+        ],
+        services: [
+          ["gRPC streaming (Dragon's Mouth)", "Included in the node price, no overage fees"],
+          ["Fumarole, Whirligig, WebSockets, other streaming", "$0.08 / GB bandwidth"],
+          ["Standard RPC, indexed accounts, ledger queries", "$0.08 / GB bandwidth + $10 / million calls"],
+          ["Metaplex, Photon APIs", "$0.08 / GB bandwidth + $50 / million calls"],
+          ["Metis API", "$0.08 / GB bandwidth + $80 / million calls"],
+          ["Titan API", "$0.08 / GB bandwidth + $80 / million calls"]
+        ]
+      },
+      pythnet: {
+        price: '$2,000+',
+        features: [
+          'Unmetered streaming services',
+          'Custom geolocated deployment',
+          'Isolated performance, dedicated to your traffic',
+          'Advanced controls and tuning for your workload',
+          'GeoDNS routing and automatic failover',
+          '1-on-1 support from senior engineers'
+        ],
+        services: [
+          ["Streaming services", "Included in the node price, no overage fees"],
+          ["Standard RPC", "$0.08 / GB bandwidth + $10 / million calls"],
+          ["Hermes REST API queries", "$0.08 / GB bandwidth + $10 / million calls"]
+        ]
+      },
+      monad: {
+        price: '$2,900+',
+        features: [
+          'Unmetered streaming services',
+          'Custom geolocated deployment',
+          'Isolated performance, dedicated to your traffic',
+          'Advanced controls and tuning for your workload',
+          'GeoDNS routing and automatic failover',
+          '1-on-1 support from senior engineers'
+        ],
+        services: [
+          ["Streaming services", "Included in the node price, no overage fees"],
+          ["Standard RPC", "$0.08 / GB bandwidth + $10 / million calls"]
+        ]
+      },
+      sui: {
+        price: '$2,000+',
+        features: [
+          'Unmetered streaming services',
+          'Complete access to Seal and Walrus',
+          'Custom geolocated deployment',
+          'Isolated performance, dedicated to your traffic',
+          'Advanced controls and tuning for your workload',
+          'GeoDNS routing and automatic failover',
+          '1-on-1 support from senior engineers'
+        ],
+        services: [
+          ["Streaming services", "Included in the node price, no overage fees"],
+          ["Standard RPC", "$0.08 / GB bandwidth + $10 / million calls"]
+        ]
+      }
+    };
+    var chainBtns = root.querySelectorAll('[data-chain]');
+    var chainPriceEl = root.querySelector('[data-chain-price]');
+    var chainFeaturesEl = root.querySelector('[data-chain-features]');
+    var chainServicesEl = root.querySelector('[data-chain-services]');
+
+    function setChain(key) {
+      chainBtns.forEach(function (b) {
+        b.classList.toggle('active', b.dataset.chain === key);
+      });
+      var c = chainData[key];
+      if (!c) return;
+      if (chainPriceEl) chainPriceEl.textContent = c.price;
+      if (chainFeaturesEl) {
+        chainFeaturesEl.innerHTML = c.features.map(function (f) { return '<li>' + f + '</li>'; }).join('');
+      }
+      if (chainServicesEl) {
+        chainServicesEl.innerHTML = c.services.map(function (s) {
+          return '<div class="triton-calc-row triton-calc-row-static">'
+               +   '<div class="triton-calc-row-title">' + s[0] + '</div>'
+               +   '<div class="triton-calc-row-rate">' + s[1] + '</div>'
+               + '</div>';
+        }).join('');
+      }
+    }
+    chainBtns.forEach(function (b) {
+      b.addEventListener('click', function () { setChain(b.dataset.chain); });
+    });
+
+    /* Initial state */
+    setMode('simplified');
+    recompute();
+  }
+
+  function scan() {
+    document.querySelectorAll('[data-triton-calc]').forEach(initCalc);
+  }
+  scan();
+
+  var obs = new MutationObserver(function () {
+    requestAnimationFrame(scan);
+  });
+  obs.observe(document.documentElement, { childList: true, subtree: true });
+})();
