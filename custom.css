@@ -2682,25 +2682,80 @@ html.dark .triton-try-output {
    container has more inner rounding than outer.
    ============================================================ */
 
-/* Body prose in dark mode: bump near-white to match the page subtitle. */
-.dark .mdx-content p,
-.dark .mdx-content li,
-.dark .mdx-content ul,
-.dark .mdx-content ol,
-.dark .mdx-content > div,
-.dark .prose p,
-.dark .prose li,
+/* Body prose in dark mode: Mintlify uses Tailwind `dark:text-gray-300`
+   directly on each <p>, which is `rgb(209, 213, 219)` -- visibly grey
+   next to the page subtitle's brighter white. Override at the Tailwind
+   class level (highest reach) and at the element level as backup. */
+html.dark .text-gray-300,
+html.dark .text-gray-400,
+html.dark .text-gray-500,
+html.dark .text-gray-600,
+html.dark .text-gray-700,
+html.dark .dark\:text-gray-300,
+html.dark .dark\:text-gray-400,
+html.dark .dark\:text-gray-500,
+html.dark .dark\:text-gray-200,
+html.dark .dark\:text-gray-100,
+.dark .text-gray-300,
+.dark .text-gray-400,
+.dark .text-gray-500,
+.dark .text-gray-600,
+.dark .text-gray-700,
+.dark .dark\:text-gray-300,
+.dark .dark\:text-gray-400,
+.dark .dark\:text-gray-500,
+.dark .dark\:text-gray-200,
+.dark .dark\:text-gray-100 {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+/* Element-level fallback for p, li, span inside the page body. */
+html.dark mdx-content p,
+html.dark mdx-content li,
+html.dark mdx-content ul,
+html.dark mdx-content ol,
 html.dark .mdx-content p,
 html.dark .mdx-content li,
 html.dark .mdx-content ul,
 html.dark .mdx-content ol,
-html.dark .prose p,
-html.dark .prose li {
+.dark mdx-content p,
+.dark mdx-content li,
+.dark mdx-content ul,
+.dark mdx-content ol,
+.dark .mdx-content p,
+.dark .mdx-content li,
+.dark .mdx-content ul,
+.dark .mdx-content ol {
   color: rgba(255, 255, 255, 0.92) !important;
 }
-.dark .mdx-content strong,
-html.dark .mdx-content strong {
+html.dark mdx-content strong,
+html.dark .mdx-content strong,
+.dark mdx-content strong,
+.dark .mdx-content strong {
   color: #ffffff !important;
+}
+/* Headings in dark mode: bump to pure white so 'Triton stack overview'
+   etc. doesn't look greyish. */
+html.dark mdx-content h1,
+html.dark mdx-content h2,
+html.dark mdx-content h3,
+html.dark mdx-content h4,
+html.dark mdx-content h5,
+html.dark mdx-content h6,
+html.dark .mdx-content h1,
+html.dark .mdx-content h2,
+html.dark .mdx-content h3,
+html.dark .mdx-content h4,
+html.dark .mdx-content h5,
+html.dark .mdx-content h6,
+html.dark #page-title,
+.dark #page-title {
+  color: #ffffff !important;
+}
+/* Table headers in dark mode -- bump white to opaque so 'NETWORK / HTTPS
+   RPC / WEB SOCKETS' don't read as dim grey. */
+html.dark html body table th,
+.dark html body table th {
+  color: rgba(255, 255, 255, 0.95) !important;
 }
 
 /* Mermaid: center the diagram horizontally and fix dark-mode contrast.
@@ -2840,38 +2895,55 @@ html.dark .stack-leaf:hover {
   color: #ffffff !important;
 }
 
-/* Logo marquee: per-brand filter overrides for logos that don't read
-   well as a single grayscale + brightness(0) silhouette. Each gets a
-   slightly different formula tuned to its visual weight. */
-.logo-marquee img.logo-mtndao {
-  filter: grayscale(100%) contrast(0) brightness(0.35) opacity(0.55);
-}
-.logo-marquee img.logo-pancake {
-  /* Pancake bunny has multiple subtle gradients; contrast(0) flattens
-     them while brightness keeps the silhouette visible. */
-  filter: grayscale(100%) contrast(0) brightness(0.4) opacity(0.55);
-}
-.logo-marquee img.logo-solflare {
-  filter: grayscale(100%) brightness(0) opacity(0.55);
-}
-.logo-marquee img.logo-adrena {
-  filter: grayscale(100%) brightness(0) opacity(0.5);
+/* Logo marquee: per-brand filter overrides.
+   Logos that have intricate detail or thin strokes (Orca, Mountain DAO,
+   Pancake Swap) lose their character when flattened with brightness(0),
+   so they get `grayscale + opacity` only -- preserves the artwork's
+   natural luminance and just desaturates + fades it. !important so we
+   beat the default `.logo-marquee img` rule above in this same file. */
+.logo-marquee img.logo-mtndao,
+.logo-marquee img.logo-pancake,
+.logo-marquee img.logo-orca {
+  filter: grayscale(100%) opacity(0.6) !important;
 }
 .dark .logo-marquee img.logo-mtndao,
-html.dark .logo-marquee img.logo-mtndao {
-  filter: grayscale(100%) contrast(0) brightness(2) invert(1) opacity(0.55);
-}
 .dark .logo-marquee img.logo-pancake,
-html.dark .logo-marquee img.logo-pancake {
-  filter: grayscale(100%) contrast(0) brightness(2) invert(1) opacity(0.55);
+.dark .logo-marquee img.logo-orca,
+html.dark .logo-marquee img.logo-mtndao,
+html.dark .logo-marquee img.logo-pancake,
+html.dark .logo-marquee img.logo-orca {
+  filter: grayscale(100%) brightness(1.4) opacity(0.7) !important;
+}
+/* Solflare and Adrena are simpler logotypes -- the default
+   brightness(0) silhouette works for them, just bump opacity slightly
+   so they read at the same visual weight as the rest of the marquee. */
+.logo-marquee img.logo-solflare,
+.logo-marquee img.logo-adrena {
+  filter: grayscale(100%) brightness(0) opacity(0.5) !important;
 }
 .dark .logo-marquee img.logo-solflare,
-html.dark .logo-marquee img.logo-solflare {
-  filter: grayscale(100%) brightness(0) invert(1) opacity(0.55);
-}
 .dark .logo-marquee img.logo-adrena,
+html.dark .logo-marquee img.logo-solflare,
 html.dark .logo-marquee img.logo-adrena {
-  filter: grayscale(100%) brightness(0) invert(1) opacity(0.5);
+  filter: grayscale(100%) brightness(0) invert(1) opacity(0.5) !important;
+}
+
+/* llms.txt + any other `text`-language code block:
+   Mintlify writes inline `style="--shiki-dark:#e1e4e8"` on the <pre>,
+   and the `text` language has no per-token color spans, so the URL
+   inherits that CSS variable -- which github-dark resolves to a soft
+   greenish-grey. Override the variable directly so the `text` block
+   reads as the same near-white as the surrounding body in dark mode. */
+html.dark pre.shiki[language="text"],
+.dark pre.shiki[language="text"] {
+  --shiki-dark: rgba(255, 255, 255, 0.88) !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+html.dark pre.shiki[language="text"] code,
+html.dark pre.shiki[language="text"] code span,
+.dark pre.shiki[language="text"] code,
+.dark pre.shiki[language="text"] code span {
+  color: rgba(255, 255, 255, 0.88) !important;
 }
 
 /*! purgecss end ignore */
