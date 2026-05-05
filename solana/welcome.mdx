@@ -2,6 +2,7 @@
 title: "Welcome to Triton"
 description: "Premium bare-metal Solana infrastructure: reads, streaming, history, trading APIs, validator services. Built for teams running production workloads."
 sidebarTitle: "Welcome"
+mode: "wide"
 ---
 
 Triton One runs premium, globally distributed bare-metal infrastructure for Solana's most demanding teams. We've been on the network since testnet as one of its original validators, and we author and maintain much of the low-level tooling the ecosystem now relies on, including Project Yellowstone, the Old Faithful archive, and major contributions to the Metaplex DAS API.
@@ -20,16 +21,6 @@ These docs cover the full stack: reads, streaming, historical data, trading APIs
   <a href="https://marinade.finance" target="_blank" rel="noopener"><img src="/logos/marinade.svg" alt="Marinade" /></a>
   <a href="https://binance.com" target="_blank" rel="noopener"><img src="/logos/binance.svg" alt="Binance" /></a>
 </div>
-
-<CardGroup cols={2}>
-  <Card title="Get an endpoint" icon="rocket" href="https://customers.triton.one/onboarding">
-    Standard RPC or dedicated gRPC in minutes. Pay as you go.
-  </Card>
-
-  <Card title="Log in" icon="log-in" href="https://customers.triton.one/users/sign-in">
-    Manage endpoints, top up credits, invite your team.
-  </Card>
-</CardGroup>
 
 ## Start here
 
@@ -52,6 +43,24 @@ If you're new, four places to begin.
     Per-product limits, quotas, how to scale up.
   </Card>
 </CardGroup>
+
+## LLM-ready
+
+Triton's docs are built for AI agents as well as humans.
+
+<CardGroup cols={2}>
+  <Card title="llms.txt index" icon="sparkles" href="/llms.txt">
+    Single-file map of every page. One fetch bootstraps your agent.
+  </Card>
+
+  <Card title="Triton MCP server" icon="plug" href="/agents/mcp">
+    Coming soon. MCP access to RPC, gRPC, account management.
+  </Card>
+</CardGroup>
+
+<Tip>
+  Working with Claude Code, Cursor or Codex? Drop our `llms.txt` URL into your agent's context to give it full Triton coverage in one fetch. Per-product `llms.txt` files are also available under each section, e.g. `/solana/streaming/dragons-mouth/llms.txt`.
+</Tip>
 
 ## Guides for building on-chain
 
@@ -83,95 +92,79 @@ The most-asked walkthroughs for production builders.
   </Card>
 </CardGroup>
 
-## LLM-ready
-
-Triton's docs are built for AI agents as well as humans.
-
-<CardGroup cols={2}>
-  <Card title="llms.txt index" icon="sparkles" href="/llms.txt">
-    Single-file map of every page. One fetch bootstraps your agent.
-  </Card>
-
-  <Card title="Triton MCP server" icon="plug" href="/agents/mcp">
-    Coming soon. MCP access to RPC, gRPC, account management.
-  </Card>
-</CardGroup>
-
-<Tip>
-  Working with Claude Code, Cursor or Codex? Drop our `llms.txt` URL into your agent's context to give it full Triton coverage in one fetch. Per-product `llms.txt` files are also available under each section, e.g. `/solana/streaming/dragons-mouth/llms.txt`.
-</Tip>
-
 ## Triton product map
 
-Each product has its own deep dive in the sidebar. This is how the surface fits together.
+How the surface fits together. Shared infrastructure powers most workloads; dedicated tiers and validator services sit alongside for teams that need them.
 
 ```mermaid
-graph TB
-    classDef reading   fill:#E8E0F5,stroke:#5B3D8A,stroke-width:1.5px,color:#1A0F2E
-    classDef stream    fill:#E8E0F5,stroke:#5B3D8A,stroke-width:1.5px,color:#1A0F2E
-    classDef history   fill:#FBEED4,stroke:#B5852A,stroke-width:1.5px,color:#3A2A05
-    classDef sending   fill:#DEEAD0,stroke:#5C7A3A,stroke-width:1.5px,color:#1F2A0F
-    classDef validator fill:#E8E0F5,stroke:#5B3D8A,stroke-width:1.5px,color:#1A0F2E
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#7A4BA0','primaryTextColor':'#FFFFFF','primaryBorderColor':'#492D60','lineColor':'#7A4BA0','secondaryColor':'#B591D3','tertiaryColor':'#F4F0F8','clusterBkg':'#F4F0F8','clusterBorder':'#7A4BA0','fontFamily':'Work Sans','fontSize':'14px'}}}%%
+flowchart TB
+    subgraph SHARED ["SHARED INFRASTRUCTURE"]
+      direction TB
 
-    subgraph READS [READING SOLANA STATE]
+      subgraph READING ["Reading state"]
+        direction LR
         RPC[Standard RPC]
-        GRPC[Dedicated gRPC]
-        SYNC[Account Sync]
         STEAM[Steamboat]
         DAS[DAS API]
         ZK[ZK Compression]
-    end
+        SYNC[Account Sync]
+      end
 
-    subgraph STREAM [STREAMING DATA]
-        DM[Dragons Mouth]
+      subgraph STREAMING ["Streaming"]
+        direction LR
+        DM[Dragons Mouth gRPC]
         WHIRL[Whirligig]
         FUM[Fumarole]
-        FAITH[Faithful Streams]
         HER[Hermes]
         PYTH[Pythnet]
-    end
+      end
 
-    subgraph HIST [HISTORY]
+      subgraph HISTORY ["History"]
+        direction LR
         HYD[Hydrant]
         OF[Old Faithful]
-    end
+        FAITH[Faithful Streams]
+      end
 
-    subgraph SEND [SENDING TRANSACTIONS]
+      subgraph SENDING ["Sending transactions"]
+        direction LR
         JET[Yellowstone Jet]
         FEES[Priority Fees API]
         METIS[Metis]
         TITAN[Titan Prime]
         JITO[Jito Bundles]
+      end
     end
 
-    subgraph VAL [VALIDATORS]
-        WL[White-label validator]
-        PT[Private trusted validator]
+    subgraph DEDICATED ["DEDICATED INFRASTRUCTURE"]
+      direction TB
+      DGRPC[Dedicated gRPC node]
+      WL[White-label validator]
     end
 
-    RPC --> DM
-    GRPC --> DM
-    DM --> STEAM
-    DM --> SYNC
-    DM --> FUM
-    DM --> WHIRL
-    HYD --> FAITH
-    OF --> HYD
-    FEES --> JET
-    METIS --> JET
-    TITAN --> JET
-    JITO --> JET
+    subgraph STAKING ["STAKING"]
+      direction TB
+      PT[Private trusted validator]
+    end
 
-    class RPC,GRPC,SYNC,STEAM,DAS,ZK reading
-    class DM,WHIRL,FUM,FAITH,HER,PYTH stream
-    class HYD,OF history
-    class JET,FEES,METIS,TITAN,JITO sending
-    class WL,PT validator
+    classDef product fill:#FFFFFF,stroke:#7A4BA0,stroke-width:1.5px,color:#492D60,font-weight:500
+    classDef dedicated fill:#F4F0F8,stroke:#492D60,stroke-width:2px,color:#492D60,font-weight:600
+    class RPC,STEAM,DAS,ZK,SYNC,DM,WHIRL,FUM,HER,PYTH,HYD,OF,FAITH,JET,FEES,METIS,TITAN,JITO product
+    class DGRPC,WL,PT dedicated
 ```
 
-<Note>
-  Mintlify's Mermaid renderer disables clickable nodes in diagrams (mermaid.js security mode). Use the sidebar or the cards above to navigate to specific products.
-</Note>
+## Get started
+
+<CardGroup cols={2}>
+  <Card title="Get an endpoint" icon="rocket" href="https://customers.triton.one/onboarding">
+    Standard RPC or dedicated gRPC in minutes. Pay as you go.
+  </Card>
+
+  <Card title="Log in" icon="log-in" href="https://customers.triton.one/users/sign-in">
+    Manage endpoints, top up credits, invite your team.
+  </Card>
+</CardGroup>
 
 ---
 

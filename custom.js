@@ -258,3 +258,94 @@
   });
   obs.observe(document.documentElement, { childList: true, subtree: true });
 })();
+
+/* ============================================================
+   Mermaid product-map clickability (welcome page)
+   ============================================================
+   Mintlify ships mermaid.js with the default `securityLevel: "strict"`,
+   which silently rejects in-diagram `click NodeID "URL"` directives.
+   To work around it: after each render, walk the rendered SVG, match
+   each node's text label against a known product map, and bind a
+   click handler on the node group. SPA-safe via MutationObserver.
+   ============================================================ */
+(function () {
+  if (typeof window === 'undefined') return;
+
+  var PRODUCT_LINKS = {
+    'Standard RPC':              '/solana/reading-state/standard-rpc',
+    'Steamboat':                 '/solana/streaming/steamboat/overview',
+    'DAS API':                   '/solana/digital-assets/das-api/overview',
+    'ZK Compression':            '/solana/digital-assets/zk-compression/overview',
+    'Account Sync':              '/solana/reading-state/account-sync',
+    'Dragons Mouth gRPC':        '/solana/streaming/dragons-mouth/overview',
+    'Dragon’s Mouth gRPC':  '/solana/streaming/dragons-mouth/overview',
+    'Whirligig':                 '/solana/streaming/whirligig/overview',
+    'Fumarole':                  '/solana/streaming/fumarole/overview',
+    'Hermes':                    '/solana/streaming/hermes/overview',
+    'Pythnet':                   '/solana/streaming/pythnet/overview',
+    'Hydrant':                   '/solana/history/hydrant/overview',
+    'Old Faithful':              '/solana/history/old-faithful/overview',
+    'Faithful Streams':          '/solana/history/faithful-streams/overview',
+    'Yellowstone Jet':           '/solana/sending-transactions/yellowstone-jet/overview',
+    'Priority Fees API':         '/solana/sending-transactions/priority-fees/overview',
+    'Metis':                     '/solana/trading-apis/metis/overview',
+    'Titan Prime':               '/solana/trading-apis/titan-prime/overview',
+    'Jito Bundles':              '/solana/sending-transactions/jito-bundles/overview',
+    'Dedicated gRPC node':       '/solana/reading-state/dedicated-grpc',
+    'White-label validator':     '/solana/validators/white-label/overview',
+    'Private trusted validator': '/solana/validators/private-trusted/overview'
+  };
+
+  function bindMermaidClicks() {
+    var nodes = document.querySelectorAll('.mermaid svg g.node, [data-mermaid] svg g.node, svg.mermaid g.node');
+    if (!nodes.length) return false;
+    var bound = 0;
+    nodes.forEach(function (node) {
+      if (node.__tritonClickBound) return;
+      var labelEl = node.querySelector('.nodeLabel, foreignObject span, text');
+      if (!labelEl) return;
+      var text = (labelEl.textContent || '').trim();
+      if (!text) return;
+      // Try exact match, then a normalised match (curly apostrophes etc)
+      var url = PRODUCT_LINKS[text]
+             || PRODUCT_LINKS[text.replace(/[’‘]/g, "'")]
+             || PRODUCT_LINKS[text.replace(/'/g, '’')];
+      if (!url) return;
+      node.style.cursor = 'pointer';
+      node.setAttribute('data-triton-link', url);
+      node.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        // Mintlify is SPA — try History API first, fall back to assign
+        try {
+          if (window.history && window.history.pushState) {
+            window.history.pushState({}, '', url);
+            window.dispatchEvent(new PopStateEvent('popstate'));
+          } else {
+            window.location.href = url;
+          }
+        } catch (err) {
+          window.location.href = url;
+        }
+      });
+      node.__tritonClickBound = true;
+      bound++;
+    });
+    return bound > 0;
+  }
+
+  // Initial pass (in case mermaid is already rendered)
+  bindMermaidClicks();
+
+  // Watch for SPA navigations + mermaid re-renders
+  var scheduled = false;
+  var obs = new MutationObserver(function () {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(function () {
+      scheduled = false;
+      bindMermaidClicks();
+    });
+  });
+  obs.observe(document.documentElement, { childList: true, subtree: true });
+})();
