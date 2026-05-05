@@ -130,14 +130,6 @@
                 ]
               },
               {
-                "group": "Dedicated nodes",
-                "pages": [
-                  "solana/dedicated-nodes/overview",
-                  "solana/dedicated-nodes/quickstart",
-                  "solana/dedicated-nodes/best-practices"
-                ]
-              },
-              {
                 "group": "Streaming data",
                 "pages": [
                   "solana/streaming/overview",
@@ -178,7 +170,7 @@
                 ]
               },
               {
-                "group": "Reading Solana state",
+                "group": "Reading state",
                 "pages": [
                   "solana/reading-state/overview",
                   "solana/reading-state/account-sync",
@@ -224,6 +216,14 @@
                   "solana/validators/introduction",
                   "solana/validators/vote-account-setup",
                   "solana/validators/node-identity-protection"
+                ]
+              },
+              {
+                "group": "Dedicated nodes",
+                "pages": [
+                  "solana/dedicated-nodes/overview",
+                  "solana/dedicated-nodes/quickstart",
+                  "solana/dedicated-nodes/best-practices"
                 ]
               }
             ]
