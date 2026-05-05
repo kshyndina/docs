@@ -1,0 +1,2946 @@
+/* Triton One docs -- custom styling overrides */
+
+/*! purgecss start ignore */
+
+/* ---- 0. Triton brand palette (CSS variables) --------------------
+   LOCKED -- DO NOT REVERT. The palette is the source of truth for
+   every colour used across docs. Picks for shared components:
+     --triton-light-wash  = purple-50  (#F2EDF6) — hover backgrounds
+     --triton-light-tint  = purple-100 (#E4DBEC) — section washes
+     --triton-border      = purple-200 (#D7C9E3) — borders
+     --triton-primary     = purple-600 (#7A4BA0) — active, brand
+     --triton-dark-bg     = purple-800 (#492D60) — dark-mode primary
+   Use these in new rules instead of hard-coded rgba() values. */
+:root {
+  --triton-purple-50:  #F2EDF6;
+  --triton-purple-100: #E4DBEC;
+  --triton-purple-200: #D7C9E3;
+  --triton-purple-300: #CAB7D9;
+  --triton-purple-400: #AF93C6;
+  --triton-purple-500: #956FB3;
+  --triton-purple-600: #7A4BA0;
+  --triton-purple-700: #623C80;
+  --triton-purple-800: #492D60;
+  --triton-purple-900: #311E40;
+  --triton-purple-950: #251730;
+  --triton-purple-1000: #180F20;
+  --triton-purple-1050: #0C0810;
+
+  --triton-blue:    #259DD0;
+  --triton-gold:    #FFC845;
+  --triton-bg-light: #F7F7F7;
+  --triton-bg-dark:  #171717;
+  --triton-text:    #171717;
+  --triton-success: #73975E;
+  --triton-warning: #FF680A;
+  --triton-error:   #BA2D0B;
+
+  --triton-light-wash: var(--triton-purple-50);
+  --triton-light-tint: var(--triton-purple-100);
+  --triton-border:     var(--triton-purple-200);
+  --triton-primary:    var(--triton-purple-600);
+  --triton-dark-bg:    var(--triton-purple-800);
+}
+
+/* ---- 0. Top navbar: a touch more vertical breathing room ---- */
+#navbar {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* ---- 0-bis. Replace the navbar's hairline bottom border with a soft
+   shadow (Gemini-style mini-bar lift). The hairline reads as a hard
+   line against the gradient background; a subtle shadow gives the
+   navbar a slight elevation that feels modern without being heavy. */
+#navbar > div.absolute.border-b,
+#navbar > div[class*="border-b"][class*="absolute"] {
+  border: 0 !important;
+}
+#navbar {
+  box-shadow: 0 1px 0 rgba(122, 75, 160, 0.08), 0 6px 16px -8px rgba(73, 45, 96, 0.18) !important;
+}
+.dark #navbar,
+html.dark #navbar {
+  box-shadow: 0 1px 0 rgba(181, 145, 211, 0.10), 0 6px 16px -8px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* ---- 0-ter. Focus + text selection: no clipped corners ----
+   Sidebar uses `overflow-y: auto` which clips outlines that extend
+   outside the link bounds. Use INSET outline (negative offset) so the
+   ring is drawn inside the focused element -- never gets clipped by
+   the scroll container even when the link is at the visible edge of
+   the viewport. */
+*:focus-visible {
+  outline: 2px solid rgba(122, 75, 160, 0.6) !important;
+  outline-offset: -2px !important;
+  border-radius: 6px;
+}
+/* Sidebar links specifically: tighter inset radius matches the link
+   pill. Inset outlines render INSIDE the element's box and so cannot
+   clip even inside an `overflow:hidden` scrollable parent. */
+#sidebar-content a:focus-visible,
+#sidebar-content button:focus-visible,
+#sidebar-content [role="link"]:focus-visible {
+  outline: 2px solid rgba(122, 75, 160, 0.6) !important;
+  outline-offset: -2px !important;
+  border-radius: 8px !important;
+}
+.dark *:focus-visible,
+html.dark *:focus-visible {
+  outline-color: rgba(181, 145, 211, 0.7) !important;
+}
+::selection {
+  background: rgba(122, 75, 160, 0.25);
+  color: inherit;
+}
+.dark ::selection,
+html.dark ::selection {
+  background: rgba(181, 145, 211, 0.35);
+}
+/* Make sure the sidebar scroll container doesn't clip focus rings on
+   the y-axis -- only x-axis hidden if needed. */
+#sidebar-content,
+#navigation-items {
+  overflow-x: visible !important;
+}
+
+/* ---- Sidebar scrollbar: very light gray, similar to dividers ----
+   Default Mintlify scrollbar is too dark. Match our divider colour
+   so it disappears into the page until hovered. */
+#sidebar-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.06) transparent;
+}
+#sidebar-content::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+#sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+#sidebar-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.06);
+  border-radius: 3px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+#sidebar-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.14);
+}
+.dark #sidebar-content,
+html.dark #sidebar-content {
+  scrollbar-color: rgba(255, 255, 255, 0.07) transparent;
+}
+.dark #sidebar-content::-webkit-scrollbar-thumb,
+html.dark #sidebar-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.07);
+}
+.dark #sidebar-content::-webkit-scrollbar-thumb:hover,
+html.dark #sidebar-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+/* ---- 0a. Sidebar width: target #sidebar-content (the real selector) ----
+   Verified via DOM inspection: Mintlify uses `<div id="sidebar-content">`
+   with Tailwind class `w-56` (14rem = 224px) for the sidebar. Earlier
+   attempts targeting `#sidebar` did nothing because that ID does not
+   exist. Override `w-56` and stamp the new width on `#sidebar-content`
+   directly. The content area auto-adjusts because the sidebar is
+   `position: fixed` and the page wrapper uses `lg:pl-56` to make room
+   for it -- override that gutter too. */
+:root {
+  --sidebar-w: 18rem;
+}
+html body #sidebar-content,
+html body div#sidebar-content,
+html body [id="sidebar-content"],
+html body div[class~="w-56"][class~="fixed"],
+html body div[class~="lg:w-56"] {
+  width: var(--sidebar-w) !important;
+  max-width: var(--sidebar-w) !important;
+  min-width: var(--sidebar-w) !important;
+}
+@media (min-width: 1024px) {
+  html body [class~="lg:pl-56"],
+  html body div[class*="lg:pl-56"] {
+    padding-left: var(--sidebar-w) !important;
+  }
+  /* Mintlify's content area uses an arbitrary Tailwind class:
+     `lg:ml-[max(0px,calc(50vw-348px-14rem))]`. The `14rem` in that
+     calc references the OLD `w-56` sidebar -- with our resized
+     sidebar the formula adds a ghost 178px left margin to the
+     content. Override to zero; the page wrapper's pl gutter
+     already handles spacing. */
+  html body [class*="lg:ml-[max"],
+  html body div[class*="lg:ml-[max"] {
+    margin-left: 0 !important;
+  }
+}
+
+/* ---- 0a-tris. Flat top-level sections, dropdown nested groups ----
+   Top-level groups are <div data-component-part="sidebar-group-header">
+   (no button, no chevron). Nested groups are <button aria-label="Toggle
+   X section"> with their own chevron — Kate wants those visible.
+   Hide chevron only on the top-level header, leave nested buttons. */
+#sidebar-content [data-component-part="sidebar-group-header"] > svg,
+#navigation-items [data-component-part="sidebar-group-header"] > svg {
+  display: none !important;
+}
+/* Hide the entire button/header for groups whose label is empty or
+   whitespace-only -- e.g. the Welcome standalone entry that has no
+   meaningful section title above it. */
+#sidebar-content [data-component-part="sidebar-group-header"]:empty,
+#navigation-items [data-component-part="sidebar-group-header"]:empty {
+  display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* ---- 0a-bis. Group labels: Geist Mono, gray, medium ----
+   Verified DOM: Mintlify renders sidebar group labels as
+   `<div class="sidebar-group-header ...">` containing `<h5>`.
+   Each group is wrapped in `<div class="mt-6 lg:mt-8">` which is a
+   direct child of `#navigation-items`. */
+.sidebar-group-header,
+.sidebar-group-header h5,
+sidebar-group-header {
+  font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  font-size: 0.68rem !important;
+  font-weight: 500 !important;
+  color: rgba(115, 115, 115, 0.85) !important;
+  padding-left: 0.5rem !important;
+  border-top: 0 !important;
+}
+
+/* Group dividers: only between groups, not above the first one.
+   Use the general sibling combinator (`~`) so a `mt-6` group div
+   gets a top border ONLY if it's preceded by another `mt-6` div.
+   Symmetric spacing: 1.25rem on either side of the divider so the
+   gap above and below the line is identical. */
+#navigation-items div[class*="mt-6"] ~ div[class*="mt-6"],
+#navigation-items div[class*="mt-8"] ~ div[class*="mt-8"] {
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+  padding-top: 1.25rem !important;
+  margin-top: 1.25rem !important;
+}
+
+/* Dark-mode tones */
+.dark .sidebar-group-header,
+html.dark .sidebar-group-header,
+.dark .sidebar-group-header h5,
+html.dark .sidebar-group-header h5 {
+  color: rgba(180, 180, 180, 0.7) !important;
+}
+.dark #navigation-items div[class*="mt-6"] ~ div[class*="mt-6"],
+html.dark #navigation-items div[class*="mt-6"] ~ div[class*="mt-6"],
+.dark #navigation-items div[class*="mt-8"] ~ div[class*="mt-8"],
+html.dark #navigation-items div[class*="mt-8"] ~ div[class*="mt-8"] {
+  border-top-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* ---- 0a-quater. Sidebar pages: keep them indented relative to
+   labels so the hierarchy reads (label slightly left, items slightly
+   right). Matches the Notion-style sidebar reference Kate sent. */
+#sidebar-content a[href][data-component-part="sidebar-page"],
+#sidebar-content [data-component-part="sidebar-group"] > ul > li > a {
+  padding-left: 0.875rem !important;
+}
+
+/* ---- 0c. Sidebar top padding ----
+   Mintlify positions the sidebar at top: calc(3rem + banner) (default
+   navbar height). Our navbar is taller (bigger logo + 0.5rem padding both
+   sides ≈ 4rem), so the first group label crashes into the navbar's
+   bottom edge. Add padding to give "Get Started" the same gap as
+   docs.triton.one. */
+#sidebar-content {
+  padding-top: 1.25rem !important;
+}
+
+/* ---- 0d. Page title: collapse empty description container ----
+   When frontmatter has no `description`, Mintlify still renders a
+   `prose` container with an empty <p> placeholder, leaving an awkward
+   gap between the H1 and the body. Hide it. Pages WITH a real
+   description are unaffected because their <p> isn't empty. */
+div.prose:has(> p:only-child:empty) {
+  display: none !important;
+}
+
+
+/* ---- 0d2. Top alignment: navbar bottom -> first content row ----
+   Mintlify renders the right TOC inside <div id="table-of-contents-
+   layout">. Default has zero top-padding so "On this page" glues to
+   the navbar. Match the same padding-top as the left sidebar and the
+   main content so all three columns start at the same y-position. */
+:root {
+  --top-pad: 1.25rem;
+}
+#sidebar-content,
+mdx-content,
+.mdx-content,
+#table-of-contents-layout,
+div#table-of-contents-layout {
+  padding-top: var(--top-pad) !important;
+}
+#table-of-contents-layout > *:first-child {
+  margin-top: 0 !important;
+}
+.mdx-content > *:first-child,
+mdx-content > *:first-child {
+  margin-top: 0 !important;
+}
+
+/* ---- 0e. Page header → body gap ----
+   Mintlify wraps content in `mdx-content` with Tailwind mt-8 (32px) AND
+   uses Tailwind's prose plugin which adds another ~1.25em margin-top to
+   the first visible paragraph. Combined, that's ~50-60px of gap. Kill
+   both: zero out the container's top margin AND the first visible
+   child's top margin (the leading <blockquote class="sr-only"> doesn't
+   count as the first prose child for this purpose). */
+.mdx-content,
+mdx-content {
+  margin-top: 0.5rem !important;
+}
+.mdx-content > blockquote.sr-only + *,
+mdx-content > blockquote.sr-only + * {
+  margin-top: 0 !important;
+}
+/* Belt-and-braces: even if no sr-only blockquote, force the very first
+   visible child to start without its prose top margin. */
+.mdx-content > *:first-child,
+mdx-content > *:first-child {
+  margin-top: 0 !important;
+}
+
+/* ---- 0b. (Removed) The floating AI "Ask a question" input is the
+   primary AI surface — keep it visible at the bottom of every page. */
+
+/* ---- 0d. Bottom Previous/Next pagination: Triton secondary button.
+   Verified DOM: pagination is `<div class="grid lg:grid-cols-2 gap-4">`
+   with link children carrying `border border-gray-200/70 rounded-xl`.
+   Target the actual pattern (no #pagination ID exists). */
+.mdx-content + .grid.gap-4 > a,
+.grid.lg\:grid-cols-2.gap-4 > a,
+[class*="grid-cols-2"] > a[class*="rounded-xl"] {
+  background: transparent !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  border-radius: 0.5rem !important;
+  color: rgba(73, 45, 96, 0.85) !important;
+  font-family: 'Work Sans', system-ui, sans-serif !important;
+  transition: background 120ms ease, border-color 120ms ease !important;
+}
+.mdx-content + .grid.gap-4 > a:hover,
+.grid.lg\:grid-cols-2.gap-4 > a:hover,
+[class*="grid-cols-2"] > a[class*="rounded-xl"]:hover {
+  background: rgba(122, 75, 160, 0.06) !important;
+  border-color: rgba(122, 75, 160, 0.3) !important;
+}
+.dark .grid.lg\:grid-cols-2.gap-4 > a,
+html.dark .grid.lg\:grid-cols-2.gap-4 > a {
+  border-color: rgba(181, 145, 211, 0.25) !important;
+  color: rgba(214, 191, 232, 0.9) !important;
+}
+.dark .grid.lg\:grid-cols-2.gap-4 > a:hover,
+html.dark .grid.lg\:grid-cols-2.gap-4 > a:hover {
+  background: rgba(181, 145, 211, 0.08) !important;
+  border-color: rgba(181, 145, 211, 0.4) !important;
+}
+
+/* ---- 1. Logo: 2x bigger (h-6 = 24px -> 48px) ---- */
+img.nav-logo,
+.nav-logo {
+  height: 3rem !important;
+  max-height: 3rem !important;
+  width: auto !important;
+}
+
+/* ---- 2. Customer Portal button: same height as Website link (h-9 = 36px) ---- */
+#topbar-cta-button > a {
+  height: 2.25rem !important;
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+}
+
+/* ---- 3. Inline code: visible against page background ----
+   Bare <code> outside <pre> renders as inline code. Without styling, it
+   blends into the page. Wash it in light purple, with a thin border. */
+:not(pre) > code {
+  background-color: rgba(122, 75, 160, 0.08);
+  color: #492D60;
+  border: 1px solid rgba(122, 75, 160, 0.18);
+  padding: 0.125rem 0.4rem;
+  border-radius: 0.375rem;
+  font-size: 0.875em;
+  font-weight: 500;
+  word-break: break-word;
+}
+.dark :not(pre) > code,
+html.dark :not(pre) > code {
+  background-color: rgba(181, 145, 211, 0.12);
+  color: #D6BFE8;
+  border-color: rgba(181, 145, 211, 0.25);
+}
+
+/* ---- 3-bis. Horizontal rules: Triton purple wash, applied globally
+   to every <hr> (Markdown `***` / `---`). Mintlify/Tailwind prose
+   defaults to a near-invisible gray; bump opacity so the line reads
+   clearly against both light and dark backgrounds, while staying
+   on-brand with the inline-code colour. Single rule, easy to tune. */
+hr,
+.mdx-content hr,
+mdx-content hr {
+  border: 0 !important;
+  border-top: 1px solid rgba(122, 75, 160, 0.35) !important;
+  margin: 2rem 0 !important;
+  background: none !important;
+  height: 0 !important;
+}
+.dark hr,
+.dark .mdx-content hr,
+html.dark hr,
+html.dark mdx-content hr {
+  border-top-color: rgba(181, 145, 211, 0.35) !important;
+}
+
+/* ---- 4. Code blocks: native Mintlify horizontal scroll (no override).
+   Per-block wrap is still available via Mintlify's `wrap` keyword after the
+   language tag in a fenced code block, e.g. ```rust wrap. */
+
+/* ---- 5. Copy page (page-context-menu): align with the page title ----
+   The container is a flex row at sm+ with items-center. ml-auto pushes
+   right. Lock vertical alignment so it doesn't drift when the title
+   wraps. */
+#page-context-menu {
+  align-self: center !important;
+  margin-top: 0 !important;
+}
+
+/* ---- Eyebrow: Geist Mono, uppercase, tracking ----
+   Mintlify renders the page eyebrow as a `.breadcrumb-list` row
+   containing one or more `.breadcrumb-item` segments. Earlier CSS
+   targeted a non-existent `.eyebrow` class -- update to the real
+   selectors. */
+.breadcrumb-list,
+.breadcrumb-item,
+.breadcrumb-list a,
+.breadcrumb-item a,
+.breadcrumb-list span,
+.breadcrumb-item span {
+  font-family: 'Geist Mono', 'SF Mono', ui-monospace, monospace !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  font-weight: 500 !important;
+  font-size: 0.75rem !important;
+}
+/* Trim to the first breadcrumb segment only -- matches GitBook
+   docs.triton.one which shows only the top section. */
+.breadcrumb-list .breadcrumb-item:not(:first-child) {
+  display: none !important;
+}
+.breadcrumb-list .breadcrumb-item:first-child svg {
+  display: none !important;
+}
+
+/* ---- Old Triton-blog table look REMOVED — superseded by the
+   universal `html body table` rule near the top of this file
+   (rule 0l). Inline code inside table cells kept. */
+.mdx-content table td code,
+mdx-content table td code,
+html body table td code {
+  font-size: 0.85em !important;
+  word-break: break-all;
+}
+
+/* ---- 6. Search + AI buttons: trust Mintlify defaults, force narrow.
+   Mintlify renders both as `rounded-full !w-9 bg-gray-950/[0.03]
+   border-none` — a perfect 36×36 circle below 1500px navbar width.
+   ABOVE 1500px the @[1500px]/navbar: container query expands to a
+   pill with "Search..." / "Ask AI" + kbd hint. Kate wants icon-only
+   ALWAYS. Override width + padding with higher specificity than
+   Tailwind's `.!w-auto` arbitrary class, and hide the inner spans. */
+html body button#search-bar-entry,
+html body button#assistant-entry {
+  width: 2.25rem !important;
+  min-width: 2.25rem !important;
+  max-width: 2.25rem !important;
+  padding: 0 !important;
+  flex: 0 0 auto !important;
+  justify-content: center !important;
+}
+/* Hide everything inside except the SVG icon. AI button: two direct
+   <span>s ("Ask AI" + ⌘I). Search button: nested divs + a flex-none
+   span for the kbd. */
+html body button#assistant-entry > span,
+html body button#search-bar-entry > div > div,
+html body button#search-bar-entry > span,
+html body button#search-bar-entry kbd,
+html body button#assistant-entry kbd {
+  display: none !important;
+}
+
+/* ---- 7. "Copy page" button: secondary style matching Solana dropdown
+   Currently rendered with a solid #f7 fill (like a primary). Kate wants
+   it muted -- transparent with a thin border, the same look as the
+   chain-selector dropdown ("Solana"). */
+#page-context-menu-button,
+#page-context-menu > button:first-child {
+  background: transparent !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  color: rgba(73, 45, 96, 0.85) !important;
+  font-weight: 500 !important;
+}
+#page-context-menu-button:hover,
+#page-context-menu > button:first-child:hover {
+  background: rgba(122, 75, 160, 0.06) !important;
+  border-color: rgba(122, 75, 160, 0.3) !important;
+}
+#page-context-menu > button:last-child {
+  background: transparent !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  border-left: 0 !important;
+  color: rgba(73, 45, 96, 0.85) !important;
+}
+.dark #page-context-menu-button,
+html.dark #page-context-menu-button,
+.dark #page-context-menu > button,
+html.dark #page-context-menu > button {
+  background: transparent !important;
+  border-color: rgba(181, 145, 211, 0.25) !important;
+  color: rgba(214, 191, 232, 0.9) !important;
+}
+.dark #page-context-menu-button:hover,
+html.dark #page-context-menu-button:hover {
+  background: rgba(181, 145, 211, 0.08) !important;
+  border-color: rgba(181, 145, 211, 0.4) !important;
+}
+
+/* ---- 8. Nested group dropdown buttons: chevron + branded states.
+   Nested groups (Account management, Dragon's Mouth gRPC, Accounts in
+   HTTP RPC, Standard, Metis, Titan, etc.) render as
+       <button aria-label="Toggle X section">
+         <div class="flex-1 ...">X</div>
+         <div class="h-[1lh] ...">
+           <svg class="transition-transform...">  <-- chevron, KEEP
+         </div>
+       </button>
+   The chevron is intentional dropdown affordance Kate asked for.
+   Click navigates to root via Mintlify's `root` config. */
+#sidebar-content button[aria-label^="Toggle "][aria-label$=" section"],
+#navigation-items button[aria-label^="Toggle "][aria-label$=" section"] {
+  border-radius: 0.5rem !important;
+  transition: background 120ms ease !important;
+}
+#sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:hover,
+#navigation-items button[aria-label^="Toggle "][aria-label$=" section"]:hover {
+  background: rgba(122, 75, 160, 0.06) !important;
+}
+.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:hover,
+html.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:hover {
+  background: rgba(181, 145, 211, 0.08) !important;
+}
+/* Active-group highlight: when the nested group contains the
+   currently-viewed page (Mintlify marks it as <li data-active="true">),
+   keep the toggle button looking "selected". */
+#sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:has(+ ul li[data-active="true"]),
+#sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:has(+ div li[data-active="true"]) {
+  background: rgba(122, 75, 160, 0.08) !important;
+  color: rgba(73, 45, 96, 1) !important;
+}
+.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:has(+ ul li[data-active="true"]),
+html.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"]:has(+ ul li[data-active="true"]) {
+  background: rgba(181, 145, 211, 0.12) !important;
+  color: rgba(214, 191, 232, 1) !important;
+}
+
+/* ---- 8a. Vertical guide line for nested group children -----------
+   The <ul> following a nested-group toggle button contains the child
+   pages. Run a single thin line down the left so the children read as
+   a tree branch. Active page gets a thicker, brand-coloured segment of
+   that line plus a slightly bolder weight. */
+#sidebar-content button[aria-label^="Toggle "][aria-label$=" section"] + ul {
+  border-left: 1px solid rgba(122, 75, 160, 0.16) !important;
+  margin-left: 0.875rem !important;
+  padding-left: 0 !important;
+}
+.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"] + ul,
+html.dark #sidebar-content button[aria-label^="Toggle "][aria-label$=" section"] + ul {
+  border-left-color: rgba(181, 145, 211, 0.18) !important;
+}
+/* Active page IN A NESTED GROUP: brand-purple stripe replacing the
+   guide-line on its row. Scoped to descendants of `li[data-group-tag]`
+   so top-level pages (Welcome, Quickstart, Rate & connection limits)
+   stay clean — they're not inside any dropdown.
+   Mintlify also marks the wrapper li with data-active=true (it has
+   data-group-tag); exclude it so we only stripe the leaf. Weight
+   bump kept to +100 (font-weight 500) — Mintlify's own text-shadow
+   trick already adds visual weight without going full bold. */
+#sidebar-content li[data-group-tag] li[data-active="true"]:not([data-group-tag]) {
+  position: relative !important;
+}
+#sidebar-content li[data-group-tag] li[data-active="true"]:not([data-group-tag])::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(122, 75, 160, 0.85);
+  border-radius: 2px;
+}
+.dark #sidebar-content li[data-group-tag] li[data-active="true"]:not([data-group-tag])::before,
+html.dark #sidebar-content li[data-group-tag] li[data-active="true"]:not([data-group-tag])::before {
+  background: rgba(181, 145, 211, 0.9);
+}
+/* Active link weight: +100 over body for ALL active sidebar links
+   (top-level AND nested). Stripe stays nested-only above; this rule
+   handles the weight bump independently so Quickstart, Welcome, etc.
+   read at the same medium weight as nested-page active state. */
+#sidebar-content li[data-active="true"]:not([data-group-tag]) > a {
+  font-weight: 500 !important;
+}
+
+/* Kill Mintlify's faux-bold text-shadow trick on every active link.
+   That trick (`text-shadow:-0.2px,0.2px,...`) was making active pages
+   look almost bold-black; Kate wanted only +100 over body weight at
+   most. With text-shadow gone, active = purple `text-primary` colour
+   alone, which already differentiates it from inactive gray text. */
+#sidebar-content a[class*="text-shadow"] {
+  text-shadow: none !important;
+}
+
+/* ---- 9. Navbar: pin tabs LEFT (right next to the logo) ----
+   Two pieces:
+   (a) Tab `<nav>` has `justify-center` baked in -- override to
+       flex-start.
+   (b) The DIV that wraps the logo has Tailwind `flex-1` on it,
+       which makes it expand and push the tab nav far to the right
+       (~400px from the logo). Kill `flex-grow` on that wrapper so
+       it shrinks to fit the logo + the tabs sit right next to it.
+   The right cluster (`.topbar-right-container`) already has
+   `flex-1 justify-end` so it gets all the leftover space. */
+#navbar nav[class*="justify-center"],
+#navbar nav.justify-center,
+#navbar > div > nav,
+#navbar nav[class*="navbar"] {
+  justify-content: flex-start !important;
+  margin-left: 0.5rem !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+/* Kill flex-grow on the logo wrapper so it shrinks to the logo
+   width and the tab nav sits flush against it.
+   Selectors using bare Tailwind class names get stripped by the
+   build pipeline; use `:has(> a > img)` (a tag-only selector)
+   which survives. The logo wrapper is a div whose direct child is
+   an anchor whose direct child is the logo img. */
+#navbar div:has(> a > img) {
+  flex-grow: 0 !important;
+  flex-basis: auto !important;
+}
+/* Logo: 1.5x bigger circular mark to match triton.one navbar size */
+img.nav-logo,
+.nav-logo,
+#navbar img[alt*="logo" i],
+#navbar img[src*="mark.svg"] {
+  height: 3.25rem !important;
+  max-height: 3.25rem !important;
+  width: 3.25rem !important;
+  border-radius: 50% !important;
+}
+
+/* ---- 10. Tab icons: ensure they render at consistent size ---- */
+#navbar [data-component-part="navbar-tab"] svg,
+#navbar [role="tab"] svg,
+#navbar a[role="tab"] svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  margin-right: 0.4rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* ---- 11. Solana chain dropdown: purple hover (was gray) ---- */
+#sidebar-content button[aria-haspopup],
+#sidebar-content button:has(img[alt*="Solana" i]),
+#sidebar-content button:has(img[alt*="Pyth" i]),
+#sidebar-content button:has(img[alt*="SUI" i]),
+#sidebar-content button:has(img[alt*="Monad" i]) {
+  background: transparent !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  border-radius: 0.5rem !important;
+  transition: background 120ms ease, border-color 120ms ease !important;
+}
+#sidebar-content button[aria-haspopup]:hover,
+#sidebar-content button:has(img[alt*="Solana" i]):hover,
+#sidebar-content button:has(img[alt*="Pyth" i]):hover,
+#sidebar-content button:has(img[alt*="SUI" i]):hover,
+#sidebar-content button:has(img[alt*="Monad" i]):hover {
+  background: rgba(122, 75, 160, 0.06) !important;
+  border-color: rgba(122, 75, 160, 0.3) !important;
+}
+.dark #sidebar-content button[aria-haspopup],
+html.dark #sidebar-content button[aria-haspopup] {
+  border-color: rgba(181, 145, 211, 0.25) !important;
+}
+.dark #sidebar-content button[aria-haspopup]:hover,
+html.dark #sidebar-content button[aria-haspopup]:hover {
+  background: rgba(181, 145, 211, 0.08) !important;
+  border-color: rgba(181, 145, 211, 0.4) !important;
+}
+
+/* ---- 13. Kbd shortcut chips (⌘K, ⌘I): remove white pill fill ----
+   Default Mintlify renders the keyboard hint inside a `<kbd>` element
+   with a white/grey rounded background pill. Kate wants the shortcut
+   text kept but with no fill -- just half-transparent text. */
+#search-bar-entry kbd,
+#topbar-ai-chat-button kbd,
+button[aria-label*="Ask AI" i] kbd,
+#navbar kbd {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  opacity: 0.55 !important;
+  font-weight: 400 !important;
+}
+.dark #search-bar-entry kbd,
+.dark #topbar-ai-chat-button kbd,
+.dark #navbar kbd,
+html.dark #search-bar-entry kbd,
+html.dark #topbar-ai-chat-button kbd,
+html.dark #navbar kbd {
+  opacity: 0.6 !important;
+}
+
+/* ---- 12. Corner-radius family lock: ONE radius across all chrome ----
+   Mintlify ships with rounded-md (6px), rounded-lg (8px), rounded-xl
+   (12px), and rounded-2xl (16px) sprinkled across navbar buttons,
+   sidebar dropdowns, popover panels, chain selector items, copy-page
+   dropdowns, and pagination. Lock every one of them to 0.5rem so the
+   design system reads as a single radius family.
+   Excluded on purpose: rounded-full (circles like search/AI/profile),
+   rounded-l / rounded-r (split-button halves), rounded-none. */
+#navbar [class*="rounded-md"],
+#navbar [class*="rounded-lg"],
+#navbar [class*="rounded-xl"],
+#navbar [class*="rounded-2xl"],
+#sidebar-content [class*="rounded-md"],
+#sidebar-content [class*="rounded-lg"],
+#sidebar-content [class*="rounded-xl"],
+#sidebar-content [class*="rounded-2xl"],
+#page-context-menu,
+#page-context-menu [class*="rounded-md"],
+#page-context-menu [class*="rounded-lg"],
+#page-context-menu [class*="rounded-xl"],
+#page-context-menu [class*="rounded-2xl"],
+[role="menu"],
+[role="menu"] [class*="rounded-md"],
+[role="menu"] [class*="rounded-lg"],
+[role="menu"] [class*="rounded-xl"],
+[role="menu"] [class*="rounded-2xl"],
+[role="dialog"][class*="rounded-2xl"],
+[role="dialog"][class*="rounded-xl"],
+[data-state="open"][class*="rounded-2xl"],
+[data-state="open"][class*="rounded-xl"],
+[data-radix-popper-content-wrapper] [class*="rounded-md"],
+[data-radix-popper-content-wrapper] [class*="rounded-lg"],
+[data-radix-popper-content-wrapper] [class*="rounded-xl"],
+[data-radix-popper-content-wrapper] [class*="rounded-2xl"],
+.grid.lg\:grid-cols-2.gap-4 > a,
+.grid.lg\:grid-cols-2.gap-4 > a[class*="rounded-xl"] {
+  border-radius: 0.5rem !important;
+}
+/* Split Copy-page button halves: explicit 0.5rem on the outer
+   corners + 0 on the inner edge so the seam is straight. The
+   family-lock rule (§12) doesn't catch these because the buttons
+   carry no rounded-* class — Mintlify ships them with a higher
+   default (rounded-2xl / 16px), so we pin both corners explicitly. */
+#page-context-menu > button:first-child {
+  border-top-left-radius: 0.5rem !important;
+  border-bottom-left-radius: 0.5rem !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+#page-context-menu > button:last-child {
+  border-top-right-radius: 0.5rem !important;
+  border-bottom-right-radius: 0.5rem !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* ---- 14. Hide "Powered by Mintlify" footer line ----
+   Renders as <a class="group flex items-baseline ..."> wrapping a
+   span with the brand mark. */
+a:has(> span):has(svg[class*="mintlify" i]),
+a[class*="text-gray-400"][class*="items-baseline"]:has(span),
+footer a:has(span):not(:has(div)) {
+  display: none !important;
+}
+
+/* ---- 15. Floating chat input: kill the white-shadow pseudo + divider ----
+   The `chat-assistant-floating-input` element uses `before:content-[""]`
+   to render a 200px white wash above the bottom edge. Disable the
+   pseudo so the chat input sits cleanly on the page background. */
+.chat-assistant-floating-input::before,
+.chat-assistant-floating-input::after {
+  display: none !important;
+  content: none !important;
+}
+.chat-assistant-floating-input {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-top: 0 !important;
+}
+/* Center the floating chat input within the content column instead
+   of stretching edge-to-edge. Cap width and centre. */
+.chat-assistant-floating-input {
+  max-width: 600px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* Kill the hairline divider drawn just ABOVE the chat input bar.
+   Mintlify renders a separator either as a `<hr>` or a sibling div
+   with `border-t` immediately before `.chat-assistant-floating-input`.
+   Hide both. Also hide the brand "Powered by Mintlify" disclaimer
+   row (already covered globally below, but belt-and-braces). */
+hr + .chat-assistant-floating-input,
+.chat-assistant-floating-input {
+  border-top: 0 !important;
+}
+.chat-assistant-floating-input + hr,
+hr:has(+ .chat-assistant-floating-input),
+hr ~ .chat-assistant-disclaimer-text {
+  display: none !important;
+}
+/* "Powered by Mintlify" disclaimer that lives inside the chat
+   panel and inside the floating bar. Hide everywhere. */
+.chat-assistant-disclaimer-text,
+[class*="chat-assistant"] [class*="disclaimer"],
+[class*="chat-assistant"] a[href*="mintlify.com"] {
+  display: none !important;
+}
+
+/* ---- 15-ter. Search modal/dialog: focus state, light-gray fill,
+   matched corner radius. When user clicks the search icon a dialog
+   opens; the input inside it gets a subtle outline + #f7f7f7 fill. */
+input[type="search"],
+[role="dialog"] input[placeholder*="earch" i],
+[role="combobox"] input,
+.search-bar input,
+[class*="search"] input[type="text"] {
+  background: #f7f7f7 !important;
+  border-radius: 0.625rem !important;
+  border: 1px solid rgba(122, 75, 160, 0.18) !important;
+  outline: none !important;
+}
+input[type="search"]:focus,
+[role="dialog"] input[placeholder*="earch" i]:focus,
+[role="combobox"] input:focus,
+.search-bar input:focus,
+[class*="search"] input[type="text"]:focus {
+  border-color: rgba(122, 75, 160, 0.55) !important;
+  box-shadow: 0 0 0 3px rgba(122, 75, 160, 0.12) !important;
+  outline: none !important;
+}
+.dark input[type="search"],
+.dark [role="dialog"] input[placeholder*="earch" i],
+html.dark input[type="search"] {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(181, 145, 211, 0.25) !important;
+}
+
+/* ---- 19. Quickstart "Next" / Step-cluster Next button rounding ----
+   The Steps component's "Next step" / final CTA can render as a
+   button with `rounded-lg` or higher. Lock to 0.5rem to match the
+   secondary button family. */
+a[href*="quickstart"][class*="rounded"],
+.mdx-content a[class*="rounded-xl"][href],
+.mdx-content button[class*="rounded-xl"],
+.mdx-content [class*="rounded-2xl"] {
+  border-radius: 0.5rem !important;
+}
+
+/* ---- 16. Copy page split button: lock both halves to same height ----
+   DOM showed the two halves render at 34px and 33px. Force both to
+   36px so the seam aligns. */
+#page-context-menu > button {
+  height: 2.25rem !important;
+  min-height: 2.25rem !important;
+  align-items: center !important;
+}
+
+/* ---- 17. Sidebar->content gap: always 44px margin + 24px padding ----
+   When the AI assistant panel opens, Mintlify applies the Tailwind
+   class `[[data-assistant-state=open]_&]:!mx-auto` which compiles to
+   `[data-assistant-state="open"] .target { margin: auto !important }`.
+   To beat it we need higher specificity. Stack three attribute
+   selectors on `html body` so we win on every state. */
+@media (min-width: 1024px) {
+  html body [class*="lg:max-w-[696px"],
+  html body [class*="lg:max-w-[696px"][class*="lg:ml-[max"],
+  html body [data-assistant-state="open"] [class*="lg:max-w-[696px"],
+  html body [data-assistant-state="closed"] [class*="lg:max-w-[696px"] {
+    margin-left: 44px !important;
+    margin-right: 0 !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+/* ---- 18. Kill the empty-void scroll: any sticky 100vh sidebar is
+   pulled out of flow entirely.
+
+   Two Mintlify elements live in the main flex layout with
+   `position: sticky` AND `h-[calc(100vh-banner)]`:
+   (a) the chat-panel wrapper `<div class="sticky..."
+       style="width:var(--assistant-sheet-width, 0px)">`
+   (b) the TOC sidebar `<div id="content-side-layout">`
+
+   `position: sticky` keeps the element in flow, so its 100vh height
+   forces the flex parent to be ≥ 100vh on every page. On a short
+   page (wireframe placeholders, etc.) that creates a scrollable
+   empty void below the real content.
+
+   Switch BOTH to `position: fixed`. They keep their viewport-pinned
+   visual behaviour but no longer contribute to layout height. */
+body div.sticky[style*="assistant-sheet-width"],
+body div[style*="--assistant-sheet-width"],
+html body #content-side-layout {
+  position: fixed !important;
+  right: 0 !important;
+  top: var(--banner-height, 0px) !important;
+  margin-top: 0 !important;
+  height: calc(100vh - var(--banner-height, 0px)) !important;
+  max-height: calc(100vh - var(--banner-height, 0px)) !important;
+}
+/* TOC sits above the chat panel when both are present. Slide TOC
+   left by the chat panel width so they don't overlap. (When the
+   chat panel is closed, --assistant-sheet-width is 0px so this is a
+   no-op.) Plus offset top by 3rem for the navbar gap matching what
+   Mintlify originally had. */
+html body #content-side-layout {
+  right: var(--assistant-sheet-width, 0px) !important;
+  top: calc(3rem + var(--banner-height, 0px)) !important;
+  height: calc(100vh - 3rem - var(--banner-height, 0px)) !important;
+}
+/* Belt-and-braces: kill any leftover h-screen / 100vh height on
+   anything still in flex flow that isn't the real content. */
+html body main,
+html body [class*="lg:max-w-[696px"] {
+  min-height: 0 !important;
+}
+
+/* The REAL culprit for "page scrolls past content": Mintlify ships
+   two `<span class="absolute inset-0 h-[64rem]">` gradient
+   backgrounds (one for light, one for dark theme). At 64rem (1024px)
+   tall and `position: absolute` inside a `position: relative` parent
+   with `overflow: visible`, they extend the document scroll area to
+   1024px regardless of how short the actual page content is.
+   Pin to viewport via `position: fixed` so they stop contributing
+   to document height — the visual effect is identical. */
+html body [class*="absolute"][class*="h-[64rem"],
+html body span[class*="h-[64rem"],
+html body span[style*="radial-gradient"] {
+  position: fixed !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  top: 0 !important;
+  inset: 0 auto auto 0 !important;
+  width: 100vw !important;
+  z-index: -10 !important;
+  pointer-events: none !important;
+}
+
+/* Force key layout wrappers to size to content, not to a viewport-
+   tied minimum. Combined with the gradient-pin above, this is what
+   actually killed the scroll-past-content on short pages. */
+html, body {
+  min-height: 0 !important;
+}
+html body #body-content,
+html body #body-content > div,
+html body div[class*="flex-1"][class*="flex-col"] {
+  min-height: 0 !important;
+}
+
+/* ---- 18b. Hide Mintlify's Previous/Next pagination ----------------
+   Kate: "What's next" Cards on each page replace this. Component
+   stays styled (§19) and the original §27 grid rule still applies --
+   to re-enable, just delete the `display: none !important` rule
+   below and pagination renders again. */
+html body #pagination,
+html body div#pagination {
+  display: none !important;
+}
+
+/* ---- 19. Mobile/tablet pagination + chat input ----------------
+   Below lg, Mintlify's pagination is `<div id="pagination" class="grid
+   lg:grid-cols-2 gap-4">` — single column = Previous on its own row,
+   Next below it. Force 2 columns at all sizes so they sit side-by-side. */
+#pagination {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+/* The "Ask a question" floating input.
+   - Desktop (lg+): keep Mintlify's native sticky-inside-body
+     positioning so the bar inherits the body content column's
+     width and follows the AI-panel state automatically. Fixed
+     positioning at this width caused the bar to stretch across
+     the full available-after-sidebar area while the body column
+     was only 696px, so the bar drifted right of the content.
+   - Mobile/tablet (<lg): pinned to viewport bottom (the §27 rule
+     and the rules below). */
+html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
+  z-index: 30 !important;
+}
+@media (max-width: 1023px) {
+  html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    padding: 0 1.5rem 1rem !important;
+  }
+}
+@media (min-width: 1024px) {
+  /* Desktop: pin to viewport bottom (position: fixed) but match the
+     body column's horizontal extent exactly so the bar lines up with
+     the Previous/Next pagination row.
+
+     Body column's left edge (per §17): sidebar (18rem) + 44px margin
+     + 24px content padding = 356px. Outer body wrapper is 696px max
+     with 24px padding each side, so inner content width = 648px.
+     We follow that here so left edge + width align with .mdx-content.
+
+     When the AI assistant panel opens, Mintlify sets
+     --assistant-sheet-width on its container; subtract that from
+     max-width so the bar doesn't slide under the panel. */
+  html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: calc(var(--sidebar-w, 18rem) + 44px + 24px) !important;
+    right: auto !important;
+    top: auto !important;
+    width: 648px !important;
+    max-width: calc(
+      100vw - var(--sidebar-w, 18rem) - 44px - 48px - var(--assistant-sheet-width, 0px)
+    ) !important;
+    padding: 0 0 1rem !important;
+    z-index: 30 !important;
+  }
+  /* Bar fills its wrapper — override §15's max-width: 600px cap. */
+  html body .chat-assistant-floating-input {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  /* Reserve a bit of bottom padding on body content so pagination
+     doesn't sit right against the now-fixed chat bar. */
+  html body [class*="lg:max-w-[696px"],
+  html body .mdx-content {
+    padding-bottom: 88px !important;
+  }
+}
+.chat-assistant-floating-input,
+.chat-assistant-floating-input [class*="rounded-2xl"],
+.chat-assistant-floating-input [class*="rounded-xl"] {
+  border-radius: 0.5rem !important;
+}
+@media (max-width: 1023px) {
+  /* Mobile/tablet: cap the input width inside the wrapper so it
+     doesn't stretch edge-to-edge on tablets. */
+  .chat-assistant-floating-input {
+    max-width: 760px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+/* Reserve room at the bottom so the body content + pagination don't
+   sit under the floating bar on mobile (where it's fixed). At
+   desktop the bar is sticky inside the body, no reserve needed. */
+@media (max-width: 1023px) {
+  html body [class*="lg:max-w-[696px"],
+  html body .mdx-content {
+    padding-bottom: 96px !important;
+  }
+}
+
+/* ---- 20. Tablet + mobile navbar layout ----------------------------
+   Cuts:
+   - Tablet (md, 768px+): show CTAs (Get an endpoint, Log in), drop
+     the 3-dots overflow, show the tab pill row.
+   - Mobile (< md): hide tab pills (don't fit), hide 3-dots, hide
+     "Get an endpoint", style Log in as a person-icon circle on the
+     far right. Hamburger opens the drawer for full nav. */
+
+/* Tablet+: show CTAs, hide 3-dots */
+@media (min-width: 768px) {
+  html body #navbar #topbar-cta-button,
+  html body #navbar li[id*="topbar-cta"],
+  html body #navbar a[href*="customers.triton.one/users/sign-in"] {
+    display: flex !important;
+  }
+  html body #navbar button[aria-label="More actions"] {
+    display: none !important;
+  }
+}
+/* Tab pill row only at tablet+ — too cramped on phones */
+@media (min-width: 768px) {
+  html body #navbar nav.hidden,
+  html body #navbar nav[class*="hidden"][class*="600px"] {
+    display: flex !important;
+  }
+}
+
+/* ---- Mobile (< 768px): icon-only navbar with person-icon Log in ---*/
+@media (max-width: 767px) {
+  /* Kill 3-dots on mobile too — Log in pill replaces it */
+  html body #navbar button[aria-label="More actions"],
+  html body #navbar [class*="@[1100px]/navbar:hidden"] button[aria-label="More actions"],
+  html body #navbar div[class*="@[1100px]"]:has(button[aria-label="More actions"]) {
+    display: none !important;
+  }
+  /* Hide "Get an endpoint" — too wide for mobile navbar */
+  html body #navbar #topbar-cta-button {
+    display: none !important;
+  }
+  /* Show Log in link, restyle as a 36×36 person-icon circle on the
+     far-right of the navbar. Replaces the kill-with-fire 3-dots. */
+  html body #navbar a[href*="customers.triton.one/users/sign-in"] {
+    display: inline-flex !important;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    min-width: 2.25rem !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    border: 0 !important;
+    background: rgba(0, 0, 0, 0.03) !important;
+    color: transparent !important;
+    overflow: hidden !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+  }
+  html body #navbar a[href*="customers.triton.one/users/sign-in"]::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background-color: rgba(73, 45, 96, 0.85) !important;
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 22a8 8 0 0 1 16 0"/></svg>') no-repeat center / 1.125rem 1.125rem !important;
+    mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 22a8 8 0 0 1 16 0"/></svg>') no-repeat center / 1.125rem 1.125rem !important;
+  }
+  html.dark body #navbar a[href*="customers.triton.one/users/sign-in"] {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+  html.dark body #navbar a[href*="customers.triton.one/users/sign-in"]::before {
+    background-color: rgba(214, 191, 232, 0.9) !important;
+  }
+
+  /* Hide the breadcrumb text + chevron inside the lg:hidden hamburger
+     button so the mobile bar shows just the hamburger icon, not
+     "Metis › Metis /quote". The whole row is `<button class="flex
+     items-center h-14 py-4 px-5 lg:hidden">` containing the nav icon
+     div + a div with breadcrumb spans. */
+  html body button[class*="lg:hidden"][class*="h-14"] > div:nth-child(2),
+  html body button[class*="h-14"][class*="lg:hidden"] > div:nth-child(2) {
+    display: none !important;
+  }
+
+  /* Page-header breadcrumb (eyebrow) hide on mobile — page leads with H1 */
+  html body .breadcrumb-list,
+  html body header#header .breadcrumb-list {
+    display: none !important;
+  }
+}
+
+/* ---- 22. Sidebar dropdowns: equal-width pill triggers -----------
+   The chain selector (Solana) and tab selector (API reference) both
+   use `nav-dropdown-trigger` — should both be w-full inside their
+   container. Lock width + matching radius so they read as a pair. */
+html body #sidebar-content button.nav-dropdown-trigger,
+html body #sidebar-content button[aria-haspopup="menu"][class*="nav-dropdown"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+/* Inner sheet fills the now-fixed wrapper. Its own .sheet-content
+   keeps overflow-y-auto for the message-list scroll. */
+#chat-assistant-sheet,
+.chat-assistant-sheet {
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* ---- 23. Mobile chrome: hamburger pinned to top-right of viewport --
+   Mintlify ships the mobile drawer-trigger as a separate row BELOW
+   the navbar — `<button class="flex items-center h-14 py-4 px-5
+   lg:hidden">`. Kate wants it sitting inside (or over) the navbar on
+   the right, not below the logo.
+
+   Approach: position: fixed over the navbar's top-right corner. Keeps
+   the React click handler intact (no DOM mutation, no proxy
+   forwarding). The button's parent row collapses because the button
+   no longer participates in flow layout. */
+@media (max-width: 1023px) {
+  html body button[class*="lg:hidden"][class*="h-14"] {
+    position: fixed !important;
+    top: 0.5rem !important;
+    right: 1rem !important;
+    left: auto !important;
+    bottom: auto !important;
+    z-index: 40 !important;
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+    min-width: 2.75rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: rgba(73, 45, 96, 0.95) !important;
+    overflow: hidden !important;
+    pointer-events: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: none !important;
+  }
+  html.dark body button[class*="lg:hidden"][class*="h-14"] {
+    background: transparent !important;
+    color: rgba(214, 191, 232, 0.95) !important;
+  }
+  html body button[class*="lg:hidden"][class*="h-14"]:hover {
+    background: transparent !important;
+    opacity: 0.7 !important;
+  }
+  /* Hide the breadcrumb-text + chevron child — keep only the menu icon */
+  html body button[class*="lg:hidden"][class*="h-14"] > div:nth-child(2) {
+    display: none !important;
+  }
+  html body button[class*="lg:hidden"][class*="h-14"] > div:nth-child(1) {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  html body button[class*="lg:hidden"][class*="h-14"] svg {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+  /* Reserve right padding inside #navbar so logo/search/AI don't
+     slide under the floating hamburger button. */
+  html body #navbar {
+    padding-right: 3.5rem !important;
+  }
+}
+/* Hide the legacy proxy if it's still in DOM from earlier deploys */
+html body .triton-mobile-menu-btn {
+  display: none !important;
+}
+
+/* ---- 23b. Mobile drawer: 4-button tab row (2x2 grid) -------------
+   custom.js replaces the "Documentation / API reference / Guides /
+   FAQs" Radix Select inside the open drawer with `.triton-mobile-tab-
+   row` containing 4 sibling links. Layout is a 2x2 grid: 2 buttons
+   per row. Display labels are short ("Docs" / "API methods") so they
+   fit comfortably side-by-side at small viewport widths. */
+html body .triton-mobile-tab-row {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 0.375rem !important;
+  width: 100% !important;
+  margin-bottom: 0.5rem !important;
+}
+html body .triton-mobile-tab-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.4rem !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 0.625rem 0.5rem !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid rgba(122, 75, 160, 0.16) !important;
+  background: transparent !important;
+  color: rgba(73, 45, 96, 0.92) !important;
+  font-family: 'DM Sans', system-ui, sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 0.9375rem !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  transition: background 120ms ease, border-color 120ms ease !important;
+}
+html body .triton-mobile-tab-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  color: currentColor !important;
+}
+html body .triton-mobile-tab-icon svg {
+  width: 1rem !important;
+  height: 1rem !important;
+}
+html body .triton-mobile-tab-label {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html body .triton-mobile-tab-btn:hover {
+  background: rgba(122, 75, 160, 0.06) !important;
+  border-color: rgba(122, 75, 160, 0.3) !important;
+}
+html body .triton-mobile-tab-btn[aria-current="page"] {
+  background: rgba(122, 75, 160, 0.1) !important;
+  border-color: rgba(122, 75, 160, 0.4) !important;
+  color: rgba(73, 45, 96, 1) !important;
+  font-weight: 600 !important;
+}
+html.dark body .triton-mobile-tab-btn {
+  border-color: rgba(181, 145, 211, 0.22) !important;
+  color: rgba(214, 191, 232, 0.9) !important;
+}
+html.dark body .triton-mobile-tab-btn:hover {
+  background: rgba(181, 145, 211, 0.08) !important;
+  border-color: rgba(181, 145, 211, 0.4) !important;
+}
+html.dark body .triton-mobile-tab-btn[aria-current="page"] {
+  background: rgba(181, 145, 211, 0.14) !important;
+  border-color: rgba(181, 145, 211, 0.5) !important;
+  color: rgba(232, 215, 244, 1) !important;
+  font-weight: 600 !important;
+}
+/* Hide the row at desktop — sidebar has its own tab pills there. */
+@media (min-width: 1024px) {
+  html body .triton-mobile-tab-row {
+    display: none !important;
+  }
+}
+
+/* ---- 24. Mobile Sign-up link: parallel styling to Log-in icon ----
+   docs.json `navbar.links` now contains both Log in and Sign up. On
+   desktop they render as text links; on mobile we collapse both to
+   icon-circle CTAs sitting before the hamburger. Sign up gets a
+   distinct user-plus icon so it's visually separable from Log in. */
+@media (max-width: 767px) {
+  html body #navbar a[href*="customers.triton.one/users/sign-up"] {
+    display: inline-flex !important;
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    min-width: 2.25rem !important;
+    padding: 0 !important;
+    margin: 0 0.125rem !important;
+    border-radius: 50% !important;
+    border: 0 !important;
+    background: rgba(122, 75, 160, 0.85) !important;
+    color: transparent !important;
+    overflow: hidden !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+  }
+  html body #navbar a[href*="customers.triton.one/users/sign-up"]::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background-color: white !important;
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>') no-repeat center / 1.125rem 1.125rem !important;
+    mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>') no-repeat center / 1.125rem 1.125rem !important;
+  }
+  html.dark body #navbar a[href*="customers.triton.one/users/sign-up"] {
+    background: rgba(181, 145, 211, 0.95) !important;
+  }
+  html.dark body #navbar a[href*="customers.triton.one/users/sign-up"]::before {
+    background-color: rgba(23, 23, 23, 0.95) !important;
+  }
+}
+/* Tablet+: render Sign up as a text link beside Log in (Mintlify
+   default), don't apply the icon-circle treatment. */
+@media (min-width: 768px) {
+  html body #navbar a[href*="customers.triton.one/users/sign-up"] {
+    display: inline-flex !important;
+  }
+}
+
+/* ---- 25. Footer: kill the empty wrapper entirely ------------------
+   Mintlify renders a <footer> at the bottom of the layout even when no
+   footer config is set. The wrapper has its own padding/min-height,
+   creating a tall white slab below the content. Hide the whole
+   element + zero out any layout contribution. */
+html body footer,
+html body footer[class*="border-t"],
+html body footer[class*="px-"],
+html body div[class*="footer"]:not(:has(*)) {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+/* If the footer is wrapped (some Mintlify layouts), kill the wrapper
+   too so it doesn't keep its own padding. */
+html body main + div:has(> footer:only-child),
+html body div:has(> footer:only-child:empty) {
+  display: none !important;
+}
+
+/* ---- 26. Mobile copy-page: icon + chevron only, on the RIGHT of H1
+   Mintlify renders TWO copies of #page-context-menu on mobile:
+     A) Inside the title row (sibling of H1#page-title) inside a
+        `flex flex-col sm:flex-row` parent — this is the desktop-style
+        version that stacks below H1 on xs because flex-col.
+     B) A second one as a direct #header child with `sm:hidden` —
+        the mobile-only DUPLICATE that stacks under the title.
+   Kate wants the menu on the right of the H1, not below.
+   Strategy: hide (B), force (A)'s flex container to flex-row at all
+   widths, shrink the buttons to icon-only. */
+@media (max-width: 767px) {
+  /* Hide duplicate B (the sm:hidden mobile-only version below title) */
+  html body #header > #page-context-menu[class*="sm:hidden"],
+  html body #header > div#page-context-menu[class*="sm:hidden"] {
+    display: none !important;
+  }
+  /* Un-hide duplicate A: the in-row variant has Tailwind `hidden sm:flex`
+     which makes it display:none at xs. Force it visible. */
+  html body div[class*="flex-col"][class*="sm:flex-row"] > #page-context-menu[class*="hidden"][class*="sm:flex"],
+  html body div[class*="flex-col"][class*="sm:flex-row"] > div#page-context-menu {
+    display: flex !important;
+  }
+  /* Force the title-row flex container into row at xs */
+  html body div[class*="flex-col"][class*="sm:flex-row"]:has(> h1#page-title),
+  html body div.flex.flex-col:has(> h1#page-title):has(> #page-context-menu) {
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 0.5rem !important;
+  }
+  html body div.flex:has(> h1#page-title) > h1#page-title {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  html body div.flex:has(> h1#page-title) > #page-context-menu {
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+    margin-top: 0 !important;
+  }
+  /* Hide the "Copy page" text inside the first half. Keep the icon. */
+  html body #page-context-menu > button:first-child > span,
+  html body #page-context-menu-button > span,
+  html body #page-context-menu > button:first-child [class*="text"]:not([class*="text-"]),
+  html body #page-context-menu > button:first-child > div > span:not(:has(svg)) {
+    display: none !important;
+  }
+  /* Tighten both halves to icon-only width */
+  html body #page-context-menu > button:first-child,
+  html body #page-context-menu-button {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    min-width: 2.25rem !important;
+    gap: 0 !important;
+  }
+  html body #page-context-menu > button:last-child {
+    padding-left: 0.4rem !important;
+    padding-right: 0.4rem !important;
+    min-width: 1.75rem !important;
+  }
+  /* Override the min-w-[156px] Tailwind class on the mobile-duplicate
+     when it's the in-row variant (we hid the sm:hidden one, this only
+     touches the desktop-variant we forced into row). */
+  html body #page-context-menu[class*="min-w-["] {
+    min-width: 0 !important;
+  }
+}
+
+/* ---- 27. Mobile floating chat input: stay visible always ----------
+   Kate flagged that "Ask a question" disappears when scrolling on
+   mobile. Section 19 already pins the wrapper as `position: fixed`,
+   but Mintlify can hide the input itself via opacity/transform on
+   scroll. Force it visible at all viewport sizes. */
+html body div.sticky.bottom-0:has(> .chat-assistant-floating-input),
+html body .chat-assistant-floating-input {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+@media (max-width: 1023px) {
+  /* Below desktop: always pinned to viewport bottom, full width, no
+     left/right offsets (no sidebar at this width). */
+  html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    padding: 0.5rem 1rem 0.75rem !important;
+    z-index: 40 !important;
+    background: linear-gradient(
+      to bottom,
+      rgba(247, 247, 247, 0) 0%,
+      rgba(247, 247, 247, 0.85) 30%,
+      rgba(247, 247, 247, 1) 100%
+    ) !important;
+  }
+  html.dark body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
+    background: linear-gradient(
+      to bottom,
+      rgba(23, 23, 23, 0) 0%,
+      rgba(23, 23, 23, 0.85) 30%,
+      rgba(23, 23, 23, 1) 100%
+    ) !important;
+  }
+}
+
+/* ---- 28. Steps numbered circles: brand-purple fill ---------------
+   LOCKED RULE -- DO NOT REVERT. Mintlify ships the step-number
+   circle with `bg-gray-50 + text-gray-900` (almost invisible
+   against the page background). The size-7 + rounded-full +
+   bg-gray-50 + shrink-0 combo is unique to the Steps component, so
+   no ancestor scoping needed. */
+html body div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"][class*="shrink-0"] {
+  background: rgba(122, 75, 160, 0.95) !important;
+  color: #F7F7F7 !important;
+  border: 0 !important;
+  font-weight: 600 !important;
+}
+html body div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"][class*="shrink-0"] * {
+  color: #F7F7F7 !important;
+}
+html.dark body div[class*="size-7"][class*="rounded-full"][class*="dark:bg-white"][class*="shrink-0"] {
+  background: rgba(181, 145, 211, 0.95) !important;
+  color: #171717 !important;
+}
+
+/* ---- 28b. Accordion: kill the wrapper, keep per-item border only
+   LOCKED RULE -- DO NOT REVERT. Two-part fix:
+
+   (1) The .accordion-group WRAPPER ships with its own 1px border +
+       overflow:hidden + rounded corners. Combined with our per-item
+       border that's a double-wrap, and the wrapper's overflow:hidden
+       clips the inner items' rounded corners. Kill the wrapper's
+       border + clip + radius so it's an invisible container.
+
+   (2) Each <details>.accordion gets its own visible border, 0.5rem
+       radius, and 0.5rem vertical gap. Beat Mintlify's
+       [&>details]:border-0 + [&>details]:rounded-none + [&>details]:mb-0
+       rules with !important. */
+
+html body div.accordion-group {
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+html body details.accordion,
+html body div.accordion-group > details.accordion,
+html body div.accordion-group > details {
+  border: 1px solid var(--triton-border) !important;
+  border-radius: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  overflow: hidden !important;
+  background: var(--triton-bg-light) !important;
+}
+html.dark body details.accordion,
+html.dark body div.accordion-group > details.accordion,
+html.dark body div.accordion-group > details {
+  border-color: var(--triton-purple-800) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+html body div.accordion-group > details.accordion:last-child,
+html body div.accordion-group > details:last-child {
+  margin-bottom: 0 !important;
+}
+html body details.accordion > summary {
+  border: 0 !important;
+}
+
+/* ---- 28c. Copy-page button: NEUTRAL grey, not brand purple
+   LOCKED RULE -- DO NOT REVERT. The Copy page button is a
+   SECONDARY action (alongside the page title). Brand purple text
+   was making it read as primary. Switch to neutral grey for both
+   text and icon (icons inherit currentColor). Keep the brand-purple
+   border so it sits in the same chrome family as Solana dropdown
+   etc.; only the text + icon change. Font-weight stays 500. */
+html body #page-context-menu-button,
+html body #page-context-menu > button:first-child,
+html body #page-context-menu > button:last-child {
+  color: rgba(60, 60, 60, 0.85) !important;
+  font-weight: 500 !important;
+}
+html body #page-context-menu-button *,
+html body #page-context-menu > button:first-child *,
+html body #page-context-menu > button:last-child * {
+  color: inherit !important;
+  font-weight: 500 !important;
+}
+html.dark body #page-context-menu-button,
+html.dark body #page-context-menu > button:first-child,
+html.dark body #page-context-menu > button:last-child,
+html.dark body #page-context-menu > button {
+  color: rgba(220, 220, 220, 0.9) !important;
+}
+html.dark body #page-context-menu-button *,
+html.dark body #page-context-menu > button * {
+  color: inherit !important;
+}
+
+/* ---- 29. Chat input: revert to native sticky-in-body --------------
+   Earlier we forced position: fixed at desktop to keep the bar at
+   viewport bottom. That caused overlap with the bottom of the page
+   content (Next button, etc.) when the page is short — the bar sits
+   on top of content because it's removed from flow.
+   Native Mintlify behaviour is `position: sticky` inside the body
+   column: glued to viewport bottom while content scrolls past, then
+   sits naturally at content end (below pagination) when reached.
+   That's the "auto-collapse on scroll" feel Kate wants. Reverting. */
+@media (min-width: 1024px) {
+  html body div.sticky.bottom-0:has(> .chat-assistant-floating-input) {
+    position: sticky !important;
+    bottom: 0 !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1rem 0 1rem !important;
+    z-index: 30 !important;
+  }
+  /* Drop the body bottom-padding reserve — sticky participates in
+     flow, no overlap to compensate for. */
+  html body [class*="lg:max-w-[696px"],
+  html body .mdx-content {
+    padding-bottom: 0 !important;
+  }
+}
+
+/* ---- 0f. Frontmatter description as body copy ----
+   Mintlify renders `description:` from frontmatter inside a div with
+   the literal class set "mt-2 text-lg prose prose-gray dark:prose-invert".
+   Default `text-lg` is 1.125rem — visibly larger than body copy. Force
+   the container AND its inner <p> to body-copy size, weight, colour,
+   line-height, and font-family. Bottom margin set to 0 so the gap to
+   the next paragraph is the normal prose paragraph break, not double. */
+div.mt-2.text-lg.prose,
+div[class~="mt-2"][class~="text-lg"][class~="prose"] {
+  font-size: 1rem !important;
+  line-height: 1.625 !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0 !important;
+}
+div.mt-2.text-lg.prose > p,
+div[class~="mt-2"][class~="text-lg"][class~="prose"] > p {
+  font-size: 1rem !important;
+  line-height: 1.625 !important;
+  color: rgb(63, 63, 70) !important;       /* zinc-700, body */
+  font-weight: 400 !important;
+  font-family: 'Work Sans', system-ui, sans-serif !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+.dark div.mt-2.text-lg.prose > p,
+.dark div[class~="mt-2"][class~="text-lg"][class~="prose"] > p,
+html.dark div.mt-2.text-lg.prose > p,
+html.dark div[class~="mt-2"][class~="text-lg"][class~="prose"] > p {
+  color: rgb(212, 212, 216) !important;     /* zinc-300, body in dark */
+}
+
+/* ---- 0i. Footer-links list (Stripe-style) ----
+   Plain-text list of icon + question + linked answer, separated by a
+   horizontal rule. Each <p> is one row. Icon sits inline with the text.
+   Hover changes colour only — no underline / no border / no margin / no
+   transform — so the row never shifts and the layout never jumps. */
+.footer-links {
+  margin-top: 1.5rem;
+}
+/* Inline-flow paragraph so the natural word-space sits between the
+   text and the linked phrase. Flex+gap put 10px gaps between EVERY
+   child including the link, which read as too much air. */
+.footer-links p {
+  display: block !important;
+  margin: 0.5rem 0 !important;
+  color: rgb(63, 63, 70);
+  font-size: 1rem;
+  line-height: 1.5;
+  min-height: 1.5rem;
+}
+/* Icon sits inline with text, with a small right margin to separate
+   from the question text. No flex container, so the rest of the line
+   uses the browser's natural word-spacing. */
+.footer-links p svg {
+  display: inline-block;
+  vertical-align: middle;
+  width: 18px;
+  height: 18px;
+  margin-right: 0.5rem;
+  color: rgb(113, 113, 122);
+  position: relative;
+  top: -1px;
+}
+/* Kill ALL prose link styling for footer-links anchors. The double
+   underline came from prose's `text-decoration-thickness` shifting on
+   hover. Set thickness to 0 across all states. The .not-prose wrapper
+   in MDX should also help, but we belt-and-brace here. */
+.footer-links a,
+.footer-links a:link,
+.footer-links a:visited,
+.footer-links a:hover,
+.footer-links a:active,
+.footer-links a:focus,
+.footer-links p > a,
+.footer-links p > a:hover {
+  color: rgb(122, 75, 160) !important;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-color: transparent !important;
+  text-decoration-thickness: 0 !important;
+  text-underline-offset: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  border-bottom-color: transparent !important;
+  border-bottom-width: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  font-weight: 500;
+  /* Lock dimensions so hover can't shift the row in any direction */
+  position: relative !important;
+  top: 0 !important;
+  transform: none !important;
+  line-height: 1.5 !important;
+  vertical-align: baseline !important;
+  display: inline !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  transition: color 120ms ease !important;
+}
+.footer-links a:hover {
+  color: rgb(73, 45, 96) !important;
+}
+.dark .footer-links p,
+html.dark .footer-links p {
+  color: rgb(212, 212, 216);
+}
+.dark .footer-links p svg,
+html.dark .footer-links p svg {
+  color: rgb(161, 161, 170);
+}
+.dark .footer-links a,
+.dark .footer-links a:link,
+.dark .footer-links a:visited,
+.dark .footer-links a:hover,
+.dark .footer-links a:focus,
+html.dark .footer-links a,
+html.dark .footer-links a:link,
+html.dark .footer-links a:visited,
+html.dark .footer-links a:hover,
+html.dark .footer-links a:focus {
+  color: rgb(181, 145, 211) !important;
+}
+.dark .footer-links a:hover,
+html.dark .footer-links a:hover {
+  color: rgb(214, 191, 232) !important;
+}
+
+/* ---- 0g. Content padding parity with sidebar ----
+   Mintlify adds extra horizontal padding to the main content area that
+   doesn't match the sidebar's left edge. Force the content container to
+   use the same horizontal padding as the sidebar so they align cleanly. */
+.mdx-content,
+mdx-content {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* ---- 0h. Customer logo marquee (welcome page) ----
+   Two-row infinite scroll. Top row scrolls left, bottom row scrolls
+   right. Logos are non-clickable static images, uniformly greyscaled
+   via brightness(0) so all SVGs render at the same darkness. Per-logo
+   size overrides for naturally-larger marks (Solflare, Jito Labs).
+   Pause on hover. */
+.logo-marquee {
+  position: relative;
+  width: 100%;
+  margin: 1.5rem 0 2.25rem 0;
+  padding: 0.5rem 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+}
+.logo-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: max-content;
+  padding: 0.5rem 1.5rem;
+}
+.logo-track-left  { animation: marquee-left  60s linear infinite; }
+.logo-track-right { animation: marquee-right 60s linear infinite; }
+.logo-marquee:hover .logo-marquee-track { animation-play-state: paused; }
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.logo-marquee img {
+  flex-shrink: 0;
+  display: block;
+  width: auto;
+  height: 28px;
+  max-width: 130px;
+  object-fit: contain;
+  filter: grayscale(100%) brightness(0) opacity(0.42);
+  pointer-events: none;
+  user-select: none;
+}
+/* Per-logo size overrides — these renders bigger by default */
+.logo-marquee img.logo-shrink { height: 18px; max-width: 92px; }
+/* Per-logo grow override — logos that read as visually small at base size */
+.logo-marquee img.logo-grow { height: 38px; max-width: 180px; }
+/* Orca's stroke-only paths sometimes vanish under brightness(0); use a
+   contrast-based filter that preserves the outline. */
+.logo-marquee img.logo-orca {
+  filter: grayscale(100%) contrast(0) brightness(0.4) opacity(0.55);
+}
+.dark .logo-marquee img,
+html.dark .logo-marquee img {
+  filter: grayscale(100%) brightness(0) invert(1) opacity(0.5);
+}
+.dark .logo-marquee img.logo-orca,
+html.dark .logo-marquee img.logo-orca {
+  filter: grayscale(100%) contrast(0) brightness(2) invert(1) opacity(0.55);
+}
+@media (max-width: 768px) {
+  .logo-marquee-track { gap: 2rem; }
+  .logo-marquee img { height: 24px; max-width: 110px; }
+  .logo-marquee img.logo-shrink { height: 20px; max-width: 92px; }
+}
+
+/* ---- 0j. Triton product map (welcome page) ----
+   Custom HTML/CSS architecture diagram replacing mermaid. Three boxes
+   (Shared infrastructure / Dedicated infrastructure / Staking) in
+   Triton purple style. Items inside are plain text links connected
+   visually to their pillar header, no per-item border. Larger
+   typography than mermaid's default; readable on first scan. */
+.product-map {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0 2rem 0;
+}
+.map-box {
+  background: linear-gradient(180deg, #FAF7FB 0%, #F4F0F8 100%);
+  border: 1.5px solid rgba(122, 75, 160, 0.35);
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.5rem 1.5rem 1.5rem;
+}
+.map-box-title {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #492D60;
+  margin-bottom: 1rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid rgba(122, 75, 160, 0.18);
+}
+.map-shared      { border-color: #7A4BA0; }
+.map-dedicated   { border-color: #492D60; background: linear-gradient(180deg, #F4F0F8 0%, #E8DFF1 100%); }
+.map-staking     { border-color: rgba(122, 75, 160, 0.5); background: #FAF7FB; }
+.map-pillars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem 1.5rem;
+}
+.pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-left: 0.875rem;
+  border-left: 2px solid rgba(122, 75, 160, 0.4);
+}
+.pillar-label {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(73, 45, 96, 0.75);
+  margin-bottom: 0.25rem;
+}
+.pillar-item,
+.pillar-item:link,
+.pillar-item:visited,
+.pillar-item:hover,
+.pillar-item:focus,
+.pillar-item:active {
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #492D60 !important;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-color: transparent !important;
+  text-decoration-thickness: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0.125rem 0;
+  line-height: 1.45;
+  transition: color 120ms ease;
+}
+.pillar-item:hover {
+  color: #7A4BA0 !important;
+}
+.map-row-bottom {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+}
+.map-row-bottom .map-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.map-row-bottom .pillar-item {
+  margin-left: 0;
+}
+.dark .map-box,
+html.dark .map-box {
+  background: linear-gradient(180deg, rgba(73, 45, 96, 0.18) 0%, rgba(73, 45, 96, 0.08) 100%);
+  border-color: rgba(181, 145, 211, 0.4);
+}
+.dark .map-shared,
+html.dark .map-shared { border-color: #B591D3; }
+.dark .map-dedicated,
+html.dark .map-dedicated {
+  background: linear-gradient(180deg, rgba(122, 75, 160, 0.22) 0%, rgba(122, 75, 160, 0.10) 100%);
+  border-color: #B591D3;
+}
+.dark .map-box-title,
+html.dark .map-box-title {
+  color: #D6BFE8;
+  border-bottom-color: rgba(181, 145, 211, 0.25);
+}
+.dark .pillar,
+html.dark .pillar { border-left-color: rgba(181, 145, 211, 0.5); }
+.dark .pillar-label,
+html.dark .pillar-label { color: rgba(214, 191, 232, 0.8); }
+.dark .pillar-item,
+.dark .pillar-item:visited,
+html.dark .pillar-item,
+html.dark .pillar-item:visited { color: #E5D7F0 !important; }
+.dark .pillar-item:hover,
+html.dark .pillar-item:hover { color: #B591D3 !important; }
+@media (max-width: 1024px) {
+  .map-pillars { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .map-pillars { grid-template-columns: 1fr; }
+  .map-row-bottom { grid-template-columns: 1fr; }
+  .map-box { padding: 1rem 1.125rem 1.25rem 1.125rem; }
+}
+
+/* ---- Font: Geist Mono for technical headers (table headers, stack
+   pillar titles, branch tags). Loaded via Google Fonts. */
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&display=swap');
+
+/* ---- 0a-fix. Top navbar pinned to top of viewport ----
+   Force the navbar to position:fixed top:0 so scrolling never reveals
+   a strip of background between the nav and the browser chrome. */
+#navbar,
+div#navbar,
+html body #navbar,
+html body div#navbar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0;
+  right: 0;
+  width: 100% !important;
+  z-index: 50 !important;
+}
+
+/* ---- Shared header tokens — table headers and stack pillar/branch
+   labels use IDENTICAL font, size, weight, color, casing. */
+:root {
+  --triton-table-border: rgba(167, 167, 178, 0.45);  /* warm grey, matches docs.triton.one tables */
+  --triton-table-header-bg: #F7F2FB;
+  --triton-table-header-color: #492D60;
+  --triton-table-cell-color: #171717;
+}
+
+/* ---- 0l. Triton table style — applies to every prose table ----
+   Targets every plausible container for body content because
+   Mintlify's class names vary across versions. Maximum specificity. */
+html body table,
+html body article table,
+html body main table,
+html body .mdx-content table,
+html body mdx-content table,
+html body .prose table,
+html body div table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  margin: 1.25rem 0 !important;
+  border: 1px solid var(--triton-table-border) !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden !important;
+}
+html body table th,
+html body table td,
+html body article table th,
+html body article table td,
+html body main table th,
+html body main table td,
+html body .prose table th,
+html body .prose table td {
+  padding: 0.625rem 0.875rem !important;
+  text-align: center !important;
+  font-family: 'Work Sans', system-ui, sans-serif !important;
+  font-size: 0.9375rem !important;
+  line-height: 1.3 !important;
+  color: var(--triton-table-cell-color) !important;
+  border-right: 1px solid var(--triton-table-border) !important;
+  border-bottom: 1px solid var(--triton-table-border) !important;
+  border-top: 0 !important;
+  border-left: 0 !important;
+  background: transparent !important;
+  min-width: 0 !important;     /* override Mintlify's [&_td]:min-w-[150px] Tailwind utility */
+  max-width: none !important;
+  white-space: normal !important;
+}
+html body table th:last-child,
+html body table td:last-child { border-right: 0 !important; }
+html body table tr:last-child td { border-bottom: 0 !important; }
+html body table th {
+  background: var(--triton-table-header-bg) !important;
+  color: var(--triton-table-header-color) !important;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace !important;
+  font-weight: 600 !important;
+  font-size: 0.6875rem !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+html body table td:first-child,
+html body table th:first-child {
+  text-align: left !important;
+  font-weight: 500 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+.dark html body table,
+html.dark body table { border-color: rgba(181, 145, 211, 0.3) !important; }
+.dark html body table th,
+html.dark body table th {
+  background: rgba(122, 75, 160, 0.18) !important;
+  color: #E5D7F0 !important;
+}
+.dark html body table td,
+.dark html body table th,
+html.dark body table td,
+html.dark body table th {
+  border-color: rgba(181, 145, 211, 0.25) !important;
+}
+
+/* Legacy alias kept for back-compat */
+.hug-table { margin: 0; padding: 0; }
+.hug-table table { margin: 1.25rem 0 !important; }
+
+/* Original specific selectors retained so existing rules still match */
+.mdx-content table,
+mdx-content table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  margin: 1.25rem 0 !important;
+  table-layout: auto !important;
+  border: 1px solid var(--triton-table-border) !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden;
+}
+.mdx-content table th,
+.mdx-content table td,
+mdx-content table th,
+mdx-content table td {
+  padding: 0.625rem 0.875rem !important;
+  text-align: center;
+  font-family: 'Work Sans', system-ui, sans-serif !important;
+  font-size: 0.9375rem !important;
+  line-height: 1.3 !important;
+  color: var(--triton-table-cell-color) !important;
+  border-right: 1px solid var(--triton-table-border) !important;
+  border-bottom: 1px solid var(--triton-table-border) !important;
+  border-top: 0 !important;
+  border-left: 0 !important;
+  background: transparent !important;
+}
+.mdx-content table th:last-child,
+.mdx-content table td:last-child,
+mdx-content table th:last-child,
+mdx-content table td:last-child { border-right: 0 !important; }
+.mdx-content table tr:last-child td,
+mdx-content table tr:last-child td { border-bottom: 0 !important; }
+.mdx-content table th,
+mdx-content table th {
+  background: var(--triton-table-header-bg) !important;
+  color: var(--triton-table-header-color) !important;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace !important;
+  font-weight: 600 !important;
+  font-size: 0.6875rem !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+.mdx-content table td:first-child,
+.mdx-content table th:first-child,
+mdx-content table td:first-child,
+mdx-content table th:first-child {
+  text-align: left !important;
+  font-weight: 500 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+.dark .mdx-content table,
+html.dark .mdx-content table { border-color: rgba(181, 145, 211, 0.3) !important; }
+.dark .mdx-content table th,
+html.dark .mdx-content table th {
+  background: rgba(122, 75, 160, 0.18) !important;
+  color: #E5D7F0 !important;
+}
+.dark .mdx-content table td,
+.dark .mdx-content table th,
+html.dark .mdx-content table td,
+html.dark .mdx-content table th {
+  border-color: rgba(181, 145, 211, 0.25) !important;
+}
+
+/* Legacy alias — old wrappers still work but no longer required */
+.hug-table { margin: 0; padding: 0; }
+.hug-table table { margin: 1.25rem 0 !important; }
+.dark .hug-table th,
+html.dark .hug-table th {
+  background: rgba(122, 75, 160, 0.18);
+  color: #E5D7F0;
+}
+.dark .hug-table td,
+.dark .hug-table th,
+html.dark .hug-table td,
+html.dark .hug-table th {
+  border-color: rgba(181, 145, 211, 0.25);
+}
+
+/* ---- 0n. The Triton stack — visually identical to the table ----
+   Pillar borders + radius match .hug-table exactly. Pillar title and
+   branch labels share font/color tokens with table headers. Leaves
+   match table body cells: Work Sans 0.875rem, dark text, same border
+   colour. */
+.stack-map {
+  margin: 1.25rem 0 2rem 0;
+}
+.stack-pillars {
+  display: grid;
+  grid-template-columns: 4fr 1.5fr;
+  gap: 0.875rem;
+  align-items: stretch;
+}
+.stack-pillar {
+  background: transparent;
+  border: 1px solid var(--triton-table-border);
+  border-radius: 0.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.stack-pillar-title {
+  background: var(--triton-table-header-bg);
+  color: var(--triton-table-header-color);
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--triton-table-border);
+}
+.stack-branches {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.625rem;
+  padding: 0.625rem;
+}
+.stack-branches-single {
+  grid-template-columns: 1fr;
+}
+.stack-branch {
+  display: flex;
+  flex-direction: column;
+}
+.stack-branch-title {
+  background: transparent;
+  color: rgba(73, 45, 96, 0.7);
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0 0.125rem;
+  border: 0;
+  border-radius: 0;
+  margin: 0 0 0.375rem 0;
+}
+.dark .stack-pillar,
+html.dark .stack-pillar { border-color: rgba(181, 145, 211, 0.3); }
+.stack-leaf,
+.stack-leaf:link,
+.stack-leaf:visited,
+.stack-leaf:hover,
+.stack-leaf:active,
+.stack-leaf:focus {
+  display: block;
+  background: transparent !important;
+  border: 1px solid var(--triton-table-border) !important;
+  border-radius: 4px !important;
+  padding: 0.375rem 0.625rem !important;
+  margin: 0 0 0.375rem 0 !important;
+  font-family: 'Work Sans', system-ui, sans-serif !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  color: var(--triton-table-cell-color) !important;
+  text-decoration: none !important;
+  text-decoration-thickness: 0 !important;
+  line-height: 1.3 !important;
+  text-align: left;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+.stack-leaf:hover {
+  background: var(--triton-table-header-bg) !important;
+  border-color: rgba(122, 75, 160, 0.45) !important;
+  color: var(--triton-table-header-color) !important;
+}
+.stack-branch .stack-leaf:last-child {
+  margin-bottom: 0 !important;
+}
+.dark .stack-pillar,
+html.dark .stack-pillar {
+  background: rgba(73, 45, 96, 0.10);
+  border-color: rgba(181, 145, 211, 0.3);
+}
+.dark .stack-pillar-title,
+html.dark .stack-pillar-title {
+  background: rgba(122, 75, 160, 0.18);
+  color: #E5D7F0;
+  border-bottom-color: rgba(181, 145, 211, 0.25);
+}
+.dark .stack-branch-title,
+html.dark .stack-branch-title {
+  background: rgba(122, 75, 160, 0.18);
+  color: #E5D7F0;
+  border-color: rgba(181, 145, 211, 0.25);
+}
+.dark .stack-leaf,
+.dark .stack-leaf:link,
+.dark .stack-leaf:visited,
+html.dark .stack-leaf,
+html.dark .stack-leaf:link,
+html.dark .stack-leaf:visited {
+  background: rgba(0, 0, 0, 0.25) !important;
+  border-color: rgba(181, 145, 211, 0.3) !important;
+  color: #E5D7F0 !important;
+}
+.dark .stack-leaf:hover,
+html.dark .stack-leaf:hover {
+  background: rgba(122, 75, 160, 0.32) !important;
+  border-color: #B591D3 !important;
+  color: #FFFFFF !important;
+}
+@media (max-width: 1100px) {
+  .stack-pillars { grid-template-columns: 1fr; gap: 0.75rem; }
+  .stack-branches { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .stack-branches { grid-template-columns: 1fr; }
+}
+
+/* ---- 0m. Mermaid node rounded corners ----
+   Mintlify renders mermaid svgs with sharp rectangle nodes by default.
+   Add rounded corners via CSS so flowchart nodes match the Triton
+   rounded-rectangle aesthetic. */
+.mermaid svg .node rect,
+.mermaid svg g.node rect,
+.mermaid svg foreignObject rect {
+  rx: 6;
+  ry: 6;
+}
+.mermaid svg .label foreignObject {
+  overflow: visible;
+}
+
+/* ---- 0k. Quickstart "Where to next" two-column routes ----
+   Replaces the long Tabs that forced scroll-to-top to switch panes.
+   Both columns visible at once; product list left, use-case list right.
+   Compact rows, hover tints to primary, no underline shenanigans. */
+.quickstart-routes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+  margin: 1.25rem 0 1.5rem 0;
+}
+.route-col {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #FAF7FB 0%, #F4F0F8 100%);
+  border: 1.5px solid rgba(122, 75, 160, 0.3);
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.25rem 1.5rem 1.25rem;
+}
+.route-col-title {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #492D60;
+  letter-spacing: -0.01em;
+}
+.route-col-sub {
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: rgba(73, 45, 96, 0.7);
+  margin-top: 0.125rem;
+  margin-bottom: 1rem;
+}
+.route-section-label {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(73, 45, 96, 0.65);
+  margin-top: 0.875rem;
+  margin-bottom: 0.375rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(122, 75, 160, 0.18);
+}
+.route-section-label:first-of-type {
+  margin-top: 0.25rem;
+}
+.route-item,
+.route-item:link,
+.route-item:visited,
+.route-item:hover,
+.route-item:active,
+.route-item:focus {
+  display: block;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: #492D60 !important;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-thickness: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  padding: 0.25rem 0;
+  transition: color 120ms ease;
+}
+.route-item strong {
+  color: #492D60;
+  font-weight: 600;
+}
+.route-item:hover { color: #7A4BA0 !important; }
+.route-item:hover strong { color: #7A4BA0; }
+.route-usecase {
+  padding: 0.625rem 0.75rem;
+  margin: 0.25rem 0;
+  border-radius: 0.375rem;
+  background: rgba(255, 255, 255, 0.5) !important;
+  transition: background 120ms ease, color 120ms ease;
+}
+.route-usecase:hover {
+  background: rgba(255, 255, 255, 0.85) !important;
+}
+.route-usecase span {
+  display: block;
+  font-size: 0.8125rem;
+  color: rgba(73, 45, 96, 0.7);
+  margin-top: 0.125rem;
+}
+.route-usecase:hover span { color: rgba(122, 75, 160, 0.85); }
+.route-col-foot {
+  margin-top: auto;
+  padding-top: 1rem;
+  font-size: 0.875rem;
+  color: rgba(73, 45, 96, 0.7);
+}
+.route-col-foot a,
+.route-col-foot a:hover {
+  color: #7A4BA0 !important;
+  text-decoration: none !important;
+  font-weight: 500;
+}
+.dark .route-col,
+html.dark .route-col {
+  background: linear-gradient(180deg, rgba(73, 45, 96, 0.18) 0%, rgba(73, 45, 96, 0.08) 100%);
+  border-color: rgba(181, 145, 211, 0.4);
+}
+.dark .route-col-title,
+html.dark .route-col-title { color: #D6BFE8; }
+.dark .route-col-sub,
+html.dark .route-col-sub { color: rgba(214, 191, 232, 0.7); }
+.dark .route-section-label,
+html.dark .route-section-label {
+  color: rgba(214, 191, 232, 0.7);
+  border-bottom-color: rgba(181, 145, 211, 0.25);
+}
+.dark .route-item,
+.dark .route-item:link,
+.dark .route-item:visited,
+html.dark .route-item,
+html.dark .route-item:link,
+html.dark .route-item:visited { color: #E5D7F0 !important; }
+.dark .route-item strong,
+html.dark .route-item strong { color: #E5D7F0; }
+.dark .route-item:hover,
+html.dark .route-item:hover { color: #B591D3 !important; }
+.dark .route-usecase,
+html.dark .route-usecase { background: rgba(0, 0, 0, 0.18) !important; }
+.dark .route-usecase:hover,
+html.dark .route-usecase:hover { background: rgba(0, 0, 0, 0.32) !important; }
+.dark .route-usecase span,
+html.dark .route-usecase span { color: rgba(214, 191, 232, 0.7); }
+@media (max-width: 900px) {
+  .quickstart-routes { grid-template-columns: 1fr; gap: 1rem; }
+}
+
+/* ---- 0o. Pricing calculator (plans-and-billing) ----
+   Ported from the Vue PricingCalculator on triton.one. Pure HTML +
+   custom.js drives interactivity. Visual style matches the Triton
+   stack and table aesthetic — light lavender header, warm-grey
+   borders, rounded outer, Geist Mono for headers. */
+.triton-calc {
+  margin: 1.5rem 0 1.75rem 0;
+  width: 100%;
+}
+.triton-calc-modes {
+  display: flex;
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.triton-calc-mode-btn {
+  padding: 0.4rem 0.875rem;
+  border: 1px solid #492D60;
+  background: transparent;
+  color: #492D60;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+.triton-calc-mode-btn.active {
+  background: #492D60;
+  color: #FFFFFF;
+}
+.triton-calc-mode-btn:hover:not(.active) {
+  background: rgba(122, 75, 160, 0.08);
+}
+.triton-calc-panel {
+  background: rgba(122, 75, 160, 0.08);
+  border: 1px solid rgba(122, 75, 160, 0.4);
+  border-radius: 1rem;
+  padding: 1.75rem;
+}
+.triton-calc-grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 2.25rem;
+}
+@media (max-width: 900px) {
+  .triton-calc-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+.triton-calc-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.triton-calc-badge {
+  display: inline-block;
+  align-self: flex-start;
+  background: #7A4BA0;
+  color: #FFFFFF;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  border-radius: 0.4rem;
+}
+.triton-calc-total {
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 2.25rem;
+  font-weight: 400;
+  color: #171717;
+  line-height: 1;
+  margin-top: 0.25rem;
+}
+.triton-calc-total-label {
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(23, 23, 23, 0.55);
+}
+.triton-calc-features-label {
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #171717;
+  margin-top: 0.5rem;
+}
+.triton-calc-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.triton-calc-features li {
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: #171717;
+  padding-left: 1.25rem;
+  position: relative;
+}
+.triton-calc-features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #7A4BA0;
+  font-weight: 700;
+}
+.triton-calc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.triton-calc-row {
+  padding: 0.875rem 0;
+}
+.triton-calc-row-static + .triton-calc-row-static,
+.triton-calc-simple .triton-calc-row + .triton-calc-row,
+.triton-calc-services .triton-calc-row + .triton-calc-row {
+  border-top: 1px dashed rgba(122, 75, 160, 0.35);
+}
+.triton-calc-row-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.875rem;
+}
+.triton-calc-row-title {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #171717;
+  line-height: 1.3;
+}
+.triton-calc-row-rate {
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: rgba(23, 23, 23, 0.6);
+  margin-top: 0.125rem;
+}
+.triton-calc-row-amount {
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #171717;
+  white-space: nowrap;
+}
+.triton-calc-slider-wrap {
+  position: relative;
+  padding-top: 8px;
+  padding-bottom: 28px;
+}
+.triton-calc-slider-track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: #FFFFFF;
+  border: 1px solid rgba(122, 75, 160, 0.25);
+  border-radius: 9999px;
+  transform: translateY(calc(-50% - 6px));
+  pointer-events: none;
+  overflow: hidden;
+}
+.triton-calc-slider-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(122, 75, 160, 0.75);
+  border-radius: 9999px 0 0 9999px;
+  transition: width 100ms ease-out;
+  width: 0;
+}
+.triton-calc-slider-wrap input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 24px;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  z-index: 5;
+  margin: 0;
+  padding: 0;
+}
+.triton-calc-slider-wrap input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 10px;
+  background: transparent;
+  border-radius: 9999px;
+}
+.triton-calc-slider-wrap input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #FFFFFF;
+  border: 2px solid #7A4BA0;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  margin-top: -4px;
+  transition: transform 120ms ease;
+}
+.triton-calc-slider-wrap input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+.triton-calc-slider-wrap input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 10px;
+  background: transparent;
+  border-radius: 9999px;
+}
+.triton-calc-slider-wrap input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #FFFFFF;
+  border: 2px solid #7A4BA0;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+.triton-calc-slider-label {
+  position: absolute;
+  bottom: 4px;
+  transform: translateX(-50%);
+  background: #7A4BA0;
+  color: #FFFFFF;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.triton-calc-deposit-input {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border: 1px solid rgba(122, 75, 160, 0.4);
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  margin-top: 1rem;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 1.125rem;
+}
+.triton-calc-currency {
+  color: rgba(23, 23, 23, 0.5);
+  margin-right: 0.25rem;
+}
+.triton-calc-deposit-input input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: #171717;
+  padding: 0;
+  width: 100%;
+}
+.triton-calc-deposit-input input::-webkit-outer-spin-button,
+.triton-calc-deposit-input input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.triton-calc-deposit-input input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.triton-calc-fineprint {
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 0.8125rem;
+  color: rgba(23, 23, 23, 0.7);
+  margin: 0.75rem 0 0 0;
+}
+.triton-calc-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+.triton-calc-cta {
+  display: inline-flex;
+  align-items: center;
+  background: #492D60;
+  color: #FFFFFF !important;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  text-decoration: none !important;
+  transition: background 120ms ease, opacity 120ms ease;
+}
+.triton-calc-cta:hover {
+  background: #7A4BA0;
+  text-decoration: none !important;
+}
+.triton-calc-cta.disabled,
+.triton-calc-cta[aria-disabled="true"] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.triton-calc-cta-warn {
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 0.8125rem;
+  color: rgba(220, 80, 80, 0.85);
+  font-weight: 500;
+}
+.triton-calc-chains {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.triton-calc-chain {
+  background: transparent;
+  border: 1px solid #7A4BA0;
+  color: #7A4BA0;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+.triton-calc-chain.active {
+  background: #7A4BA0;
+  color: #FFFFFF;
+}
+/* Dark-mode adjustments */
+.dark .triton-calc-panel,
+html.dark .triton-calc-panel {
+  background: rgba(122, 75, 160, 0.10);
+  border-color: rgba(181, 145, 211, 0.4);
+}
+.dark .triton-calc-mode-btn,
+html.dark .triton-calc-mode-btn {
+  border-color: #B591D3;
+  color: #E5D7F0;
+}
+.dark .triton-calc-mode-btn.active,
+html.dark .triton-calc-mode-btn.active {
+  background: #B591D3;
+  color: #1A0F2E;
+}
+.dark .triton-calc-total,
+.dark .triton-calc-row-title,
+.dark .triton-calc-features li,
+.dark .triton-calc-row-amount,
+html.dark .triton-calc-total,
+html.dark .triton-calc-row-title,
+html.dark .triton-calc-features li,
+html.dark .triton-calc-row-amount { color: #E5D7F0; }
+.dark .triton-calc-features-label,
+html.dark .triton-calc-features-label { color: #E5D7F0; }
+.dark .triton-calc-row-rate,
+.dark .triton-calc-fineprint,
+.dark .triton-calc-total-label,
+html.dark .triton-calc-row-rate,
+html.dark .triton-calc-fineprint,
+html.dark .triton-calc-total-label { color: rgba(229, 215, 240, 0.65); }
+
+/* ---- 0p. Try-it-out (welcome page) — Stripe-style ----
+   Tab strip + dark code panel + Run button + JSON output. Hits
+   api.mainnet.solana.com directly from the browser; no auth. */
+.triton-try {
+  margin: 1.5rem 0 1.75rem 0;
+  border: 1px solid var(--triton-table-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #FFFFFF;
+}
+.triton-try-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 0.625rem 0.625rem 0 0.625rem;
+  background: var(--triton-table-header-bg);
+  border-bottom: 1px solid var(--triton-table-border);
+}
+.triton-try-tab {
+  background: transparent;
+  border: 0;
+  padding: 0.5rem 0.875rem;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: rgba(73, 45, 96, 0.7);
+  cursor: pointer;
+  border-radius: 0.375rem 0.375rem 0 0;
+  margin-bottom: -1px;
+  transition: background 120ms ease, color 120ms ease;
+}
+.triton-try-tab:hover { color: #492D60; background: rgba(255, 255, 255, 0.5); }
+.triton-try-tab.active {
+  background: #FFFFFF;
+  color: #492D60;
+  border: 1px solid var(--triton-table-border);
+  border-bottom: 1px solid #FFFFFF;
+}
+.triton-try-body {
+  padding: 1rem 1rem 1.25rem 1rem;
+}
+.triton-try-code {
+  background: #14121A;
+  color: #E5D7F0;
+  border-radius: 0.375rem;
+  padding: 0.875rem 1rem;
+  margin-bottom: 0.875rem;
+  overflow-x: auto;
+}
+.triton-try-code pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.triton-try-code code {
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace !important;
+  font-size: 0.8125rem !important;
+  color: #E5D7F0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.triton-try-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+.triton-try-run {
+  background: #492D60;
+  color: #FFFFFF;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+.triton-try-run:hover { background: #7A4BA0; }
+.triton-try-run:disabled,
+.triton-try-run[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.triton-try-status {
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.75rem;
+  color: rgba(23, 23, 23, 0.55);
+}
+.triton-try-output {
+  background: #F7F2FB;
+  color: #171717;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace !important;
+  font-size: 0.8125rem !important;
+  border-radius: 0.375rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--triton-table-border);
+  margin: 0;
+  max-height: 280px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.dark .triton-try,
+html.dark .triton-try {
+  background: rgba(73, 45, 96, 0.10);
+  border-color: rgba(181, 145, 211, 0.3);
+}
+.dark .triton-try-tabs,
+html.dark .triton-try-tabs {
+  background: rgba(122, 75, 160, 0.18);
+  border-bottom-color: rgba(181, 145, 211, 0.25);
+}
+.dark .triton-try-tab,
+html.dark .triton-try-tab { color: rgba(229, 215, 240, 0.7); }
+.dark .triton-try-tab.active,
+html.dark .triton-try-tab.active {
+  background: rgba(73, 45, 96, 0.30);
+  color: #E5D7F0;
+  border-color: rgba(181, 145, 211, 0.3);
+  border-bottom-color: rgba(73, 45, 96, 0.30);
+}
+.dark .triton-try-output,
+html.dark .triton-try-output {
+  background: rgba(0, 0, 0, 0.35);
+  color: #E5D7F0;
+  border-color: rgba(181, 145, 211, 0.25);
+}
+
+/*! purgecss end ignore */

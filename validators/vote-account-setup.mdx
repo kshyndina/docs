@@ -1,76 +1,40 @@
 ---
-title: "Set Up a Solana Vote Account with Triton"
-sidebarTitle: "Vote account setup"
-description: "Create and configure the three key pairs for a Solana hosted validator: node identity (Triton-managed), vote account, and withdrawal authority (yours)."
+title: "Vote account setup"
 ---
 
-Before your hosted validator can participate in consensus, you need to set up a vote account and provide Triton with the necessary keys. This page explains the three types of keys involved and how to create the ones you are responsible for.
+NOTE: Should we host your validator, we will set up the vote account for you. The information below is for transparency and educational purposes.
 
-<Note>
-  If Triton is hosting your validator, we will set up the vote account on your behalf as part of the onboarding process. The instructions below are provided for transparency and educational purposes.
-</Note>
+To set up a validator, three kinds of keys need to be present:
 
-## Keys required for a validator
+* Node identity key pair.
+* Vote key/account (public key only).
+* Withdrawal key pair.
 
-A Solana validator requires three distinct keys:
+### Node Identity Key Pair
 
-| Key | Who holds it | Purpose |
-| --- | ------------ | ------- |
-| Node identity key pair | Triton | Signs votes on behalf of your vote account; must maintain a SOL balance to pay vote fees |
-| Vote account key pair | You (public key only needed after setup) | Identifies your vote account on-chain |
-| Withdrawal key pair | You | Controls the vote account; used to withdraw rewards and change commission |
+The node identity key pair is owned and held by Triton. Clients guarantee a minimum balance of 10 SOL to keep the validator running. If the balance drops below 10 SOL, the client must send SOL directly to the validator. Contact our support to receive the validator public key if you are creating your vote account.
 
-## Node identity key pair
+### Withdrawal Key Pair
 
-Triton owns and holds the node identity key pair. You are responsible for maintaining a minimum balance of **10 SOL** on the node identity account. If the balance drops below this threshold, the validator will stop functioning — contact Triton support if you need the node identity's public key to top it up directly.
+The withdrawal key pair is the one that can be used to modify the vote account; it must be kept safe! You use this key pair to withdraw rewards from the vote account. We recommend you keep this in a hardware wallet or cold storage. This should never be a hotkey or used with online/web wallets. Losing the keys to this account may result in significant losses.
 
-The node identity also accrues rewards that help offset vote fees over time. Depending on the stake your validator attracts, these rewards may partially or fully cover your vote transaction costs.
-
-## Create your withdrawal key pair
-
-The withdrawal key pair controls the vote account. Anyone with this key can withdraw accumulated rewards, change the validator's commission rate, or update the vote account's authorized voter. **Keep it safe.**
-
-<Warning>
-  Never store the withdrawal key pair in a hot wallet or an online wallet service. Use a hardware wallet or cold storage. Losing access to this key pair means losing control of your vote account and any accumulated rewards.
-</Warning>
-
-Generate the withdrawal key pair with the Solana CLI:
+To create a withdrawal key pair, you can run the following:
 
 ```bash
 solana-keygen new -o ~/authorized-withdrawer-keypair.json
 ```
 
-Store the resulting file and its seed phrase securely offline.
+### Vote account
 
-## Create your vote account
+The final step involves setting up the vote account. You will generate a keypair for the vote account, but once it is configured, only the public key of the vote account matters. The withdrawal keypair is the one that will be used to control the vote account:
 
-Once you have your withdrawal key pair and Triton has provided the node identity public key, create your vote account:
+```bash
+$ solana-keygen new -o ~/vote-account-keypair.json
+$ solana create-vote-account ~/vote-account-keypair.json <pubkey for node identity> ~/authorized-withdrawer-keypair.json
+```
 
-<Steps>
-  <Step title="Generate a vote account key pair">
-    ```bash
-    solana-keygen new -o ~/vote-account-keypair.json
-    ```
+### Further reading
 
-    After the vote account is created, only the public key of this file matters. The vote account itself is controlled by the withdrawal key pair you created above.
-  </Step>
+For more documentation about vote account management, we strongly encourage you to read through the documents on Solana's website here:
 
-  <Step title="Create the vote account on-chain">
-    Replace `<pubkey for node identity>` with the public key provided by Triton:
-
-    ```bash
-    solana create-vote-account \
-      ~/vote-account-keypair.json \
-      <pubkey for node identity> \
-      ~/authorized-withdrawer-keypair.json
-    ```
-
-    This transaction registers the vote account on the Solana network, links it to the node identity, and sets the withdrawal authority to your withdrawal key pair.
-  </Step>
-</Steps>
-
-## Further reading
-
-For comprehensive documentation on vote account management — including changing the authorized withdrawer, setting commission, and closing vote accounts — see the official Solana validator guide:
-
-[Validator Guide: Vote Account Management](https://docs.solana.com/running-validator/vote-accounts)
+https://docs.solana.com/running-validator/vote-accounts

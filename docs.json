@@ -1,121 +1,536 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "Docs Triton",
+  "name": "Triton One",
   "theme": "luma",
-  "favicon": "https://media.brand.dev/03e74411-3b32-42eb-a2a6-b14206dcf5e4.png",
+  "favicon": "/favicon.png",
+  "logo": {
+    "light": "/logo/mark.svg",
+    "dark": "/logo/mark.svg",
+    "href": "https://triton.one"
+  },
   "colors": {
     "primary": "#7A4BA0",
-    "light": "#F2EDF6",
+    "light": "#B591D3",
     "dark": "#492D60"
   },
+  "fonts": {
+    "heading": {
+      "family": "DM Sans"
+    },
+    "body": {
+      "family": "Work Sans"
+    }
+  },
+  "icons": {
+    "library": "lucide"
+  },
+  "background": {
+    "decoration": "gradient",
+    "color": {
+      "light": "#F7F7F7",
+      "dark": "#171717"
+    }
+  },
+  "styling": {
+    "codeblocks": {
+      "theme": {
+        "light": "github-light",
+        "dark": "github-dark"
+      }
+    },
+    "eyebrows": "breadcrumbs"
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "api": {
+    "mdx": {
+      "server": "https://api.mainnet-beta.solana.com"
+    },
+    "playground": {
+      "display": "interactive"
+    },
+    "examples": {
+      "languages": [
+        "curl",
+        "javascript",
+        "python",
+        "rust"
+      ],
+      "defaults": "required"
+    }
+  },
   "navbar": {
+    "links": [
+      {
+        "label": "Log in",
+        "href": "https://customers.triton.one/users/sign-in"
+      }
+    ],
     "primary": {
-      "type": "github",
-      "href": "https://github.com/rpcpool"
+      "type": "button",
+      "label": "Get an endpoint",
+      "href": "https://customers.triton.one/onboarding"
     }
   },
   "navigation": {
-    "tabs": [
+    "dropdowns": [
       {
-        "tab": "Documentation",
-        "groups": [
+        "dropdown": "Solana",
+        "icon": "/logo/chains/solana.svg",
+        "tabs": [
           {
-            "group": "Get Started",
-            "pages": [
-              "introduction",
-              "getting-started",
-              "core-features"
+            "tab": "Documentation",
+            "icon": "book-open",
+            "groups": [
+              {
+                "group": "Get started",
+                "pages": [
+                  "solana/welcome",
+                  "solana/get-started/quickstart",
+                  "solana/get-started/plans-and-billing",
+                  "solana/get-started/rate-and-connection-limits",
+                  {
+                    "group": "Account management",
+                    "root": "solana/get-started/account-management/set-up-your-account-and-add-users",
+                    "expanded": false,
+                    "pages": [
+                      "solana/get-started/account-management/set-up-your-account-and-add-users",
+                      "solana/get-started/account-management/platform-overview",
+                      "solana/get-started/account-management/auth-and-security-best-practices",
+                      "solana/get-started/account-management/how-to-top-up-credits",
+                      "solana/get-started/account-management/reach-out-to-support",
+                      {
+                        "group": "Account management API",
+                        "root": "solana/get-started/account-management/account-management-api/overview",
+                        "expanded": false,
+                        "pages": [
+                          "solana/get-started/account-management/account-management-api/overview",
+                          "solana/get-started/account-management/account-management-api/auth-and-headers",
+                          "solana/get-started/account-management/account-management-api/accounts",
+                          "solana/get-started/account-management/account-management-api/address-watch-lists",
+                          "solana/get-started/account-management/account-management-api/subscriptions",
+                          "solana/get-started/account-management/account-management-api/subscription-types",
+                          "solana/get-started/account-management/account-management-api/endpoints",
+                          "solana/get-started/account-management/account-management-api/tokens",
+                          "solana/get-started/account-management/account-management-api/rate-tiers"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Streaming data",
+                "pages": [
+                  "solana/streaming/overview",
+                  "solana/streaming/quickstart",
+                  {
+                    "group": "Dragon's Mouth gRPC",
+                    "root": "solana/streaming/dragons-mouth/overview",
+                    "expanded": false,
+                    "pages": [
+                      "solana/streaming/dragons-mouth/overview",
+                      "solana/streaming/dragons-mouth/quickstart",
+                      "solana/streaming/dragons-mouth/sdks-and-client-libraries",
+                      "solana/streaming/dragons-mouth/deshred-transactions"
+                    ]
+                  },
+                  {
+                    "group": "Whirligig WebSockets",
+                    "root": "solana/streaming/whirligig/overview",
+                    "expanded": false,
+                    "pages": [
+                      "solana/streaming/whirligig/overview",
+                      "solana/streaming/whirligig/quickstart",
+                      "solana/streaming/whirligig/whirligig-client"
+                    ]
+                  },
+                  {
+                    "group": "Fumarole reliable streams",
+                    "root": "solana/streaming/fumarole/overview",
+                    "expanded": false,
+                    "pages": [
+                      "solana/streaming/fumarole/overview",
+                      "solana/streaming/fumarole/quickstart",
+                      "solana/streaming/fumarole/sdk-clients-setup",
+                      "solana/streaming/fumarole/migration-from-dragons-mouth"
+                    ]
+                  },
+                  "solana/streaming/old-faithful-streams"
+                ]
+              },
+              {
+                "group": "Reading state",
+                "pages": [
+                  "solana/reading-state/overview",
+                  "solana/reading-state/account-sync",
+                  "solana/reading-state/standard-rpc",
+                  "solana/reading-state/steamboat-indexed-accounts",
+                  "solana/reading-state/metaplex-das-api",
+                  "solana/reading-state/zk-compression-photon"
+                ]
+              },
+              {
+                "group": "Historical data",
+                "pages": [
+                  "solana/history/overview",
+                  "solana/history/quickstart",
+                  "solana/history/hydrant",
+                  "solana/history/faithful-streams"
+                ]
+              },
+              {
+                "group": "Sending transactions",
+                "pages": [
+                  "solana/sending-transactions/overview",
+                  "solana/sending-transactions/quickstart",
+                  "solana/sending-transactions/jet-sender",
+                  "solana/sending-transactions/priority-fees-api",
+                  "solana/sending-transactions/metis-swap-api",
+                  "solana/sending-transactions/titan-swap-api",
+                  "solana/sending-transactions/jito-bundles",
+                  "solana/sending-transactions/transaction-sending-best-practices"
+                ]
+              },
+              {
+                "group": "Agents / MCP",
+                "pages": [
+                  "solana/agents-mcp/overview",
+                  "solana/agents-mcp/quickstart",
+                  "solana/agents-mcp/mcp-server"
+                ]
+              },
+              {
+                "group": "White label validator",
+                "pages": [
+                  "solana/validators/introduction",
+                  "solana/validators/vote-account-setup",
+                  "solana/validators/node-identity-protection"
+                ]
+              },
+              {
+                "group": "Dedicated nodes",
+                "pages": [
+                  "solana/dedicated-nodes/overview",
+                  "solana/dedicated-nodes/quickstart",
+                  "solana/dedicated-nodes/best-practices"
+                ]
+              }
             ]
           },
           {
-            "group": "Streaming",
+            "tab": "Guides",
+            "icon": "compass",
             "pages": [
-              "streaming/overview",
-              "streaming/dragons-mouth-grpc",
-              "streaming/whirligig-websockets",
-              "streaming/fumarole",
-              "streaming/vixen-program-streams"
+              {
+                "group": "Error handling",
+                "icon": "alert-triangle",
+                "pages": [
+                  "solana-guides/error-handling/overview",
+                  "solana-guides/error-handling/rpc",
+                  "solana-guides/error-handling/streaming",
+                  "solana-guides/error-handling/transaction-sending",
+                  "solana-guides/error-handling/history",
+                  "solana-guides/error-handling/billing",
+                  "solana-guides/error-handling/connection-pooling"
+                ]
+              },
+              "solana-guides/getting-started",
+              "solana-guides/solana-dev",
+              "solana-guides/streaming-guides",
+              "solana-guides/transaction-guides",
+              "solana-guides/industry-use-cases",
+              "solana-guides/nfts-and-digital-assets"
             ]
           },
           {
-            "group": "Solana",
-            "pages": [
-              "solana/overview",
-              "solana/cascade-transactions",
-              "solana/digital-assets-api",
-              "solana/old-faithful-archive",
-              "solana/steamboat-indexes",
-              "solana/shield-policies",
-              "solana/photon"
+            "tab": "API reference",
+            "icon": "code",
+            "groups": [
+              {
+                "group": "Overview and auth",
+                "pages": [
+                  "solana-api/api-overview",
+                  "solana-api/authentication",
+                  "solana-api/endpoints"
+                ]
+              },
+              {
+                "group": "HTTP RPC methods",
+                "pages": [
+                  {
+                    "group": "Accounts",
+                    "root": "solana-api/http/accounts/getAccountInfo",
+                    "expanded": false,
+                    "pages": [
+                      "solana-api/http/accounts/getAccountInfo",
+                      "solana-api/http/accounts/getBalance",
+                      "solana-api/http/accounts/getMultipleAccounts",
+                      "solana-api/http/accounts/getProgramAccounts",
+                      "solana-api/http/accounts/getTokenAccountBalance",
+                      "solana-api/http/accounts/getTokenAccountsByDelegate",
+                      "solana-api/http/accounts/getTokenAccountsByOwner",
+                      "solana-api/http/accounts/getTokenLargestAccounts",
+                      "solana-api/http/accounts/getTokenSupply",
+                      "solana-api/http/accounts/getLargestAccounts",
+                      "solana-api/http/accounts/getMinimumBalanceForRentExemption",
+                      "solana-api/http/accounts/getStakeMinimumDelegation"
+                    ]
+                  },
+                  {
+                    "group": "History",
+                    "root": "solana-api/http/history/getBlock",
+                    "expanded": false,
+                    "pages": [
+                      "solana-api/http/history/getBlock",
+                      "solana-api/http/history/getBlockCommitment",
+                      "solana-api/http/history/getBlockHeight",
+                      "solana-api/http/history/getBlockProduction",
+                      "solana-api/http/history/getBlockTime",
+                      "solana-api/http/history/getBlocks",
+                      "solana-api/http/history/getBlocksWithLimit",
+                      "solana-api/http/history/getTransaction",
+                      "solana-api/http/history/getTransactionCount",
+                      "solana-api/http/history/getSignaturesForAddress",
+                      "solana-api/http/history/getSignatureStatuses",
+                      "solana-api/http/history/getFirstAvailableBlock",
+                      "solana-api/http/history/getRecentPerformanceSamples",
+                      "solana-api/http/history/getRecentPrioritizationFees"
+                    ]
+                  },
+                  {
+                    "group": "Standard",
+                    "root": "solana-api/http/standard/getClusterNodes",
+                    "expanded": false,
+                    "pages": [
+                      "solana-api/http/standard/getClusterNodes",
+                      "solana-api/http/standard/getEpochInfo",
+                      "solana-api/http/standard/getEpochSchedule",
+                      "solana-api/http/standard/getFeeForMessage",
+                      "solana-api/http/standard/getGenesisHash",
+                      "solana-api/http/standard/getHealth",
+                      "solana-api/http/standard/getHighestSnapshotSlot",
+                      "solana-api/http/standard/getIdentity",
+                      "solana-api/http/standard/getInflationGovernor",
+                      "solana-api/http/standard/getInflationRate",
+                      "solana-api/http/standard/getInflationReward",
+                      "solana-api/http/standard/getLatestBlockhash",
+                      "solana-api/http/standard/getLeaderSchedule",
+                      "solana-api/http/standard/getMaxRetransmitSlot",
+                      "solana-api/http/standard/getMaxShredInsertSlot",
+                      "solana-api/http/standard/getSlot",
+                      "solana-api/http/standard/getSlotLeader",
+                      "solana-api/http/standard/getSlotLeaders",
+                      "solana-api/http/standard/getSupply",
+                      "solana-api/http/standard/getVersion",
+                      "solana-api/http/standard/getVoteAccounts",
+                      "solana-api/http/standard/isBlockhashValid",
+                      "solana-api/http/standard/minimumLedgerSlot",
+                      "solana-api/http/standard/requestAirdrop",
+                      "solana-api/http/standard/sendTransaction",
+                      "solana-api/http/standard/simulateTransaction"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Whirligig WebSocket",
+                "pages": [
+                  "solana-api/websocket/accountSubscribe",
+                  "solana-api/websocket/accountUnsubscribe",
+                  "solana-api/websocket/logsSubscribe",
+                  "solana-api/websocket/logsUnsubscribe",
+                  "solana-api/websocket/programSubscribe",
+                  "solana-api/websocket/programUnsubscribe",
+                  "solana-api/websocket/rootSubscribe",
+                  "solana-api/websocket/rootUnsubscribe",
+                  "solana-api/websocket/signatureSubscribe",
+                  "solana-api/websocket/signatureUnsubscribe",
+                  "solana-api/websocket/slotSubscribe",
+                  "solana-api/websocket/slotUnsubscribe"
+                ]
+              },
+              {
+                "group": "Yellowstone gRPC",
+                "pages": [
+                  "solana-api/grpc/subscribe",
+                  "solana-api/grpc/subscribeReplayInfo",
+                  "solana-api/grpc/getBlockHeight",
+                  "solana-api/grpc/getLatestBlockhash",
+                  "solana-api/grpc/getSlot",
+                  "solana-api/grpc/getVersion",
+                  "solana-api/grpc/isBlockhashValid",
+                  "solana-api/grpc/ping"
+                ]
+              },
+              {
+                "group": "DAS API",
+                "pages": [
+                  "solana-api/das/getAsset",
+                  "solana-api/das/getAssetBatch",
+                  "solana-api/das/getAssetProof",
+                  "solana-api/das/getAssetProofBatch",
+                  "solana-api/das/getAssetsByOwner",
+                  "solana-api/das/getAssetsByAuthority",
+                  "solana-api/das/getAssetsByCreator",
+                  "solana-api/das/getAssetsByGroup",
+                  "solana-api/das/searchAssets",
+                  "solana-api/das/getSignaturesForAsset",
+                  "solana-api/das/getTokenAccounts",
+                  "solana-api/das/getNftEditions",
+                  "solana-api/das/getTokenLargestAccounts",
+                  "solana-api/das/getAssets"
+                ]
+              },
+              {
+                "group": "Transactions",
+                "pages": [
+                  {
+                    "group": "Standard",
+                    "root": "solana-api/transactions/standard/getRecentPrioritizationFees",
+                    "expanded": false,
+                    "pages": [
+                      "solana-api/transactions/standard/getRecentPrioritizationFees",
+                      "solana-api/transactions/standard/sendTransaction"
+                    ]
+                  },
+                  {
+                    "group": "Metis",
+                    "root": "solana-api/transactions/metis/quote",
+                    "expanded": false,
+                    "pages": [
+                      "solana-api/transactions/metis/quote",
+                      "solana-api/transactions/metis/swap",
+                      "solana-api/transactions/metis/price"
+                    ]
+                  },
+                  {
+                    "group": "Titan",
+                    "root": "solana-api/transactions/titan/quote",
+                    "expanded": false,
+                    "pages": [
+                      "solana-api/transactions/titan/quote",
+                      "solana-api/transactions/titan/swap"
+                    ]
+                  }
+                ]
+              }
             ]
           },
           {
-            "group": "Trading APIs",
+            "tab": "FAQs",
+            "icon": "messages-square",
             "pages": [
-              "trading-apis/overview",
-              "trading-apis/metis-swap",
-              "trading-apis/titan-swap",
-              "trading-apis/jito-bundles",
-              "trading-apis/pyth-hermes"
-            ]
-          },
-          {
-            "group": "Other Chains",
-            "pages": [
-              "chains/sui",
-              "chains/monad",
-              "chains/pythnet"
-            ]
-          },
-          {
-            "group": "Validators",
-            "pages": [
-              "validators/overview",
-              "validators/vote-account-setup",
-              "validators/node-identity-protection"
-            ]
-          },
-          {
-            "group": "Support",
-            "pages": [
-              "support/faq",
-              "support/security",
-              "support/streaming-troubleshooting"
+              "solana-faqs/general",
+              "solana-faqs/rpc",
+              "solana-faqs/streaming",
+              "solana-faqs/das",
+              "solana-faqs/account",
+              "solana-faqs/billing",
+              "solana-faqs/trading",
+              "solana-faqs/pyth-oracle",
+              "solana-faqs/validator",
+              "solana-faqs/transactions"
             ]
           }
         ]
       },
       {
-        "tab": "Account Management API",
+        "dropdown": "Pyth",
+        "icon": "/logo/chains/pyth.svg",
         "groups": [
           {
-            "group": "Overview",
+            "group": "Pyth",
             "pages": [
-              "account-api/introduction",
-              "account-api/authentication"
+              "pyth/overview",
+              "pyth/quickstart",
+              "pyth/pyth-hermes",
+              "pyth/publisher-setup-nginx-proxy",
+              "pyth/testnet-devnet-and-pythnet",
+              {
+                "group": "API reference",
+                "expanded": false,
+                "pages": [
+                  {
+                    "group": "HTTP RPC",
+                    "expanded": false,
+                    "pages": [
+                      "pyth/api/http/get-latest-price-feeds",
+                      "pyth/api/http/get-price-feed",
+                      "pyth/api/http/get-price-feed-ids",
+                      "pyth/api/http/get-latest-vaas",
+                      "pyth/api/http/get-vaa"
+                    ]
+                  },
+                  {
+                    "group": "Streaming",
+                    "expanded": false,
+                    "pages": [
+                      "pyth/api/streaming/subscribe-price",
+                      "pyth/api/streaming/unsubscribe-price"
+                    ]
+                  }
+                ]
+              },
+              "pyth/faqs"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "dropdown": "SUI",
+        "icon": "/logo/chains/sui.svg",
+        "groups": [
           {
-            "group": "Resources",
+            "group": "SUI",
             "pages": [
-              "account-api/accounts",
-              "account-api/subscriptions",
-              "account-api/endpoints",
-              "account-api/tokens",
-              "account-api/rate-tiers",
-              "account-api/address-watch-lists",
-              "account-api/payments"
+              "sui/overview",
+              "sui/quickstart",
+              "sui/walrus",
+              "sui/seal",
+              {
+                "group": "API reference",
+                "expanded": false,
+                "pages": [
+                  "sui/api/method-placeholder"
+                ]
+              },
+              "sui/faqs"
+            ]
+          }
+        ]
+      },
+      {
+        "dropdown": "Monad",
+        "icon": "/logo/chains/monad.svg",
+        "groups": [
+          {
+            "group": "Monad",
+            "pages": [
+              "monad/overview",
+              "monad/quickstart",
+              {
+                "group": "API reference",
+                "expanded": false,
+                "pages": [
+                  "monad/api/method-placeholder"
+                ]
+              },
+              "monad/faqs"
             ]
           }
         ]
       }
     ]
-  },
-  "background": {
-    "color": {
-      "light": "#F7F7F7",
-      "dark": "#171717"
-    },
-    "decoration": "gradient"
   }
 }

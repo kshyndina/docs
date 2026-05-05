@@ -5,3 +5,7 @@
 # Draft content
 drafts/
 *.draft.mdx
+
+# Repo-internal reference docs (not part of the published docs site)
+DESIGN-SPEC.md
+AGENTS.md

@@ -1,0 +1,55 @@
+---
+title: "Get NFT Editions"
+---
+
+Get all printable editions for a master edition NFT mint.
+
+### Parameters
+
+| Name           | Description                             | Required |
+| ---------------| --------------------------------------- | --------- |
+| `mintAddress`  | The mint address of the master edition. | Yes       |
+| `page`         | The current pagination page.            | No        |
+| `limit`       | Number of results per page.             | No        |
+| `cursor`      | Optional pagination cursor.             | No        |
+| `before`      | Return results before the cursor.       | No        |
+| `after`       | Return results after the cursor.        | No        |
+
+<details>
+
+<summary>Request (POST)</summary>
+
+```json
+{
+    "id": "123",
+    "jsonrpc": "2.0",
+    "method": "getNftEditions",
+    "params": {
+      "mintAddress": "BUaiggSfm81ZRAeW572dNf1BhXCzZxaWrGNRm5PjSQzY",
+      "page": 1,
+      "limit": 100
+    }
+}
+```
+
+</details>
+
+<details>
+
+<summary>Response 200</summary>
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "total": 0,
+        "limit": 100,
+        "master_edition_address": "4faJkL1F5yLKTf9DSgqBmp2DJeUKk9fyfZzMKM1nMbzD",
+        "supply": 0,
+        "max_supply": 0,
+        "page": 1
+    },
+    "id": "123"
+}
+```
+</details>

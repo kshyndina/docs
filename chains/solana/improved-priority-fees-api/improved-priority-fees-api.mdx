@@ -1,0 +1,64 @@
+---
+title: "Improved Priority Fees API"
+---
+
+#### The Problem with Standard Priority Fees
+
+Solana's default `getRecentPrioritizationFees` RPC method can be difficult to use effectively for setting a competitive priority fee. It only returns the **minimum** priority fee paid in recent blocks, which is often zero and not a useful indicator of the market rate required for a transaction to land.
+
+#### Our Solution: Percentile-Based Fees
+
+To solve this, we have enhanced the `getRecentPrioritizationFees` method with a `percentile` parameter. You can now request a specific percentile (e.g., 50th for the median fee, 90th for a high-end fee) to get a much more realistic and actionable fee estimate based on recent on-chain activity.
+
+> For other RPC providers or users running their own nodes, we provide the patches to enable this functionality and encourage its adoption for a better developer experience. [Learn more →](/for-rpc-providers)
+
+#### How to Use the API
+
+The request and response formats are straightforward. The method name remains `getRecentPrioritizationFees`.
+
+**Sample Request**
+
+The `percentile` parameter is an integer between 1 and 10,000, representing a range from 0.01% to 100.00%. For example, `5000` represents the 50th percentile (median).
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "getRecentPrioritizationFees",
+  "params": [
+    [
+      "RNXnAJV1DeBt6Lytjz4wYzvS3d6bhsfidS5Np4ovwZz"
+    ],
+    {
+      "percentile": 5000
+    }
+  ]
+}
+```
+
+**Sample Response**
+
+The response format is identical to the standard Solana RPC method, but the prioritizationFee value will reflect the requested percentile instead of the minimum. If no percentile is provided, the method defaults to the original behavior of returning the minimum fee.
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "slot": 348126,
+      "prioritizationFee": 1000
+    },
+    {
+      "slot": 348127,
+      "prioritizationFee": 500
+    }
+  ],
+  "id": 1
+}
+```
+
+**Client Integration**
+
+Since this is an enhanced method, it may not be available in standard SDKs. We have prepared an example repository with utility functions you can use in your JavaScript/TypeScript codebase to get started quickly.
+
+https://github.com/rpcpool/solana-prioritization-fees-api/

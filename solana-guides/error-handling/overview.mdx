@@ -1,0 +1,56 @@
+---
+title: "Error handling overview"
+description: "Where to start when something goes wrong. Covers the most common first-call issues across RPC, gRPC, streaming, transactions, and billing."
+sidebarTitle: "Overview"
+---
+
+When something doesn't work, jump to the relevant category below. Each page lists the symptom, the cause, and the fix.
+
+## Common first-call issues
+
+<AccordionGroup>
+  <Accordion title="401 Unauthorized" icon="lock">
+    The token is wrong, or you're calling a public endpoint from an origin not on its allowlist. Re-check the token in the portal under your endpoint's **Auth** tab, or add your origin (e.g. `https://yourapp.com`) to the allowlist. Full details: [RPC errors](/solana-guides/error-handling/rpc).
+  </Accordion>
+  <Accordion title="429 Too Many Requests" icon="gauge">
+    You've hit the rate limit on the endpoint or the calling IP. Pause for 10 seconds, then resume. See [Rate and connection limits](/solana/get-started/rate-and-connection-limits) for the full numbers.
+  </Accordion>
+  <Accordion title="Connection timeout from a browser" icon="globe">
+    Public endpoints require an origin allowlist. Open **Auth** in the portal, add the origin you're calling from, save, and retry.
+  </Accordion>
+  <Accordion title="403 on gRPC" icon="shield-x">
+    Token must be passed as `x-token` metadata, not in the URL path. See [Streaming errors](/solana-guides/error-handling/streaming) for the gRPC auth pattern.
+  </Accordion>
+</AccordionGroup>
+
+## Browse by category
+
+<CardGroup cols={2}>
+  <Card title="RPC errors" icon="zap" href="/solana-guides/error-handling/rpc">
+    401, 403, 405, 429, JSON-RPC error codes, malformed responses.
+  </Card>
+
+  <Card title="Streaming errors" icon="radio" href="/solana-guides/error-handling/streaming">
+    gRPC auth, dropped subscriptions, slot lag, reconnection patterns.
+  </Card>
+
+  <Card title="Transaction-sending errors" icon="send" href="/solana-guides/error-handling/transaction-sending">
+    Simulation failures, blockhash expired, priority fee too low.
+  </Card>
+
+  <Card title="History errors" icon="history" href="/solana-guides/error-handling/history">
+    Hydrant query timeouts, missing slots, archive lookup failures.
+  </Card>
+
+  <Card title="Billing errors" icon="credit-card" href="/solana-guides/error-handling/billing">
+    Insufficient balance, top-up failures, surprise overage charges.
+  </Card>
+
+  <Card title="Connection pooling (web3.js)" icon="circuit-board" href="/solana-guides/error-handling/connection-pooling">
+    Port exhaustion, ephemeral-port limits, undici dispatcher tuning.
+  </Card>
+</CardGroup>
+
+<Note>
+  Still stuck? Click the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one). Include the endpoint, the time of the failed request, and the error message you saw.
+</Note>

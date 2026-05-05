@@ -1,0 +1,86 @@
+---
+url: https://docs.triton.one
+last_updated: 2026-05-05
+---
+
+# Triton One Documentation
+
+Premium bare-metal Solana infrastructure: reads, streaming, history, trading APIs and validator services. Built for teams running production workloads.
+
+## Getting started
+
+1. Sign up at https://customers.triton.one/users/sign-up
+2. Top up the $125 minimum (card, USDC, hel.io or wire)
+3. Provision a Solana mainnet endpoint, copy your URL and token
+4. Make your first request to `getSlot`
+
+Full quickstart: https://docs.triton.one/solana/get-started/quickstart
+
+## Product index
+
+### Reading state
+
+- **Standard RPC** — Solana JSON-RPC over HTTPS, all standard methods. https://docs.triton.one/solana/reading-state/standard-rpc
+- **Steamboat** — Custom indexes built from your gRPC stream, 50x faster than `getProgramAccounts`. https://docs.triton.one/solana/streaming/steamboat/overview
+- **DAS API** — Unified read for NFTs, cNFTs, SPL, Token-2022. https://docs.triton.one/solana/digital-assets/das-api/overview
+- **Account Sync** — Live account-state mirror, Geyser-fed, no polling. https://docs.triton.one/solana/reading-state/account-sync
+- **ZK Compression** — Compressed accounts, Merkle indexer. https://docs.triton.one/solana/digital-assets/zk-compression/overview
+
+### Streaming
+
+- **Dragon's Mouth gRPC** — Sub-slot account, transaction, slot and block subscriptions. https://docs.triton.one/solana/streaming/dragons-mouth/overview
+- **Whirligig** — Drop-in replacement for native Solana WebSockets, custom `transactionSubscribe`. https://docs.triton.one/solana/streaming/whirligig/overview
+- **Fumarole** — Multi-node merge, persistent storage, resume from cursor. https://docs.triton.one/solana/streaming/fumarole/overview
+- **Hermes** — Pyth price feed API, REST plus WebSocket. https://docs.triton.one/solana/streaming/hermes/overview
+- **Pythnet** — Pyth oracle source-of-truth chain, Solana Foundation backed. https://docs.triton.one/solana/streaming/pythnet/overview
+
+### History
+
+- **Hydrant** — Millisecond ledger queries from genesis, ClickHouse-backed, 400+ TB. https://docs.triton.one/solana/history/hydrant/overview
+- **Old Faithful** — Open archive of every block from genesis, JSON-RPC and gRPC. https://docs.triton.one/solana/history/old-faithful/overview
+- **Faithful Streams** — Replay history live, same API as Dragon's Mouth. https://docs.triton.one/solana/history/faithful-streams/overview
+
+### Sending transactions
+
+- **Yellowstone Jet** — SWQoS TPU client, direct-to-leader transaction submission via QUIC. https://docs.triton.one/solana/sending-transactions/yellowstone-jet/overview
+- **Priority Fees API** — Smart per-program fee estimation. https://docs.triton.one/solana/sending-transactions/priority-fees/overview
+- **Metis** — Jupiter swap routing, 20+ DEXes scanned, optimal route. https://docs.triton.one/solana/trading-apis/metis/overview
+- **Titan Prime** — Streaming swaps, DART live re-optimisation. https://docs.triton.one/solana/trading-apis/titan-prime/overview
+- **Jito Bundles** — Tips-based bundle ordering, direct-to-leader. https://docs.triton.one/solana/sending-transactions/jito-bundles/overview
+
+### Dedicated and validator services
+
+- **Dedicated gRPC node** — Private endpoint, no shared rate limits, Yellowstone gRPC included. https://docs.triton.one/solana/reading-state/dedicated-grpc
+- **White-label validator** — Branded validator on Triton infrastructure. https://docs.triton.one/solana/validators/white-label/overview
+- **Private trusted validator** — Validator-as-a-service for stake delegation, no third-party operators. https://docs.triton.one/solana/validators/private-trusted/overview
+
+## By use case
+
+| Building... | Recommended stack |
+|---|---|
+| Trading or market making | Dragon's Mouth, Yellowstone Jet, Priority Fees, Fumarole |
+| DEX or DeFi protocol | Dragon's Mouth, Yellowstone Jet, Hydrant, Priority Fees |
+| Wallet or consumer app | Standard RPC, DAS API, Whirligig |
+| NFT or compressed-asset platform | DAS API, ZK Compression, Whirligig |
+| Indexer or analytics | Steamboat, Hydrant, Old Faithful, Vixen |
+| Institutional or RWA | Dedicated gRPC, White-label validator, dedicated tier |
+| Gaming or high-throughput consumer | Standard RPC, DAS API, Dragon's Mouth, Whirligig |
+| AI agent or LLM app | MCP (coming soon), llms.txt, Standard RPC, DAS API |
+
+## Account, billing, support
+
+- Account management: https://docs.triton.one/solana/get-started/account-management
+- Plans and billing: https://docs.triton.one/solana/get-started/plans-and-billing
+- Rate and connection limits: https://docs.triton.one/solana/get-started/rate-and-connection-limits
+- Auth and security: https://docs.triton.one/solana/get-started/account-management/auth-and-security-best-practices
+
+## Resources
+
+- Customer portal: https://customers.triton.one
+- Blog: https://blog.triton.one
+- GitHub: https://github.com/rpcpool
+- X / Twitter: https://x.com/triton_one
+- YouTube: https://www.youtube.com/@triton_one_ltd
+- Telegram: https://t.me/tritonone
+- Status: https://status.triton.one
+- Contact: https://triton.one/contact

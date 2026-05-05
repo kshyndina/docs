@@ -1,0 +1,39 @@
+---
+title: "ARCHIVED — Welcome page LLM-ready component (v1)"
+description: "Saved variant of the LLM-ready section as it appeared on solana/welcome.mdx. Two-card grid (llms.txt index + Triton MCP server) plus a Tip block with the agent-context instructions. Saved for potential reuse when revisiting the welcome page layout."
+---
+
+{/*
+
+# About this archive
+
+Saved 2026-05-05 from /solana/welcome.mdx, commit a1201ca.
+
+This is the "LLM-ready" section in its 2-card + Tip form. The replacement
+version on welcome.mdx swapped this for a code-block treatment of the
+llms.txt URL so users could click-to-copy. Kate asked to archive this
+variant in case we want it back.
+
+To reuse: paste the block below directly into a `.mdx` page where you
+want this section. Update the `href` paths if the route layout has
+changed since.
+
+*/}
+
+## LLM-ready
+
+Triton's docs are built for AI agents as well as humans.
+
+<CardGroup cols={2}>
+  <Card title="llms.txt index" icon="sparkles" href="/llms.txt">
+    Single-file map of every page. One fetch bootstraps your agent.
+  </Card>
+
+  <Card title="Triton MCP server" icon="plug" href="/agents/mcp">
+    Coming soon. MCP access to RPC, gRPC, account management.
+  </Card>
+</CardGroup>
+
+<Tip>
+  Working with Claude Code, Cursor or Codex? Drop our `llms.txt` URL into your agent's context to give it full Triton coverage in one fetch. Per-product `llms.txt` files are also available under each section, e.g. `/solana/streaming/dragons-mouth/llms.txt`.
+</Tip>

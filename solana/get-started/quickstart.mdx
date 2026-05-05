@@ -1,0 +1,234 @@
+---
+title: "Quickstart"
+description: "Five minutes from sign-up to your first Solana RPC call. Then a routed path to whichever product or use case fits your build."
+sidebarTitle: "Quickstart"
+---
+
+## Get your first request working
+
+<Steps>
+  <Step title="Sign up and deposit $125" titleSize="h3">
+    Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up), verify your email, and top up the \$125 minimum (stablecoins only).
+  </Step>
+  <Step title="Set up an endpoint" titleSize="h3">
+    Open the dashboard, click **Create endpoint**, pick **Solana mainnet** (or devnet for testing), and choose the closest region. The portal returns two things you'll use everywhere:
+
+    - **Endpoint URL**: `<your-endpoint>.mainnet.rpcpool.com`
+    - **Secret token**: a long random string
+
+    Keep the token server-side only. Frontend code uses an origin allowlist instead. See [Auth and security](/solana/get-started/account-management/auth-and-security-best-practices).
+
+    Full walkthrough: [Set up your account and add users](/solana/get-started/account-management/set-up-your-account-and-add-users).
+  </Step>
+  <Step title="Send your first request" titleSize="h3">
+    Call `getSlot` to confirm the endpoint is live. Pick your stack:
+
+    <CodeGroup>
+
+    ```bash curl
+    curl https://<endpoint>.mainnet.rpcpool.com/<token> \
+      -H "Content-Type: application/json" \
+      -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}'
+    ```
+
+    ```javascript Solana Kit
+    import { createSolanaRpc } from "@solana/kit";
+    
+    const rpc = createSolanaRpc("https://<endpoint>.mainnet.rpcpool.com/<token>");
+    const slot = await rpc.getSlot().send();
+    console.log(slot);
+    ```
+
+    ```javascript web3.js
+    import { Connection } from '@solana/web3.js';
+    
+    const conn = new Connection(
+      'https://<endpoint>.mainnet.rpcpool.com/<token>',
+      'confirmed'
+    );
+    console.log(await conn.getSlot());
+    ```
+
+    ```python python
+    import requests
+    
+    r = requests.post(
+        'https://<endpoint>.mainnet.rpcpool.com/<token>',
+        json={'jsonrpc': '2.0', 'id': 1, 'method': 'getSlot'},
+    )
+    print(r.json()['result'])
+    ```
+
+    ```rust rust
+    use solana_client::rpc_client::RpcClient;
+    
+    let client = RpcClient::new(
+        "https://<endpoint>.mainnet.rpcpool.com/<token>".to_string(),
+    );
+    println!("{}", client.get_slot()?);
+    ```
+
+    </CodeGroup>
+
+    Expected response:
+
+    ```json
+    { "jsonrpc": "2.0", "result": 311340987, "id": 1 }
+    ```
+
+    <Note>
+      You should be connected. If something doesn't work (401, 429, timeouts, gRPC 403), see the [Error handling guide](/solana-guides/error-handling/overview) for the full debug flow.
+    </Note>
+  </Step>
+</Steps>
+
+## Where to next
+
+You have an endpoint and a working call. Two ways to navigate from here.
+
+<Tabs>
+  <Tab title="By product (I know what I want)">
+    Each Triton product handles one job. Pick the one that matches what you're building.
+
+    ### Reading state
+
+    <CardGroup cols={2}>
+      <Card title="Standard RPC" icon="zap" href="/solana/reading-state/standard-rpc">
+        JSON-RPC over HTTPS. Every standard Solana method.
+      </Card>
+
+      <Card title="Steamboat" icon="database" href="/solana/streaming/steamboat/overview">
+        Custom indexes from your gRPC stream. 50x faster than `getProgramAccounts`.
+      </Card>
+
+      <Card title="DAS API" icon="image" href="/solana/digital-assets/das-api/overview">
+        Unified read for NFTs, cNFTs, SPL, Token-2022.
+      </Card>
+
+      <Card title="Account Sync" icon="refresh-cw" href="/solana/reading-state/account-sync">
+        Live account state mirror. No polling, always current.
+      </Card>
+    </CardGroup>
+
+    ### Streaming
+
+    <CardGroup cols={2}>
+      <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth/overview">
+        Sub-slot account, transaction, slot, block subscriptions.
+      </Card>
+
+      <Card title="Whirligig" icon="rotate-cw" href="/solana/streaming/whirligig/overview">
+        Drop-in for native Solana WebSockets. Custom `transactionSubscribe`.
+      </Card>
+
+      <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole/overview">
+        Multi-node merge, persistent storage, resume from cursor.
+      </Card>
+
+      <Card title="Hermes" icon="activity" href="/solana/streaming/hermes/overview">
+        Pyth price feed API. REST plus WebSocket. Powers Pyth JS SDK.
+      </Card>
+    </CardGroup>
+
+    ### History
+
+    <CardGroup cols={2}>
+      <Card title="Hydrant" icon="history" href="/solana/history/hydrant/overview">
+        Millisecond ledger queries from genesis. 400\+ TB.
+      </Card>
+
+      <Card title="Old Faithful" icon="archive" href="/solana/history/old-faithful/overview">
+        Open archive of every block from genesis. JSON-RPC and gRPC.
+      </Card>
+    </CardGroup>
+
+    ### Sending transactions
+
+    <CardGroup cols={2}>
+      <Card title="Yellowstone Jet" icon="send" href="/solana/sending-transactions/yellowstone-jet/overview">
+        SWQoS TPU client. Direct-to-leader via QUIC.
+      </Card>
+
+      <Card title="Priority Fees API" icon="trending-up" href="/solana/sending-transactions/priority-fees/overview">
+        Smart per-program fee estimation.
+      </Card>
+
+      <Card title="Metis" icon="git-branch" href="/solana/trading-apis/metis/overview">
+        Jupiter swap routing. 20\+ DEXes scanned.
+      </Card>
+
+      <Card title="Titan Prime" icon="route" href="/solana/trading-apis/titan-prime/overview">
+        Streaming swaps with DART live re-optimisation.
+      </Card>
+
+      <Card title="Jito Bundles" icon="package" href="/solana/sending-transactions/jito-bundles/overview">
+        Tips-based bundle ordering. Skip the standard queue.
+      </Card>
+    </CardGroup>
+
+    ### Dedicated and validator services
+
+    <CardGroup cols={2}>
+      <Card title="Dedicated gRPC node" icon="server" href="/solana/reading-state/dedicated-grpc">
+        Private endpoint, no shared limits, Yellowstone gRPC included.
+      </Card>
+
+      <Card title="White-label validator" icon="shield" href="/solana/validators/white-label/overview">
+        Branded validator on Triton infra. We run ops, you keep the brand.
+      </Card>
+    </CardGroup>
+  </Tab>
+  <Tab title="By use case (I'm not sure yet)">
+    Pick the kind of app you're building. Each guide stitches the right Triton products into a working end-to-end flow with code.
+
+    <CardGroup cols={2}>
+      <Card title="Trading or market making" icon="coins" href="/solana/guides/trading">
+        Real-time price \+ liquidity, sub-slot tx submission. **Stack:** Dragon's Mouth, Jet, Priority Fees, Fumarole.
+      </Card>
+
+      <Card title="DEX or DeFi protocol" icon="git-merge" href="/solana/guides/defi">
+        Pool state, swap activity, tx landing, historical fills. **Stack:** Dragon's Mouth, Jet, Hydrant, Priority Fees.
+      </Card>
+
+      <Card title="Wallet or consumer app" icon="wallet" href="/solana/guides/wallet">
+        Balances, tx history, NFT portfolio, live updates. **Stack:** Standard RPC, DAS API, Whirligig.
+      </Card>
+
+      <Card title="NFT or compressed-asset platform" icon="palette" href="/solana/guides/nft">
+        Mint and metadata queries, collection feeds, sale events. **Stack:** DAS API, ZK Compression, Whirligig.
+      </Card>
+
+      <Card title="Indexer or analytics" icon="bar-chart-3" href="/solana/guides/indexer">
+        Custom program indexes, historical backfill, parsed tx. **Stack:** Steamboat, Hydrant, Old Faithful, Vixen.
+      </Card>
+
+      <Card title="Institutional or RWA" icon="building" href="/solana/guides/institutional">
+        Dedicated infra, white-label validator, custom regions, SLAs. **Stack:** Dedicated gRPC, White-label validator, dedicated tier.
+      </Card>
+
+      <Card title="Gaming or high-throughput consumer" icon="gamepad-2" href="/solana/guides/gaming">
+        On-chain state for games, NFT items, real-time updates. **Stack:** Standard RPC, DAS API, Dragon's Mouth, Whirligig.
+      </Card>
+
+      <Card title="AI agent or LLM app" icon="bot" href="/solana/guides/ai-agent">
+        MCP-driven access, llms.txt context, autonomous setup. **Stack:** MCP (coming soon), llms.txt, Standard RPC, DAS API.
+      </Card>
+    </CardGroup>
+
+    <Note>
+      Building something not on this list? [Contact sales](https://triton.one/contact) and we'll route you to the right combination.
+    </Note>
+  </Tab>
+</Tabs>
+
+---
+
+<div className="footer-links not-prose">
+  <p><Icon icon="life-buoy" /> Need help? Click the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)</p>
+
+  <p><Icon icon="user-cog" /> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)</p>
+
+  <p><Icon icon="briefcase" /> Sales questions? [Contact sales](https://triton.one/contact)</p>
+
+  <p><Icon icon="sparkles" /> AI agent? [Read llms.txt](/llms.txt)</p>
+</div>

@@ -1,0 +1,86 @@
+---
+title: "getAccountInfo"
+description: "Returns full information about an account, including its data, owner program, lamports, and rent status."
+api: 'POST https://api.mainnet-beta.solana.com'
+authMethod: "none"
+---
+
+Returns full information about an account: its lamport balance, owner program, executable flag, rent epoch, and the raw data the account holds. Use this to inspect any account on Solana -- system accounts, token accounts, program-derived accounts, etc.
+
+## Request body
+
+<ParamField body="jsonrpc" type="string" required>
+  Always `"2.0"`.
+</ParamField>
+
+<ParamField body="id" type="integer" required>
+  An identifier you choose.
+</ParamField>
+
+<ParamField body="method" type="string" required>
+  Always `"getAccountInfo"`.
+</ParamField>
+
+<ParamField body="params" type="array" required>
+  `[pubkey, config?]`:
+  - `pubkey` (string, required) -- the base58 account address
+  - `config.encoding` (string, optional) -- one of `"base58"`, `"base64"`, `"base64+zstd"`, or `"jsonParsed"`. Defaults to `"base58"`.
+  - `config.commitment` (string, optional) -- `"processed"`, `"confirmed"`, or `"finalized"`.
+  - `config.dataSlice` (object, optional) -- request only a slice of the data: `{ offset: int, length: int }`.
+</ParamField>
+
+## Response
+
+<ResponseField name="result.context.slot" type="integer">
+  The slot the data was retrieved at.
+</ResponseField>
+
+<ResponseField name="result.value" type="object">
+  The account, or `null` if the account does not exist.
+  - `lamports` (integer) -- balance in lamports
+  - `owner` (string) -- base58 address of the program that owns the account
+  - `data` (string or array) -- the account data, encoded as requested
+  - `executable` (boolean) -- whether the account contains an executable program
+  - `rentEpoch` (integer) -- the epoch when the account next owes rent
+  - `space` (integer) -- the size of the account data in bytes
+</ResponseField>
+
+## Example
+
+<RequestExample>
+
+```json Request
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "getAccountInfo",
+  "params": [
+    "vines1vzrYbzLMRdu58ou5XTby4qAqVRLmqo36NKPTg",
+    { "encoding": "jsonParsed" }
+  ]
+}
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 OK
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "context": { "slot": 280123456 },
+    "value": {
+      "lamports": 12345678901,
+      "owner": "11111111111111111111111111111111",
+      "data": ["", "base58"],
+      "executable": false,
+      "rentEpoch": 18446744073709551615,
+      "space": 0
+    }
+  },
+  "id": 1
+}
+```
+
+</ResponseExample>

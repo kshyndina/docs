@@ -1,0 +1,237 @@
+---
+title: "SDK clients setup"
+---
+
+Pick the language that matches your stack. The wire protocol is identical -- every client speaks the same `SubscribeRequest` schema -- so messages and filters look the same regardless. The differences are in performance characteristics and ecosystem fit.
+
+| Language | Recommended for | Repository |
+|---|---|---|
+| **Rust** | Maximum performance, MEV / trading, custom Geyser plugins | [github.com/rpcpool/yellowstone-grpc](https://github.com/rpcpool/yellowstone-grpc) |
+| **Go** | High-throughput backends, indexers | [github.com/rpcpool/yellowstone-grpc-go](https://github.com/rpcpool/yellowstone-grpc-go) |
+| **Node.js (Triton NAPI)** | TypeScript backends, frontends-with-backend | [@triton-one/yellowstone-grpc](https://www.npmjs.com/package/@triton-one/yellowstone-grpc) |
+| **Python** | Data science, analytics, scripts | [yellowstone-grpc-python](https://github.com/rpcpool/yellowstone-grpc) (Python clients dir) |
+| **Java** | JVM backends | community-maintained generated stubs |
+
+## Rust
+
+Best performance, recommended for any production workload that must keep up with full-chain rates.
+
+```bash
+cargo add yellowstone-grpc-client yellowstone-grpc-proto
+cargo add tokio --features full
+```
+
+```rust
+use std::collections::HashMap;
+use yellowstone_grpc_client::GeyserGrpcClient;
+use yellowstone_grpc_proto::prelude::*;
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let mut client = GeyserGrpcClient::build_from_shared(
+        "https://your-app.mainnet.rpcpool.com".to_string()
+    )?
+    .x_token(Some("your-token".to_string()))?
+    .tls_config(ClientTlsConfig::new().with_native_roots())?
+    .max_decoding_message_size(64 * 1024 * 1024)
+    .connect()
+    .await?;
+
+    let mut accounts = HashMap::new();
+    accounts.insert("sol-usdc".to_string(), SubscribeRequestFilterAccounts {
+        account: vec!["58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2".to_string()],
+        owner: vec![],
+        filters: vec![],
+        nonempty_txn_signature: None,
+    });
+
+    let request = SubscribeRequest {
+        accounts,
+        slots: HashMap::new(),
+        transactions: HashMap::new(),
+        commitment: Some(CommitmentLevel::Processed as i32),
+        ..Default::default()
+    };
+
+    let (mut subscribe_tx, mut stream) = client.subscribe().await?;
+    subscribe_tx.send(request).await?;
+
+    while let Some(msg) = stream.message().await? {
+        println!("{:?}", msg);
+    }
+    Ok(())
+}
+```
+
+## Go
+
+```bash
+go get github.com/rpcpool/yellowstone-grpc-go
+```
+
+```go
+package main
+
+import (
+    "context"
+    "log"
+    pb "github.com/rpcpool/yellowstone-grpc-go/proto"
+    "google.golang.org/grpc"
+    "google.golang.org/grpc/credentials"
+    "google.golang.org/grpc/metadata"
+    "crypto/tls"
+)
+
+func main() {
+    creds := credentials.NewTLS(&tls.Config{})
+    conn, err := grpc.Dial(
+        "your-app.mainnet.rpcpool.com:443",
+        grpc.WithTransportCredentials(creds),
+        grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(64*1024*1024)),
+    )
+    if err != nil { log.Fatal(err) }
+    defer conn.Close()
+
+    client := pb.NewGeyserClient(conn)
+    md := metadata.Pairs("x-token", "your-token")
+    ctx := metadata.NewOutgoingContext(context.Background(), md)
+
+    stream, err := client.Subscribe(ctx)
+    if err != nil { log.Fatal(err) }
+
+    req := &pb.SubscribeRequest{
+        Accounts: map[string]*pb.SubscribeRequestFilterAccounts{
+            "sol-usdc": {Account: []string{"58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2"}},
+        },
+    }
+    if err := stream.Send(req); err != nil { log.Fatal(err) }
+
+    for {
+        msg, err := stream.Recv()
+        if err != nil { log.Fatal(err) }
+        log.Printf("%+v", msg)
+    }
+}
+```
+
+## Node.js (Triton NAPI)
+
+<Warning>
+Use **`@triton-one/yellowstone-grpc`**, not the generic `@grpc/grpc-js`. The Triton package wraps native bindings that are 4x faster than pure JS and don't backpressure-stall on Solana volume.
+</Warning>
+
+```bash
+npm install @triton-one/yellowstone-grpc
+```
+
+```javascript
+import Client, { CommitmentLevel } from '@triton-one/yellowstone-grpc';
+
+const client = new Client(
+  'https://your-app.mainnet.rpcpool.com',
+  'your-token',
+  { 'grpc.max_receive_message_length': 64 * 1024 * 1024 }
+);
+
+const stream = await client.subscribe();
+
+await stream.write({
+  accounts: {
+    'sol-usdc': {
+      account: ['58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2'],
+      owner: [], filters: [],
+    },
+  },
+  slots: {}, transactions: {}, transactionsStatus: {},
+  blocks: {}, blocksMeta: {}, entry: {}, accountsDataSlice: [],
+  commitment: CommitmentLevel.PROCESSED,
+});
+
+stream.on('data', (msg) => console.log(msg));
+stream.on('error', (e) => console.error(e));
+```
+
+## Python
+
+```bash
+pip install grpcio grpcio-tools yellowstone-grpc-python
+```
+
+```python
+import asyncio
+import grpc
+from yellowstone_grpc.client import YellowstoneClient
+
+async def main():
+    client = YellowstoneClient(
+        endpoint="your-app.mainnet.rpcpool.com:443",
+        x_token="your-token",
+        max_message_size=64 * 1024 * 1024,
+    )
+    async with client.subscribe() as stream:
+        await stream.send({
+            "accounts": {
+                "sol-usdc": {
+                    "account": ["58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2"],
+                    "owner": [], "filters": [],
+                },
+            },
+            "commitment": "processed",
+        })
+        async for msg in stream:
+            print(msg)
+
+asyncio.run(main())
+```
+
+## Java
+
+Generate stubs from the proto files in [yellowstone-grpc/proto](https://github.com/rpcpool/yellowstone-grpc/tree/main/proto). Use `io.grpc:grpc-netty-shaded` and `io.grpc:grpc-stub`.
+
+```java
+ManagedChannel channel = NettyChannelBuilder
+    .forAddress("your-app.mainnet.rpcpool.com", 443)
+    .useTransportSecurity()
+    .maxInboundMessageSize(64 * 1024 * 1024)
+    .build();
+
+Metadata metadata = new Metadata();
+metadata.put(Metadata.Key.of("x-token", Metadata.ASCII_STRING_MARSHALLER), "your-token");
+
+GeyserGrpc.GeyserStub stub = MetadataUtils
+    .attachHeaders(GeyserGrpc.newStub(channel), metadata);
+
+StreamObserver<SubscribeUpdate> observer = new StreamObserver<>() {
+    public void onNext(SubscribeUpdate update) { System.out.println(update); }
+    public void onError(Throwable t) { t.printStackTrace(); }
+    public void onCompleted() {}
+};
+
+StreamObserver<SubscribeRequest> requestStream = stub.subscribe(observer);
+requestStream.onNext(SubscribeRequest.newBuilder()
+    .putAccounts("sol-usdc", SubscribeRequestFilterAccounts.newBuilder()
+        .addAccount("58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2")
+        .build())
+    .build());
+```
+
+## Settings every client should set
+
+| Setting | Value | Why |
+|---|---|---|
+| `max_receive_message_length` | 64 MB or higher | Solana account-batch updates can be large |
+| zstd compression | enabled | 4--6x bandwidth reduction; without it you saturate the link |
+| HTTP/2 adaptive window | true | Default tonic / NodeJS settings throttle large streams |
+| TCP keepalive | 60s | Detect dead connections faster |
+| Retry policy | exponential backoff with jitter | Network blips and edge restarts |
+
+## What's next
+
+<Columns cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/solana/streaming/dragons-mouth/quickstart">
+    Subscribe end-to-end with the reference client first.
+  </Card>
+  <Card title="Deshred transactions" icon="zap" href="/solana/streaming/dragons-mouth/deshred-transactions">
+    Lowest-latency transaction reception for trading consumers.
+  </Card>
+</Columns>

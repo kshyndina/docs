@@ -1,0 +1,77 @@
+---
+title: "Subscription types"
+---
+
+`/v1/subscription-types` is the read-only catalogue of plans and add-ons Triton offers. Use it to populate your billing UI or to programmatically pick what to attach via [Subscriptions](/solana/get-started/account-management/account-management-api/subscriptions).
+
+Resource path: `/v1/subscription-types`
+
+## List all types
+
+```
+GET /v1/subscription-types
+```
+
+Filter via `?category=base` or `?category=addon` to narrow the list.
+
+```bash
+curl 'https://api.triton.one/v1/subscription-types?category=addon' \
+  -H "Authorization: Bearer $TRITON_API_TOKEN"
+```
+
+```json
+{
+  "data": [
+    {
+      "id": "type_addon_das",
+      "category": "addon",
+      "name": "DAS API",
+      "description": "Digital Asset Standard API for NFTs, compressed assets",
+      "pricing": {
+        "model": "per_request",
+        "rate_usd_per_million": 50
+      },
+      "monthly_minimum_usd": 0
+    },
+    {
+      "id": "type_addon_hydrant",
+      "category": "addon",
+      "name": "Hydrant historical archive",
+      "description": "Full Solana history beyond the recent ledger",
+      "pricing": {
+        "model": "per_request",
+        "rate_usd_per_million": 10
+      },
+      "monthly_minimum_usd": 10
+    }
+  ]
+}
+```
+
+## Get a specific type
+
+```
+GET /v1/subscription-types/{id}
+```
+
+Returns full pricing details including any tiered breakdowns (e.g. committed plans with a credit pool).
+
+## Categories
+
+| Category | What it is |
+|---|---|
+| `base` | Mutually exclusive root plan: PAYG, Committed (sized), Dedicated (sized) |
+| `addon` | Stackable: DAS, Hydrant, Steamboat, SWQoS access, custom regions |
+
+An organisation has exactly one `base` and zero-or-more `addon` subscriptions at any time.
+
+## What's next
+
+<Columns cols={2}>
+  <Card title="Subscriptions" icon="rss" href="/solana/get-started/account-management/account-management-api/subscriptions">
+    Attach a type to your organisation.
+  </Card>
+  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
+    Pricing in plain English.
+  </Card>
+</Columns>
