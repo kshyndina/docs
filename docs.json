@@ -262,8 +262,6 @@
               },
               {
                 "group": "End-to-end builds",
-                "root": "solana-guides/end-to-end-builds/stream-solana-grpc",
-                "expanded": false,
                 "pages": [
                   "solana-guides/end-to-end-builds/stream-solana-grpc",
                   "solana-guides/end-to-end-builds/get-token-metadata",
