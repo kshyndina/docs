@@ -2173,32 +2173,50 @@ html.dark .stack-leaf:hover {
   margin-bottom: 1.25rem;
   flex-wrap: wrap;
 }
+/* Mode toggle: match the live triton.one/pricing pattern --
+   `bg-foreground text-soft-white` on active, plain border otherwise.
+   Padding `px-3 py-1` (12px 4px), radius `rounded-lg` (0.5rem), Geist
+   Mono uppercase 12px. */
 .triton-calc-mode-btn {
-  padding: 0.4rem 0.875rem;
-  border: 1px solid #492D60;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid #171717;
   background: transparent;
-  color: #492D60;
+  color: #171717;
   font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
-  font-size: 0.6875rem;
+  font-style: normal;        /* Mintlify doesn't italicize, but lock it. */
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background 120ms ease, color 120ms ease;
 }
 .triton-calc-mode-btn.active {
-  background: #492D60;
+  background: #171717;
   color: #FFFFFF;
 }
 .triton-calc-mode-btn:hover:not(.active) {
   background: rgba(122, 75, 160, 0.08);
 }
+/* Dark mode: invert the toggle. */
+.dark .triton-calc-mode-btn,
+html.dark .triton-calc-mode-btn {
+  border-color: #E5D7F0;
+  color: #E5D7F0;
+}
+.dark .triton-calc-mode-btn.active,
+html.dark .triton-calc-mode-btn.active {
+  background: #E5D7F0;
+  color: #171717;
+}
+/* Panel: lighter wash + larger radius to match
+   `bg-primary/15 rounded-3xl border-primary/50`. */
 .triton-calc-panel {
-  background: rgba(122, 75, 160, 0.08);
-  border: 1px solid rgba(122, 75, 160, 0.4);
-  border-radius: 1rem;
-  padding: 1.75rem;
+  background: rgba(122, 75, 160, 0.15);
+  border: 1px solid rgba(122, 75, 160, 0.5);
+  border-radius: 1.5rem;
+  padding: 2rem;
 }
 .triton-calc-grid {
   display: grid;
@@ -2508,16 +2526,9 @@ html.dark .triton-calc-panel {
   background: rgba(122, 75, 160, 0.10);
   border-color: rgba(181, 145, 211, 0.4);
 }
-.dark .triton-calc-mode-btn,
-html.dark .triton-calc-mode-btn {
-  border-color: #B591D3;
-  color: #E5D7F0;
-}
-.dark .triton-calc-mode-btn.active,
-html.dark .triton-calc-mode-btn.active {
-  background: #B591D3;
-  color: #1A0F2E;
-}
+/* (The .dark .triton-calc-mode-btn rule that used to live here was a
+   duplicate of the canonical rule defined alongside the light-mode
+   spec around line 2210. Source of truth lives there.) */
 .dark .triton-calc-total,
 .dark .triton-calc-row-title,
 .dark .triton-calc-features li,
