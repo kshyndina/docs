@@ -105,14 +105,14 @@ Triton's docs are built for AI agents as well as humans.
 
 ## Triton product map
 
-Each product has its own deep dive elsewhere in the docs. This is how the surface fits together. Click any product to jump to its page.
+Each product has its own deep dive in the sidebar. This is how the surface fits together.
 
 ```mermaid
 graph TB
-    classDef reading  fill:#E8E0F5,stroke:#5B3D8A,stroke-width:1.5px,color:#1A0F2E
-    classDef stream   fill:#E8E0F5,stroke:#5B3D8A,stroke-width:1.5px,color:#1A0F2E
-    classDef history  fill:#FBEED4,stroke:#B5852A,stroke-width:1.5px,color:#3A2A05
-    classDef sending  fill:#DEEAD0,stroke:#5C7A3A,stroke-width:1.5px,color:#1F2A0F
+    classDef reading   fill:#E8E0F5,stroke:#5B3D8A,stroke-width:1.5px,color:#1A0F2E
+    classDef stream    fill:#E8E0F5,stroke:#5B3D8A,stroke-width:1.5px,color:#1A0F2E
+    classDef history   fill:#FBEED4,stroke:#B5852A,stroke-width:1.5px,color:#3A2A05
+    classDef sending   fill:#DEEAD0,stroke:#5C7A3A,stroke-width:1.5px,color:#1F2A0F
     classDef validator fill:#E8E0F5,stroke:#5B3D8A,stroke-width:1.5px,color:#1A0F2E
 
     subgraph READS [READING SOLANA STATE]
@@ -125,7 +125,7 @@ graph TB
     end
 
     subgraph STREAM [STREAMING DATA]
-        DM[Dragon's Mouth]
+        DM[Dragons Mouth]
         WHIRL[Whirligig]
         FUM[Fumarole]
         FAITH[Faithful Streams]
@@ -169,32 +169,10 @@ graph TB
     class HYD,OF history
     class JET,FEES,METIS,TITAN,JITO sending
     class WL,PT validator
-
-    click RPC   "/solana/reading-state/standard-rpc"               "Standard RPC: 99.99% uptime, 20+ regions, GeoDNS routing"
-    click GRPC  "/solana/reading-state/dedicated-grpc"             "Dedicated gRPC: private endpoint, no rate limits"
-    click SYNC  "/solana/reading-state/account-sync"               "Account Sync: live state mirror, Geyser-fed, no polling"
-    click STEAM "/solana/streaming/steamboat/overview"             "Steamboat: indexed program state, 50x faster than getProgramAccounts"
-    click DAS   "/solana/digital-assets/das-api/overview"          "DAS API: NFTs, cNFTs, SPL, Token-2022"
-    click ZK    "/solana/digital-assets/zk-compression/overview"   "ZK Compression: compressed accounts, Merkle indexer"
-    click DM    "/solana/streaming/dragons-mouth/overview"         "Dragon's Mouth: Geyser gRPC, intra-slot updates"
-    click WHIRL "/solana/streaming/whirligig/overview"             "Whirligig: drop-in for native Solana WebSockets"
-    click FUM   "/solana/streaming/fumarole/overview"              "Fumarole: multi-node merge, persistent storage, scale-out"
-    click FAITH "/solana/history/faithful-streams/overview"        "Faithful Streams: replay history live, same API as Dragon's Mouth"
-    click HER   "/solana/streaming/hermes/overview"                "Hermes: Pyth feed API, REST + WebSocket"
-    click PYTH  "/solana/streaming/pythnet/overview"               "Pythnet: oracle endpoint, Solana Foundation backed"
-    click HYD   "/solana/history/hydrant/overview"                 "Hydrant: ms-latency ledger queries, ClickHouse-backed, 400+ TB"
-    click OF    "/solana/history/old-faithful/overview"            "Old Faithful: open archive, genesis-onwards, OSS"
-    click JET   "/solana/sending-transactions/yellowstone-jet/overview" "Yellowstone Jet: SWQoS TPU client, QUIC, Rust"
-    click FEES  "/solana/sending-transactions/priority-fees/overview"   "Priority Fees API: smart fee estimation"
-    click METIS "/solana/trading-apis/metis/overview"              "Metis: Jupiter swap routing"
-    click TITAN "/solana/trading-apis/titan-prime/overview"        "Titan Prime: streaming swaps, DART live re-optimisation"
-    click JITO  "/solana/sending-transactions/jito-bundles/overview" "Jito Bundles: tips-based bundle ordering"
-    click WL    "/solana/validators/white-label/overview"          "White-label validator: branded operator, Triton ops"
-    click PT    "/solana/validators/private-trusted/overview"      "Private trusted validator: no third-party operators"
 ```
 
 <Note>
-  Each section has its own deep dive. The map shows how the surface fits together; on mobile the sidebar is easier to navigate than the diagram.
+  Mintlify's Mermaid renderer disables clickable nodes in diagrams (mermaid.js security mode). Use the sidebar or the cards above to navigate to specific products.
 </Note>
 
 ## Need anything?
