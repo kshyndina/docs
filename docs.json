@@ -599,6 +599,17 @@
         "icon": "book-marked",
         "groups": [
           {
+            "group": "Page templates",
+            "pages": [
+              "kate-overview-template",
+              "kate-product-template",
+              "kate-quickstart-template",
+              "kate-api-reference-template",
+              "kate-guide-template",
+              "kate-faq-template"
+            ]
+          },
+          {
             "group": "Component reference",
             "pages": [
               "kate-all-elements"
