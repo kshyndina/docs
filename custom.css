@@ -2046,6 +2046,66 @@ html.dark .pillar-item:hover { color: #B591D3 !important; }
   .map-box { padding: 1rem 1.125rem 1.25rem 1.125rem; }
 }
 
+/* ---- 0l. Hug-table: tables that shrink to content width ----
+   Wrap a markdown table in <div className="hug-table"> to make it
+   shrink-to-fit instead of stretching to fill the column. Use for
+   short tables where the wide stretch + horizontal-scroll combo
+   reads as broken layout. Kills nowrap-induced overflow too. */
+.hug-table {
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+.hug-table table {
+  width: auto !important;
+  min-width: 0 !important;
+  border-collapse: collapse;
+  margin: 0;
+}
+.hug-table th,
+.hug-table td {
+  padding: 0.5rem 0.875rem !important;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 0.9375rem;
+  border: 1px solid rgba(122, 75, 160, 0.2);
+}
+.hug-table th {
+  background: #F7F2FB;
+  color: #492D60;
+  font-weight: 600;
+  font-family: 'DM Sans', system-ui, sans-serif;
+}
+.hug-table td:first-child,
+.hug-table th:first-child {
+  text-align: left;
+  font-weight: 500;
+}
+.dark .hug-table th,
+html.dark .hug-table th {
+  background: rgba(122, 75, 160, 0.18);
+  color: #E5D7F0;
+}
+.dark .hug-table td,
+.dark .hug-table th,
+html.dark .hug-table td,
+html.dark .hug-table th {
+  border-color: rgba(181, 145, 211, 0.25);
+}
+
+/* ---- 0m. Mermaid node rounded corners ----
+   Mintlify renders mermaid svgs with sharp rectangle nodes by default.
+   Add rounded corners via CSS so flowchart nodes match the Triton
+   rounded-rectangle aesthetic. */
+.mermaid svg .node rect,
+.mermaid svg g.node rect,
+.mermaid svg foreignObject rect {
+  rx: 6;
+  ry: 6;
+}
+.mermaid svg .label foreignObject {
+  overflow: visible;
+}
+
 /* ---- 0k. Quickstart "Where to next" two-column routes ----
    Replaces the long Tabs that forced scroll-to-top to switch panes.
    Both columns visible at once; product list left, use-case list right.

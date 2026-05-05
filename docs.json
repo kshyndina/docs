@@ -95,7 +95,6 @@
               {
                 "group": "Get started",
                 "pages": [
-                  "kate-all-elements",
                   "solana/welcome",
                   "solana/get-started/quickstart",
                   "solana/get-started/rate-and-connection-limits",

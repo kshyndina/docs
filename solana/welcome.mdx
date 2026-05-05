@@ -86,11 +86,15 @@ Triton runs bare-metal nodes we operate ourselves, not infrastructure we resell.
 
 ## Networks supported
 
-| Network | HTTPS RPC | WebSockets | Yellowstone gRPC | Historical archive |
-|---|:---:|:---:|:---:|:---:|
-| Solana mainnet | yes | yes | yes | yes |
-| Solana devnet | yes | yes | yes | yes |
-| Solana testnet | yes | yes | yes | yes |
+<div className="hug-table not-prose">
+
+| Network | HTTPS RPC | WebSockets | Yellowstone gRPC | Steamboat indexed queries | Historical archive |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Solana mainnet | yes | yes | yes | yes | yes |
+| Solana devnet | yes | yes | yes | yes | yes |
+| Solana testnet | yes | yes | yes | yes | yes |
+
+</div>
 
 All three networks served from 20+ global regions via GeoDNS. Devnet and testnet for testing, mainnet for production.
 
@@ -133,76 +137,33 @@ A native Triton MCP server is **coming soon**, with direct access to RPC queries
 How the surface fits together. Shared infrastructure powers most workloads; dedicated tiers and validator services sit alongside for teams that need them. Click any product to jump to its page.
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'fontFamily':'Work Sans','fontSize':'13px','primaryColor':'#7A4BA0','primaryBorderColor':'#492D60','primaryTextColor':'#FFFFFF','lineColor':'#956FB3','tertiaryColor':'#F2EDF6'},'flowchart':{'nodeSpacing':22,'rankSpacing':38,'padding':8,'curve':'basis'}}}%%
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Work Sans','fontSize':'12px','primaryColor':'#7A4BA0','primaryBorderColor':'#492D60','primaryTextColor':'#FFFFFF','lineColor':'#956FB3','tertiaryColor':'#F2EDF6'},'flowchart':{'nodeSpacing':12,'rankSpacing':28,'padding':4,'curve':'linear'}}}%%
 flowchart TB
-  SHARED["Shared"]
-  DEDI["Dedicated"]
-  STAKE["Staking"]
+    SHARED["Shared infrastructure"] --- READ["Reading state"] & STREAM["Streaming"] & HIST["History"] & SEND["Sending txs"]
 
-  SHARED --- READ["Reading state"]
-  SHARED --- STREAM["Streaming"]
-  SHARED --- HIST["History"]
-  SHARED --- SEND["Sending txs"]
+    R1["Standard RPC"] ~~~ R2["Steamboat"] ~~~ R3["DAS API"] ~~~ R4["ZK Compression"] ~~~ R5["Account Sync"]
+    READ --- R1 & R2 & R3 & R4 & R5
 
-  subgraph READ_LEAVES [ ]
-    direction TB
-    R1["Standard RPC"]
-    R2["Steamboat"]
-    R3["DAS API"]
-    R4["ZK Compression"]
-    R5["Account Sync"]
-    R1 ~~~ R2 ~~~ R3 ~~~ R4 ~~~ R5
-  end
-  READ --- R1 & R2 & R3 & R4 & R5
+    S1["Dragon's Mouth gRPC"] ~~~ S2["Whirligig"] ~~~ S3["Fumarole"] ~~~ S4["Hermes"] ~~~ S5["Pythnet"]
+    STREAM --- S1 & S2 & S3 & S4 & S5
 
-  subgraph STREAM_LEAVES [ ]
-    direction TB
-    S1["Dragon's Mouth gRPC"]
-    S2["Whirligig"]
-    S3["Fumarole"]
-    S4["Hermes"]
-    S5["Pythnet"]
-    S1 ~~~ S2 ~~~ S3 ~~~ S4 ~~~ S5
-  end
-  STREAM --- S1 & S2 & S3 & S4 & S5
+    H1["Hydrant"] ~~~ H2["Old Faithful"] ~~~ H3["Faithful Streams"]
+    HIST --- H1 & H2 & H3
 
-  subgraph HIST_LEAVES [ ]
-    direction TB
-    H1["Hydrant"]
-    H2["Old Faithful"]
-    H3["Faithful Streams"]
-    H1 ~~~ H2 ~~~ H3
-  end
-  HIST --- H1 & H2 & H3
+    T1["Yellowstone Jet"] ~~~ T2["Priority Fees API"] ~~~ T3["Metis"] ~~~ T4["Titan Prime"] ~~~ T5["Jito Bundles"]
+    SEND --- T1 & T2 & T3 & T4 & T5
 
-  subgraph SEND_LEAVES [ ]
-    direction TB
-    T1["Yellowstone Jet"]
-    T2["Priority Fees API"]
-    T3["Metis"]
-    T4["Titan Prime"]
-    T5["Jito Bundles"]
-    T1 ~~~ T2 ~~~ T3 ~~~ T4 ~~~ T5
-  end
-  SEND --- T1 & T2 & T3 & T4 & T5
+    DEDI["Dedicated gRPC node"] --- DG["Dragon's Mouth gRPC"]
 
-  subgraph DEDI_LEAVES [ ]
-    direction TB
-    D1["Dedicated gRPC node"]
-    D2["White-label validator"]
-    D1 ~~~ D2
-  end
-  DEDI --- D1 & D2
+    VAL["Validator services"] --- V1["White-label validator"] & V2["Private trusted validator"]
 
-  STAKE --- K1["Private trusted validator"]
+    classDef pillar fill:#7A4BA0,stroke:#492D60,stroke-width:1.5px,color:#FFFFFF,font-weight:700,rx:6,ry:6
+    classDef branch fill:#E0D2EC,stroke:#7A4BA0,stroke-width:1.5px,color:#492D60,font-weight:600,rx:6,ry:6
+    classDef leaf fill:#F7F2FB,stroke:#C8B4DC,stroke-width:1px,color:#171717,font-weight:500,rx:4,ry:4
 
-  classDef pillar fill:#7A4BA0,stroke:#492D60,stroke-width:1.5px,color:#FFFFFF,font-weight:700;
-  classDef branch fill:#E0D2EC,stroke:#7A4BA0,stroke-width:1.5px,color:#492D60,font-weight:600;
-  classDef leaf fill:#F7F2FB,stroke:#C8B4DC,stroke-width:1px,color:#171717,font-weight:500;
-
-  class SHARED,DEDI,STAKE pillar;
-  class READ,STREAM,HIST,SEND branch;
-  class R1,R2,R3,R4,R5,S1,S2,S3,S4,S5,H1,H2,H3,T1,T2,T3,T4,T5,D1,D2,K1 leaf;
+    class SHARED,DEDI,VAL pillar
+    class READ,STREAM,HIST,SEND branch
+    class R1,R2,R3,R4,R5,S1,S2,S3,S4,S5,H1,H2,H3,T1,T2,T3,T4,T5,DG,V1,V2 leaf
 ```
 
 ## Guides for building on-chain
