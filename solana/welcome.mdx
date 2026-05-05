@@ -86,17 +86,18 @@ Solana has no public mempool. Reads come from your RPC's local copy of the ledge
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7'}}}%%
 sequenceDiagram
     participant You as Your client
-    participant RPC as Triton RPC
+    participant Triton
     participant Net as Solana network
     Note over You,Net: Read path
-    You->>RPC: getBalance, getAccount, getSlot, ...
-    Net->>RPC: every block replayed locally (Turbine + ledger)
-    RPC-->>You: response from local state
+    You->>Triton: getBalance, getAccount, getSlot, ...
+    Net->>Triton: sends shreds (every block replayed locally)
+    Triton-->>You: response
     Note over You,Net: Send path
-    You->>RPC: sendTransaction
-    RPC->>Net: route to current slot leader TPU<br/>(SWQoS, QUIC)
-    Net-->>RPC: leader includes tx in block
-    RPC-->>You: signature confirmed
+    You->>Triton: sendTransaction
+    You->>Triton: subscribe to tx status
+    Triton->>Net: route to current slot leader TPU<br/>(SWQoS, QUIC)
+    Net-->>Triton: leader includes tx in block
+    Triton-->>You: signature confirmed
 ```
 
 Where your RPC sits, and what stake-weighted access it has, directly shapes your landing rate, your fill prices, and how fresh the data your indexer reads is. Triton is built for this:
@@ -182,6 +183,28 @@ Shared infrastructure powers most workloads. Dedicated nodes and validator servi
   </div>
 </div>
 
+## Start here
+
+New to Triton? These four pages cover the basics.
+
+<CardGroup cols={2}>
+  <Card title="Set up your account" icon="user-plus" href="/solana/get-started/account-management/set-up-your-account-and-add-users">
+    Create a workspace and invite your team.
+  </Card>
+
+  <Card title="Quickstart" icon="zap" href="/solana/get-started/quickstart">
+    Make your first API request in five minutes.
+  </Card>
+
+  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
+    Pricing, dedicated tiers, how credits work.
+  </Card>
+
+  <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
+    Per-product limits, quotas, how to scale up.
+  </Card>
+</CardGroup>
+
 ## Common builds
 
 The most-asked builder paths. Each card jumps to a working walkthrough with code.
@@ -209,28 +232,6 @@ The most-asked builder paths. Each card jumps to a working walkthrough with code
 
   <Card title="Index custom programs" icon="database" href="/solana/streaming/steamboat/overview">
     Custom indexes built from your existing gRPC stream.
-  </Card>
-</CardGroup>
-
-## Start here
-
-New to Triton? These four pages cover the basics.
-
-<CardGroup cols={2}>
-  <Card title="Set up your account" icon="user-plus" href="/solana/get-started/account-management/set-up-your-account-and-add-users">
-    Create a workspace and invite your team.
-  </Card>
-
-  <Card title="Quickstart" icon="zap" href="/solana/get-started/quickstart">
-    Make your first API request in five minutes.
-  </Card>
-
-  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
-    Pricing, dedicated tiers, how credits work.
-  </Card>
-
-  <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
-    Per-product limits, quotas, how to scale up.
   </Card>
 </CardGroup>
 
