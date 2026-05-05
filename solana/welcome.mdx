@@ -80,12 +80,29 @@ These docs cover the full stack: reads, streaming, history, trading APIs, and va
 
 ## Why teams pick Triton
 
-Solana has no public mempool. Transactions forward through your RPC straight into the current slot leader's TPU pipeline, so where your RPC sits and how it's connected affects your landing rate, your fill prices, and how fresh the data your indexer reads is.
+Solana has no public mempool. Reads come from your RPC's local copy of the ledger, kept current by replaying every block the network produces. Sends forward from your RPC directly to the current slot leader's TPU pipeline, and the quality of that connection sets your landing rate.
 
-Three things make us different:
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7'}}}%%
+sequenceDiagram
+    participant You as Your client
+    participant RPC as Triton RPC
+    participant Net as Solana network
+    Note over You,Net: Read path
+    You->>RPC: getBalance, getAccount, getSlot, ...
+    Net->>RPC: every block replayed locally (Turbine + ledger)
+    RPC-->>You: response from local state
+    Note over You,Net: Send path
+    You->>RPC: sendTransaction
+    RPC->>Net: route to current slot leader TPU<br/>(SWQoS, QUIC)
+    Net-->>RPC: leader includes tx in block
+    RPC-->>You: signature confirmed
+```
+
+Where your RPC sits, and what stake-weighted access it has, directly shapes your landing rate, your fill prices, and how fresh the data your indexer reads is. Triton is built for this:
 
 - **We run every node ourselves on bare-metal hardware.** No reselling, no shared cloud tenancy, no surprise quotas.
-- **We're a Solana validator since testnet** and we author the streaming layer the network runs on, Yellowstone gRPC.
+- **We've been a Solana validator since testnet** and we author the streaming layer the rest of the network runs on, Yellowstone gRPC.
 - **Reads, streams, history, and validator services live on the same infrastructure.** Hydrant gives you the full ledger from genesis with millisecond responses, no replay window.
 
 ## Solana networks we support
