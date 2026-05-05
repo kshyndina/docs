@@ -261,6 +261,23 @@
                 ]
               },
               {
+                "group": "End-to-end builds",
+                "root": "solana-guides/end-to-end-builds/stream-solana-grpc",
+                "expanded": false,
+                "pages": [
+                  "solana-guides/end-to-end-builds/stream-solana-grpc",
+                  "solana-guides/end-to-end-builds/get-token-metadata",
+                  "solana-guides/end-to-end-builds/copy-trade-wallet",
+                  "solana-guides/end-to-end-builds/calculate-solana-fees",
+                  "solana-guides/end-to-end-builds/stream-raydium-amm-pool",
+                  "solana-guides/end-to-end-builds/mint-solana-token",
+                  "solana-guides/end-to-end-builds/integrate-titan-prime",
+                  "solana-guides/end-to-end-builds/solana-telegram-bot",
+                  "solana-guides/end-to-end-builds/jupiter-swap-api",
+                  "solana-guides/end-to-end-builds/send-transactions-during-congestion"
+                ]
+              },
+              {
                 "group": "Solana beginners",
                 "pages": [
                   {
