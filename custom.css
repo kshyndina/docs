@@ -269,6 +269,33 @@ div.prose:has(> p:only-child:empty) {
 }
 
 
+/* ---- 0d2. Top alignment: navbar bottom -> first content row ----
+   Make the vertical gap from the top navbar to the first piece of
+   content identical across all three columns: left sidebar, main
+   content, right TOC. Default Mintlify uses different padding-top on
+   each, so the columns don't align. Force them to the same value.
+   Also kill auto-margin on the first heading so it doesn't push the
+   text down differently from the sidebar/TOC. */
+:root {
+  --top-pad: 1.25rem;
+}
+#sidebar-content,
+mdx-content,
+.mdx-content,
+nav[aria-label="On this page"],
+aside[aria-label="On this page"],
+[id*="table-of-contents"],
+[class*="toc-sidebar"],
+[class*="TableOfContents"] {
+  padding-top: var(--top-pad) !important;
+}
+.mdx-content > *:first-child,
+mdx-content > *:first-child,
+nav[aria-label="On this page"] > *:first-child,
+aside[aria-label="On this page"] > *:first-child {
+  margin-top: 0 !important;
+}
+
 /* ---- 0e. Page header → body gap ----
    Mintlify wraps content in `mdx-content` with Tailwind mt-8 (32px) AND
    uses Tailwind's prose plugin which adds another ~1.25em margin-top to

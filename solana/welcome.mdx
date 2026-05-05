@@ -78,6 +78,21 @@ These docs cover the full stack: reads, streaming, historical data, trading APIs
   </div>
 </div>
 
+## Why RPC choice matters
+
+Solana has no public mempool. Transactions forward through your RPC straight into the current slot leader's TPU pipeline, so where your RPC sits and how it's connected directly affects your landing rate, your fill prices, and how fresh the data your indexer reads is.
+
+Triton runs bare-metal nodes we operate ourselves, not infrastructure we resell. Reads come from validators we've operated since testnet. Transactions submit via direct SWQoS routing through Yellowstone Jet. Historical queries hit Hydrant, our 400+ TB ledger with no replay window. The streaming layer the rest of the network runs on, Yellowstone gRPC, is ours.
+
+## Networks supported
+
+| Network | HTTPS RPC | WebSockets | Yellowstone gRPC | Historical archive |
+|---|:---:|:---:|:---:|:---:|
+| Solana mainnet | yes | yes | yes (dedicated) | yes (Hydrant + Old Faithful) |
+| Solana devnet | yes | yes | yes (dedicated) | not available |
+
+Both networks served from 20+ global regions via GeoDNS. Devnet for testing, mainnet for production.
+
 ## Start here
 
 If you're new, four places to begin.
@@ -111,36 +126,6 @@ https://docs.triton.one/llms.txt
 Drop that URL into your agent's context (Claude Code, Cursor, Codex) for full Triton coverage in one fetch. Per-product `llms.txt` files are also available under each section, e.g. `/solana/streaming/dragons-mouth/llms.txt`.
 
 A native Triton MCP server is **coming soon**, with direct access to RPC queries, gRPC streams and account management.
-
-## Guides for building on-chain
-
-The most-asked walkthroughs for production builders.
-
-<CardGroup cols={3}>
-  <Card title="Stream Solana with gRPC" icon="zap" href="/solana/streaming/dragons-mouth/quickstart">
-    Subscribe to accounts, transactions, blocks via gRPC.
-  </Card>
-
-  <Card title="Backfill historical data" icon="history" href="/solana/history/hydrant/overview">
-    Query the ledger from genesis with millisecond responses.
-  </Card>
-
-  <Card title="Send transactions reliably" icon="send" href="/solana/sending-transactions/quickstart">
-    SWQoS routing, priority fees, Jupiter swap routing.
-  </Card>
-
-  <Card title="Build a wallet or NFT app" icon="image" href="/solana/digital-assets/das-api/overview">
-    DAS API for NFTs, cNFTs, SPL, Token-2022 assets.
-  </Card>
-
-  <Card title="Run a private validator" icon="server" href="/solana/validators/overview">
-    White-label or private trusted validators on request.
-  </Card>
-
-  <Card title="Index custom programs" icon="database" href="/solana/streaming/steamboat/overview">
-    Custom indexes built from your existing gRPC stream.
-  </Card>
-</CardGroup>
 
 ## Triton product map
 
@@ -196,6 +181,36 @@ How the surface fits together. Shared infrastructure powers most workloads; dedi
     </div>
   </div>
 </div>
+
+## Guides for building on-chain
+
+The most-asked walkthroughs for production builders.
+
+<CardGroup cols={3}>
+  <Card title="Stream Solana with gRPC" icon="zap" href="/solana/streaming/dragons-mouth/quickstart">
+    Subscribe to accounts, transactions, blocks via gRPC.
+  </Card>
+
+  <Card title="Backfill historical data" icon="history" href="/solana/history/hydrant/overview">
+    Query the ledger from genesis with millisecond responses.
+  </Card>
+
+  <Card title="Send transactions reliably" icon="send" href="/solana/sending-transactions/quickstart">
+    SWQoS routing, priority fees, Jupiter swap routing.
+  </Card>
+
+  <Card title="Build a wallet or NFT app" icon="image" href="/solana/digital-assets/das-api/overview">
+    DAS API for NFTs, cNFTs, SPL, Token-2022 assets.
+  </Card>
+
+  <Card title="Run a private validator" icon="server" href="/solana/validators/overview">
+    White-label or private trusted validators on request.
+  </Card>
+
+  <Card title="Index custom programs" icon="database" href="/solana/streaming/steamboat/overview">
+    Custom indexes built from your existing gRPC stream.
+  </Card>
+</CardGroup>
 
 ## Get started
 
