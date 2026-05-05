@@ -3,18 +3,38 @@ title: "Plans and billing"
 description: "Triton has two billing methods (PAYG, invoiced) and two infrastructure types (shared, dedicated). The calculator below estimates a monthly draw-down across services."
 ---
 
-Triton has **two billing methods** and **two infrastructure types**. Pick one of each and you have your setup.
+Triton has two billing methods (pay as you go, invoiced) and two infrastructure types (shared, dedicated). Estimate your cost and pick the combination that fits your workload.
 
-| | PAYG | Invoiced |
+## Pay as you go vs invoiced
+
+| | Pay as you go | Invoiced |
 |---|---|---|
-| **Shared infrastructure** | Self-onboard, pay as you go. Default for most teams. | Same shared pool, billed monthly via invoice. |
-| **Dedicated infrastructure** | Available on request. | Most dedicated customers are here, monthly invoice, custom sizing. |
+| **Sign up** | Self-onboard at [customers.triton.one](https://customers.triton.one/users/sign-up) | Contact sales |
+| **Minimum** | {"$"}125 prepaid deposit | {"$"}125 monthly invoice |
+| **Billing** | Drawn from your prepaid balance | Billed at the start of each month for the month |
+| **Overages** | Not allowed. Top up to avoid service interruptions | Billed in {"$"}100 increments at the same rate at the start of next month |
+| **Payment** | Stablecoins only | Card, USDC, wire, hel.io |
+| **Cancellation** | None, balance valid for 12 months | 1 calendar month notice |
 
-Either axis can combine. PAYG is the fastest start; invoicing is the standard for procurement-driven companies. Shared is fine for the vast majority of workloads; dedicated is for trading systems, very high RPS, or custom Geyser configurations.
+Pay as you go is the fastest start, and you can sign up at [customers.triton.one](https://customers.triton.one/users/sign-up) right now. Most teams running steady production traffic switch to monthly invoicing once usage stabilises, for two reasons:
+
+- **Overages at the same rate.** If you go over the estimate, you get a follow-up invoice at the same rates: no sudden service interruption.
+- **Predictable bills.** Same line items each month, sized around the previous month's volume and adjustable as usage shifts.
+
+To switch to monthly invoicing, click the chat icon in your [customer dashboard](https://customers.triton.one) or [contact sales](https://triton.one/contact).
+
+## Shared or dedicated?
+
+Shared infrastructure is best for most workloads. A dedicated gRPC node is a good fit for traders, market makers, and teams where receiving data a millisecond earlier directly influences your PnL. With one, you get full network bandwidth, CPU, flat streaming costs, and minimal latency with backend colocation.
+
+Most dedicated customers run on monthly invoicing; PAYG dedicated is available on request. [Contact sales](https://triton.one/contact) to start.
 
 ## Estimate your spend
 
-Pick a plan style. Move the sliders or enter a deposit; the total updates as you go.
+Pricing is simple: you pay for what you use. Per-million rates for calls, per-GB rates for bandwidth, line-itemed by service.
+
+- **Cost calculator.** Set each slider to expected monthly volume. The total estimates your spend at that rate. Minimum deposit {"$"}125.
+- **Dedicated node.** Fixed monthly price covers gRPC streaming. Other services use the same rates as shared infrastructure.
 
 <div className="triton-calc not-prose" data-triton-calc>
 
@@ -191,43 +211,32 @@ Pick a plan style. Move the sliders or enter a deposit; the total updates as you
 
 </div>
 
-### How to use the calculator
+## How pay as you go works
 
-- **Custom PAYG** — drag each service slider to the volume you expect for the month. The total is what you'd burn through at that rate. Sliders are estimates only; actual usage drives actual draw-down. Minimum deposit is `$125`.
-- **Dedicated nodes** — pick a chain. Pricing is fixed-per-month for the node plus included streaming. Other services drawdown at the same per-call rate as PAYG.
+Once you've made a deposit, it's valid for a year and draws down as you use the services. Top up any time from your dashboard.
 
-## Getting started: $125 prepaid deposit
-
-A `$125` prepaid, non-refundable deposit kicks off your account. The deposit is **valid for up to one year** and burns down as you use services. Top up at any time; unused balance carries over until the year is up.
-
-There is no free trial. The deposit replaces it; one `$125` deposit gives you a year of testing room with the same account, endpoint, and tokens you'd ship to production.
+There is no free trial, as the deposit replaces it: you get a year of testing room with the same account, endpoint, and tokens you'd ship to production.
 
 <Info>
-Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up). The flow walks you through a `$125` deposit and provisions your first endpoint automatically.
+[Sign up at customers.triton.one](https://customers.triton.one/users/sign-up). For a step-by-step, see [How to sign up](/solana/get-started/account-management/set-up-your-account-and-add-users). Issues? Email [support@triton.one](mailto:support@triton.one).
 </Info>
 
-## Invoicing
+## What's next
 
-Same pricing, but billed monthly with a **`$125` minimum invoice** instead of prepaid drawdown. Use this when:
-
-- You need a procurement-friendly contract (NET-30, NET-60).
-- Finance prefers monthly invoices over auto-deductions.
-- You're a high-volume customer where prepaid would mean managing very large balances.
-
-Sign up via the same flow and choose **Invoiced** when prompted, or click the chat icon in your [customer dashboard](https://customers.triton.one) to switch over.
-
-## Dedicated infrastructure
-
-A dedicated stack means your own validator(s), edge router(s), and gRPC streamers, sized to your workload. Most dedicated customers are on monthly invoicing, but PAYG dedicated is available on request.
-
-When to consider dedicated:
-
-- **Trading systems** with strict latency budgets (`<50ms`) to a specific region.
-- **Heavy `getProgramAccounts`** workloads that would saturate the shared pool.
-- **High-cardinality streaming** with custom Geyser plugins or filter logic.
-- **Custom rate limits** beyond what the shared pool offers.
-
-Sizing happens with your account manager. [Contact sales](https://triton.one/contact) to start that conversation.
+<Columns cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/solana/get-started/quickstart">
+    Sign up, deposit, get an endpoint, send your first request.
+  </Card>
+  <Card title="Account management" icon="user-cog" href="/solana/get-started/account-management/platform-overview">
+    Where everything lives in the portal.
+  </Card>
+  <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
+    Per-endpoint rate limits and 429 handling.
+  </Card>
+  <Card title="Metered billing breakdown" icon="chart-bar" href="/solana/get-started/account-management/metered-billing">
+    How calls and bandwidth map to your monthly bill.
+  </Card>
+</Columns>
 
 ## Cancellation
 
