@@ -106,32 +106,6 @@ Where your RPC sits, and what stake-weighted access it has, directly shapes your
 - **We've been a Solana validator since testnet** and we author the streaming layer the rest of the network runs on, Yellowstone gRPC.
 - **Reads, streams, history, and validator services live on the same infrastructure.** Hydrant gives you the full ledger from genesis with millisecond responses, no replay window.
 
-## Try it out
-
-Pick a task. Hit **Run**. Each tab fires a real JSON-RPC call against Solana's public mainnet endpoint, no key required. Switch over to a Triton endpoint when you're ready for production.
-
-<div className="triton-try not-prose" data-triton-try>
-
-  <div className="triton-try-tabs">
-    <button type="button" className="triton-try-tab active" data-task="slot">Latest slot</button>
-    <button type="button" className="triton-try-tab" data-task="balance">Wallet SOL balance</button>
-    <button type="button" className="triton-try-tab" data-task="tokens">Wallet tokens</button>
-    <button type="button" className="triton-try-tab" data-task="fees">Priority fees right now</button>
-    <button type="button" className="triton-try-tab" data-task="epoch">Where are we in the epoch?</button>
-    <button type="button" className="triton-try-tab" data-task="version">Cluster version</button>
-  </div>
-
-  <div className="triton-try-body">
-    <div className="triton-try-code" data-code>Loading...</div>
-    <div className="triton-try-actions">
-      <button type="button" className="triton-try-run" data-run>Run on mainnet</button>
-      <span className="triton-try-status" data-status></span>
-    </div>
-    <div className="triton-try-output" data-output>Click Run on mainnet to see live output.</div>
-  </div>
-
-</div>
-
 ## Solana networks we support
 
 All three networks, served from 20+ regions via GeoDNS. Devnet and testnet for testing; mainnet for production.
@@ -205,6 +179,32 @@ Shared infrastructure powers most workloads. Dedicated nodes and validator servi
   </div>
 </div>
 
+## Try it out
+
+Pick a task. Hit **Run**. Each tab fires a real JSON-RPC call against Solana's public mainnet endpoint, no key required. Switch over to a Triton endpoint when you're ready for production.
+
+<div className="triton-try not-prose" data-triton-try>
+
+  <div className="triton-try-tabs">
+    <button type="button" className="triton-try-tab active" data-task="slot">Latest slot</button>
+    <button type="button" className="triton-try-tab" data-task="balance">Wallet SOL balance</button>
+    <button type="button" className="triton-try-tab" data-task="tokens">Wallet tokens</button>
+    <button type="button" className="triton-try-tab" data-task="fees">Priority fees right now</button>
+    <button type="button" className="triton-try-tab" data-task="epoch">Where are we in the epoch?</button>
+    <button type="button" className="triton-try-tab" data-task="version">Cluster version</button>
+  </div>
+
+  <div className="triton-try-body">
+    <div className="triton-try-code" data-code>Loading...</div>
+    <div className="triton-try-actions">
+      <button type="button" className="triton-try-run" data-run>Run on mainnet</button>
+      <span className="triton-try-status" data-status></span>
+    </div>
+    <div className="triton-try-output" data-output>Click Run on mainnet to see live output.</div>
+  </div>
+
+</div>
+
 ## Common builds
 
 The most-asked builder paths. Each card jumps to a working walkthrough with code.
@@ -235,18 +235,6 @@ The most-asked builder paths. Each card jumps to a working walkthrough with code
   </Card>
 </CardGroup>
 
-## For AI agents
-
-Triton's docs are built for humans and AI agents alike. The single-file index lives at:
-
-```text llms.txt
-https://docs.triton.one/llms.txt
-```
-
-Drop that URL into your agent's context (Claude Code, Cursor, Codex) for full Triton coverage in one fetch. Per-product `llms.txt` files are also available under each section, e.g. `/solana/streaming/dragons-mouth/llms.txt`.
-
-A native Triton MCP server is **coming soon**, with direct access to RPC queries, gRPC streams, and account management.
-
 ## What's next?
 
 New to Triton? Four steps from here to a production endpoint.
@@ -268,6 +256,18 @@ New to Triton? Four steps from here to a production endpoint.
     Standard RPC or dedicated gRPC in minutes. Pay as you go.
   </Card>
 </CardGroup>
+
+## For AI agents
+
+Triton's docs are built for humans and AI agents alike. The single-file index lives at:
+
+```text llms.txt
+https://docs.triton.one/llms.txt
+```
+
+Drop that URL into your agent's context (Claude Code, Cursor, Codex) for full Triton coverage in one fetch. Per-product `llms.txt` files are also available under each section, e.g. `/solana/streaming/dragons-mouth/llms.txt`.
+
+A native Triton MCP server is **coming soon**, with direct access to RPC queries, gRPC streams, and account management.
 
 ---
 
