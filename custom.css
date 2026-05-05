@@ -270,29 +270,25 @@ div.prose:has(> p:only-child:empty) {
 
 
 /* ---- 0d2. Top alignment: navbar bottom -> first content row ----
-   Make the vertical gap from the top navbar to the first piece of
-   content identical across all three columns: left sidebar, main
-   content, right TOC. Default Mintlify uses different padding-top on
-   each, so the columns don't align. Force them to the same value.
-   Also kill auto-margin on the first heading so it doesn't push the
-   text down differently from the sidebar/TOC. */
+   Mintlify renders the right TOC inside <div id="table-of-contents-
+   layout">. Default has zero top-padding so "On this page" glues to
+   the navbar. Match the same padding-top as the left sidebar and the
+   main content so all three columns start at the same y-position. */
 :root {
   --top-pad: 1.25rem;
 }
 #sidebar-content,
 mdx-content,
 .mdx-content,
-nav[aria-label="On this page"],
-aside[aria-label="On this page"],
-[id*="table-of-contents"],
-[class*="toc-sidebar"],
-[class*="TableOfContents"] {
+#table-of-contents-layout,
+div#table-of-contents-layout {
   padding-top: var(--top-pad) !important;
 }
+#table-of-contents-layout > *:first-child {
+  margin-top: 0 !important;
+}
 .mdx-content > *:first-child,
-mdx-content > *:first-child,
-nav[aria-label="On this page"] > *:first-child,
-aside[aria-label="On this page"] > *:first-child {
+mdx-content > *:first-child {
   margin-top: 0 !important;
 }
 
@@ -1754,23 +1750,29 @@ html.dark div[class~="mt-2"][class~="text-lg"][class~="prose"] > p {
 .footer-links {
   margin-top: 1.5rem;
 }
+/* Inline-flow paragraph so the natural word-space sits between the
+   text and the linked phrase. Flex+gap put 10px gaps between EVERY
+   child including the link, which read as too much air. */
 .footer-links p {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
+  display: block !important;
   margin: 0.5rem 0 !important;
   color: rgb(63, 63, 70);
   font-size: 1rem;
   line-height: 1.5;
-  /* Reserve a stable line-height/min-height so hover state can't
-     change row dimensions */
   min-height: 1.5rem;
 }
+/* Icon sits inline with text, with a small right margin to separate
+   from the question text. No flex container, so the rest of the line
+   uses the browser's natural word-spacing. */
 .footer-links p svg {
-  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
   width: 18px;
   height: 18px;
+  margin-right: 0.5rem;
   color: rgb(113, 113, 122);
+  position: relative;
+  top: -1px;
 }
 /* Kill ALL prose link styling for footer-links anchors. The double
    underline came from prose's `text-decoration-thickness` shifting on
