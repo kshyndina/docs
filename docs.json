@@ -264,51 +264,46 @@
                 ]
               },
               {
-                "group": "Error handling",
-                "root": "solana-guides/error-handling/overview",
-                "expanded": false,
+                "group": "Solana beginners",
                 "pages": [
-                  "solana-guides/error-handling/overview",
-                  "solana-guides/error-handling/rpc",
-                  "solana-guides/error-handling/streaming",
-                  "solana-guides/error-handling/transaction-sending",
-                  "solana-guides/error-handling/history",
-                  "solana-guides/error-handling/billing",
-                  "solana-guides/error-handling/connection-pooling"
-                ]
-              },
-              {
-                "group": "Solana dev",
-                "root": "solana-guides/solana-dev",
-                "expanded": false,
-                "pages": [
-                  "solana-guides/solana-dev",
-                  "solana-guides/solana-dev/glossary",
-                  "solana-guides/solana-dev/core-concepts"
-                ]
-              },
-              {
-                "group": "Streaming",
-                "root": "solana-guides/streaming-guides",
-                "expanded": false,
-                "pages": [
-                  "solana-guides/streaming-guides"
-                ]
-              },
-              {
-                "group": "Transaction sending",
-                "root": "solana-guides/transaction-guides",
-                "expanded": false,
-                "pages": [
-                  "solana-guides/transaction-guides"
-                ]
-              },
-              {
-                "group": "NFTs and digital assets",
-                "root": "solana-guides/nfts-and-digital-assets",
-                "expanded": false,
-                "pages": [
-                  "solana-guides/nfts-and-digital-assets"
+                  {
+                    "group": "Error handling",
+                    "root": "solana-guides/error-handling/overview",
+                    "expanded": false,
+                    "pages": [
+                      "solana-guides/error-handling/overview",
+                      "solana-guides/error-handling/rpc",
+                      "solana-guides/error-handling/streaming",
+                      "solana-guides/error-handling/transaction-sending",
+                      "solana-guides/error-handling/history",
+                      "solana-guides/error-handling/billing",
+                      "solana-guides/error-handling/connection-pooling"
+                    ]
+                  },
+                  {
+                    "group": "Streaming",
+                    "root": "solana-guides/streaming-guides",
+                    "expanded": false,
+                    "pages": [
+                      "solana-guides/streaming-guides"
+                    ]
+                  },
+                  {
+                    "group": "Transaction sending",
+                    "root": "solana-guides/transaction-guides",
+                    "expanded": false,
+                    "pages": [
+                      "solana-guides/transaction-guides"
+                    ]
+                  },
+                  {
+                    "group": "NFTs and digital assets",
+                    "root": "solana-guides/nfts-and-digital-assets",
+                    "expanded": false,
+                    "pages": [
+                      "solana-guides/nfts-and-digital-assets"
+                    ]
+                  }
                 ]
               }
             ]
