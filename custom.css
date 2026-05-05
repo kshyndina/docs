@@ -2021,6 +2021,9 @@ html body .prose table td {
   border-top: 0 !important;
   border-left: 0 !important;
   background: transparent !important;
+  min-width: 0 !important;     /* override Mintlify's [&_td]:min-w-[150px] Tailwind utility */
+  max-width: none !important;
+  white-space: normal !important;
 }
 html body table th:last-child,
 html body table td:last-child { border-right: 0 !important; }
