@@ -79,7 +79,7 @@ Full quickstart: https://docs.triton.one/solana/get-started/quickstart
 - Customer portal: https://customers.triton.one
 - Blog: https://blog.triton.one
 - GitHub: https://github.com/rpcpool
-- X / Twitter: https://twitter.com/triton_one
+- X / Twitter: https://x.com/triton_one
 - YouTube: https://www.youtube.com/@triton_one_ltd
 - Telegram: https://t.me/tritonone
 - Status: https://status.triton.one
