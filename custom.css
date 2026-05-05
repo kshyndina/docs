@@ -2279,15 +2279,27 @@ html.dark .triton-calc-mode-btn.active {
   font-family: 'Work Sans', system-ui, sans-serif;
   font-size: 0.875rem;
   color: #171717;
-  padding-left: 1.25rem;
+  padding-left: 1.5rem;
   position: relative;
+  line-height: 1.5;
 }
+/* SVG check (not the unicode ✓ character) -- macOS renders the unicode
+   tick as an emoji with its own background tile, which Kate flagged.
+   Inline SVG gives clean stroke-only rendering with no surrounding box. */
 .triton-calc-features li::before {
-  content: "✓";
+  content: "";
   position: absolute;
   left: 0;
-  color: #7A4BA0;
-  font-weight: 700;
+  top: 0.35em;
+  width: 14px;
+  height: 14px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237A4BA0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.dark .triton-calc-features li::before,
+html.dark .triton-calc-features li::before {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B591D3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
 }
 .triton-calc-controls {
   display: flex;
