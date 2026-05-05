@@ -88,7 +88,7 @@ Triton runs bare-metal nodes we operate ourselves, not infrastructure we resell.
 
 <div className="hug-table not-prose">
 
-| Network | HTTPS RPC | WebSockets | Yellowstone gRPC | Steamboat indexed queries | Historical archive |
+| Network | HTTPS<br/>RPC | Web<br/>Sockets | Yellowstone<br/>gRPC | Steamboat<br/>indexed | Historical<br/>archive |
 |---|:---:|:---:|:---:|:---:|:---:|
 | Solana mainnet | yes | yes | yes | yes | yes |
 | Solana devnet | yes | yes | yes | yes | yes |
@@ -139,31 +139,33 @@ How the surface fits together. Shared infrastructure powers most workloads; dedi
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'Work Sans','fontSize':'12px','primaryColor':'#7A4BA0','primaryBorderColor':'#492D60','primaryTextColor':'#FFFFFF','lineColor':'#956FB3','tertiaryColor':'#F2EDF6'},'flowchart':{'nodeSpacing':12,'rankSpacing':28,'padding':4,'curve':'linear'}}}%%
 flowchart TB
-    SHARED["Shared infrastructure"] --- READ["Reading state"] & STREAM["Streaming"] & HIST["History"] & SEND["Sending txs"]
+    SHARED["Shared infrastructure"] --- STREAM["Streaming"] & HIST["History"] & SEND["Sending txs"] & READ["Reading state"]
+    R1["Standard RPC"] ~~~ R2["Steamboat"]
+    R2 ~~~ R3["DAS API"]
+    R3 ~~~ R4["ZK Compression"]
+    R4 ~~~ R5["Account Sync"]
+    S1["Dragon's Mouth gRPC"] ~~~ S2["Whirligig"]
+    S2 ~~~ S3["Fumarole"]
+    S3 ~~~ S4["Hermes"]
+    S4 ~~~ S5["Pythnet"]
+    H1["Hydrant"] ~~~ H2["Old Faithful"]
+    H2 ~~~ H3["Faithful Streams"]
+    T1["Yellowstone Jet"] ~~~ T2["Priority Fees API"]
+    T2 ~~~ T3["Metis"]
+    T3 ~~~ T4["Titan Prime"]
+    T4 ~~~ T5["Jito Bundles"]
+    n1["Dedicated gRPC node"] --> n3["Dragon's Mouth gRPC"]
+    D2["White-label validator"]
+    K1["Private trusted validator"]
+    n2["Validator services"]
 
-    R1["Standard RPC"] ~~~ R2["Steamboat"] ~~~ R3["DAS API"] ~~~ R4["ZK Compression"] ~~~ R5["Account Sync"]
-    READ --- R1 & R2 & R3 & R4 & R5
-
-    S1["Dragon's Mouth gRPC"] ~~~ S2["Whirligig"] ~~~ S3["Fumarole"] ~~~ S4["Hermes"] ~~~ S5["Pythnet"]
-    STREAM --- S1 & S2 & S3 & S4 & S5
-
-    H1["Hydrant"] ~~~ H2["Old Faithful"] ~~~ H3["Faithful Streams"]
-    HIST --- H1 & H2 & H3
-
-    T1["Yellowstone Jet"] ~~~ T2["Priority Fees API"] ~~~ T3["Metis"] ~~~ T4["Titan Prime"] ~~~ T5["Jito Bundles"]
-    SEND --- T1 & T2 & T3 & T4 & T5
-
-    DEDI["Dedicated gRPC node"] --- DG["Dragon's Mouth gRPC"]
-
-    VAL["Validator services"] --- V1["White-label validator"] & V2["Private trusted validator"]
-
-    classDef pillar fill:#7A4BA0,stroke:#492D60,stroke-width:1.5px,color:#FFFFFF,font-weight:700,rx:6,ry:6
-    classDef branch fill:#E0D2EC,stroke:#7A4BA0,stroke-width:1.5px,color:#492D60,font-weight:600,rx:6,ry:6
+    classDef pillar fill:#7A4BA0,stroke:#5C3880,stroke-width:1.5px,color:#FFFFFF,font-weight:700,rx:6,ry:6
+    classDef branch fill:#E0D2EC,stroke:#7A4BA0,stroke-width:1.5px,color:#5C3880,font-weight:600,rx:6,ry:6
     classDef leaf fill:#F7F2FB,stroke:#C8B4DC,stroke-width:1px,color:#171717,font-weight:500,rx:4,ry:4
 
-    class SHARED,DEDI,VAL pillar
-    class READ,STREAM,HIST,SEND branch
-    class R1,R2,R3,R4,R5,S1,S2,S3,S4,S5,H1,H2,H3,T1,T2,T3,T4,T5,DG,V1,V2 leaf
+    class SHARED,n1,n2 pillar
+    class STREAM,HIST,SEND,READ branch
+    class R1,R2,R3,R4,R5,S1,S2,S3,S4,S5,H1,H2,H3,T1,T2,T3,T4,T5,n3,D2,K1 leaf
 ```
 
 ## Guides for building on-chain
@@ -171,7 +173,7 @@ flowchart TB
 The most-asked walkthroughs for production builders.
 
 <CardGroup cols={3}>
-  <Card title="Stream Solana with gRPC" icon="zap" href="/solana/streaming/dragons-mouth/quickstart">
+  <Card title="Stream Solana with gRPC" icon="radio" href="/solana/streaming/dragons-mouth/quickstart">
     Subscribe to accounts, transactions, blocks via gRPC.
   </Card>
 
@@ -187,7 +189,7 @@ The most-asked walkthroughs for production builders.
     DAS API for NFTs, cNFTs, SPL, Token-2022 assets.
   </Card>
 
-  <Card title="Run a private validator" icon="server" href="/solana/validators/overview">
+  <Card title="Run a private validator" icon="shield" href="/solana/validators/overview">
     White-label or private trusted validators on request.
   </Card>
 
