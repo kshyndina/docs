@@ -233,26 +233,12 @@
             "icon": "compass",
             "groups": [
               {
-                "group": "Error handling",
-                "icon": "alert-triangle",
-                "pages": [
-                  "solana-guides/error-handling/overview",
-                  "solana-guides/error-handling/rpc",
-                  "solana-guides/error-handling/streaming",
-                  "solana-guides/error-handling/transaction-sending",
-                  "solana-guides/error-handling/history",
-                  "solana-guides/error-handling/billing",
-                  "solana-guides/error-handling/connection-pooling"
-                ]
-              },
-              {
                 "group": "Getting started",
-                "icon": "rocket",
-                "root": "solana-guides/getting-started",
-                "expanded": false,
                 "pages": [
                   {
                     "group": "Set up your RPC services for...",
+                    "root": "solana-guides/getting-started/set-up-rpc/trading-and-market-making",
+                    "expanded": false,
                     "pages": [
                       "solana-guides/getting-started/set-up-rpc/trading-and-market-making",
                       "solana-guides/getting-started/set-up-rpc/defi",
@@ -269,6 +255,8 @@
                   },
                   {
                     "group": "Account management",
+                    "root": "solana-guides/getting-started/account-management",
+                    "expanded": false,
                     "pages": [
                       "solana-guides/getting-started/account-management"
                     ]
@@ -276,18 +264,31 @@
                 ]
               },
               {
+                "group": "Error handling",
+                "root": "solana-guides/error-handling/overview",
+                "expanded": false,
+                "pages": [
+                  "solana-guides/error-handling/overview",
+                  "solana-guides/error-handling/rpc",
+                  "solana-guides/error-handling/streaming",
+                  "solana-guides/error-handling/transaction-sending",
+                  "solana-guides/error-handling/history",
+                  "solana-guides/error-handling/billing",
+                  "solana-guides/error-handling/connection-pooling"
+                ]
+              },
+              {
                 "group": "Solana dev",
-                "icon": "code",
                 "root": "solana-guides/solana-dev",
                 "expanded": false,
                 "pages": [
+                  "solana-guides/solana-dev",
                   "solana-guides/solana-dev/glossary",
                   "solana-guides/solana-dev/core-concepts"
                 ]
               },
               {
                 "group": "Streaming",
-                "icon": "radio",
                 "root": "solana-guides/streaming-guides",
                 "expanded": false,
                 "pages": [
@@ -296,7 +297,6 @@
               },
               {
                 "group": "Transaction sending",
-                "icon": "send",
                 "root": "solana-guides/transaction-guides",
                 "expanded": false,
                 "pages": [
@@ -305,7 +305,6 @@
               },
               {
                 "group": "NFTs and digital assets",
-                "icon": "image",
                 "root": "solana-guides/nfts-and-digital-assets",
                 "expanded": false,
                 "pages": [

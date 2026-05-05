@@ -1,4 +1,4 @@
-<svg viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg" fill="none">
+<svg width="16" height="14" viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg" fill="none">
   <defs>
     <linearGradient id="solanaGradient" x1="1.32" y1="14.33" x2="14.17" y2="-0.16" gradientUnits="userSpaceOnUse">
       <stop offset="0.08" stop-color="#9945FF"/>
