@@ -19,8 +19,7 @@ Pick a plan style. Move the sliders or enter a deposit; the total updates as you
 <div className="triton-calc not-prose" data-triton-calc>
 
   <div className="triton-calc-modes">
-    <button type="button" className="triton-calc-mode-btn active" data-mode="simplified">Simple PAYG</button>
-    <button type="button" className="triton-calc-mode-btn" data-mode="custom">Custom PAYG</button>
+    <button type="button" className="triton-calc-mode-btn active" data-mode="custom">Custom PAYG</button>
     <button type="button" className="triton-calc-mode-btn" data-mode="dedicated">Dedicated nodes</button>
   </div>
 
@@ -46,32 +45,7 @@ Pick a plan style. Move the sliders or enter a deposit; the total updates as you
 
       <div className="triton-calc-controls">
 
-        <div className="triton-calc-simple" data-simple>
-          <div className="triton-calc-row triton-calc-row-static">
-            <div className="triton-calc-row-title">Standard RPC, indexed accounts, ledger queries</div>
-            <div className="triton-calc-row-rate">$0.08 / GB bandwidth + $10 / million calls</div>
-          </div>
-          <div className="triton-calc-row triton-calc-row-static">
-            <div className="triton-calc-row-title">Streaming services, Titan Prime API</div>
-            <div className="triton-calc-row-rate">$0.08 / GB bandwidth</div>
-          </div>
-          <div className="triton-calc-row triton-calc-row-static">
-            <div className="triton-calc-row-title">Metaplex, Photon APIs</div>
-            <div className="triton-calc-row-rate">$0.08 / GB bandwidth + $50 / million calls</div>
-          </div>
-          <div className="triton-calc-row triton-calc-row-static">
-            <div className="triton-calc-row-title">Metis API</div>
-            <div className="triton-calc-row-rate">$0.08 / GB bandwidth + $80 / million calls</div>
-          </div>
-
-          <div className="triton-calc-deposit-input">
-            <span className="triton-calc-currency">$</span>
-            <input type="number" min="125" defaultValue="125" data-deposit />
-          </div>
-          <p className="triton-calc-fineprint">Deposit is prepaid, non-refundable, and valid for 12 months.</p>
-        </div>
-
-        <div className="triton-calc-custom" data-custom hidden>
+        <div className="triton-calc-custom" data-custom>
           <div className="triton-calc-row" data-slider data-key="bandwidthAll" data-price="0.08" data-min="0" data-max="10000" data-step="100" data-format="bandwidth">
             <div className="triton-calc-row-head">
               <div>
@@ -223,8 +197,7 @@ Pick a plan style. Move the sliders or enter a deposit; the total updates as you
 
 ### How to use the calculator
 
-- **Simple PAYG** — leave the line-item rates as a reference, type the deposit you want to start with. Minimum is `$125`. The deposit burns down at the per-service rates as you use the platform.
-- **Custom PAYG** — drag each service slider to the volume you expect for the month. The total is what you'd burn through at that rate. Sliders are estimates only; actual usage drives actual draw-down.
+- **Custom PAYG** — drag each service slider to the volume you expect for the month. The total is what you'd burn through at that rate. Sliders are estimates only; actual usage drives actual draw-down. Minimum deposit is `$125`.
 - **Dedicated nodes** — pick a chain. Pricing is fixed-per-month for the node plus included streaming. Other services drawdown at the same per-call rate as PAYG.
 
 ## Getting started: $125 prepaid deposit

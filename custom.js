@@ -286,7 +286,6 @@
     var modeBtns = root.querySelectorAll('[data-mode]');
     var paygPanel = root.querySelector('[data-panel="payg"]');
     var dediPanel = root.querySelector('[data-panel="dedicated"]');
-    var simpleBlock = root.querySelector('[data-simple]');
     var customBlock = root.querySelector('[data-custom]');
     var deposit = root.querySelector('[data-deposit]');
     var totalEl = root.querySelector('[data-total]');
@@ -304,25 +303,18 @@
         if (dediPanel) dediPanel.hidden = false;
         return;
       }
+      // PAYG mode (Custom PAYG only -- the simplified mode was removed)
       if (paygPanel) paygPanel.hidden = false;
       if (dediPanel) dediPanel.hidden = true;
-      if (mode === 'simplified') {
-        if (simpleBlock) simpleBlock.hidden = false;
-        if (customBlock) customBlock.hidden = true;
-        if (deposit) deposit.value = '125';
-        recompute();
-      } else if (mode === 'custom') {
-        if (simpleBlock) simpleBlock.hidden = true;
-        if (customBlock) customBlock.hidden = false;
-        sliderRows.forEach(function (row) {
-          var input = row.querySelector('[data-input]');
-          if (input) {
-            input.value = '0';
-            updateSliderRow(row);
-          }
-        });
-        recompute();
-      }
+      if (customBlock) customBlock.hidden = false;
+      sliderRows.forEach(function (row) {
+        var input = row.querySelector('[data-input]');
+        if (input) {
+          input.value = '0';
+          updateSliderRow(row);
+        }
+      });
+      recompute();
     }
 
     function updateSliderRow(row) {
@@ -355,11 +347,9 @@
     function recompute() {
       var total = 0;
       var mode = root.querySelector('[data-mode].active');
-      mode = mode ? mode.dataset.mode : 'simplified';
-      if (mode === 'simplified') {
-        var v = parseFloat(deposit && deposit.value) || 0;
-        total = v;
-      } else if (mode === 'custom') {
+      mode = mode ? mode.dataset.mode : 'custom';
+      // PAYG (custom) mode: sum all sliders
+      if (mode === 'custom') {
         sliderRows.forEach(function (row) {
           var input = row.querySelector('[data-input]');
           if (!input) return;
@@ -500,8 +490,8 @@
       b.addEventListener('click', function () { setChain(b.dataset.chain); });
     });
 
-    /* Initial state */
-    setMode('simplified');
+    /* Initial state -- Custom PAYG is now the default (Simple PAYG removed) */
+    setMode('custom');
     recompute();
   }
 
