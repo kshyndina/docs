@@ -97,8 +97,8 @@
                 "pages": [
                   "solana/welcome",
                   "solana/get-started/quickstart",
-                  "solana/get-started/rate-and-connection-limits",
                   "solana/get-started/plans-and-billing",
+                  "solana/get-started/rate-and-connection-limits",
                   {
                     "group": "Account management",
                     "root": "solana/get-started/account-management/set-up-your-account-and-add-users",
