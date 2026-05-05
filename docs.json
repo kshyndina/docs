@@ -233,7 +233,7 @@
                 "group": "Getting started",
                 "pages": [
                   {
-                    "group": "Set up your RPC services for...",
+                    "group": "Set up your RPC for...",
                     "root": "solana-guides/getting-started/set-up-rpc/trading-and-market-making",
                     "expanded": false,
                     "pages": [
