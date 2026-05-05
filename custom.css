@@ -1521,22 +1521,33 @@ html body .chat-assistant-floating-input {
 }
 
 /* ---- 28. Steps numbered circles: brand-purple fill ---------------
-   LOCKED RULE -- DO NOT REVERT. Mintlify ships the step-number
-   circle with `bg-gray-50 + text-gray-900` (almost invisible
-   against the page background). The size-7 + rounded-full +
-   bg-gray-50 + shrink-0 combo is unique to the Steps component, so
-   no ancestor scoping needed. */
-html body div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"][class*="shrink-0"] {
+   Mintlify ships the step-number circle with `bg-gray-50 +
+   text-gray-900` (almost invisible against the page background). The
+   size-7 + rounded-full + bg-gray-50 + shrink-0 combo is unique to
+   the Steps component. */
+/* Light mode: dark-purple circle, off-white digit. */
+html:not(.dark) body div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"][class*="shrink-0"] {
   background: rgba(122, 75, 160, 0.95) !important;
   color: #F7F7F7 !important;
   border: 0 !important;
   font-weight: 600 !important;
 }
-html body div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"][class*="shrink-0"] * {
+html:not(.dark) body div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"][class*="shrink-0"] * {
   color: #F7F7F7 !important;
 }
+/* Dark mode: light-purple circle, DARK digit (matches the 'Get an
+   endpoint' CTA pattern: light pill, dark text). The descendant
+   wildcard is also scoped to dark so the inner number node ('1', '2'…)
+   inherits #171717 instead of the light-mode #F7F7F7. */
+html.dark body div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"][class*="shrink-0"],
 html.dark body div[class*="size-7"][class*="rounded-full"][class*="dark:bg-white"][class*="shrink-0"] {
   background: rgba(181, 145, 211, 0.95) !important;
+  color: #171717 !important;
+  border: 0 !important;
+  font-weight: 600 !important;
+}
+html.dark body div[class*="size-7"][class*="rounded-full"][class*="bg-gray-50"][class*="shrink-0"] *,
+html.dark body div[class*="size-7"][class*="rounded-full"][class*="dark:bg-white"][class*="shrink-0"] * {
   color: #171717 !important;
 }
 
@@ -2015,16 +2026,22 @@ html.dark body table tbody tr:first-child td {
   flex-direction: column;
   overflow: hidden;
 }
-.stack-pillar-title {
+/* IDENTICAL to table th by design. Both rules use the same vars and
+   the same typography spec. Padding 10px 20px matches `html body table th`
+   above. If you change one, change the other -- or better, use the
+   shared CSS class .triton-header-cell that maps to either. */
+.stack-pillar-title,
+html body .stack-pillar-title {
   background: var(--triton-table-header-bg) !important;
   color: var(--triton-table-header-color) !important;
   font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace !important;
   font-weight: 600 !important;
   font-size: 0.75rem !important;
+  line-height: 1.3 !important;
   letter-spacing: 0.04em !important;
   text-transform: uppercase !important;
   text-align: left !important;
-  padding: 0.625rem 0.875rem !important;
+  padding: 10px 20px !important;
   border-bottom: 1px solid var(--triton-table-border) !important;
 }
 .stack-branches {
@@ -2742,9 +2759,11 @@ html.dark .triton-try-output {
    ============================================================ */
 :root {
   --mint-color-text:               #171717;
-  --mint-color-background:         #FAFAFA;
+  /* Code-block bg in light mode: soft purple wash so the block reads
+     as a distinct surface (page bg is #F7F7F7). */
+  --mint-color-background:         #F2EDF6;
   --mint-foreground:               #171717;
-  --mint-background:               #FAFAFA;
+  --mint-background:               #F2EDF6;
   /* Token colors tuned for legibility on a light bg, with the Triton
      palette so the cool blue/green of github-light is gone. */
   --mint-token-keyword:            #623C80;     /* purple-700 */
@@ -2759,9 +2778,12 @@ html.dark .triton-try-output {
 }
 html.dark, .dark {
   --mint-color-text:               #E5D7F0;
-  --mint-color-background:         #171717;
+  /* Code-block bg slightly lifted off page bg so the block visually
+     separates from the page (page is #171717; code is a touch warmer
+     dark purple-tinted shade). */
+  --mint-color-background:         #1F1729;
   --mint-foreground:               #E5D7F0;
-  --mint-background:               #171717;
+  --mint-background:               #1F1729;
   /* Token colors tuned for vivid readability on a dark Triton bg.
      Previous pass used dim purples/golds that washed out. */
   --mint-token-keyword:            #D4A5F0;     /* bright lavender */
@@ -2835,20 +2857,8 @@ html.dark .mdx-content strong,
 .dark .mdx-content strong {
   color: #ffffff !important;
 }
-/* Steps component number circle in dark mode.
-   Mintlify's default uses `dark:bg-white/10 dark:text-gray-50` -- the
-   '1' / '2' inside renders nearly-white on a translucent light circle,
-   which gives low contrast in dark mode. Match the styling of the
-   primary CTA button: light-purple circle with DARK text inside. */
-html.dark [data-component-part="step-number"] > div,
-.dark [data-component-part="step-number"] > div {
-  background: rgba(181, 145, 211, 0.55) !important;
-  color: #171717 !important;
-}
-html.dark [data-component-part="step-number"] > div > div,
-.dark [data-component-part="step-number"] > div > div {
-  color: #171717 !important;
-}
+/* (Step-number dark-mode rule deleted -- it was a duplicate of rule 28
+   at line ~1538 which already covers both light and dark properly.) */
 
 /* Headings in dark mode: bump to pure white so 'Triton stack overview'
    etc. doesn't look greyish. */
