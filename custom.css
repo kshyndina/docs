@@ -2046,9 +2046,12 @@ html.dark .pillar-item:hover { color: #B591D3 !important; }
   .map-box { padding: 1rem 1.125rem 1.25rem 1.125rem; }
 }
 
-/* ---- 0l. Hug-table: tables that shrink to content width ----
-   Tight column widths — minimum padding so text just clears its cell.
-   Width: max-content forces the table to shrink to its widest line. */
+/* ---- 0l. Hug-table: shrink each column to its widest content ----
+   The width: 1% trick combined with white-space: nowrap forces every
+   column to render at exactly the width of its longest cell + the
+   tight padding, no more. Header font is smaller than body so that
+   when the header is the longer string (e.g. "HTTPS"), the column
+   doesn't balloon because of an oversized header. */
 .hug-table {
   overflow-x: auto;
   margin: 1.25rem 0;
@@ -2056,31 +2059,38 @@ html.dark .pillar-item:hover { color: #B591D3 !important; }
 .hug-table table {
   width: max-content !important;
   min-width: 0 !important;
-  border-collapse: collapse;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
   margin: 0;
+  table-layout: auto;
 }
 .hug-table th,
 .hug-table td {
-  padding: 0.375rem 0.5rem !important;
-  white-space: nowrap;
+  padding: 0.25rem 0.4rem !important;
+  white-space: nowrap !important;
   text-align: center;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   line-height: 1.25;
   border: 1px solid rgba(122, 75, 160, 0.2);
+  width: 1% !important;
+  min-width: 0 !important;
+  max-width: max-content !important;
 }
 .hug-table th {
   background: #F7F2FB;
   color: #492D60;
   font-weight: 600;
   font-family: 'DM Sans', system-ui, sans-serif;
-  font-size: 0.8125rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  padding: 0.25rem 0.375rem !important;
 }
 .hug-table td:first-child,
 .hug-table th:first-child {
   text-align: left;
   font-weight: 500;
   padding-left: 0.625rem !important;
-  padding-right: 0.875rem !important;
+  padding-right: 0.75rem !important;
 }
 .dark .hug-table th,
 html.dark .hug-table th {
