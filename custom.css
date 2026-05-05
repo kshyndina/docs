@@ -2672,4 +2672,206 @@ html.dark .triton-try-output {
   border-color: rgba(181, 145, 211, 0.25);
 }
 
+
+/* ============================================================
+   0p. Dark-mode polish (welcome page + global)
+   ============================================================
+   Kate flagged: body text too grey, purple links/highlights almost
+   invisible, mermaid diagrams have white boxes + black text in dark
+   mode, llms.txt code block has weird green shade, code-block
+   container has more inner rounding than outer.
+   ============================================================ */
+
+/* Body prose in dark mode: bump near-white to match the page subtitle. */
+.dark .mdx-content p,
+.dark .mdx-content li,
+.dark .mdx-content ul,
+.dark .mdx-content ol,
+.dark .mdx-content > div,
+.dark .prose p,
+.dark .prose li,
+html.dark .mdx-content p,
+html.dark .mdx-content li,
+html.dark .mdx-content ul,
+html.dark .mdx-content ol,
+html.dark .prose p,
+html.dark .prose li {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+.dark .mdx-content strong,
+html.dark .mdx-content strong {
+  color: #ffffff !important;
+}
+
+/* Mermaid: center the diagram horizontally and fix dark-mode contrast.
+   The default mermaid theme in dark mode uses white participant boxes
+   with black text -- unreadable. Override fills + strokes + text fills. */
+.mermaid,
+[data-component-name="mermaid-container"] {
+  text-align: center;
+}
+.mermaid svg {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Sequence-diagram participants */
+.dark .mermaid svg .actor,
+html.dark .mermaid svg .actor {
+  fill: rgba(73, 45, 96, 0.55) !important;
+  stroke: rgba(181, 145, 211, 0.55) !important;
+}
+.dark .mermaid svg text.actor,
+.dark .mermaid svg .actor text,
+.dark .mermaid svg .actor tspan,
+html.dark .mermaid svg text.actor,
+html.dark .mermaid svg .actor text,
+html.dark .mermaid svg .actor tspan {
+  fill: rgba(255, 255, 255, 0.92) !important;
+}
+/* Sequence-diagram message text and lines */
+.dark .mermaid svg .messageText,
+.dark .mermaid svg .messageText tspan,
+html.dark .mermaid svg .messageText,
+html.dark .mermaid svg .messageText tspan {
+  fill: rgba(255, 255, 255, 0.85) !important;
+  stroke: none !important;
+}
+.dark .mermaid svg .messageLine0,
+.dark .mermaid svg .messageLine1,
+.dark .mermaid svg line,
+html.dark .mermaid svg .messageLine0,
+html.dark .mermaid svg .messageLine1,
+html.dark .mermaid svg line {
+  stroke: rgba(181, 145, 211, 0.6) !important;
+}
+/* Sequence-diagram notes (the "Read path" / "Send path" yellow boxes) */
+.dark .mermaid svg .note,
+html.dark .mermaid svg .note {
+  fill: rgba(122, 75, 160, 0.25) !important;
+  stroke: rgba(181, 145, 211, 0.5) !important;
+}
+.dark .mermaid svg .noteText,
+.dark .mermaid svg .noteText tspan,
+html.dark .mermaid svg .noteText,
+html.dark .mermaid svg .noteText tspan {
+  fill: rgba(255, 255, 255, 0.85) !important;
+}
+/* Flowchart nodes (rectangles + diamonds + circles) */
+.dark .mermaid svg .node rect,
+.dark .mermaid svg .node circle,
+.dark .mermaid svg .node ellipse,
+.dark .mermaid svg .node polygon,
+.dark .mermaid svg .node path,
+html.dark .mermaid svg .node rect,
+html.dark .mermaid svg .node circle,
+html.dark .mermaid svg .node ellipse,
+html.dark .mermaid svg .node polygon,
+html.dark .mermaid svg .node path {
+  fill: rgba(73, 45, 96, 0.4) !important;
+  stroke: rgba(181, 145, 211, 0.55) !important;
+}
+.dark .mermaid svg .nodeLabel,
+.dark .mermaid svg .label,
+.dark .mermaid svg .label text,
+.dark .mermaid svg .label tspan,
+.dark .mermaid svg .label foreignObject *,
+html.dark .mermaid svg .nodeLabel,
+html.dark .mermaid svg .label,
+html.dark .mermaid svg .label text,
+html.dark .mermaid svg .label tspan,
+html.dark .mermaid svg .label foreignObject * {
+  fill: rgba(255, 255, 255, 0.92) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+/* Flowchart edges */
+.dark .mermaid svg .flowchart-link,
+.dark .mermaid svg path.path,
+.dark .mermaid svg .edgePath path,
+html.dark .mermaid svg .flowchart-link,
+html.dark .mermaid svg path.path,
+html.dark .mermaid svg .edgePath path {
+  stroke: rgba(181, 145, 211, 0.5) !important;
+  fill: none !important;
+}
+.dark .mermaid svg .edgeLabel,
+.dark .mermaid svg .edgeLabel rect,
+.dark .mermaid svg .edgeLabel foreignObject *,
+html.dark .mermaid svg .edgeLabel,
+html.dark .mermaid svg .edgeLabel rect,
+html.dark .mermaid svg .edgeLabel foreignObject * {
+  fill: transparent !important;
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Code-block container: align inner rounding with outer.
+   The wrapper has a 6px radius; the <pre> inside has its own larger
+   radius which makes the inner content peek over the outer corners. */
+[data-component-part="code-block-root"] {
+  border-radius: 0.5rem !important;
+  overflow: hidden !important;
+}
+[data-component-part="code-block-root"] pre,
+[data-component-part="code-block-root"] code,
+[data-component-part="code-block-root"] .font-mono {
+  border-radius: 0 !important;
+}
+/* Plain `text`-language code blocks pick up an unintended green tint
+   from Shiki's github-dark theme on some content (the language=text path
+   defaults to the comment colour). Force a neutral near-white in dark
+   mode so URLs and plain content stay readable. */
+.dark pre.shiki[language="text"] code,
+.dark pre.shiki[language="text"] code span,
+.dark pre.shiki[language="text"] code .line,
+.dark pre.shiki[language="text"] code .line span,
+html.dark pre.shiki[language="text"] code,
+html.dark pre.shiki[language="text"] code span,
+html.dark pre.shiki[language="text"] code .line,
+html.dark pre.shiki[language="text"] code .line span {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* Triton stack: a few last dark-mode contrast bumps so leaf links
+   read like proper links, not muted text. */
+.dark .stack-leaf:hover,
+html.dark .stack-leaf:hover {
+  background: rgba(122, 75, 160, 0.25) !important;
+  color: #ffffff !important;
+}
+
+/* Logo marquee: per-brand filter overrides for logos that don't read
+   well as a single grayscale + brightness(0) silhouette. Each gets a
+   slightly different formula tuned to its visual weight. */
+.logo-marquee img.logo-mtndao {
+  filter: grayscale(100%) contrast(0) brightness(0.35) opacity(0.55);
+}
+.logo-marquee img.logo-pancake {
+  /* Pancake bunny has multiple subtle gradients; contrast(0) flattens
+     them while brightness keeps the silhouette visible. */
+  filter: grayscale(100%) contrast(0) brightness(0.4) opacity(0.55);
+}
+.logo-marquee img.logo-solflare {
+  filter: grayscale(100%) brightness(0) opacity(0.55);
+}
+.logo-marquee img.logo-adrena {
+  filter: grayscale(100%) brightness(0) opacity(0.5);
+}
+.dark .logo-marquee img.logo-mtndao,
+html.dark .logo-marquee img.logo-mtndao {
+  filter: grayscale(100%) contrast(0) brightness(2) invert(1) opacity(0.55);
+}
+.dark .logo-marquee img.logo-pancake,
+html.dark .logo-marquee img.logo-pancake {
+  filter: grayscale(100%) contrast(0) brightness(2) invert(1) opacity(0.55);
+}
+.dark .logo-marquee img.logo-solflare,
+html.dark .logo-marquee img.logo-solflare {
+  filter: grayscale(100%) brightness(0) invert(1) opacity(0.55);
+}
+.dark .logo-marquee img.logo-adrena,
+html.dark .logo-marquee img.logo-adrena {
+  filter: grayscale(100%) brightness(0) invert(1) opacity(0.5);
+}
+
 /*! purgecss end ignore */
