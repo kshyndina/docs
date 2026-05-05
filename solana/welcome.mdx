@@ -7,19 +7,76 @@ mode: "wide"
 
 Triton One runs premium, globally distributed bare-metal infrastructure for Solana's most demanding teams. We've been on the network since testnet as one of its original validators, and we author and maintain much of the low-level tooling the ecosystem now relies on, including Project Yellowstone, the Old Faithful archive, and major contributions to the Metaplex DAS API.
 
-These docs cover the full stack: reads, streaming, historical data, trading APIs and validator services. Teams like Solana Foundation, Jupiter, Phantom, Orca, Solflare, Squads, Arcium, Jito Labs, Marinade and Binance all run on Triton.
+These docs cover the full stack: reads, streaming, historical data, trading APIs and validator services. Teams like Solana Foundation, Jupiter, Phantom, Orca, Solflare, Jito Labs, Marinade, Squads, Arcium, Binance, Raydium, Meteora and many more all run on Triton.
 
-<div className="customer-logo-grid">
-  <a href="https://solana.com" target="_blank" rel="noopener"><img src="/logos/solana.svg" alt="Solana" /></a>
-  <a href="https://jup.ag" target="_blank" rel="noopener"><img src="/logos/jupiter.svg" alt="Jupiter" /></a>
-  <a href="https://phantom.app" target="_blank" rel="noopener"><img src="/logos/phantom.svg" alt="Phantom" /></a>
-  <a href="https://orca.so" target="_blank" rel="noopener"><img src="/logos/orca.svg" alt="Orca" /></a>
-  <a href="https://solflare.com" target="_blank" rel="noopener"><img src="/logos/solflare.svg" alt="Solflare" /></a>
-  <a href="https://squads.so" target="_blank" rel="noopener"><img src="/logos/squads.svg" alt="Squads" /></a>
-  <a href="https://arcium.com" target="_blank" rel="noopener"><img src="/logos/arcium.svg" alt="Arcium" /></a>
-  <a href="https://jito.network" target="_blank" rel="noopener"><img src="/logos/jito-labs.svg" alt="Jito Labs" /></a>
-  <a href="https://marinade.finance" target="_blank" rel="noopener"><img src="/logos/marinade.svg" alt="Marinade" /></a>
-  <a href="https://binance.com" target="_blank" rel="noopener"><img src="/logos/binance.svg" alt="Binance" /></a>
+<div className="logo-marquee">
+  <div className="logo-marquee-track logo-track-left">
+    <img src="/logos/solana.svg" alt="" />
+    <img src="/logos/jupiter.svg" alt="" />
+    <img src="/logos/phantom.svg" alt="" />
+    <img src="/logos/orca.svg" alt="" className="logo-orca" />
+    <img src="/logos/solflare.svg" alt="" className="logo-shrink" />
+    <img src="/logos/squads.svg" alt="" />
+    <img src="/logos/arcium.svg" alt="" />
+    <img src="/logos/jito-labs.svg" alt="" className="logo-shrink" />
+    <img src="/logos/marinade.svg" alt="" />
+    <img src="/logos/binance.svg" alt="" />
+    <img src="/logos/raydium.svg" alt="" />
+    <img src="/logos/meteora.svg" alt="" />
+    <img src="/logos/bonk.svg" alt="" />
+    <img src="/logos/bitfinex.svg" alt="" />
+    <img src="/logos/birdeye.svg" alt="" />
+    {/* duplicate for seamless loop */}
+    <img src="/logos/solana.svg" alt="" />
+    <img src="/logos/jupiter.svg" alt="" />
+    <img src="/logos/phantom.svg" alt="" />
+    <img src="/logos/orca.svg" alt="" className="logo-orca" />
+    <img src="/logos/solflare.svg" alt="" className="logo-shrink" />
+    <img src="/logos/squads.svg" alt="" />
+    <img src="/logos/arcium.svg" alt="" />
+    <img src="/logos/jito-labs.svg" alt="" className="logo-shrink" />
+    <img src="/logos/marinade.svg" alt="" />
+    <img src="/logos/binance.svg" alt="" />
+    <img src="/logos/raydium.svg" alt="" />
+    <img src="/logos/meteora.svg" alt="" />
+    <img src="/logos/bonk.svg" alt="" />
+    <img src="/logos/bitfinex.svg" alt="" />
+    <img src="/logos/birdeye.svg" alt="" />
+  </div>
+
+  <div className="logo-marquee-track logo-track-right">
+    <img src="/logos/debridge.svg" alt="" />
+    <img src="/logos/dialect.svg" alt="" />
+    <img src="/logos/streamflow.svg" alt="" />
+    <img src="/logos/titan.svg" alt="" />
+    <img src="/logos/swiss-borg.svg" alt="" />
+    <img src="/logos/hubble.svg" alt="" />
+    <img src="/logos/openbook.svg" alt="" />
+    <img src="/logos/pancake-swap.svg" alt="" />
+    <img src="/logos/abk-labs.svg" alt="" />
+    <img src="/logos/alpha-fi.svg" alt="" />
+    <img src="/logos/defi-tuna.svg" alt="" />
+    <img src="/logos/mtn-dao.svg" alt="" />
+    <img src="/logos/validators-app.svg" alt="" />
+    <img src="/logos/zeta.svg" alt="" />
+    <img src="/logos/adrena.svg" alt="" />
+    {/* duplicate for seamless loop */}
+    <img src="/logos/debridge.svg" alt="" />
+    <img src="/logos/dialect.svg" alt="" />
+    <img src="/logos/streamflow.svg" alt="" />
+    <img src="/logos/titan.svg" alt="" />
+    <img src="/logos/swiss-borg.svg" alt="" />
+    <img src="/logos/hubble.svg" alt="" />
+    <img src="/logos/openbook.svg" alt="" />
+    <img src="/logos/pancake-swap.svg" alt="" />
+    <img src="/logos/abk-labs.svg" alt="" />
+    <img src="/logos/alpha-fi.svg" alt="" />
+    <img src="/logos/defi-tuna.svg" alt="" />
+    <img src="/logos/mtn-dao.svg" alt="" />
+    <img src="/logos/validators-app.svg" alt="" />
+    <img src="/logos/zeta.svg" alt="" />
+    <img src="/logos/adrena.svg" alt="" />
+  </div>
 </div>
 
 ## Start here
@@ -46,21 +103,15 @@ If you're new, four places to begin.
 
 ## LLM-ready
 
-Triton's docs are built for AI agents as well as humans.
+Triton's docs are built for AI agents as well as humans. The single-file index lives at:
 
-<CardGroup cols={2}>
-  <Card title="llms.txt index" icon="sparkles" href="/llms.txt">
-    Single-file map of every page. One fetch bootstraps your agent.
-  </Card>
+```text llms.txt
+https://docs.triton.one/llms.txt
+```
 
-  <Card title="Triton MCP server" icon="plug" href="/agents/mcp">
-    Coming soon. MCP access to RPC, gRPC, account management.
-  </Card>
-</CardGroup>
+Drop that URL into your agent's context (Claude Code, Cursor, Codex) for full Triton coverage in one fetch. Per-product `llms.txt` files are also available under each section, e.g. `/solana/streaming/dragons-mouth/llms.txt`.
 
-<Tip>
-  Working with Claude Code, Cursor or Codex? Drop our `llms.txt` URL into your agent's context to give it full Triton coverage in one fetch. Per-product `llms.txt` files are also available under each section, e.g. `/solana/streaming/dragons-mouth/llms.txt`.
-</Tip>
+A native Triton MCP server is **coming soon**, with direct access to RPC queries, gRPC streams and account management.
 
 ## Guides for building on-chain
 
@@ -96,63 +147,56 @@ The most-asked walkthroughs for production builders.
 
 How the surface fits together. Shared infrastructure powers most workloads; dedicated tiers and validator services sit alongside for teams that need them.
 
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#7A4BA0','primaryTextColor':'#FFFFFF','primaryBorderColor':'#492D60','lineColor':'#7A4BA0','secondaryColor':'#B591D3','tertiaryColor':'#F4F0F8','clusterBkg':'#F4F0F8','clusterBorder':'#7A4BA0','fontFamily':'Work Sans','fontSize':'14px'}}}%%
-flowchart TB
-    subgraph SHARED ["SHARED INFRASTRUCTURE"]
-      direction TB
+<div className="product-map">
+  <div className="map-box map-shared">
+    <div className="map-box-title">Shared infrastructure</div>
+    <div className="map-pillars">
+      <div className="pillar">
+        <div className="pillar-label">Reading state</div>
+        <a className="pillar-item" href="/solana/reading-state/standard-rpc">Standard RPC</a>
+        <a className="pillar-item" href="/solana/streaming/steamboat/overview">Steamboat</a>
+        <a className="pillar-item" href="/solana/digital-assets/das-api/overview">DAS API</a>
+        <a className="pillar-item" href="/solana/digital-assets/zk-compression/overview">ZK Compression</a>
+        <a className="pillar-item" href="/solana/reading-state/account-sync">Account Sync</a>
+      </div>
+      <div className="pillar">
+        <div className="pillar-label">Streaming</div>
+        <a className="pillar-item" href="/solana/streaming/dragons-mouth/overview">Dragon's Mouth gRPC</a>
+        <a className="pillar-item" href="/solana/streaming/whirligig/overview">Whirligig</a>
+        <a className="pillar-item" href="/solana/streaming/fumarole/overview">Fumarole</a>
+        <a className="pillar-item" href="/solana/streaming/hermes/overview">Hermes</a>
+        <a className="pillar-item" href="/solana/streaming/pythnet/overview">Pythnet</a>
+      </div>
+      <div className="pillar">
+        <div className="pillar-label">History</div>
+        <a className="pillar-item" href="/solana/history/hydrant/overview">Hydrant</a>
+        <a className="pillar-item" href="/solana/history/old-faithful/overview">Old Faithful</a>
+        <a className="pillar-item" href="/solana/history/faithful-streams/overview">Faithful Streams</a>
+      </div>
+      <div className="pillar">
+        <div className="pillar-label">Sending transactions</div>
+        <a className="pillar-item" href="/solana/sending-transactions/yellowstone-jet/overview">Yellowstone Jet</a>
+        <a className="pillar-item" href="/solana/sending-transactions/priority-fees/overview">Priority Fees API</a>
+        <a className="pillar-item" href="/solana/trading-apis/metis/overview">Metis</a>
+        <a className="pillar-item" href="/solana/trading-apis/titan-prime/overview">Titan Prime</a>
+        <a className="pillar-item" href="/solana/sending-transactions/jito-bundles/overview">Jito Bundles</a>
+      </div>
+    </div>
+  </div>
 
-      subgraph READING ["Reading state"]
-        direction LR
-        RPC[Standard RPC]
-        STEAM[Steamboat]
-        DAS[DAS API]
-        ZK[ZK Compression]
-        SYNC[Account Sync]
-      end
+  <div className="map-row-bottom">
+    <div className="map-box map-dedicated">
+      <div className="map-box-title">Dedicated infrastructure</div>
+      <a className="pillar-item" href="/solana/reading-state/dedicated-grpc">Dedicated gRPC node</a>
+      <a className="pillar-item" href="/solana/validators/white-label/overview">White-label validator</a>
+    </div>
 
-      subgraph STREAMING ["Streaming"]
-        direction LR
-        DM[Dragons Mouth gRPC]
-        WHIRL[Whirligig]
-        FUM[Fumarole]
-        HER[Hermes]
-        PYTH[Pythnet]
-      end
-
-      subgraph HISTORY ["History"]
-        direction LR
-        HYD[Hydrant]
-        OF[Old Faithful]
-        FAITH[Faithful Streams]
-      end
-
-      subgraph SENDING ["Sending transactions"]
-        direction LR
-        JET[Yellowstone Jet]
-        FEES[Priority Fees API]
-        METIS[Metis]
-        TITAN[Titan Prime]
-        JITO[Jito Bundles]
-      end
-    end
-
-    subgraph DEDICATED ["DEDICATED INFRASTRUCTURE"]
-      direction TB
-      DGRPC[Dedicated gRPC node]
-      WL[White-label validator]
-    end
-
-    subgraph STAKING ["STAKING"]
-      direction TB
-      PT[Private trusted validator]
-    end
-
-    classDef product fill:#FFFFFF,stroke:#7A4BA0,stroke-width:1.5px,color:#492D60,font-weight:500
-    classDef dedicated fill:#F4F0F8,stroke:#492D60,stroke-width:2px,color:#492D60,font-weight:600
-    class RPC,STEAM,DAS,ZK,SYNC,DM,WHIRL,FUM,HER,PYTH,HYD,OF,FAITH,JET,FEES,METIS,TITAN,JITO product
-    class DGRPC,WL,PT dedicated
-```
+    <div className="map-box map-staking">
+      <div className="map-box-title">Staking</div>
+      <a className="pillar-item" href="/solana/validators/private-trusted/overview">Private trusted validator</a>
+    </div>
+  </div>
+</div>
 
 ## Get started
 
@@ -174,7 +218,7 @@ flowchart TB
 
 <p><Icon icon="user-cog" /> Already a customer? [Customer portal](https://customers.triton.one).</p>
 
-<p><Icon icon="circle-help" /> Sales questions? [Contact sales](https://triton.one/contact).</p>
+<p><Icon icon="briefcase" /> Sales questions? [Contact sales](https://triton.one/contact).</p>
 
 <p><Icon icon="sparkles" /> AI agent? [Read llms.txt](/llms.txt).</p>
 

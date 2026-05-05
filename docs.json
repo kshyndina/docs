@@ -230,6 +230,19 @@
             ]
           },
           {
+            "tab": "Guides",
+            "icon": "compass",
+            "pages": [
+              "solana-guides/error-handling",
+              "solana-guides/getting-started",
+              "solana-guides/solana-dev",
+              "solana-guides/streaming-guides",
+              "solana-guides/transaction-guides",
+              "solana-guides/industry-use-cases",
+              "solana-guides/nfts-and-digital-assets"
+            ]
+          },
+          {
             "tab": "API reference",
             "icon": "code",
             "groups": [
@@ -401,19 +414,6 @@
                   }
                 ]
               }
-            ]
-          },
-          {
-            "tab": "Guides",
-            "icon": "compass",
-            "pages": [
-              "solana-guides/error-handling",
-              "solana-guides/getting-started",
-              "solana-guides/solana-dev",
-              "solana-guides/streaming-guides",
-              "solana-guides/transaction-guides",
-              "solana-guides/industry-use-cases",
-              "solana-guides/nfts-and-digital-assets"
             ]
           },
           {
