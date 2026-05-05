@@ -530,6 +530,18 @@
             ]
           }
         ]
+      },
+      {
+        "dropdown": "Reference",
+        "icon": "book-marked",
+        "groups": [
+          {
+            "group": "Component reference",
+            "pages": [
+              "kate-all-elements"
+            ]
+          }
+        ]
       }
     ]
   },
