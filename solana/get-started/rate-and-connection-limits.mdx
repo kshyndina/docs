@@ -2,87 +2,87 @@
 title: "Rate and connection limits"
 ---
 
-Every Triton endpoint enforces a rate limit, a concurrency cap, and a separate budget for the most expensive Solana RPC methods. This page shows you where to read the live numbers, how the limits combine, and what to do when you hit one.
+Triton has two kinds of limits: rate limits for HTTP requests (per IP, 10-second window) and connection limits for streaming (simultaneous connections per endpoint). This page covers each, defaults, where to read your live numbers, and what to do when you hit one.
 
-## Default shared-endpoint limits
+## Rate limits
+
+Two budgets apply at the same time, both reset every 10 seconds, both keyed to the IP making the request:
+
+- **Total RPS** is the budget across every method. If your IP sends 1,000 `getBalance` and 1,000 `getSlot` in 10 seconds, that counts as 2,000 against this budget.
+- **Per-method RPS** is a separate budget for each individual RPC method. Even if your total is under the cap, you can hit the per-method cap on a single hot method (most often `getBalance`, `getProgramAccounts`, or similar).
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717'}}}%%
+flowchart TD
+    Req["Request from your IP"] --> Total{"Under total RPS<br/>(2,000 per 10s)?"}
+    Total -->|No| Block["HTTP 429"]
+    Total -->|Yes| Method{"Under per-method RPS<br/>for this method?"}
+    Method -->|No| Block
+    Method -->|Yes| OK["Request processed"]
+```
+
+If either check fails, the response is HTTP 429 Too Many Requests. In practice, we see most of the 429s come from the per-method limit, not the total.
+
+<Info>
+**Per IP** means the IP making the request. Backends sharing one IP share one budget.
+</Info>
+
+### Defaults
 
 | Limit | Default |
 |---|---|
-| Requests per IP | **1,200 per 10 seconds** |
-| Concurrency per IP | Visible per endpoint in the portal |
-| Expensive methods (e.g. `getProgramAccounts`, `getTokenAccountsByOwner` at large `dataSize`) | Significantly lower per-IP cap |
-| Streaming connections (gRPC, WS) | Per endpoint; see [Plans and billing](/solana/get-started/plans-and-billing) for limits and how to raise them |
+| Total RPS per IP | 2,000 per 10 seconds |
+| Per-method RPS per IP | Lower than total, varies by method |
 
-<Info>
-"Per IP" means the IP that makes the request, not the endpoint URL. If you're behind a NAT or sharing an IP across many backends, those all share the budget.
-</Info>
+### Read your live limits
 
-## Read your live limits
-
-Every endpoint exposes its current limits at a `/ratelimits` path:
+Every endpoint exposes its current limits at `/ratelimits`:
 
 ```bash
 curl https://<your-app>.mainnet.rpcpool.com/ratelimits
 ```
 
-Response is JSON, listing the request budget per window, the per-method overrides, and the concurrency cap. Bookmark this URL -- it's the source of truth for *your* endpoint's exact numbers, which can differ from defaults if support has tuned them.
+The response is JSON, listing the request budget per window, every per-method override, and the connection cap. Bookmark this URL. It's the source of truth for your endpoint's exact numbers, which can differ from defaults if support has tuned them.
 
-## Read live counts in response headers
-
-Every JSON-RPC response carries `X-Ratelimit-*` headers. Watch them in your client to back off **before** you hit a 429:
+Every JSON-RPC response also carries `X-Ratelimit-*` headers. Watch them in your client to back off before you hit a 429:
 
 | Header | What it tells you |
 |---|---|
-| `X-Ratelimit-Limit` | Your total budget for the current window |
-| `X-Ratelimit-Remaining` | How many requests you have left |
+| `X-Ratelimit-Limit` | Total budget for the current 10-second window |
+| `X-Ratelimit-Remaining` | How many total requests you have left |
 | `X-Ratelimit-Reset` | Seconds until the window resets |
-| `X-Ratelimit-Method-Limit` | Method-specific cap (when applicable) |
-| `X-Ratelimit-Method-Remaining` | Remaining method-specific budget |
+| `X-Ratelimit-Method-Limit` | Per-method cap for this RPC |
+| `X-Ratelimit-Method-Remaining` | How many of this method you have left |
 
-## What to do when you hit a 429
+If you do hit one, see the [Error handling guide](/solana-guides/error-handling/overview) for the full debug flow.
 
-<Steps>
-  <Step title="Pause -- don't retry immediately">
-    On `HTTP 429 Too Many Requests`, **stop sending from that IP for the full 10-second window**. Immediate retries only generate more 429s and extend the window.
-  </Step>
-  <Step title="Inspect the headers from the next successful call">
-    Once the window resets, log `X-Ratelimit-Limit` and `X-Ratelimit-Remaining` to confirm your fresh budget.
-  </Step>
-  <Step title="Smooth your traffic profile">
-    Spread bursty workloads across the window using a token-bucket or leaky-bucket limiter on your side. The window is fixed at 10 seconds; sending 1,200 requests in the first second wastes the next 9.
-  </Step>
-  <Step title="If you're hitting it routinely, scale up">
-    Either raise the per-IP budget by talking to support (we can tune limits on shared if your traffic profile justifies it) or move the workload to a [dedicated node](/solana/dedicated-nodes/overview). Dedicated nodes have custom rate limits negotiated up front.
-  </Step>
-</Steps>
+### Method-specific limits
 
-## Method-specific budgets
+Some Solana methods scan large datasets: they use a separate, lower per-method counter so that a single heavy call doesn't starve the rest of your traffic.
 
-Some Solana methods scan large data sets and are scoped on a separate per-method counter so they can't starve everything else. Most commonly:
-
-| Method | Why it's expensive | Typical mitigation |
+| Method | Why is it expensive | Mitigation |
 |---|---|---|
-| `getProgramAccounts` | Full program-state scan; can return MBs | Filter aggressively (`dataSize`, `memcmp`); for production, use [Steamboat indexed accounts](/solana/reading-state/steamboat-indexed-accounts) |
+| `getProgramAccounts` | Full program-state scan can return MBs of data | Filter aggressively (`dataSize`, `memcmp`); for production, use [Steamboat indexed accounts](/solana/streaming/steamboat/overview) |
 | `getTokenAccountsByOwner` (large owners) | Iterates every token account for an owner | Cache results, batch by owner, use Steamboat for indexed reads |
-| `getSignaturesForAddress` (deep history) | Walks signatures back through epochs | Cap `limit`; for archival depth use [Hydrant historical data](/solana/history/overview) |
+| `getSignaturesForAddress` (deep history) | Walks signatures back through epochs | Cap `limit`; for archival depth use [Hydrant historical data](/solana/history/hydrant/overview) |
 
-A 429 on these methods usually means you've burned the **method-specific** budget. The general budget is unaffected, so other reads keep working.
+A 429 on these methods usually means you've burned the per-method budget. The total RPS remains unaffected, so other reads continue to work.
 
-## Browser concurrency
+### Browser concurrency
 
-Browsers limit the number of concurrent HTTP/2 streams to a single host. If your frontend opens many parallel calls, you can self-throttle before Triton's limits even kick in. Mitigations:
+Browsers cap parallel HTTP/2 streams to a single host, so a frontend with many parallel calls can self-throttle before Triton's limits ever apply. Best practices:
 
-- Use a single shared `Connection` (web3.js) per page.
-- Batch reads with `getMultipleAccounts` instead of N parallel `getAccountInfo` calls.
-- Move heavy reads (program scans, signature crawls) to your backend.
+- Use a single shared `Connection` (web3.js) per page
+- Batch reads with `getMultipleAccounts` instead of N parallel `getAccountInfo` calls
+- Move heavy reads (program scans, signature crawls) to your backend
 
-## Streaming connection limits
+## Connection limits
 
-For Yellowstone gRPC, Whirligig WebSockets, and Fumarole streams, the limit is on **simultaneous connections**, not requests. Each endpoint has a default; you can raise it via support or by switching to dedicated infrastructure.
+Streaming products (Yellowstone gRPC, Whirligig WebSockets, Fumarole) cap simultaneous connections, not request rate.
 
-<Info>
-A single gRPC connection can multiplex many subscriptions. Don't open one connection per filter -- one connection plus many subscribe messages is the right pattern. See the [Dragon's Mouth quickstart](/solana/streaming/dragons-mouth/quickstart) for the canonical multiplex example.
-</Info>
+Connection limits are flexible. If you hit one, let us know and we'll work with you to either optimise usage or raise the cap.
+
+A single gRPC connection can multiplex many subscriptions. The right pattern is one connection plus many `subscribe` messages, not one connection per filter. See the [Dragon's Mouth quickstart](/solana/streaming/dragons-mouth/quickstart) for the canonical multiplex example.
 
 ## What's next
 
@@ -91,6 +91,6 @@ A single gRPC connection can multiplex many subscriptions. Don't open one connec
     Per-service rates, invoicing, when to move to dedicated.
   </Card>
   <Card title="Dedicated nodes" icon="server" href="/solana/dedicated-nodes/overview">
-    Custom limits, isolated capacity, and dedicated regions.
+    Custom limits, isolated capacity, dedicated regions.
   </Card>
 </Columns>
