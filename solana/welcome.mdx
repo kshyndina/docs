@@ -168,18 +168,16 @@ sequenceDiagram
 
 ## Solana networks we support
 
-Production workloads usually come last. You prototype locally, push to devnet for integration tests, then graduate to mainnet for real traffic. Triton supports every endpoint type across all three:
+Production workloads usually come last. You prototype locally, push to devnet for integration tests, then graduate to mainnet for real traffic. Triton supports every endpoint type on both networks:
 
 - **Mainnet**: production traffic ([learn more](https://solana.com/docs/references/clusters#mainnet-beta))
 - **Devnet**: free, for development and integration tests ([learn more](https://solana.com/docs/references/clusters#devnet))
-- **Testnet**: available on request ([learn more](https://solana.com/docs/references/clusters#testnet))
 
 <div className="hug-table not-prose">
   | Network        | HTTPS<br />RPC | Web<br />Sockets | Yellowstone<br />gRPC | Steamboat<br />indexed | Historical<br />archive |
   | -------------- | :------------: | :--------------: | :-------------------: | :--------------------: | :---------------------: |
   | Solana mainnet |       yes      |        yes       |          yes          |           yes          |           yes           |
   | Solana devnet  |       yes      |        yes       |          yes          |           yes          |           yes           |
-  | Solana testnet |       yes      |        yes       |          yes          |           yes          |           yes           |
 </div>
 
 ## Triton stack overview
