@@ -1656,27 +1656,74 @@ html.dark body #page-context-menu > button * {
 }
 
 /* ---- 0f. Frontmatter description as body copy ----
-   Mintlify renders `description:` from frontmatter as a styled subheadline
-   (larger font, lighter colour). Kate wants it to look like normal body
-   copy: same font size, same colour, same family as the rest of the page.
-   Target the prose container that immediately follows the H1. */
-.mdx-content > .prose > p,
-mdx-content > .prose > p,
-.mdx-content > div.prose:first-of-type > p,
-mdx-content > div.prose:first-of-type > p {
+   Mintlify renders `description:` from frontmatter inside a div with
+   the literal class set "mt-2 text-lg prose prose-gray dark:prose-invert".
+   Default `text-lg` is 1.125rem — visibly larger than body copy. Force
+   the container AND its inner <p> to body-copy size, weight, colour,
+   line-height, and font-family. */
+div.mt-2.text-lg.prose,
+div[class~="mt-2"][class~="text-lg"][class~="prose"] {
   font-size: 1rem !important;
   line-height: 1.625 !important;
-  color: rgb(63, 63, 70) !important; /* zinc-700 */
+}
+div.mt-2.text-lg.prose > p,
+div[class~="mt-2"][class~="text-lg"][class~="prose"] > p {
+  font-size: 1rem !important;
+  line-height: 1.625 !important;
+  color: rgb(63, 63, 70) !important;       /* zinc-700, body */
   font-weight: 400 !important;
+  font-family: 'Work Sans', system-ui, sans-serif !important;
   margin-top: 0.5rem !important;
   margin-bottom: 1rem !important;
-  font-family: 'Work Sans', system-ui, sans-serif !important;
 }
-.dark .mdx-content > .prose > p,
-.dark mdx-content > .prose > p,
-html.dark .mdx-content > .prose > p,
-html.dark mdx-content > .prose > p {
-  color: rgb(212, 212, 216) !important; /* zinc-300 */
+.dark div.mt-2.text-lg.prose > p,
+.dark div[class~="mt-2"][class~="text-lg"][class~="prose"] > p,
+html.dark div.mt-2.text-lg.prose > p,
+html.dark div[class~="mt-2"][class~="text-lg"][class~="prose"] > p {
+  color: rgb(212, 212, 216) !important;     /* zinc-300, body in dark */
+}
+
+/* ---- 0i. Footer-links list (Stripe-style) ----
+   Plain-text list of icon + question + linked answer, separated by a
+   horizontal rule. Used at the bottom of welcome and other top pages.
+   Each <p> is one row. Icon sits inline with the text. */
+.footer-links {
+  margin-top: 1.5rem;
+}
+.footer-links p {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin: 0.5rem 0 !important;
+  color: rgb(63, 63, 70);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.footer-links p svg {
+  flex-shrink: 0;
+  color: rgb(113, 113, 122); /* zinc-500 */
+  width: 18px;
+  height: 18px;
+}
+.footer-links a {
+  color: rgb(122, 75, 160) !important; /* Triton primary */
+  text-decoration: none;
+  font-weight: 500;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
+.dark .footer-links p,
+html.dark .footer-links p {
+  color: rgb(212, 212, 216);
+}
+.dark .footer-links p svg,
+html.dark .footer-links p svg {
+  color: rgb(161, 161, 170);
+}
+.dark .footer-links a,
+html.dark .footer-links a {
+  color: rgb(181, 145, 211) !important;
 }
 
 /* ---- 0g. Content padding parity with sidebar ----
