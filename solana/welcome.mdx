@@ -1,100 +1,218 @@
 ---
-title: "Welcome"
+title: "Welcome to Triton"
+description: "Premium bare-metal Solana infrastructure: reads, streaming, history, trading APIs, validator services. Built for teams running production workloads."
+sidebarTitle: "Welcome"
 ---
 
-Triton operates the largest independent RPC infrastructure on Solana. We run validators, edge routers, gRPC streamers, and the underlying Geyser plugins that most of the ecosystem builds on. This section walks you from "I want a Solana endpoint" to "my production app is live".
+Triton One runs premium, globally distributed bare-metal infrastructure for Solana's most demanding teams. We've been on the network since testnet as one of its original validators, and we author and maintain much of the low-level tooling the ecosystem now relies on, including Project Yellowstone, the Old Faithful archive, and major contributions to the Metaplex DAS API.
 
-## Where to start
+These docs cover the full stack: reads, streaming, historical data, trading APIs and validator services.
 
-<Columns cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/solana/get-started/quickstart">
-    From signup to your first `getSlot` call in five minutes. Curl, JavaScript, Python, Rust.
+## Teams running on Triton
+
+<div className="customer-logo-grid">
+  <a href="https://solana.com" target="_blank" rel="noopener"><img src="/logos/solana.svg" alt="Solana Foundation" /></a>
+  <a href="https://jup.ag" target="_blank" rel="noopener"><img src="/logos/jupiter.svg" alt="Jupiter" /></a>
+  <a href="https://phantom.app" target="_blank" rel="noopener"><img src="/logos/phantom.svg" alt="Phantom" /></a>
+  <a href="https://kamino.finance" target="_blank" rel="noopener"><img src="/logos/kamino.svg" alt="Kamino" /></a>
+  <a href="https://wintermute.com" target="_blank" rel="noopener"><img src="/logos/wintermute.svg" alt="Wintermute" /></a>
+  <a href="https://orca.so" target="_blank" rel="noopener"><img src="/logos/orca.svg" alt="Orca" /></a>
+  <a href="https://metaplex.com" target="_blank" rel="noopener"><img src="/logos/metaplex.svg" alt="Metaplex" /></a>
+  <a href="https://solflare.com" target="_blank" rel="noopener"><img src="/logos/solflare.svg" alt="Solflare" /></a>
+  <a href="https://squads.so" target="_blank" rel="noopener"><img src="/logos/squads.svg" alt="Squads" /></a>
+  <a href="https://arcium.com" target="_blank" rel="noopener"><img src="/logos/arcium.svg" alt="Arcium" /></a>
+</div>
+
+<CardGroup cols={2}>
+  <Card title="Get an endpoint" icon="rocket" href="https://customers.triton.one/onboarding">
+    Standard RPC or dedicated gRPC in minutes. Pay as you go.
   </Card>
-  <Card title="API reference" icon="code" href="/solana-api/api-overview">
-    Every JSON-RPC, WebSocket, gRPC, and DAS method we expose. Live playground on every page.
+
+  <Card title="Log in" icon="log-in" href="https://customers.triton.one/users/sign-in">
+    Manage endpoints, top up credits, invite your team.
   </Card>
+</CardGroup>
+
+## Start here
+
+If you're new, four places to begin.
+
+<CardGroup cols={2}>
+  <Card title="Set up your account" icon="user-plus" href="/solana/get-started/account-management/set-up-your-account-and-add-users">
+    Create a workspace and invite your team.
+  </Card>
+
+  <Card title="Quickstart" icon="zap" href="/solana/get-started/quickstart">
+    Make your first API request in five minutes.
+  </Card>
+
   <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
-    PAYG vs invoiced, shared vs dedicated. $125 minimum deposit, per-service rates.
+    Pricing, dedicated tiers, how credits work.
   </Card>
-  <Card title="Streaming data" icon="radio" href="/solana/streaming/overview">
-    Yellowstone gRPC, Whirligig WebSockets, Fumarole reliable streams. Real-time and resumable.
-  </Card>
-</Columns>
 
-## What's in this section
-
-Get started is structured around a typical integration journey. Pick the entry point that matches where you are.
-
-<Columns cols={3}>
-  <Card title="New to Solana RPC?" icon="lightbulb" href="/solana/get-started/quickstart">
-    Start with the Quickstart, then read [Plans and billing](/solana/get-started/plans-and-billing).
+  <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
+    Per-product limits, quotas, how to scale up.
   </Card>
-  <Card title="Migrating from another provider?" icon="arrow-right-left" href="/solana/get-started/rate-and-connection-limits">
-    Read [Rate and connection limits](/solana/get-started/rate-and-connection-limits) first to plan capacity.
-  </Card>
-  <Card title="Running production traffic?" icon="server" href="/solana/dedicated-nodes/overview">
-    See [Dedicated nodes](/solana/dedicated-nodes/overview) and [Streaming data](/solana/streaming/overview).
-  </Card>
-</Columns>
+</CardGroup>
 
-## How Triton fits together
+## Guides for building on-chain
+
+The most-asked walkthroughs for production builders.
+
+<CardGroup cols={3}>
+  <Card title="Stream Solana with gRPC" icon="zap" href="/solana/streaming/dragons-mouth/quickstart">
+    Subscribe to accounts, transactions, blocks via gRPC.
+  </Card>
+
+  <Card title="Backfill historical data" icon="history" href="/solana/history/hydrant/overview">
+    Query the ledger from genesis with millisecond responses.
+  </Card>
+
+  <Card title="Send transactions reliably" icon="send" href="/solana/sending-transactions/quickstart">
+    SWQoS routing, priority fees, Jupiter swap routing.
+  </Card>
+
+  <Card title="Build a wallet or NFT app" icon="image" href="/solana/digital-assets/das-api/overview">
+    DAS API for NFTs, cNFTs, SPL, Token-2022 assets.
+  </Card>
+
+  <Card title="Run a private validator" icon="server" href="/solana/validators/overview">
+    White-label or private trusted validators on request.
+  </Card>
+
+  <Card title="Index custom programs" icon="database" href="/solana/streaming/steamboat/overview">
+    Custom indexes built from your existing gRPC stream.
+  </Card>
+</CardGroup>
+
+## LLM-ready
+
+Triton's docs are built for AI agents as well as humans.
+
+<CardGroup cols={2}>
+  <Card title="llms.txt index" icon="sparkles" href="/llms.txt">
+    Single-file map of every page. One fetch bootstraps your agent.
+  </Card>
+
+  <Card title="Triton MCP server" icon="plug" href="/agents/mcp">
+    Coming soon. MCP access to RPC, gRPC, account management.
+  </Card>
+</CardGroup>
+
+<Tip>
+  Working with Claude Code, Cursor or Codex? Drop our `llms.txt` URL into your agent's context to give it full Triton coverage in one fetch. Per-product `llms.txt` files are also available under each section, e.g. `/solana/streaming/dragons-mouth/llms.txt`.
+</Tip>
+
+## Triton product map
+
+Each product has its own deep dive elsewhere in the docs. This is how the surface fits together. Click any product to jump to its page.
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'}}}%%
-flowchart LR
-    A[Your app] --> B{Triton edge}
-    B -->|HTTP RPC| C[Solana RPC pool]
-    B -->|WebSocket| D[Whirligig]
-    B -->|gRPC stream| E[Yellowstone / Dragon's Mouth]
-    B -->|Send tx| F[Yellowstone Jet + SWQoS]
-    E --> G[Geyser plugins]
-    D --> G
-    G --> H[Validator pool]
-    F --> H
-    C --> I[Hydrant historical archive]
+graph TB
+    classDef reading  fill:#E8E0F5,stroke:#5B3D8A,stroke-width:1.5px,color:#1A0F2E
+    classDef stream   fill:#E8E0F5,stroke:#5B3D8A,stroke-width:1.5px,color:#1A0F2E
+    classDef history  fill:#FBEED4,stroke:#B5852A,stroke-width:1.5px,color:#3A2A05
+    classDef sending  fill:#DEEAD0,stroke:#5C7A3A,stroke-width:1.5px,color:#1F2A0F
+    classDef validator fill:#E8E0F5,stroke:#5B3D8A,stroke-width:1.5px,color:#1A0F2E
+
+    subgraph READS [READING SOLANA STATE]
+        RPC[Standard RPC]
+        GRPC[Dedicated gRPC]
+        SYNC[Account Sync]
+        STEAM[Steamboat]
+        DAS[DAS API]
+        ZK[ZK Compression]
+    end
+
+    subgraph STREAM [STREAMING DATA]
+        DM[Dragon's Mouth]
+        WHIRL[Whirligig]
+        FUM[Fumarole]
+        FAITH[Faithful Streams]
+        HER[Hermes]
+        PYTH[Pythnet]
+    end
+
+    subgraph HIST [HISTORY]
+        HYD[Hydrant]
+        OF[Old Faithful]
+    end
+
+    subgraph SEND [SENDING TRANSACTIONS]
+        JET[Yellowstone Jet]
+        FEES[Priority Fees API]
+        METIS[Metis]
+        TITAN[Titan Prime]
+        JITO[Jito Bundles]
+    end
+
+    subgraph VAL [VALIDATORS]
+        WL[White-label validator]
+        PT[Private trusted validator]
+    end
+
+    RPC --> DM
+    GRPC --> DM
+    DM --> STEAM
+    DM --> SYNC
+    DM --> FUM
+    DM --> WHIRL
+    HYD --> FAITH
+    OF --> HYD
+    FEES --> JET
+    METIS --> JET
+    TITAN --> JET
+    JITO --> JET
+
+    class RPC,GRPC,SYNC,STEAM,DAS,ZK reading
+    class DM,WHIRL,FUM,FAITH,HER,PYTH stream
+    class HYD,OF history
+    class JET,FEES,METIS,TITAN,JITO sending
+    class WL,PT validator
+
+    click RPC   "/solana/reading-state/standard-rpc"               "Standard RPC: 99.99% uptime, 20+ regions, GeoDNS routing"
+    click GRPC  "/solana/reading-state/dedicated-grpc"             "Dedicated gRPC: private endpoint, no rate limits"
+    click SYNC  "/solana/reading-state/account-sync"               "Account Sync: live state mirror, Geyser-fed, no polling"
+    click STEAM "/solana/streaming/steamboat/overview"             "Steamboat: indexed program state, 50x faster than getProgramAccounts"
+    click DAS   "/solana/digital-assets/das-api/overview"          "DAS API: NFTs, cNFTs, SPL, Token-2022"
+    click ZK    "/solana/digital-assets/zk-compression/overview"   "ZK Compression: compressed accounts, Merkle indexer"
+    click DM    "/solana/streaming/dragons-mouth/overview"         "Dragon's Mouth: Geyser gRPC, intra-slot updates"
+    click WHIRL "/solana/streaming/whirligig/overview"             "Whirligig: drop-in for native Solana WebSockets"
+    click FUM   "/solana/streaming/fumarole/overview"              "Fumarole: multi-node merge, persistent storage, scale-out"
+    click FAITH "/solana/history/faithful-streams/overview"        "Faithful Streams: replay history live, same API as Dragon's Mouth"
+    click HER   "/solana/streaming/hermes/overview"                "Hermes: Pyth feed API, REST + WebSocket"
+    click PYTH  "/solana/streaming/pythnet/overview"               "Pythnet: oracle endpoint, Solana Foundation backed"
+    click HYD   "/solana/history/hydrant/overview"                 "Hydrant: ms-latency ledger queries, ClickHouse-backed, 400+ TB"
+    click OF    "/solana/history/old-faithful/overview"            "Old Faithful: open archive, genesis-onwards, OSS"
+    click JET   "/solana/sending-transactions/yellowstone-jet/overview" "Yellowstone Jet: SWQoS TPU client, QUIC, Rust"
+    click FEES  "/solana/sending-transactions/priority-fees/overview"   "Priority Fees API: smart fee estimation"
+    click METIS "/solana/trading-apis/metis/overview"              "Metis: Jupiter swap routing"
+    click TITAN "/solana/trading-apis/titan-prime/overview"        "Titan Prime: streaming swaps, DART live re-optimisation"
+    click JITO  "/solana/sending-transactions/jito-bundles/overview" "Jito Bundles: tips-based bundle ordering"
+    click WL    "/solana/validators/white-label/overview"          "White-label validator: branded operator, Triton ops"
+    click PT    "/solana/validators/private-trusted/overview"      "Private trusted validator: no third-party operators"
 ```
 
-- **Standard JSON-RPC** for one-off reads and most application traffic.
-- **WebSocket** for browser-side subscriptions (account, signature, logs).
-- **gRPC streaming** for backend systems that need intra-slot updates.
-- **Jet + SWQoS** for transaction sending with stake-weighted priority.
-- **Hydrant** for historical queries beyond the recent ledger.
+<Note>
+  Each section has its own deep dive. The map shows how the surface fits together; on mobile the sidebar is easier to navigate than the diagram.
+</Note>
 
-## Choose the right product for the job
+## Need anything?
 
-| Need | Use | Where |
-|---|---|---|
-| Single read (`getAccountInfo`, `getSlot`, etc.) | Standard RPC | [API reference](/solana-api/api-overview) |
-| Subscribe to an account/signature/log from a browser | Whirligig WebSocket | [Whirligig WebSockets](/solana/streaming/whirligig/overview) |
-| Backend stream with intra-slot updates | Yellowstone gRPC (Dragon's Mouth) | [Dragon's Mouth gRPC](/solana/streaming/dragons-mouth/overview) |
-| Resumable stream with backfill (analytics, accounting) | Fumarole | [Fumarole reliable streams](/solana/streaming/fumarole/overview) |
-| Send transactions to leaders directly | Yellowstone Jet (SWQoS) | [Yellowstone Jet](/solana/sending-transactions/jet-sender) |
-| Block / transaction history beyond recent slots | Hydrant | [Historical data](/solana/history/overview) |
-| Indexed account reads at API speed | Steamboat | [Steamboat indexed accounts](/solana/reading-state/steamboat-indexed-accounts) |
-| Token assets, NFTs, compressed NFTs | DAS API | [DAS API](/solana-api/das/getAsset) |
-
-## Endpoint format
-
-Triton endpoints share a common URL shape. You'll see this everywhere in this section.
-
-```
-HTTPS:     https://<your-app>.mainnet.rpcpool.com
-WebSocket: wss://<your-app>.mainnet.rpcpool.com
-With token (backend only):
-           https://<your-app>.mainnet.rpcpool.com/<your-secret-token>
-```
-
-<Warning>
-Never embed a secret token in frontend code. Use [public endpoints with origin allowlists](/solana/get-started/account-management/auth-and-security-best-practices) for browser apps; keep tokens on your backend.
-</Warning>
-
-## Help and support
-
-<Columns cols={2}>
-  <Card title="Reach out to support" icon="life-buoy" href="/solana/get-started/account-management/reach-out-to-support">
-    Slack channel, email, or Telegram -- pick what works for you.
+<CardGroup cols={2}>
+  <Card title="Customer portal" icon="user-cog" href="https://customers.triton.one">
+    Endpoints, billing, and team access in one place.
   </Card>
-  <Card title="Status and incidents" icon="activity" href="https://status.triton.one">
-    Live infrastructure status, scheduled maintenance, recent incidents.
+
+  <Card title="AI agent? llms.txt" icon="sparkles" href="/llms.txt">
+    Read llms.txt first; per-product files live in sections.
   </Card>
-</Columns>
+
+  <Card title="Sales questions" icon="circle-help" href="https://triton.one/contact-sales">
+    Dedicated nodes, enterprise pricing, custom regions.
+  </Card>
+
+  <Card title="Follow updates" icon="rss" href="https://blog.triton.one">
+    Blog, X, YouTube, Telegram, and GitHub channels.
+  </Card>
+</CardGroup>
