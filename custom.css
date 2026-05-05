@@ -2061,41 +2061,47 @@ html.dark .pillar-item:hover { color: #B591D3 !important; }
   --triton-table-cell-color: #171717;
 }
 
-/* ---- 0l. Hug-table: rounded outer, identical aesthetic to stack ----
-   Drop the width:1% hack that was creating column-truncation issues.
-   Let the browser's auto layout split width naturally; first column
-   left-aligned and gets extra space, others sit centered. */
-.hug-table {
-  overflow: hidden;
-  margin: 1.25rem 0;
-  width: 100%;
-  border: 1px solid var(--triton-table-border);
-  border-radius: 0.5rem;
-}
-.hug-table table {
+/* ---- 0l. Triton table style — applies to every prose table ----
+   Single source of truth. Every <table> rendered in body content
+   inherits this look automatically; no .hug-table wrapper needed.
+   Geist Mono uppercase headers, light lavender header bg, warm-grey
+   cell borders, rounded outer 0.5rem (clipped via overflow:hidden
+   on the wrapping container). */
+.mdx-content table,
+mdx-content table {
   width: 100% !important;
-  border-collapse: collapse !important;
+  border-collapse: separate !important;
   border-spacing: 0 !important;
-  margin: 0 !important;
-  table-layout: auto;
+  margin: 1.25rem 0 !important;
+  table-layout: auto !important;
+  border: 1px solid var(--triton-table-border) !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden;
 }
-.hug-table th,
-.hug-table td {
+.mdx-content table th,
+.mdx-content table td,
+mdx-content table th,
+mdx-content table td {
   padding: 0.625rem 0.875rem !important;
   text-align: center;
   font-family: 'Work Sans', system-ui, sans-serif !important;
-  font-size: 0.9375rem;
-  line-height: 1.3;
-  color: var(--triton-table-cell-color);
-  border-right: 1px solid var(--triton-table-border);
-  border-bottom: 1px solid var(--triton-table-border);
-  border-top: 0;
-  border-left: 0;
+  font-size: 0.9375rem !important;
+  line-height: 1.3 !important;
+  color: var(--triton-table-cell-color) !important;
+  border-right: 1px solid var(--triton-table-border) !important;
+  border-bottom: 1px solid var(--triton-table-border) !important;
+  border-top: 0 !important;
+  border-left: 0 !important;
+  background: transparent !important;
 }
-.hug-table th:last-child,
-.hug-table td:last-child { border-right: 0 !important; }
-.hug-table tr:last-child td { border-bottom: 0 !important; }
-.hug-table th {
+.mdx-content table th:last-child,
+.mdx-content table td:last-child,
+mdx-content table th:last-child,
+mdx-content table td:last-child { border-right: 0 !important; }
+.mdx-content table tr:last-child td,
+mdx-content table tr:last-child td { border-bottom: 0 !important; }
+.mdx-content table th,
+mdx-content table th {
   background: var(--triton-table-header-bg) !important;
   color: var(--triton-table-header-color) !important;
   font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace !important;
@@ -2103,28 +2109,33 @@ html.dark .pillar-item:hover { color: #B591D3 !important; }
   font-size: 0.6875rem !important;
   letter-spacing: 0.04em !important;
   text-transform: uppercase !important;
-  padding: 0.625rem 0.625rem !important;
 }
-.hug-table td:first-child,
-.hug-table th:first-child {
-  text-align: left;
-  font-weight: 500;
+.mdx-content table td:first-child,
+.mdx-content table th:first-child,
+mdx-content table td:first-child,
+mdx-content table th:first-child {
+  text-align: left !important;
+  font-weight: 500 !important;
   padding-left: 1rem !important;
   padding-right: 1rem !important;
 }
-.dark .hug-table,
-html.dark .hug-table { border-color: rgba(181, 145, 211, 0.3); }
-.dark .hug-table th,
-html.dark .hug-table th {
+.dark .mdx-content table,
+html.dark .mdx-content table { border-color: rgba(181, 145, 211, 0.3) !important; }
+.dark .mdx-content table th,
+html.dark .mdx-content table th {
   background: rgba(122, 75, 160, 0.18) !important;
   color: #E5D7F0 !important;
 }
-.dark .hug-table td,
-.dark .hug-table th,
-html.dark .hug-table td,
-html.dark .hug-table th {
+.dark .mdx-content table td,
+.dark .mdx-content table th,
+html.dark .mdx-content table td,
+html.dark .mdx-content table th {
   border-color: rgba(181, 145, 211, 0.25) !important;
 }
+
+/* Legacy alias — old wrappers still work but no longer required */
+.hug-table { margin: 0; padding: 0; }
+.hug-table table { margin: 1.25rem 0 !important; }
 .dark .hug-table th,
 html.dark .hug-table th {
   background: rgba(122, 75, 160, 0.18);

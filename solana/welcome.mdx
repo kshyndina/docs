@@ -122,12 +122,12 @@ Pick a task. Hit **Run**. Each tab fires a real JSON-RPC call against Solana's p
   </div>
 
   <div className="triton-try-body">
-    <div className="triton-try-code"><pre><code data-code>curl https://api.mainnet.solana.com -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}'</code></pre></div>
+    <div className="triton-try-code" data-code>curl https://api.mainnet.solana.com -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}'</div>
     <div className="triton-try-actions">
       <button type="button" className="triton-try-run" data-run>▶ Run on mainnet</button>
       <span className="triton-try-status" data-status></span>
     </div>
-    <pre className="triton-try-output" data-output>// Click "Run on mainnet" to see live output.</pre>
+    <div className="triton-try-output" data-output>// Click "Run on mainnet" to see live output.</div>
   </div>
 
 </div>
@@ -136,15 +136,11 @@ Pick a task. Hit **Run**. Each tab fires a real JSON-RPC call against Solana's p
 
 All three networks, served from 20+ regions via GeoDNS. Devnet and testnet for testing; mainnet for production.
 
-<div className="hug-table not-prose">
-
 | Network | HTTPS<br/>RPC | Web<br/>Sockets | Yellowstone<br/>gRPC | Steamboat<br/>indexed | Historical<br/>archive |
 |---|:---:|:---:|:---:|:---:|:---:|
 | Solana mainnet | yes | yes | yes | yes | yes |
 | Solana devnet | yes | yes | yes | yes | yes |
 | Solana testnet | yes | yes | yes | yes | yes |
-
-</div>
 
 ## The Triton stack
 
