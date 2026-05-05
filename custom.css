@@ -1953,7 +1953,7 @@ html body table tr:last-child td:last-child   { border-bottom-right-radius: var(
 .dark html body table th,
 html.dark body table th {
   background: rgba(181, 145, 211, 0.15) !important;
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: #ffffff !important;
   border-color: rgba(255, 255, 255, 0.08) !important;
 }
 .dark html body table th:last-child,
@@ -2672,6 +2672,25 @@ html.dark .triton-try-output {
   border-color: rgba(181, 145, 211, 0.25);
 }
 
+
+/* ============================================================
+   0o-bis. Body content width: 20% wider
+   ============================================================
+   Mintlify's default content wrapper is `lg:max-w-[696px]` with a
+   centering offset of `lg:ml-[max(0px,calc(50vw-348px-14rem))]`
+   (348 = half of 696, 14rem = sidebar). Kate wanted 10% more space
+   on each side, so 696 -> 835px (835/2 ≈ 418).
+   ============================================================ */
+@media (min-width: 1024px) {
+  /* Match the exact Tailwind arbitrary class via attribute selector --
+     fragile but the ONLY non-fragile thing about Mintlify's wrappers. */
+  div[class*="lg:max-w-[696px]"] {
+    max-width: 835px !important;
+  }
+  div[class*="lg:ml-[max(0px,calc(50vw-348px-14rem))]"] {
+    margin-left: max(0px, calc(50vw - 418px - 14rem)) !important;
+  }
+}
 
 /* ============================================================
    0p. Dark-mode polish (welcome page + global)

@@ -608,7 +608,8 @@
         t.classList.toggle('active', t.dataset.task === key);
       });
       if (codeEl) codeEl.textContent = buildCurl(TASKS[key]);
-      if (outputEl) outputEl.textContent = '// Click "Run on mainnet" to execute. ' + TASKS[key].blurb;
+      // Empty until the user clicks Run -- no placeholder note.
+      if (outputEl) outputEl.textContent = '';
       if (statusEl) statusEl.textContent = '';
     }
 
