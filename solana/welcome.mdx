@@ -176,7 +176,9 @@ Production workloads usually come last. You prototype locally, push to devnet fo
 
 ## Triton stack overview
 
-Shared infrastructure powers most workloads. Dedicated nodes and validator services sit alongside for teams that need them. Click any product to jump to its page.
+For most workloads, shared is the right answer. Solana's read layer has split into purpose-built components, which makes geographic distribution and per-component scaling the dominant factors for both low latency and spike absorption.
+
+The exception is gRPC streaming. Dragon's Mouth connects directly to Geyser, and a dedicated node gives you full bandwidth and CPU, flat costs on streaming bandwidth, and absolute minimal latency when colocated.
 
 <div className="stack-map not-prose">
   <div className="stack-pillars">
