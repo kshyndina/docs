@@ -606,3 +606,142 @@
   });
   obs.observe(document.documentElement, { childList: true, subtree: true });
 })();
+
+/* ============================================================
+   Try-it-out (welcome page Solana RPC playground)
+   ============================================================
+   Stripe-style: tabs across the top, code preview, Run button,
+   live JSON-RPC POST against api.mainnet.solana.com (the public
+   Solana Foundation endpoint, CORS-enabled, no key needed).
+   ============================================================ */
+(function () {
+  if (typeof window === 'undefined') return;
+
+  var ENDPOINT = 'https://api.mainnet.solana.com';
+
+  var TASKS = {
+    slot: {
+      label: 'Latest slot',
+      method: 'getSlot',
+      params: [],
+      blurb: 'What slot is the network on right now?'
+    },
+    balance: {
+      label: 'Wallet SOL balance',
+      method: 'getBalance',
+      params: ['86xCnPeV69n6t3DnyGvkKobf9FdN2H9oiVDdaMpo2MMY'],
+      blurb: 'SOL balance for Anatoly Yakovenko\'s wallet.'
+    },
+    tokens: {
+      label: 'Wallet tokens',
+      method: 'getTokenAccountsByOwner',
+      params: [
+        '86xCnPeV69n6t3DnyGvkKobf9FdN2H9oiVDdaMpo2MMY',
+        { programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' },
+        { encoding: 'jsonParsed' }
+      ],
+      blurb: 'All SPL token accounts for this wallet.'
+    },
+    fees: {
+      label: 'Priority fees right now',
+      method: 'getRecentPrioritizationFees',
+      params: [],
+      blurb: 'Per-slot prioritization fees from the last few hundred slots.'
+    },
+    epoch: {
+      label: 'Epoch info',
+      method: 'getEpochInfo',
+      params: [],
+      blurb: 'Current epoch, slot, absolute slot, transaction count.'
+    },
+    version: {
+      label: 'Cluster version',
+      method: 'getVersion',
+      params: [],
+      blurb: 'What software is the cluster running?'
+    }
+  };
+
+  function buildBody(task) {
+    return JSON.stringify({
+      jsonrpc: '2.0',
+      id: 1,
+      method: task.method,
+      params: task.params
+    });
+  }
+
+  function buildCurl(task) {
+    var body = buildBody(task);
+    return 'curl ' + ENDPOINT + ' -X POST \\\n  -H "Content-Type: application/json" \\\n  -d \'' + body + '\'';
+  }
+
+  function pretty(json) {
+    try { return JSON.stringify(json, null, 2); }
+    catch (e) { return String(json); }
+  }
+
+  function initTry(root) {
+    if (root.__tritonTryInit) return;
+    root.__tritonTryInit = true;
+
+    var tabs = root.querySelectorAll('[data-task]');
+    var codeEl = root.querySelector('[data-code]');
+    var runBtn = root.querySelector('[data-run]');
+    var outputEl = root.querySelector('[data-output]');
+    var statusEl = root.querySelector('[data-status]');
+    var current = 'slot';
+
+    function selectTask(key) {
+      if (!TASKS[key]) return;
+      current = key;
+      tabs.forEach(function (t) {
+        t.classList.toggle('active', t.dataset.task === key);
+      });
+      if (codeEl) codeEl.textContent = buildCurl(TASKS[key]);
+      if (outputEl) outputEl.textContent = '// Click "Run on mainnet" to execute. ' + TASKS[key].blurb;
+      if (statusEl) statusEl.textContent = '';
+    }
+
+    function runCurrent() {
+      var task = TASKS[current];
+      if (!task) return;
+      if (statusEl) statusEl.textContent = 'sending...';
+      if (outputEl) outputEl.textContent = '// requesting...';
+      runBtn.disabled = true;
+      var t0 = performance.now();
+      fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: buildBody(task)
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (json) {
+          var ms = Math.round(performance.now() - t0);
+          if (statusEl) statusEl.textContent = '' + ms + ' ms · ' + ENDPOINT;
+          if (outputEl) outputEl.textContent = pretty(json);
+        })
+        .catch(function (err) {
+          if (statusEl) statusEl.textContent = 'error';
+          if (outputEl) outputEl.textContent = '// error: ' + (err && err.message ? err.message : String(err));
+        })
+        .finally(function () {
+          runBtn.disabled = false;
+        });
+    }
+
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () { selectTask(t.dataset.task); });
+    });
+    if (runBtn) runBtn.addEventListener('click', runCurrent);
+
+    selectTask(current);
+  }
+
+  function scan() {
+    document.querySelectorAll('[data-triton-try]').forEach(initTry);
+  }
+  scan();
+  var obs = new MutationObserver(function () { requestAnimationFrame(scan); });
+  obs.observe(document.documentElement, { childList: true, subtree: true });
+})();
