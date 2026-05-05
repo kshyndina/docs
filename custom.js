@@ -462,33 +462,9 @@
         ]
       }
     };
-    var chainBtns = root.querySelectorAll('[data-chain]');
-    var chainPriceEl = root.querySelector('[data-chain-price]');
-    var chainFeaturesEl = root.querySelector('[data-chain-features]');
-    var chainServicesEl = root.querySelector('[data-chain-services]');
-
-    function setChain(key) {
-      chainBtns.forEach(function (b) {
-        b.classList.toggle('active', b.dataset.chain === key);
-      });
-      var c = chainData[key];
-      if (!c) return;
-      if (chainPriceEl) chainPriceEl.textContent = c.price;
-      if (chainFeaturesEl) {
-        chainFeaturesEl.innerHTML = c.features.map(function (f) { return '<li>' + f + '</li>'; }).join('');
-      }
-      if (chainServicesEl) {
-        chainServicesEl.innerHTML = c.services.map(function (s) {
-          return '<div class="triton-calc-row triton-calc-row-static">'
-               +   '<div class="triton-calc-row-title">' + s[0] + '</div>'
-               +   '<div class="triton-calc-row-rate">' + s[1] + '</div>'
-               + '</div>';
-        }).join('');
-      }
-    }
-    chainBtns.forEach(function (b) {
-      b.addEventListener('click', function () { setChain(b.dataset.chain); });
-    });
+    /* Chain switcher removed -- dedicated panel hardcoded to Solana
+       (in MDX). The chainData map is kept above so we can re-add other
+       chains later, but no buttons exist in the DOM anymore. */
 
     /* Initial state -- Custom PAYG is now the default (Simple PAYG removed) */
     setMode('custom');
@@ -653,5 +629,81 @@
   }
   scan();
   var obs = new MutationObserver(function () { requestAnimationFrame(scan); });
+  obs.observe(document.documentElement, { childList: true, subtree: true });
+})();
+
+
+/* ============================================================
+   Sidebar dropdowns: persist user-toggled state across pages
+   ============================================================
+   Mintlify auto-collapses sidebar groups that aren't on the active
+   route. Kate wants groups to stay open once a user opens them, only
+   closing when the user clicks the toggle again. This module:
+
+   1. Watches the DOM for `<button aria-label="Toggle X section" ...>`.
+   2. On first sight, reads localStorage for the saved set of opened
+      groups; if a group is in the set but currently collapsed, it
+      simulates a click to open it.
+   3. On user click, writes the new state back to localStorage after
+      the framework toggles aria-expanded.
+   ============================================================ */
+(function () {
+  if (typeof window === 'undefined') return;
+
+  var STORAGE_KEY = 'triton-sidebar-open-groups';
+
+  function readState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return new Set();
+      return new Set(JSON.parse(raw));
+    } catch (e) {
+      return new Set();
+    }
+  }
+  function writeState(set) {
+    try {
+      var arr = [];
+      set.forEach(function (v) { arr.push(v); });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    } catch (e) {}
+  }
+
+  function bindToggles() {
+    var btns = document.querySelectorAll('button[aria-label^="Toggle "][aria-label$=" section"]');
+    if (!btns.length) return;
+    var state = readState();
+
+    btns.forEach(function (btn) {
+      var label = btn.getAttribute('aria-label');
+      if (!label) return;
+
+      // Restore state if needed
+      var isOpen = btn.getAttribute('aria-expanded') === 'true';
+      var wantOpen = state.has(label);
+      if (wantOpen && !isOpen && !btn.__tritonRestored) {
+        btn.__tritonRestored = true;
+        // Click without scroll-into-view side-effects
+        try { btn.click(); } catch (e) {}
+      }
+
+      if (btn.__tritonStickyBound) return;
+      btn.__tritonStickyBound = true;
+      btn.addEventListener('click', function () {
+        // Wait a tick for aria-expanded to flip, then save
+        setTimeout(function () {
+          var nowOpen = btn.getAttribute('aria-expanded') === 'true';
+          var s = readState();
+          if (nowOpen) s.add(label); else s.delete(label);
+          writeState(s);
+        }, 60);
+      });
+    });
+  }
+
+  bindToggles();
+  var obs = new MutationObserver(function () {
+    requestAnimationFrame(bindToggles);
+  });
   obs.observe(document.documentElement, { childList: true, subtree: true });
 })();

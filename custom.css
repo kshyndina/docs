@@ -2285,21 +2285,33 @@ html.dark .triton-calc-mode-btn.active {
 }
 /* SVG check (not the unicode ✓ character) -- macOS renders the unicode
    tick as an emoji with its own background tile, which Kate flagged.
-   Inline SVG gives clean stroke-only rendering with no surrounding box. */
+   Inline SVG gives clean stroke-only rendering with no surrounding box.
+   Forced transparent bg in case any prose / Tailwind rule tries to add
+   a marker styling. */
 .triton-calc-features li::before {
-  content: "";
+  content: "" !important;
   position: absolute;
   left: 0;
-  top: 0.35em;
-  width: 14px;
-  height: 14px;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237A4BA0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
-  background-repeat: no-repeat;
-  background-size: contain;
+  top: 0.3em;
+  width: 16px;
+  height: 16px;
+  background-color: transparent !important;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237A4BA0' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  border: 0 !important;
+  font-size: 0 !important;             /* stop any unicode fallback rendering */
+  color: transparent !important;
 }
 .dark .triton-calc-features li::before,
 html.dark .triton-calc-features li::before {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B591D3' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B591D3' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") !important;
+}
+/* Belt-and-braces: override any Tailwind marker:: pseudo-element that
+   Mintlify's prose may add to <li> elements inside not-prose blocks. */
+.triton-calc-features li::marker {
+  content: "" !important;
+  color: transparent !important;
 }
 .triton-calc-controls {
   display: flex;
