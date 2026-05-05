@@ -519,45 +519,55 @@
   var ENDPOINT = 'https://api.mainnet.solana.com';
 
   var TASKS = {
-    slot: {
-      label: 'Latest slot',
-      method: 'getSlot',
-      params: [],
-      blurb: 'What slot is the network on right now?'
-    },
     balance: {
-      label: 'Wallet SOL balance',
+      label: 'Wallet balance',
       method: 'getBalance',
       params: ['86xCnPeV69n6t3DnyGvkKobf9FdN2H9oiVDdaMpo2MMY'],
-      blurb: 'SOL balance for Anatoly Yakovenko\'s wallet.'
+      blurb: 'SOL balance for any wallet on mainnet.'
     },
-    tokens: {
-      label: 'Wallet tokens',
-      method: 'getTokenAccountsByOwner',
+    accountInfo: {
+      label: 'getAccountInfo for a token mint',
+      method: 'getAccountInfo',
+      params: [
+        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+        { encoding: 'jsonParsed', commitment: 'confirmed' }
+      ],
+      blurb: 'Full account state for a token mint -- here, USDC.'
+    },
+    history: {
+      label: 'Address history',
+      method: 'getSignaturesForAddress',
       params: [
         '86xCnPeV69n6t3DnyGvkKobf9FdN2H9oiVDdaMpo2MMY',
-        { programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' },
-        { encoding: 'jsonParsed' }
+        { limit: 10 }
       ],
-      blurb: 'All SPL token accounts for this wallet.'
+      blurb: 'Most recent transaction signatures for an address.'
     },
     fees: {
-      label: 'Priority fees right now',
+      label: 'Priority fee (with percentiles)',
       method: 'getRecentPrioritizationFees',
-      params: [],
+      params: [
+        ['EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v']
+      ],
       blurb: 'Per-slot prioritization fees from the last few hundred slots.'
     },
-    epoch: {
-      label: 'Epoch info',
-      method: 'getEpochInfo',
-      params: [],
-      blurb: 'Current epoch, slot, absolute slot, transaction count.'
+    sendTx: {
+      label: 'Send a transaction',
+      method: 'sendTransaction',
+      params: [
+        '<base64-encoded signed transaction>',
+        { encoding: 'base64', skipPreflight: false, preflightCommitment: 'confirmed' }
+      ],
+      blurb: 'Submit a signed transaction. Replace the placeholder with your own base64 payload to actually run.'
     },
-    version: {
-      label: 'Cluster version',
-      method: 'getVersion',
-      params: [],
-      blurb: 'What software is the cluster running?'
+    streamAccounts: {
+      label: 'Stream account changes',
+      method: 'accountSubscribe',
+      params: [
+        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+        { encoding: 'jsonParsed', commitment: 'confirmed' }
+      ],
+      blurb: 'WebSocket subscription that pushes account state updates as they land. (Requires a WS endpoint -- this curl shows the JSON-RPC shape.)'
     }
   };
 
@@ -589,7 +599,7 @@
     var runBtn = root.querySelector('[data-run]');
     var outputEl = root.querySelector('[data-output]');
     var statusEl = root.querySelector('[data-status]');
-    var current = 'slot';
+    var current = 'balance';
 
     function selectTask(key) {
       if (!TASKS[key]) return;

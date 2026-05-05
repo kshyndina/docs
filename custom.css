@@ -51,6 +51,18 @@
   --triton-table-cell-bg:       hsla(0, 0%, 97%, 0.5);
   --triton-table-radius:        12px;
 }
+/* Dark-mode overrides for the table tokens. Anything that uses
+   `var(--triton-table-header-color)` now flips to white in dark mode
+   without needing a separate selector override -- this is what fixes
+   the .stack-pillar-title 'SHARED INFRASTRUCTURE' dark-on-dark
+   problem that the previous, no-!important override couldn't beat. */
+html.dark, .dark {
+  --triton-table-border:        rgba(255, 255, 255, 0.10);
+  --triton-table-header-bg:     rgba(122, 75, 160, 0.18);
+  --triton-table-header-color:  #ffffff;
+  --triton-table-cell-color:    rgba(255, 255, 255, 0.92);
+  --triton-table-cell-bg:       rgba(255, 255, 255, 0.02);
+}
 
 /* ---- 0. Top navbar: a touch more vertical breathing room ---- */
 #navbar {
@@ -2731,11 +2743,15 @@ html.dark .triton-try-output {
 :root {
   --mint-color-text:               #171717;
   --mint-color-background:         #FAFAFA;
+  --mint-foreground:               #171717;
+  --mint-background:               #FAFAFA;
+  /* Token colors tuned for legibility on a light bg, with the Triton
+     palette so the cool blue/green of github-light is gone. */
   --mint-token-keyword:            #623C80;     /* purple-700 */
   --mint-token-string:             #BA2D0B;     /* triton-error red-orange */
   --mint-token-string-expression:  #BA2D0B;
   --mint-token-comment:            #6F6F6F;
-  --mint-token-function:           #492D60;     /* purple-800 */
+  --mint-token-function:           #171717;     /* near-black -- pops on white */
   --mint-token-constant:           #7A4BA0;     /* primary */
   --mint-token-parameter:          #492D60;
   --mint-token-punctuation:        #171717;
@@ -2744,15 +2760,19 @@ html.dark .triton-try-output {
 html.dark, .dark {
   --mint-color-text:               #E5D7F0;
   --mint-color-background:         #171717;
-  --mint-token-keyword:            #B591D3;     /* light purple */
-  --mint-token-string:             #E0BB75;     /* warm gold */
-  --mint-token-string-expression:  #FFC845;     /* triton gold */
-  --mint-token-comment:            #8B7AA1;     /* muted purple-grey */
-  --mint-token-function:           #CAB7D9;     /* purple-300 */
+  --mint-foreground:               #E5D7F0;
+  --mint-background:               #171717;
+  /* Token colors tuned for vivid readability on a dark Triton bg.
+     Previous pass used dim purples/golds that washed out. */
+  --mint-token-keyword:            #D4A5F0;     /* bright lavender */
+  --mint-token-string:             #FFD18B;     /* warm cream */
+  --mint-token-string-expression:  #FFD18B;
+  --mint-token-comment:            #9F92AE;     /* muted but visible */
+  --mint-token-function:           #FFFFFF;     /* full white -- function names should pop */
   --mint-token-constant:           #FFC845;     /* triton gold */
-  --mint-token-parameter:          #D7C9E3;     /* purple-200 */
+  --mint-token-parameter:          #E5D7F0;     /* match body text */
   --mint-token-punctuation:        #E5D7F0;
-  --mint-token-link:               #B591D3;
+  --mint-token-link:               #D4A5F0;
 }
 
 /* ============================================================
@@ -2984,13 +3004,9 @@ html.dark pre.shiki[language="text"] code .line span {
   color: rgba(255, 255, 255, 0.88) !important;
 }
 
-/* Triton stack: a few last dark-mode contrast bumps so leaf links
-   read like proper links, not muted text. */
-.dark .stack-leaf:hover,
-html.dark .stack-leaf:hover {
-  background: rgba(122, 75, 160, 0.25) !important;
-  color: #ffffff !important;
-}
+/* (.stack-leaf:hover dark-mode rule deleted -- it was a duplicate of
+   the rule already declared up at line ~2104. Keeping a single source
+   of truth so future edits don't fight each other.) */
 
 /* Logo marquee: per-brand filter overrides.
    Logos that have intricate detail or thin strokes (Orca, Mountain DAO,
