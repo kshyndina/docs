@@ -1719,11 +1719,14 @@ html.dark body #page-context-menu > button * {
    the literal class set "mt-2 text-lg prose prose-gray dark:prose-invert".
    Default `text-lg` is 1.125rem — visibly larger than body copy. Force
    the container AND its inner <p> to body-copy size, weight, colour,
-   line-height, and font-family. */
+   line-height, and font-family. Bottom margin set to 0 so the gap to
+   the next paragraph is the normal prose paragraph break, not double. */
 div.mt-2.text-lg.prose,
 div[class~="mt-2"][class~="text-lg"][class~="prose"] {
   font-size: 1rem !important;
   line-height: 1.625 !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0 !important;
 }
 div.mt-2.text-lg.prose > p,
 div[class~="mt-2"][class~="text-lg"][class~="prose"] > p {
@@ -1732,8 +1735,8 @@ div[class~="mt-2"][class~="text-lg"][class~="prose"] > p {
   color: rgb(63, 63, 70) !important;       /* zinc-700, body */
   font-weight: 400 !important;
   font-family: 'Work Sans', system-ui, sans-serif !important;
-  margin-top: 0.5rem !important;
-  margin-bottom: 1rem !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 .dark div.mt-2.text-lg.prose > p,
 .dark div[class~="mt-2"][class~="text-lg"][class~="prose"] > p,

@@ -4,22 +4,22 @@ description: "Five minutes from sign-up to your first Solana RPC call. Then a ro
 sidebarTitle: "Quickstart"
 ---
 
-Five minutes from sign-up to your first request. Then a routed path to whichever product or use case fits your build.
-
 ## Get your first request working
 
 <Steps>
-  <Step title="Set up your account" titleSize="h3">
-    Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up), verify your email, top up the $125 minimum (card, USDC, hel.io or wire). Full walkthrough: [Set up your account and add users](/solana/get-started/account-management/set-up-your-account-and-add-users).
+  <Step title="Sign up and deposit $125" titleSize="h3">
+    Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up), verify your email, top up the $125 minimum (card, USDC, hel.io or wire).
   </Step>
 
-  <Step title="Provision an endpoint" titleSize="h3">
+  <Step title="Set up an endpoint" titleSize="h3">
     Open the dashboard, click **Create endpoint**, pick **Solana mainnet** (or devnet for testing), and choose the closest region. The portal returns two things you'll use everywhere:
 
-    - **Endpoint URL** — `<your-endpoint>.mainnet.rpcpool.com`
-    - **Secret token** — a long random string
+    - **Endpoint URL**: `<your-endpoint>.mainnet.rpcpool.com`
+    - **Secret token**: a long random string
 
     Keep the token server-side only. Frontend code uses an origin allowlist instead. See [Auth and security](/solana/get-started/account-management/auth-and-security-best-practices).
+
+    Full walkthrough: [Set up your account and add users](/solana/get-started/account-management/set-up-your-account-and-add-users).
   </Step>
 
   <Step title="Send your first request" titleSize="h3">
@@ -79,7 +79,7 @@ Five minutes from sign-up to your first request. Then a routed path to whichever
     ```
 
     <Note>
-      You should be connected. If something doesn't work — 401, 429, timeouts, gRPC 403 — see the [Error handling guide](/solana-guides/error-handling/overview) for the full debug flow.
+      You should be connected. If something doesn't work (401, 429, timeouts, gRPC 403), see the [Error handling guide](/solana-guides/error-handling/overview) for the full debug flow.
     </Note>
   </Step>
 </Steps>
@@ -141,16 +141,19 @@ You have an endpoint and a working call. Two ways to navigate from here.
 
     <CardGroup cols={2}>
       <Card title="Yellowstone Jet" icon="send" href="/solana/sending-transactions/yellowstone-jet/overview">
-        SWQoS TPU client. Direct-to-leader transaction submission via QUIC.
+        SWQoS TPU client. Direct-to-leader submission via QUIC.
       </Card>
       <Card title="Priority Fees API" icon="trending-up" href="/solana/sending-transactions/priority-fees/overview">
-        Smart per-program fee estimation. Land transactions, don't overpay.
+        Smart per-program fee estimation. Land tx, don't overpay.
       </Card>
       <Card title="Metis" icon="git-branch" href="/solana/trading-apis/metis/overview">
-        Jupiter swap routing. 20+ DEXes scanned, optimal route returned.
+        Jupiter swap routing. 20+ DEXes scanned, optimal route.
+      </Card>
+      <Card title="Titan Prime" icon="zap" href="/solana/trading-apis/titan-prime/overview">
+        Streaming swaps with DART live re-optimisation.
       </Card>
       <Card title="Jito Bundles" icon="package" href="/solana/sending-transactions/jito-bundles/overview">
-        Tips-based bundle ordering. Direct-to-leader, skip the standard queue.
+        Tips-based bundle ordering. Skip the standard queue.
       </Card>
     </CardGroup>
 
