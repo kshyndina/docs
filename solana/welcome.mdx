@@ -4,7 +4,7 @@ description: "Premium bare-metal Solana infrastructure: reads, streaming, histor
 sidebarTitle: "Welcome"
 ---
 
-Triton One has been on Solana since testnet as one of its original validators. We author and maintain much of the open-source tooling the rest of the ecosystem now relies on, including Project Yellowstone, the Old Faithful archive, and large parts of the Metaplex DAS API.
+Here you'll find everything you need to integrate with Triton's Solana infrastructure. If you're new here, start with the Quickstart for a five-minute walk-through, or jump to the common build guides for the path that matches what you're shipping.
 
 <div className="logo-marquee not-prose">
   <div className="logo-marquee-track logo-track-left">
@@ -139,13 +139,14 @@ Triton One has been on Solana since testnet as one of its original validators. W
 
 ## Why teams pick Triton
 
-Solana has no public mempool. Reads come from your RPC's local copy of the ledger, kept current by replaying every block the network produces. Sends forward from your RPC directly to the current slot leader's TPU pipeline, and the quality of that connection sets your landing rate.
+On Solana, your RPC provider sits in the path of every read your application makes and every transaction it sends. Your app inherits whatever reliability and latency they deliver, setting the ceiling on what you can build.
 
-Where your RPC sits, and what stake-weighted access it has, directly shapes your landing rate, your fill prices, and how fresh the data your indexer reads is. Triton is built for this:
+Depending on the workload, four things matter at different ratios: reliability, low latency, direct engineer support, and consistent capacity. We commit to all four without compromise. Here's how:
 
-- **We run every node ourselves on bare-metal hardware.** No reselling, no shared cloud tenancy, no surprise quotas.
-- **We've been a Solana validator since testnet** and we author the streaming layer the rest of the network runs on, Yellowstone gRPC.
-- **Reads, streams, history, and validator services live on the same infrastructure.** Hydrant gives you the full ledger from genesis with millisecond responses, no replay window.
+- **Premium bare metal across 20+ PoPs on three continents**, GeoDNS-routed with continuous health checks, load balancing, and automatic failover.
+- **Hardware tuned for the workload it serves.** Read clusters, streaming nodes, historical indexers, and TPU clients all run on machines configured for their specific role.
+- **Direct engineer support.** The person who replies to your ticket is on the team that built the component you're asking about.
+- **Consistent capacity.** Our shared infrastructure is purpose-built to absorb spikes across the cluster without affecting your QoS.
 
 ```mermaid actions={false}
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7'}}}%%
