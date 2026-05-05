@@ -101,6 +101,7 @@
                 "pages": [
                   "kate-all-elements",
                   "solana/welcome",
+                  "solana/welcome-v2",
                   "solana/get-started/quickstart",
                   "solana/get-started/rate-and-connection-limits",
                   "solana/get-started/plans-and-billing",
