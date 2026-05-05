@@ -1874,14 +1874,17 @@ html body div table th {
   border: 1px solid var(--triton-table-border) !important;
   border-right: 0 !important;
   color: var(--triton-table-header-color) !important;
-  font-family: 'DM Sans', var(--font-heading), system-ui, sans-serif !important;
-  font-size: 14px !important;
+  /* Geist Mono so table headers visually match .stack-pillar-title
+     (the "SHARED INFRASTRUCTURE" header on the Triton stack). Same
+     size, weight, and tracking as that component. */
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace !important;
+  font-size: 0.75rem !important;
   font-weight: 600 !important;
   line-height: 1.3 !important;
   padding: 10px 20px !important;
   text-align: left !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.02em !important;
+  letter-spacing: 0.04em !important;
   word-break: keep-all !important;
 }
 html body table th:last-child,
