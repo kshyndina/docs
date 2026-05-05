@@ -2838,12 +2838,12 @@ html.dark .triton-try-output {
 }
 html.dark, .dark {
   --mint-color-text:               #E5D7F0;
-  /* Code-block bg slightly lifted off page bg so the block visually
-     separates from the page (page is #171717; code is a touch warmer
-     dark purple-tinted shade). */
-  --mint-color-background:         #1F1729;
+  /* Code-block bg lifted further off page bg with more purple
+     saturation, so the block reads as a clearly purple surface, not
+     near-black (Kate flagged the previous #1F1729 as too dark). */
+  --mint-color-background:         #2D1F47;
   --mint-foreground:               #E5D7F0;
-  --mint-background:               #1F1729;
+  --mint-background:               #2D1F47;
   /* Token colors tuned for vivid readability on a dark Triton bg.
      Previous pass used dim purples/golds that washed out. */
   --mint-token-keyword:            #D4A5F0;     /* bright lavender */
@@ -3080,22 +3080,40 @@ html.dark pre.shiki[language="text"] code .line span {
 
 /* Logo marquee: per-brand filter overrides.
    Logos that have intricate detail or thin strokes (Orca, Mountain DAO,
-   Pancake Swap) lose their character when flattened with brightness(0),
-   so they get `grayscale + opacity` only -- preserves the artwork's
-   natural luminance and just desaturates + fades it. !important so we
-   beat the default `.logo-marquee img` rule above in this same file. */
+   Pancake Swap, Titan, Meteora) lose their character when flattened
+   with brightness(0), so they get `grayscale + opacity` only --
+   preserves the artwork's natural luminance and just desaturates +
+   fades it. !important so we beat the default `.logo-marquee img`
+   rule above in this same file. */
 .logo-marquee img.logo-mtndao,
 .logo-marquee img.logo-pancake,
-.logo-marquee img.logo-orca {
+.logo-marquee img.logo-orca,
+.logo-marquee img.logo-titan,
+.logo-marquee img.logo-meteora {
   filter: grayscale(100%) opacity(0.6) !important;
 }
 .dark .logo-marquee img.logo-mtndao,
 .dark .logo-marquee img.logo-pancake,
 .dark .logo-marquee img.logo-orca,
+.dark .logo-marquee img.logo-titan,
+.dark .logo-marquee img.logo-meteora,
 html.dark .logo-marquee img.logo-mtndao,
 html.dark .logo-marquee img.logo-pancake,
-html.dark .logo-marquee img.logo-orca {
+html.dark .logo-marquee img.logo-orca,
+html.dark .logo-marquee img.logo-titan,
+html.dark .logo-marquee img.logo-meteora {
   filter: grayscale(100%) brightness(1.4) opacity(0.7) !important;
+}
+/* Raydium 30% bigger than baseline (28px height). */
+.logo-marquee img.logo-raydium {
+  height: 36px !important;
+  max-width: 170px !important;
+}
+@media (max-width: 768px) {
+  .logo-marquee img.logo-raydium {
+    height: 31px !important;
+    max-width: 140px !important;
+  }
 }
 /* Solflare and Adrena are simpler logotypes -- the default
    brightness(0) silhouette works for them, just bump opacity slightly
