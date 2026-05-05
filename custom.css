@@ -40,6 +40,16 @@
   --triton-border:     var(--triton-purple-200);
   --triton-primary:    var(--triton-purple-600);
   --triton-dark-bg:    var(--triton-purple-800);
+
+  /* Table tokens -- exact values from blog.triton.one's
+     `.post-content.gh-content table` rule. Don't change without
+     re-checking the blog. */
+  --triton-table-border:        hsla(0, 0%, 9%, 0.1);
+  --triton-table-header-bg:     rgba(122, 75, 160, 0.1);
+  --triton-table-header-color:  hsla(0, 0%, 9%, 0.75);
+  --triton-table-cell-color:    hsla(0, 0%, 9%, 0.75);
+  --triton-table-cell-bg:       hsla(0, 0%, 97%, 0.5);
+  --triton-table-radius:        12px;
 }
 
 /* ---- 0. Top navbar: a touch more vertical breathing room ---- */
@@ -1830,9 +1840,9 @@ html.dark .logo-marquee img.logo-orca {
   .logo-marquee img.logo-shrink { height: 20px; max-width: 92px; }
 }
 
-/* ---- 0l. Triton table style — applies to every prose table ----
-   Targets every plausible container for body content because
-   Mintlify's class names vary across versions. Maximum specificity. */
+/* ---- 0l. Triton table style -- matches blog.triton.one 1:1 ----
+   Source: blog.triton.one screen.css `.post-content.gh-content table`.
+   Don't drift from these values without re-checking the blog. */
 html body table,
 html body article table,
 html body main table,
@@ -1840,40 +1850,19 @@ html body .mdx-content table,
 html body mdx-content table,
 html body .prose table,
 html body div table {
-  width: 100% !important;
   border-collapse: separate !important;
   border-spacing: 0 !important;
-  margin: 1.25rem 0 !important;
-  border: 1px solid var(--triton-table-border) !important;
-  border-radius: 0.5rem !important;
-  overflow: hidden !important;
+  border-radius: var(--triton-table-radius) !important;
+  display: block !important;
+  overflow-x: auto !important;
+  width: 100% !important;
+  margin: 1.5rem 0 !important;
+  background: none !important;
+  -webkit-overflow-scrolling: touch;
+  border: 0 !important;
 }
-html body table th,
-html body table td,
-html body article table th,
-html body article table td,
-html body main table th,
-html body main table td,
-html body .prose table th,
-html body .prose table td {
-  padding: 0.625rem 0.875rem !important;
-  text-align: center !important;
-  font-family: 'Work Sans', system-ui, sans-serif !important;
-  font-size: 0.9375rem !important;
-  line-height: 1.3 !important;
-  color: var(--triton-table-cell-color) !important;
-  border-right: 1px solid var(--triton-table-border) !important;
-  border-bottom: 1px solid var(--triton-table-border) !important;
-  border-top: 0 !important;
-  border-left: 0 !important;
-  background: transparent !important;
-  min-width: 0 !important;     /* override Mintlify's [&_td]:min-w-[150px] Tailwind utility */
-  max-width: none !important;
-  white-space: normal !important;
-}
-html body table th:last-child,
-html body table td:last-child { border-right: 0 !important; }
-html body table tr:last-child td { border-bottom: 0 !important; }
+
+/* Header row */
 html body table th,
 html body article table th,
 html body main table th,
@@ -1882,38 +1871,110 @@ html body .mdx-content table th,
 html body mdx-content table th,
 html body div table th {
   background: var(--triton-table-header-bg) !important;
+  border: 1px solid var(--triton-table-border) !important;
+  border-right: 0 !important;
   color: var(--triton-table-header-color) !important;
-  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, monospace !important;
+  font-family: 'DM Sans', var(--font-heading), system-ui, sans-serif !important;
+  font-size: 14px !important;
   font-weight: 600 !important;
-  font-size: 0.75rem !important;
-  letter-spacing: 0.04em !important;
-  text-transform: uppercase !important;
-  padding: 0.625rem 0.875rem !important;
-}
-html body table td:first-child,
-html body table th:first-child {
+  line-height: 1.3 !important;
+  padding: 10px 20px !important;
   text-align: left !important;
-  font-weight: 500 !important;
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
+  word-break: keep-all !important;
 }
-.dark html body table,
-html.dark body table { border-color: rgba(181, 145, 211, 0.3) !important; }
+html body table th:last-child,
+html body article table th:last-child,
+html body main table th:last-child,
+html body .prose table th:last-child,
+html body .mdx-content table th:last-child,
+html body mdx-content table th:last-child,
+html body div table th:last-child {
+  border-right: 1px solid var(--triton-table-border) !important;
+}
+
+/* Body cells */
+html body table td,
+html body article table td,
+html body main table td,
+html body .prose table td,
+html body .mdx-content table td,
+html body mdx-content table td,
+html body div table td {
+  background: var(--triton-table-cell-bg) !important;
+  border: 1px solid var(--triton-table-border) !important;
+  border-right: 0 !important;
+  border-top: 0 !important;
+  color: var(--triton-table-cell-color) !important;
+  font-family: 'Work Sans', var(--font-body), system-ui, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  padding: 14px 20px !important;
+  text-align: left !important;
+  word-break: keep-all !important;
+  min-width: 0 !important;     /* override Mintlify's [&_td]:min-w-[150px] Tailwind utility */
+  max-width: none !important;
+  white-space: normal !important;
+}
+html body table tbody tr:first-child td {
+  border-top: 1px solid var(--triton-table-border) !important;
+}
+html body table thead + tbody tr:first-child td {
+  border-top: 0 !important;          /* the th above already provides the border */
+}
+html body table td:last-child,
+html body article table td:last-child,
+html body main table td:last-child,
+html body .prose table td:last-child,
+html body .mdx-content table td:last-child,
+html body mdx-content table td:last-child,
+html body div table td:last-child {
+  border-right: 1px solid var(--triton-table-border) !important;
+}
+
+/* Rounded corners on the four corners of the table */
+html body table th:first-child       { border-top-left-radius: var(--triton-table-radius) !important; }
+html body table th:last-child        { border-top-right-radius: var(--triton-table-radius) !important; }
+html body table tr:first-child td:first-child { border-top-left-radius: var(--triton-table-radius) !important; }
+html body table tr:first-child td:last-child  { border-top-right-radius: var(--triton-table-radius) !important; }
+html body table thead + tbody tr:first-child td:first-child,
+html body table thead + tbody tr:first-child td:last-child {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+html body table tr:last-child td:first-child  { border-bottom-left-radius: var(--triton-table-radius) !important; }
+html body table tr:last-child td:last-child   { border-bottom-right-radius: var(--triton-table-radius) !important; }
+
+/* Dark mode: lighten the borders + cell bg, keep the same header wash */
 .dark html body table th,
 html.dark body table th {
-  background: rgba(122, 75, 160, 0.18) !important;
-  color: #E5D7F0 !important;
+  background: rgba(181, 145, 211, 0.15) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+.dark html body table th:last-child,
+html.dark body table th:last-child {
+  border-right-color: rgba(255, 255, 255, 0.08) !important;
 }
 .dark html body table td,
-.dark html body table th,
-html.dark body table td,
-html.dark body table th {
-  border-color: rgba(181, 145, 211, 0.25) !important;
+html.dark body table td {
+  background: rgba(255, 255, 255, 0.02) !important;
+  color: rgba(255, 255, 255, 0.78) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+.dark html body table td:last-child,
+html.dark body table td:last-child {
+  border-right-color: rgba(255, 255, 255, 0.08) !important;
+}
+.dark html body table tbody tr:first-child td,
+html.dark body table tbody tr:first-child td {
+  border-top-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 /* Legacy alias kept for back-compat */
 .hug-table { margin: 0; padding: 0; }
-.hug-table table { margin: 1.25rem 0 !important; }
+.hug-table table { margin: 1.5rem 0 !important; }
 
 
 /* ---- 0n. The Triton stack — visually identical to the table ----
