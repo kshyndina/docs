@@ -532,5 +532,11 @@
         ]
       }
     ]
-  }
+  },
+  "customCss": [
+    "/custom.css"
+  ],
+  "customJs": [
+    "/custom.js"
+  ]
 }
