@@ -233,7 +233,19 @@
             "tab": "Guides",
             "icon": "compass",
             "pages": [
-              "solana-guides/error-handling",
+              {
+                "group": "Error handling",
+                "icon": "alert-triangle",
+                "pages": [
+                  "solana-guides/error-handling/overview",
+                  "solana-guides/error-handling/rpc",
+                  "solana-guides/error-handling/streaming",
+                  "solana-guides/error-handling/transaction-sending",
+                  "solana-guides/error-handling/history",
+                  "solana-guides/error-handling/billing",
+                  "solana-guides/error-handling/connection-pooling"
+                ]
+              },
               "solana-guides/getting-started",
               "solana-guides/solana-dev",
               "solana-guides/streaming-guides",

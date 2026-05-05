@@ -104,6 +104,42 @@ html.dark ::selection {
   overflow-x: visible !important;
 }
 
+/* ---- Sidebar scrollbar: very light gray, similar to dividers ----
+   Default Mintlify scrollbar is too dark. Match our divider colour
+   so it disappears into the page until hovered. */
+#sidebar-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.06) transparent;
+}
+#sidebar-content::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+#sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+#sidebar-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.06);
+  border-radius: 3px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+#sidebar-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.14);
+}
+.dark #sidebar-content,
+html.dark #sidebar-content {
+  scrollbar-color: rgba(255, 255, 255, 0.07) transparent;
+}
+.dark #sidebar-content::-webkit-scrollbar-thumb,
+html.dark #sidebar-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.07);
+}
+.dark #sidebar-content::-webkit-scrollbar-thumb:hover,
+html.dark #sidebar-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
 /* ---- 0a. Sidebar width: target #sidebar-content (the real selector) ----
    Verified via DOM inspection: Mintlify uses `<div id="sidebar-content">`
    with Tailwind class `w-56` (14rem = 224px) for the sidebar. Earlier
@@ -1709,29 +1745,43 @@ html.dark div[class~="mt-2"][class~="text-lg"][class~="prose"] > p {
   height: 18px;
   color: rgb(113, 113, 122);
 }
-/* Kill Mintlify's prose-default underline + any inherited border on
-   anchors. Hover only changes colour, never decoration or position. */
+/* Kill ALL prose link styling for footer-links anchors. The double
+   underline came from prose's `text-decoration-thickness` shifting on
+   hover. Set thickness to 0 across all states. The .not-prose wrapper
+   in MDX should also help, but we belt-and-brace here. */
 .footer-links a,
 .footer-links a:link,
 .footer-links a:visited,
 .footer-links a:hover,
 .footer-links a:active,
-.footer-links a:focus {
+.footer-links a:focus,
+.footer-links p > a,
+.footer-links p > a:hover {
   color: rgb(122, 75, 160) !important;
   text-decoration: none !important;
-  text-decoration-color: transparent !important;
   text-decoration-line: none !important;
+  text-decoration-color: transparent !important;
+  text-decoration-thickness: 0 !important;
+  text-underline-offset: 0 !important;
   background: transparent !important;
+  background-image: none !important;
   border: 0 !important;
   border-bottom: 0 !important;
+  border-bottom-color: transparent !important;
+  border-bottom-width: 0 !important;
   box-shadow: none !important;
   outline: 0 !important;
   font-weight: 500;
-  transition: color 120ms ease;
-  /* Lock vertical position so hover can't shift the row */
-  position: relative;
-  top: 0;
+  /* Lock dimensions so hover can't shift the row in any direction */
+  position: relative !important;
+  top: 0 !important;
   transform: none !important;
+  line-height: 1.5 !important;
+  vertical-align: baseline !important;
+  display: inline !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  transition: color 120ms ease !important;
 }
 .footer-links a:hover {
   color: rgb(73, 45, 96) !important;
@@ -1818,7 +1868,7 @@ mdx-content {
   user-select: none;
 }
 /* Per-logo size overrides — these renders bigger by default */
-.logo-marquee img.logo-shrink { height: 22px; max-width: 110px; }
+.logo-marquee img.logo-shrink { height: 18px; max-width: 92px; }
 /* Orca's stroke-only paths sometimes vanish under brightness(0); use a
    contrast-based filter that preserves the outline. */
 .logo-marquee img.logo-orca {
@@ -1892,19 +1942,28 @@ html.dark .logo-marquee img.logo-orca {
   margin-bottom: 0.25rem;
 }
 .pillar-item,
-.pillar-item:visited {
+.pillar-item:link,
+.pillar-item:visited,
+.pillar-item:hover,
+.pillar-item:focus,
+.pillar-item:active {
   font-family: 'Work Sans', system-ui, sans-serif;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 500;
   color: #492D60 !important;
   text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-color: transparent !important;
+  text-decoration-thickness: 0 !important;
   border: 0 !important;
-  padding: 0.0625rem 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0.125rem 0;
+  line-height: 1.45;
   transition: color 120ms ease;
 }
 .pillar-item:hover {
   color: #7A4BA0 !important;
-  text-decoration: none !important;
 }
 .map-row-bottom {
   display: grid;
@@ -1953,6 +2012,143 @@ html.dark .pillar-item:hover { color: #B591D3 !important; }
   .map-pillars { grid-template-columns: 1fr; }
   .map-row-bottom { grid-template-columns: 1fr; }
   .map-box { padding: 1rem 1.125rem 1.25rem 1.125rem; }
+}
+
+/* ---- 0k. Quickstart "Where to next" two-column routes ----
+   Replaces the long Tabs that forced scroll-to-top to switch panes.
+   Both columns visible at once; product list left, use-case list right.
+   Compact rows, hover tints to primary, no underline shenanigans. */
+.quickstart-routes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+  margin: 1.25rem 0 1.5rem 0;
+}
+.route-col {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #FAF7FB 0%, #F4F0F8 100%);
+  border: 1.5px solid rgba(122, 75, 160, 0.3);
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.25rem 1.5rem 1.25rem;
+}
+.route-col-title {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #492D60;
+  letter-spacing: -0.01em;
+}
+.route-col-sub {
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: rgba(73, 45, 96, 0.7);
+  margin-top: 0.125rem;
+  margin-bottom: 1rem;
+}
+.route-section-label {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(73, 45, 96, 0.65);
+  margin-top: 0.875rem;
+  margin-bottom: 0.375rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(122, 75, 160, 0.18);
+}
+.route-section-label:first-of-type {
+  margin-top: 0.25rem;
+}
+.route-item,
+.route-item:link,
+.route-item:visited,
+.route-item:hover,
+.route-item:active,
+.route-item:focus {
+  display: block;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: #492D60 !important;
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-thickness: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  padding: 0.25rem 0;
+  transition: color 120ms ease;
+}
+.route-item strong {
+  color: #492D60;
+  font-weight: 600;
+}
+.route-item:hover { color: #7A4BA0 !important; }
+.route-item:hover strong { color: #7A4BA0; }
+.route-usecase {
+  padding: 0.625rem 0.75rem;
+  margin: 0.25rem 0;
+  border-radius: 0.375rem;
+  background: rgba(255, 255, 255, 0.5) !important;
+  transition: background 120ms ease, color 120ms ease;
+}
+.route-usecase:hover {
+  background: rgba(255, 255, 255, 0.85) !important;
+}
+.route-usecase span {
+  display: block;
+  font-size: 0.8125rem;
+  color: rgba(73, 45, 96, 0.7);
+  margin-top: 0.125rem;
+}
+.route-usecase:hover span { color: rgba(122, 75, 160, 0.85); }
+.route-col-foot {
+  margin-top: auto;
+  padding-top: 1rem;
+  font-size: 0.875rem;
+  color: rgba(73, 45, 96, 0.7);
+}
+.route-col-foot a,
+.route-col-foot a:hover {
+  color: #7A4BA0 !important;
+  text-decoration: none !important;
+  font-weight: 500;
+}
+.dark .route-col,
+html.dark .route-col {
+  background: linear-gradient(180deg, rgba(73, 45, 96, 0.18) 0%, rgba(73, 45, 96, 0.08) 100%);
+  border-color: rgba(181, 145, 211, 0.4);
+}
+.dark .route-col-title,
+html.dark .route-col-title { color: #D6BFE8; }
+.dark .route-col-sub,
+html.dark .route-col-sub { color: rgba(214, 191, 232, 0.7); }
+.dark .route-section-label,
+html.dark .route-section-label {
+  color: rgba(214, 191, 232, 0.7);
+  border-bottom-color: rgba(181, 145, 211, 0.25);
+}
+.dark .route-item,
+.dark .route-item:link,
+.dark .route-item:visited,
+html.dark .route-item,
+html.dark .route-item:link,
+html.dark .route-item:visited { color: #E5D7F0 !important; }
+.dark .route-item strong,
+html.dark .route-item strong { color: #E5D7F0; }
+.dark .route-item:hover,
+html.dark .route-item:hover { color: #B591D3 !important; }
+.dark .route-usecase,
+html.dark .route-usecase { background: rgba(0, 0, 0, 0.18) !important; }
+.dark .route-usecase:hover,
+html.dark .route-usecase:hover { background: rgba(0, 0, 0, 0.32) !important; }
+.dark .route-usecase span,
+html.dark .route-usecase span { color: rgba(214, 191, 232, 0.7); }
+@media (max-width: 900px) {
+  .quickstart-routes { grid-template-columns: 1fr; gap: 1rem; }
 }
 
 /*! purgecss end ignore */
