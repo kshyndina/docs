@@ -152,11 +152,17 @@
                 ]
               },
               {
-                "group": "White label validator",
+                "group": "Validator services",
                 "pages": [
-                  "solana/validators/introduction",
-                  "solana/validators/vote-account-setup",
-                  "solana/validators/node-identity-protection"
+                  {
+                    "group": "White-label validators",
+                    "pages": [
+                      "solana/validators/introduction",
+                      "solana/validators/vote-account-setup",
+                      "solana/validators/node-identity-protection"
+                    ]
+                  },
+                  "staking-sol"
                 ]
               },
               {
