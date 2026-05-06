@@ -6,26 +6,15 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
 ## What is Dragon's Mouth
 
-Dragon's Mouth is Triton's Geyser-fed gRPC interface for streaming Solana data. It taps the validator's Geyser plugin directly, so you get account, transaction, slot, and block updates as the validator processes them -- before the regular RPC interface sees them. For DeFi traders, that's up to a 400 ms head start over a polling client.
+Dragon's Mouth is Triton's Geyser-fed gRPC interface for streaming Solana data. It taps the validator's Geyser plugin directly, so you get account, transaction, slot, and block updates as the validator processes them, giving you up to a 400 ms head start over a polling client.
 
-It's the fastest live data path available, more stable than the traditional WebSocket interface, and the recommended choice for any backend service where latency matters. For browser clients that can't speak gRPC, use [Whirligig WebSockets](/solana/streaming/whirligig-websockets) instead.
+It's the fastest live data path available and the recommended choice for any backend service where latency matters. For browser clients that can't communicate with gRPC, use [Whirligig WebSockets](/solana/streaming/whirligig-websockets) instead.
 
 ## Use cases
 
-<CardGroup cols={2}>
-  <Card title="Trading and MEV" icon="coins">
-    Lowest-latency reads of pool state, oracles, AMM accounts, and price-impacting transactions.
-  </Card>
-  <Card title="Indexers" icon="bar-chart-3">
-    Full transaction firehose with server-side filters, exactly-once processing per slot.
-  </Card>
-  <Card title="Real-time UIs" icon="activity">
-    Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers.
-  </Card>
-  <Card title="Compliance and analytics" icon="shield-check">
-    Watch specific addresses or programs, route updates to a downstream pipeline.
-  </Card>
-</CardGroup>
+- **Trading and MEV.** Lowest-latency reads of pool state, oracles, AMM accounts, and price-impacting transactions
+- **Real-time UIs (backend).** Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers
+- **Compliance and analytics.** Watch specific addresses or programs, route updates downstream
 
 ## Features and benefits
 
@@ -33,12 +22,15 @@ It's the fastest live data path available, more stable than the traditional WebS
   <Card title="Sub-slot latency" icon="zap">
     Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.
   </Card>
-  <Card title="Server-side filtering" icon="filter">
-    Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state. The matching subset reaches you, not the firehose.
+
+  <Card title="Server-side filtering" icon="server">
+    Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state. 
   </Card>
-  <Card title="Replay from a slot" icon="rotate-ccw">
+
+  <Card title="Minimal serialisation overhead" icon="weight">
     Resume from a specific slot after a disconnect. The server replays buffered updates, then continues live on the same stream.
   </Card>
+
   <Card title="Bi-directional streams" icon="repeat">
     Modify subscriptions on the fly -- send a new request and the server swaps your filter set without reconnecting.
   </Card>
@@ -46,7 +38,7 @@ It's the fastest live data path available, more stable than the traditional WebS
 
 ## Stream types and unary operations
 
-Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions and one-shot unary calls.
+Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions and one-shot unary calls.Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions and one-shot unary calls.
 
 <Tabs>
   <Tab title="Streaming subscriptions">
@@ -67,7 +59,7 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 
     | Method | Returns |
     | --- | --- |
-    | `getLatestBlockhash` | The latest blockhash + last valid block height at a commitment level |
+    | `getLatestBlockhash` | The latest blockhash \+ last valid block height at a commitment level |
     | `getBlockHeight` | The current block height at a commitment level |
     | `getSlot` | The current slot at a commitment level |
     | `isValidBlockhash` | Whether a given blockhash is still valid |
@@ -112,7 +104,71 @@ Every stream subscription is a single `SubscribeRequest` message. It has fields 
 
 Each `SubscribeRequest` has a map per stream type. The key is a label you choose (returned with each match so you can route it); the value is the filter spec.
 
-#### Account filters
+<Tabs>
+  <Tab title="Streaming subscriptions">
+    Open a subscribe stream, receive matching events as the validator processes them.
+
+    | Stream | What you receive |
+    | --- | --- |
+    | Account writes | Updates whenever a matching account's data, lamports, or owner changes |
+    | Transactions | Every transaction matching your filter, with full `meta` (logs, status, balance deltas) |
+    | Deshred transactions (paid beta) | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](#deshred-transactions). |
+    | Entries | Solana ledger entries (low-level, rare use case) |
+    | Block notifications | Full blocks as they're produced, optionally with their transactions and accounts |
+    | Block metadata | Block headers only, without the transaction payload |
+    | Slot notifications | Slot-status events (processed/confirmed/finalized plus intra-slot lifecycle) |
+  </Tab>
+  <Tab title="Unary operations">
+    One request, one response. Use these for occasional queries instead of a persistent stream.
+
+    | Method | Returns |
+    | --- | --- |
+    | `getLatestBlockhash` | The latest blockhash \+ last valid block height at a commitment level |
+    | `getBlockHeight` | The current block height at a commitment level |
+    | `getSlot` | The current slot at a commitment level |
+    | `isValidBlockhash` | Whether a given blockhash is still valid |
+    | `subscribeReplayInfo` | Earliest slot still available for stream replay |
+  </Tab>
+</Tabs>
+
+## Subscribe request
+
+Every stream subscription is a single `SubscribeRequest` message. It has fields that apply across all stream types and a per-stream filter map. Send it once when you open the stream; send it again at any time to modify (the new request fully replaces the old one).
+
+<Tabs>
+  <Tab title="commitment">
+    Commitment level for buffering. Optional. Defaults to `processed`.
+
+    | Value | Meaning |
+    | --- | --- |
+    | `PROCESSED` (0) | Highest slot seen, possibly on a fork. Lowest latency. |
+    | `CONFIRMED` (1) | Voted on by supermajority. Some buffering. |
+    | `FINALIZED` (2) | Max vote lockout. Most buffering. |
+
+    For maximum performance, work at `processed` and manage commitment client-side using [slot notifications](#slots).
+  </Tab>
+  <Tab title="ping">
+    Sends a periodic keepalive to prevent idle-connection drops by load balancers and NATs. Server replies with `pong`. Optional but recommended for long-running streams.
+
+    See [pings](#pings).
+  </Tab>
+  <Tab title="accountsDataSlice">
+    Truncates account data payloads to a byte range, reducing bandwidth. Optional. Empty array means full payload.
+
+    Example: `[{ "offset": 32, "length": 40 }]` returns 40 bytes starting at byte 32.
+  </Tab>
+  <Tab title="fromSlot">
+    Replay buffered updates starting from this slot, then continue live. Optional. Used for reconnection logic.
+
+    See [replaying from a slot](#replay-from-a-slot).
+  </Tab>
+</Tabs>
+
+### Filter configuration
+
+Each `SubscribeRequest` has a map per stream type. The key is a label you choose (returned with each match so you can route it); the value is the filter spec.
+
+#### Account filtersAccount filters
 
 <ParamField path="account" type="string[]">
   List of pubkeys to subscribe to directly. Each must be a base58-encoded address.
@@ -128,15 +184,15 @@ Each `SubscribeRequest` has a map per stream type. The key is a label you choose
 
 #### Transaction filters
 
-<ParamField path="vote" type="bool" optional>
+<ParamField path="vote" type="bool">
   Include or exclude vote transactions. `false` excludes votes.
 </ParamField>
 
-<ParamField path="failed" type="bool" optional>
+<ParamField path="failed" type="bool">
   Include or exclude failed transactions. `false` excludes failures.
 </ParamField>
 
-<ParamField path="signature" type="string" optional>
+<ParamField path="signature" type="string">
   Subscribe to a specific signature's status updates.
 </ParamField>
 
@@ -158,21 +214,21 @@ Each `SubscribeRequest` has a map per stream type. The key is a label you choose
   Only deliver transactions and accounts in the block that mention these.
 </ParamField>
 
-<ParamField path="include_transactions" type="bool" default="true">
+<ParamField path="include_transactions" default="true" type="bool">
   Include the block's transactions.
 </ParamField>
 
-<ParamField path="include_accounts" type="bool" default="false">
+<ParamField path="include_accounts" default="false" type="bool">
   Include accounts updated during the block.
 </ParamField>
 
-<ParamField path="include_entries" type="bool" default="false">
+<ParamField path="include_entries" default="false" type="bool">
   Include the block's entries.
 </ParamField>
 
 #### Slot filters
 
-<ParamField path="filter_by_commitment" type="bool" default="false">
+<ParamField path="filter_by_commitment" default="false" type="bool">
   If `true`, only receive updates matching the request's `commitment`. If `false`, receive every status change.
 </ParamField>
 
@@ -180,9 +236,75 @@ Each `SubscribeRequest` has a map per stream type. The key is a label you choose
 
 No filter parameters. Subscribe by adding any named entry to the `entry` map.
 
-### Filter logic
+<ParamField path="account" type="string[]">
+  List of pubkeys to subscribe to directly. Each must be a base58-encoded address.
+</ParamField>
 
-Within a single filter category (e.g. one transaction filter), values are combined as follows:
+<ParamField path="owner" type="string[]">
+  List of program owners. Subscribes to every account owned by these programs.
+</ParamField>
+
+<ParamField path="filters" type="AccountsFilter[]">
+  Content-based filters on the account data. Each filter is one of: `memcmp`, `datasize`, `tokenAccountState`, or `lamports`. Combined as logical AND.
+</ParamField>
+
+#### Transaction filters
+
+<ParamField path="vote" type="bool">
+  Include or exclude vote transactions. `false` excludes votes.
+</ParamField>
+
+<ParamField path="failed" type="bool">
+  Include or exclude failed transactions. `false` excludes failures.
+</ParamField>
+
+<ParamField path="signature" type="string">
+  Subscribe to a specific signature's status updates.
+</ParamField>
+
+<ParamField path="account_include" type="string[]">
+  Accounts mentioned anywhere in the transaction.
+</ParamField>
+
+<ParamField path="account_exclude" type="string[]">
+  Exclude transactions mentioning these accounts.
+</ParamField>
+
+<ParamField path="account_required" type="string[]">
+  Accounts that MUST all be mentioned (every one of them).
+</ParamField>
+
+#### Block filters
+
+<ParamField path="account_include" type="string[]">
+  Only deliver transactions and accounts in the block that mention these.
+</ParamField>
+
+<ParamField path="include_transactions" default="true" type="bool">
+  Include the block's transactions.
+</ParamField>
+
+<ParamField path="include_accounts" default="false" type="bool">
+  Include accounts updated during the block.
+</ParamField>
+
+<ParamField path="include_entries" default="false" type="bool">
+  Include the block's entries.
+</ParamField>
+
+#### Slot filters
+
+<ParamField path="filter_by_commitment" default="false" type="bool">
+  If `true`, only receive updates matching the request's `commitment`. If `false`, receive every status change.
+</ParamField>
+
+#### Entry filters
+
+No filter parameters. Subscribe by adding any named entry to the `entry` map.
+
+### Filter logicFilter logic
+
+Within a single filter category (e.g. one transaction filter), values are combined as follows:Within a single filter category (e.g. one transaction filter), values are combined as follows:
 
 - **Within an array, OR.** `account_include: [A, B]` matches transactions mentioning A _or_ B.
 - **Across fields, AND.** `vote: false, account_include: [A]` matches non-vote transactions mentioning A.
@@ -206,7 +328,16 @@ Across multiple named filters in the same category (e.g. two transaction filters
 
 The latest protobuf files live in the [yellowstone-grpc repo](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto). For Rust, use the [yellowstone-grpc-proto crate](https://crates.io/crates/yellowstone-grpc-proto).
 
-The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](#clients-and-sdks)).
+- **Within an array, OR.** `account_include: [A, B]` matches transactions mentioning A _or_ B.
+- **Across fields, AND.** `vote: false, account_include: [A]` matches non-vote transactions mentioning A.
+
+For transactions specifically:
+
+```text
+match = (accountInclude OR empty) AND (accountRequired AND all) AND NOT accountExclude
+```
+
+Across multiple named filters in the same category (e.g. two transaction filters), you receive matches from any of them. Each match comes tagged with the filter name(s) that produced it, so you can route updates downstream.
 
 ### Accounts
 
@@ -514,7 +645,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
 #### Transaction data structure
 
-Each transaction update is a `SubscribeUpdateTransaction` containing the full transaction info plus its execution metadata.
+[Each transaction update is a `SubscribeUpdateTransaction` containing the full transaction info plus its execution metadata.](#clients-and-sdks)
 
 <AccordionGroup>
   <Accordion title="Transaction message structure">
@@ -672,7 +803,7 @@ Subscribe to ledger entries (groups of transactions that make up a slot). No fil
 
 </CodeGroup>
 
-This is a low-level signal, mostly useful for validator tooling. Most consumers want transactions or blocks instead.
+[This is a low-level signal, mostly useful for validator tooling. Most consumers want transactions or blocks instead.](#intra-slot-updates)
 
 ## Modifying and unsubscribing
 
@@ -776,7 +907,7 @@ const request = {
 
 </CodeGroup>
 
-To discover the earliest replayable slot, call the unary `subscribeReplayInfo` RPC:
+[To discover the earliest replayable slot, call the unary `subscribeReplayInfo` RPC:](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88)
 
 <CodeGroup>
 
@@ -900,7 +1031,7 @@ Certain programs are excluded from all Dragon's Mouth gRPC streams and are also 
 
 **Why is ZK Compression excluded?** It generates extremely high-volume account updates -- each update is a ~10MB blob, producing several gigabits per second of data. That volume isn't practical to include in standard streams.
 
-Most consumers of this data want the **end result** processed by the [Photon indexer](https://github.com/helius-labs/photon), not raw account blobs. Triton offers a [hosted Photon service](https://docs.triton.one/chains/solana/photon) -- use that instead.
+[Most consumers of this data want the **end result** processed by the ](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/)[Photon indexer](https://github.com/helius-labs/photon), not raw account blobs. Triton offers a [hosted Photon service](https://docs.triton.one/chains/solana/photon) -- use that instead.
 
 ## Clients and SDKs
 
@@ -920,6 +1051,23 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
     ```
 
     Self-hosters can drop the `x-token` header.
+  </Tab>
+  <Tab title="client-ubuntu">
+    Prebuilt CLI binary for Ubuntu 22.04 and 24.04. Download from the [releases page](https://github.com/rpcpool/yellowstone-grpc/releases).
+
+    Subscribe to all accounts:
+
+    ```shell
+    ./client-ubuntu-22.04 --endpoint https://<endpoint> --x-token <token> subscribe --accounts --slots
+    ```
+
+    Subscribe to a specific program (e.g. Raydium):
+
+    ```shell
+    ./client-ubuntu-22.04 --endpoint https://<endpoint> --x-token <token> subscribe --accounts --slots --accounts-owner 675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8
+    ```
+
+    Add `--stats` to see total accounts, slots, and bandwidth in real time.
   </Tab>
   <Tab title="TypeScript / NodeJS">
     From `5.1.x` the TypeScript SDK is supercharged with a Rust NAPI backend. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
@@ -997,6 +1145,80 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 </CardGroup>
 
 ---
+
+<FooterLinks />
+
+<FooterLinks />
+
+<Tabs>
+  <Tab title="grpcurl">
+    Good for ad-hoc testing. Needs `geyser.proto` \+ dependencies.
+
+    ```shell
+    ./grpcurl \
+      -proto geyser.proto \
+      -d '{"slots": { "slots": {} }, "accounts": { "usdc": { "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
+      -H "x-token: <token>" \
+      api.rpcpool.com:443 \
+      geyser.Geyser/Subscribe
+    ```
+
+    Self-hosters can drop the `x-token` header.
+  </Tab>
+  <Tab title="TypeScript / NodeJS">
+    From `5.1.x` the TypeScript SDK is supercharged with a Rust NAPI backend. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
+
+    Install:
+
+    ```bash
+    npm install --save @triton-one/yellowstone-grpc
+    ```
+
+    Initialise:
+
+    ```typescript
+    import Client from "@triton-one/yellowstone-grpc";
+    
+    const client = new Client(
+      "https://api.rpcpool.com:443",
+      "<your-token>"
+    );
+    
+    await client.connect();
+    
+    const version = await client.getVersion();
+    console.log(version);
+    ```
+
+    Open a subscription stream:
+
+    ```typescript
+    import { SubscribeRequest } from "@triton-one/yellowstone-grpc";
+    
+    const stream = client.subscribe();
+    
+    stream.on("data", (data) => {
+      console.log("data", data);
+    });
+    
+    const request: SubscribeRequest = { /* see Subscribe request */ };
+    
+    await new Promise<void>((resolve, reject) => {
+      stream.write(request, (err) =>
+        err == null ? resolve() : reject(err)
+      );
+    });
+    ```
+
+    Full example: [yellowstone-grpc/examples/typescript](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript).
+  </Tab>
+  <Tab title="Rust">
+    Sample client: [yellowstone-grpc/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust).
+  </Tab>
+  <Tab title="Go">
+    Sample client: [yellowstone-grpc/examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang).
+  </Tab>
+</Tabs>
 
 <FooterLinks />
 
