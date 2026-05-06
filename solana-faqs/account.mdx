@@ -18,6 +18,45 @@ import FooterLinks from '/snippets/footer-links.mdx'
   </Accordion>
 </AccordionGroup>
 
+## Sign-in
+
+<AccordionGroup>
+  <Accordion title="Why can't I sign in with Google?">
+    Google single sign-on is reserved for Triton One employees and isn't available on customer accounts. Sign in with your Triton username and password instead.
+  </Accordion>
+
+  <Accordion title="Why won't my email work to sign in?">
+    The login form takes your username, not your email address. If you've forgotten your username, click **Forgot your username** at the bottom of the form, enter your email, and we'll send it to you.
+  </Accordion>
+</AccordionGroup>
+
+## Billing and usage
+
+<AccordionGroup>
+  <Accordion title="How do I top up my balance?">
+    Open your customer dashboard, go to **Billing**, and click **Buy credits**. You can pay in stablecoins via:
+
+    - **Wallet Connect.** Connect your wallet and pay with any supported token.
+    - **Transfer from anywhere.** Send stablecoins from any external wallet or exchange.
+
+    If you'd rather pay by card or wire, switch to invoiced billing.
+  </Accordion>
+
+  <Accordion title="Can I set up low-balance notifications?">
+    Yes. Open your customer dashboard, go to **Billing**, toggle alerts on, and set a threshold (for example, $10). When your balance hits that amount, every user on the account gets a notification.
+  </Accordion>
+
+  <Accordion title="Where can I see my usage?">
+    In your customer dashboard, open the **v3 Billing** tab. You'll see total requests and GB used (the two dimensions you're billed on), plus a per-service breakdown table below with product-level detail. To export it, click **Export CSV** in the top-right corner.
+  </Accordion>
+
+  <Accordion title="Why did my gRPC bill spike all at once?">
+    gRPC streaming is metered when the connection closes. If you hold a stream open for several hours or a day, the full bandwidth charge is applied to your account once it disconnects.
+
+    Also, usage data refreshes every \~4 hours, so you can expect a lag between actual traffic and what's reflected in the dashboard.
+  </Accordion>
+</AccordionGroup>
+
 ## Invoicing and payments
 
 <AccordionGroup>

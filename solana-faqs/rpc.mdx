@@ -50,6 +50,16 @@ import FooterLinks from '/snippets/footer-links.mdx'
     Users with dedicated nodes get access to a Grafana dashboard with real-time metrics: request volume, latency, error rates, and bandwidth usage. Users with a shared subscription can check metrics on our customer dashboard.
   </Accordion>
 
+  <Accordion title="Can I create new tokens or endpoints myself?">
+    Standard accounts can't create tokens or endpoints directly. If you need self-service provisioning, ask support to upgrade you to the **operator** role. Once enabled, you can add tokens and endpoints from the dashboard without going through support.
+  </Accordion>
+
+  <Accordion title="What's the __blocked.rpcpool.com origin on my endpoint?">
+    `__blocked.rpcpool.com` is a system origin that Triton automatically adds to every endpoint. It signals that the endpoint only accepts requests authenticated by a valid token, blocking anonymous traffic.
+
+    Don't remove it. If you do and leave the allowed origins list empty, the endpoint becomes fully open: anyone can query it without a token, and the resulting traffic will be billed to your account.
+  </Accordion>
+
   <Accordion title="How does Triton secure private pool endpoints?">
     Private endpoints use:
 
