@@ -1,7 +1,83 @@
 ---
 title: "Streaming"
+description: "Project Yellowstone, Geyser streaming, gRPC, and WebSocket questions."
+sidebarTitle: "Streaming"
 ---
 
-<Info>
-**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
-</Info>
+Quick answers to the most frequently asked questions about Yellowstone and its Geyser streaming components.
+
+## Project Yellowstone
+
+<AccordionGroup>
+  <Accordion title="What is Project Yellowstone?">
+    Project Yellowstone is Triton's suite of enhancements for Solana RPC services. Key components include:
+
+    - **Dragon's Mouth:** gRPC subscriptions for real-time streaming.
+    - **Steamboat:** Custom indexes to speed up `getProgramAccounts` (gPA) queries.
+    - **Old Faithful:** Alternative access to Solana's full transaction history archive.
+    - **Whirligig:** WebSocket streaming for frontend compatibility.
+    - **Fumarole:** Persistent, scalable streaming system for account and transaction data.
+    - **Vixen:** High-performance gRPC service that delivers real-time, parsed Solana data streams.
+    - **Cascade:** Bandwidth marketplace where trusted validators can sell their SWQoS transaction bandwidth to consumers.
+  </Accordion>
+
+  <Accordion title="How can I install Yellowstone on my server?">
+    You don't need to install anything. All Geyser streaming products (Dragon's Mouth, Whirligig) are pre-installed on Triton infrastructure and enabled automatically for all subscriptions.
+  </Accordion>
+
+  <Accordion title="Is Geyser streaming available with all subscriptions?">
+    Yes. All subscriptions include Geyser streaming by default, with no setup required. It's available as soon as your subscription is active.
+  </Accordion>
+</AccordionGroup>
+
+## Components and limits
+
+<AccordionGroup>
+  <Accordion title="What is the maximum number of accounts I can subscribe to using Yellowstone gRPC?">
+    For shared plans, the current limit is ~150,000 account subscriptions per HTTP connection.
+
+    For dedicated nodes, there's no set limit. However, opening too many subscriptions for your servers to ingest can cause backpressure from your backend, leading to poor streaming performance. Please check that your server can handle the amount of data you are subscribing to.
+  </Accordion>
+
+  <Accordion title="What is Steamboat, and how does it improve latency?">
+    Steamboat is Triton's custom program indexer within Project Yellowstone. By pre-indexing Solana program accounts, `getProgramAccounts` queries are accelerated by up to 400ms compared to unindexed calls.
+
+    Cascade, Fumarole, Vixen Streams, and custom indexes for Steamboat are add-ons that we can activate for you upon request.
+
+    If you want to run these on your own nodes, they're open source.
+  </Accordion>
+
+  <Accordion title="What is Fumarole, and how can I get access?">
+    Fumarole is a new streaming system designed for reliable and scalable streaming of account and transaction data. It aggregates data from multiple downstream Solana nodes to ensure high availability and data persistence with up to 23 hours of retained stream history. Additionally, Fumarole supports horizontal scalability by allowing data to be managed across multiple readers using consumer groups.
+
+    Please note that Fumarole is currently in limited beta, and access is managed through Triton's CS channel.
+  </Accordion>
+
+  <Accordion title="What is Cascade Marketplace?">
+    Cascade is a stake-weighted bandwidth marketplace for Solana. It allows validators to sell their SWQoS transaction capacity and lets consumers buy predictable, reserved bandwidth for priority delivery during network congestion.
+  </Accordion>
+</AccordionGroup>
+
+## gRPC and WebSocket
+
+<AccordionGroup>
+  <Accordion title="Can I use gRPC from a web browser?">
+    No, gRPC is not supported in web browsers due to HTTP/2 and protobuf limitations. It is designed for backend applications. For frontend use, try Whirligig WebSockets instead.
+  </Accordion>
+
+  <Accordion title="Do endpoints support WebSocket connections?">
+    Yes. We support both standard WebSockets and Whirligig, our optimised, high-performance implementation, on both shared and dedicated infrastructures.
+
+    We recommend using Whirligig for better stability and throughput.
+  </Accordion>
+
+  <Accordion title="How do I connect to WebSockets?">
+    Simply replace `https` with `wss` in your RPC endpoint URL. For example: `wss://your-endpoint.rpcpool.com`. We do recommend, however, using the gRPC interface for streaming purposes if available -- see the [Dragon's Mouth gRPC](/solana/streaming/dragons-mouth/overview) page for details on how to do that on Solana.
+  </Accordion>
+
+  <Accordion title="How can I use Geyser plugins?">
+    Geyser plugins can be enabled on our dedicated Solana nodes. They provide powerful, real-time streams of on-chain data. Contact our support team to discuss your specific needs and we can configure a node for you.
+  </Accordion>
+</AccordionGroup>
+
+If you're already a customer, you can reach us directly through the support channel in your [customer dashboard](https://customers.triton.one).

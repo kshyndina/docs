@@ -1,7 +1,103 @@
 ---
 title: "RPC"
+description: "Performance, reliability, configuration, and troubleshooting questions for Triton's Solana RPC services."
+sidebarTitle: "RPC"
 ---
 
-<Info>
-**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
-</Info>
+## Performance and reliability
+
+<AccordionGroup>
+  <Accordion title="How reliable are Triton's RPC services?">
+    Our infrastructure delivers 99.9% uptime, backed by multiple servers per region and automated health checks. This ensures that nodes stay synced and serve accurate, up-to-date ledger data. If any node falls behind, requests are routed to a shared backup pool while the issue is resolved. Our infrastructure is monitored 24/7, and we're known for fast and responsive support.
+
+    As Stephen Hess, founder of Metaplex, put it: "We use Triton RPCs every day at Metaplex. They're fast, reliable, and built by one of the most competent teams I've worked with in Solana or across tech."
+  </Accordion>
+
+  <Accordion title="How does Triton ensure minimal latency with RPC and gRPC?">
+    It's a big topic, but at a high level, we do it through:
+
+    - **GeoDNS:** Routes traffic to the nearest server in shared pools.
+    - **Geyser Integration:** Streams intra-slot updates via Dragon's Mouth, unlike end-of-slot updates in traditional RPC.
+    - **Custom Indexes:** Steamboat optimises `getProgramAccounts` (gPA) calls to improve query performance.
+  </Accordion>
+
+  <Accordion title="How does Triton handle network congestion on Solana?">
+    We mitigate congestion with:
+
+    - **Staked Nodes:** Prioritise transaction delivery to the block producer.
+    - **Load Balancing:** Distribute traffic across our 100+ nodes.
+    - **Rate Limiting:** Prevent abuse and ensure fair access.
+    - **Redundancy:** Automatic failover systems to maintain uptime during outages.
+  </Accordion>
+
+  <Accordion title="What happens if my gRPC/RPC node receives excessive traffic? Will it affect transaction sending?">
+    If traffic exceeds your node's capacity, it may lag behind the network's latest state, resulting in older data being served. In such cases, requests will be rerouted to our backup pool, which supports upgrades and traffic spikes but introduces additional latency. This could slow transaction submission. If reliance on the backup pool becomes frequent, we will contact you to discuss scaling your deployment.
+  </Accordion>
+
+  <Accordion title="What happens if I hit my rate limit?">
+    Your application will receive `HTTP 429` errors. When this happens, you must pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See our [Rate and connection limits](/solana/get-started/rate-and-connection-limits) page for more details.
+  </Accordion>
+
+  <Accordion title="Can I run scripts on the shared service?">
+    Yes. Our shared infrastructure is designed to handle backend workloads and absorbs traffic well. You can run scripts, bots, and indexers on shared endpoints. If your usage outgrows the shared pool's rate limits, dedicated nodes are the next step.
+  </Accordion>
+</AccordionGroup>
+
+## Configuration and access
+
+<AccordionGroup>
+  <Accordion title="How do I monitor my RPC usage?">
+    Users with dedicated nodes get access to a Grafana dashboard with real-time metrics: request volume, latency, error rates, and bandwidth usage. Users with a shared subscription can check metrics on our customer dashboard.
+  </Accordion>
+
+  <Accordion title="How does Triton secure private pool endpoints?">
+    Private endpoints use:
+
+    - **API Keys:** Unique per client, revocable via the portal.
+    - **Rate Monitoring:** Alerts for unusual spikes to detect misuse.
+  </Accordion>
+
+  <Accordion title="Can I have multiple API keys for the dedicated nodes? Can I manage them by myself?">
+    Yes. If you have an operator role, you should be able to add them yourself.
+  </Accordion>
+
+  <Accordion title="Can I choose the geographic location of my RPC nodes?">
+    Yes, dedicated node users can select primary regions (US, EU, or Asia Pacific) or request multi-region setups for redundancy and lower latency based on their user base.
+  </Accordion>
+
+  <Accordion title="Are shared RPC subscriptions restricted to a single domain?">
+    No, shared RPC subscriptions are not limited to one domain. We allow the addition of multiple domains, providing flexibility to meet your project's needs.
+  </Accordion>
+
+  <Accordion title="Can Triton provide historical blockchain data?">
+    Yes, dedicated node users can opt into archival nodes that store full Solana blockchain history (e.g., past blocks, transactions). This requires additional storage (multi-TB scale) and is priced separately -- reach out for a custom quote.
+  </Accordion>
+
+  <Accordion title="Can I use Jito sendBundle with Triton RPCs?">
+    This isn't possible on shared infrastructure.
+
+    If you have dedicated nodes, we can install the Jito software for you. You'll be responsible for whitelisting for the block engine and contacting Jito to obtain access and complete their setup.
+  </Accordion>
+</AccordionGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="I have an issue with my Web3.js socket connection. How can I fix it?">
+    If you're experiencing issues with your Web3.js socket connection while using our services, please review our [troubleshooting guide](/solana-guides/error-handling/how-to-troubleshoot). It covers the most common errors, their causes, and practical solutions.
+  </Accordion>
+
+  <Accordion title="How can I accurately measure latency when using Triton's RPC services?">
+    To measure latency effectively, avoid relying on blockchain or explorer timestamps, as these may not reflect the actual performance of your RPC provider due to drift in the timestamping. The on-chain time and clock time drift apart, leading to misleading metrics.
+
+    Instead, record a timestamp immediately after receiving a transaction response from each provider in your application. This method captures the actual time it took for the request to complete, providing a reliable metric for assessing latency.
+  </Accordion>
+
+  <Accordion title="How can I monitor for delays on my gRPC connection?">
+    To detect delays, examine the `slot` field included in all gRPC messages. The most precise method is to compare this slot value with a secondary source, such as another subscription or a `getSlot` call in your production environment. For additional validation, you may also cross-reference with an alternative RPC provider. Dedicated users can select the "Tracking Tip" folder in their Grafana Dashboard. The slot latency reflected here shows how much your node's slot latency differs from the rest of the network. As the node processes data from the network downstream, it sends this information through Geyser.
+
+    If you suspect your Geyser stream is experiencing a drastically different latency, check whether your receiving server is not providing back pressure to the RPC node due to bandwidth constraints.
+  </Accordion>
+</AccordionGroup>
+
+If you're already a customer, you can reach us directly through the support channel in your [customer dashboard](https://customers.triton.one).

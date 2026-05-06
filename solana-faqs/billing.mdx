@@ -1,7 +1,43 @@
 ---
 title: "Billing"
+description: "Invoicing, payments, and subscription cancellation questions."
+sidebarTitle: "Billing"
 ---
 
-<Info>
-**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
-</Info>
+## Invoicing and payments
+
+<AccordionGroup>
+  <Accordion title="When will I receive my invoice, and what period does it cover?">
+    We send two kinds of invoices:
+
+    - **Node or shared subscription invoices** are sent on the first day of each month as prepayment for the upcoming month's services.
+    - **Add-on service invoices** (e.g., Cascade, Metaplex DAS) are metered and billed monthly. They're sent early in the following month, covering the previous month's usage.
+  </Accordion>
+
+  <Accordion title="Is there a due date for paying the invoice?">
+    Yes, all invoices are due within 7 days of the issue date.
+  </Accordion>
+
+  <Accordion title="What payment methods do you support?">
+    We accept:
+
+    - USDC (SPL, ERC20 on Ethereum, Tron, Polygon)
+    - Payments through hel.io (USDC)
+    - Credit cards (via Coinflow)
+    - Wire transfers in GBP and USD
+
+    Credit card payments are available only for customers using shared services. For any billing or account-related questions, please [contact us](https://triton.one/contact).
+  </Accordion>
+</AccordionGroup>
+
+## Subscription
+
+<AccordionGroup>
+  <Accordion title="How do I cancel my subscription?">
+    For dedicated nodes and invoiced clients, we require one calendar month's notice. This aligns with the notice periods from our own infrastructure vendors.
+
+    For PAYG customers, there's nothing to cancel: if you don't top up, you don't pay anything. Any unused balance remains valid for one year from the date of the deposit.
+  </Accordion>
+</AccordionGroup>
+
+If you're already a customer, you can reach us directly through the support channel in your [customer dashboard](https://customers.triton.one).

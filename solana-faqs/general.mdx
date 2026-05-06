@@ -1,7 +1,90 @@
 ---
 title: "General"
+description: "Common questions about Triton, our products, and getting started."
+sidebarTitle: "General"
 ---
 
-<Info>
-**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
-</Info>
+Whether you're just exploring Triton or have recently joined as a customer, this guide will help you get up to speed.
+
+## About Triton
+
+<AccordionGroup>
+  <Accordion title="What is Triton One?">
+    Triton is a high-performance infrastructure provider running RPC nodes, private validators, and data streaming systems across Solana, Sui, Monad, and other networks.
+
+    It delivers reliable, fast, and feature-rich blockchain infrastructure trusted by developers, validators, and traders that can't afford downtime.
+
+    Triton powers everything from real-time trading and market-making to large-scale data indexing and validator operations.
+  </Accordion>
+
+  <Accordion title="What is Project Yellowstone?">
+    Project Yellowstone is Triton's suite of high-performance tools and open-source frameworks designed to enhance RPC and data infrastructure for the Solana ecosystem.
+
+    It addresses critical infrastructure challenges: real-time data streaming, historical ledger access, ultra-low latency queries, and custom indexing.
+
+    To this date, key components include:
+
+    | Tool | Description |
+    | --- | --- |
+    | Dragon's Mouth | Core gRPC streaming engine for Solana. Delivers raw real-time data directly from the validator with ultra-low latency using Protobuf. |
+    | Whirligig | WebSocket counterpart to Dragon's Mouth -- built for front-end or browser-based apps needing live account and transaction feeds. |
+    | Fumarole | Persistent streaming layer with automatic redundancy and 23-hour caching. Ensures no data loss even if the connection drops. |
+    | Vixen | Parser delivering decoded JSON data instead of raw binary -- simplifies client integration with Yellowstone streams. |
+    | Steamboat | Custom indexing engine that accelerates heavy gPA queries by up to 99%, cutting latency for large programs. |
+    | Old Faithful | Full-ledger archival service providing access to Solana's complete historical transaction data -- ideal for analytics, re-indexing, and backtesting. |
+    | Jet | A transaction submission software that lets you add Stake Weight to your transactions to route them through a priority lane during network congestion. |
+    | Shield | Anti-MEV protection layer integrated with Jet. Allows configurable allow- and block-lists to prevent sandwiching and other frontrunning behaviours. |
+    | Cascade | A bandwidth marketplace where trusted validators sell SWQoS bandwidth to consumers. |
+
+    For deeper questions about Yellowstone components, see the [Streaming FAQs](/solana-faqs/streaming).
+  </Accordion>
+
+  <Accordion title="What are other products outside of Project Yellowstone?">
+    Beyond the famous Project Yellowstone, Triton operates additional infrastructure and integrations across multiple networks:
+
+    | Service | Description |
+    | --- | --- |
+    | Sui & Monad | RPC infrastructure for Mainnet and Testnet. |
+    | Eclipse & PythNet | RPC infrastructure for Mainnet. |
+    | Photon | Indexer for ZK compression. |
+    | Metaplex DAS API | Optimised API for fast access to fungible and non-fungible asset data on Solana. |
+    | Pyth Hermes | Real-time price feed for financial market data. |
+    | Jito | Dedicated Jito deployments for bundle simulation and MEV-related infrastructure. |
+    | Titan Swap API | Swap API for various trading and protocol needs. |
+    | Cascade Marketplace | A bandwidth marketplace where trusted validators sell SWQoS bandwidth to consumers. |
+  </Accordion>
+</AccordionGroup>
+
+## Getting started
+
+<AccordionGroup>
+  <Accordion title="How can I get started with Triton services? / How do I get an account?">
+    The fastest path is to sign up at [customers.triton.one](https://customers.triton.one/users/sign-up), verify your email, and top up the $125 minimum to get a PAYG endpoint. For custom inquiries (dedicated nodes, invoiced billing), email us at [support@triton.one](mailto:support@triton.one) or contact us on [Telegram](https://t.me/tritonone).
+  </Accordion>
+
+  <Accordion title="How can I decide which service fits my traffic needs best?">
+    We offer personalised consultations to review your traffic patterns and recommend the right setup. Please reach out via our [inquiry page](https://triton.one/contact).
+  </Accordion>
+
+  <Accordion title="How can I add a user to my Triton customer dashboard?">
+    We're working on self-service user management, but in the meantime, reach out through the support channel on your customer dashboard, and we'll add them for you.
+  </Accordion>
+
+  <Accordion title="Do you require long-term contracts?">
+    No, our standard billing is month-to-month.
+  </Accordion>
+
+  <Accordion title="Can I change my plan later?">
+    Yes, you can upgrade or downgrade your plan as your needs change.
+  </Accordion>
+
+  <Accordion title="Does Triton offer a free trial to test its services?">
+    Triton does not offer testing of dedicated nodes because they run on custom bare-metal servers that require significant upfront costs, long provisioning times, and multi-month vendor commitments. For now, we provide trials only on our shared infrastructure so you can evaluate reliability and latency. [Contact us here](https://triton.one/contact) to set it up.
+  </Accordion>
+
+  <Accordion title="Can I run custom software on Triton's nodes?">
+    No. We offer managed services; therefore, no one outside the Triton team has access to the infrastructure. We don't provide SSH access to our infrastructure. If you have dedicated nodes, we can set up the supported add-ons you request.
+  </Accordion>
+</AccordionGroup>
+
+If you're already a customer, you can reach us directly through the support channel in your [customer dashboard](https://customers.triton.one).

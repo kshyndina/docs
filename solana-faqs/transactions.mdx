@@ -1,7 +1,21 @@
 ---
 title: "Transactions"
+description: "Sending transactions on Solana, staked validators, and commitment levels."
+sidebarTitle: "Transactions"
 ---
 
-<Info>
-**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
-</Info>
+<AccordionGroup>
+  <Accordion title="My transactions aren't landing successfully. What should I do?">
+    Triton ensures reliable transaction delivery to the network, but for optimal transaction finalisation, we recommend configuring appropriate priority fees. See our [Priority Fees API](/solana/sending-transactions/priority-fees/overview) for how to set them.
+  </Accordion>
+
+  <Accordion title="What is the advantage of sending transactions through a staked validator?">
+    Staked validators have access to a much larger, reserved connection pool for sending transactions. During periods of high network congestion on Solana, this provides a significant advantage over the limited, highly contested public connection pools. See [Cascade: buying transaction bandwidth](https://docs.triton.one/chains/solana/cascade/buying-transaction-bandwidth).
+  </Accordion>
+
+  <Accordion title="Can a 'processed' transaction on Solana still be dropped?">
+    Yes. A transaction is only final once it reaches `confirmed` or `finalized` commitment. Slots containing `processed` transactions can still be dropped during minority forks or network congestion.
+  </Accordion>
+</AccordionGroup>
+
+If you're already a customer, you can reach us directly through the support channel in your [customer dashboard](https://customers.triton.one).

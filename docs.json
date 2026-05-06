@@ -278,6 +278,9 @@
                     "expanded": false,
                     "pages": [
                       "solana-guides/error-handling/overview",
+                      "solana-guides/error-handling/how-to-troubleshoot",
+                      "solana-guides/error-handling/common-solana-errors",
+                      "solana-guides/error-handling/triton-rpc-error-codes",
                       "solana-guides/error-handling/rpc",
                       "solana-guides/error-handling/streaming",
                       "solana-guides/error-handling/transaction-sending",

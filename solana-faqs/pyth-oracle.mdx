@@ -1,7 +1,23 @@
 ---
 title: "Pyth / oracle"
+description: "Pyth oracle products and Hermes streaming price feeds."
+sidebarTitle: "Pyth / oracle"
 ---
 
-<Info>
-**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
-</Info>
+<AccordionGroup>
+  <Accordion title="What Pyth oracle products do you offer?">
+    We provide infrastructure for PythNet RPC and Hermes for streaming price updates. We don't offer benchmarks. For publishers, we offer dedicated RPC to publish onto PythNet and Validators to bolster the Pyth Network.
+
+    We work closely with Douro Labs (Pyth Team) to ensure a smooth onboarding and service experience.
+  </Accordion>
+
+  <Accordion title="How can I access Pyth Hermes?">
+    To access Hermes, you need to point your endpoint to access Hermes and Pythnet. Make sure your path looks like:
+
+    ```
+    https://<endpoint>.mainnet.pythnet.rpcpool.com/<secret token>/hermes/v2/<rest of the call>
+    ```
+
+    The most common mistake is omitting the token, `v2`, or `hermes` parts of the path.
+  </Accordion>
+</AccordionGroup>
