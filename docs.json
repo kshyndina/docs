@@ -98,8 +98,6 @@
                   "solana/get-started/rate-and-connection-limits",
                   {
                     "group": "Account management",
-                    "root": "solana/get-started/account-management/set-up-your-account-and-add-users",
-                    "expanded": false,
                     "pages": [
                       "solana/get-started/account-management/set-up-your-account-and-add-users",
                       "solana/get-started/account-management/platform-overview",
@@ -108,8 +106,6 @@
                       "solana/get-started/account-management/reach-out-to-support",
                       {
                         "group": "Account management API",
-                        "root": "solana/get-started/account-management/account-management-api/overview",
-                        "expanded": false,
                         "pages": [
                           "solana/get-started/account-management/account-management-api/overview",
                           "solana/get-started/account-management/account-management-api/auth-and-headers",
@@ -248,8 +244,6 @@
                   },
                   {
                     "group": "Account management",
-                    "root": "solana-guides/getting-started/account-management",
-                    "expanded": false,
                     "pages": [
                       "solana-guides/getting-started/account-management"
                     ]
