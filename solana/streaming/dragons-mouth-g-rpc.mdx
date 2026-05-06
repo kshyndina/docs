@@ -13,7 +13,7 @@ import StreamingOverviewCard from '/snippets/cards/streaming-overview.mdx'
 
 Dragon's Mouth is Triton's Geyser-fed gRPC interface for streaming Solana data. It taps the validator's Geyser plugin directly, so you get account, transaction, slot, and block updates as the validator processes them, giving you up to a 400 ms head start over a polling client.
 
-It's the fastest live data path available and the recommended choice for any backend service where latency matters.
+It's the fastest live data path available and the recommended choice for any backend service where latency matters. Stream data directly to your application's middle layer hosted on a cloud provider, and update your backend database with the lowest possible latency.
 
 - **Trading and MEV.** Lowest-latency reads of pool state, oracles, AMM accounts, and price-impacting transactions
 - **Real-time UIs (backend).** Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers
