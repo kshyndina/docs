@@ -42,13 +42,11 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 
 <Tabs>
   <Tab title="Streaming subscriptions">
-    Open a subscribe stream, receive matching events as the validator processes them.
-
     | Stream | What you receive |
-    | --- | --- |
+    | :-- | :-- |
     | Account writes | Updates whenever a matching account's data, lamports, or owner changes |
     | Transactions | Every transaction matching your filter, with full `meta` (logs, status, balance deltas) |
-    | Deshred transactions (paid beta) | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](#deshred-transactions). |
+    | Deshred transactions (paid beta) | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](https://tritonone.mintlify.app/#deshred-transactions). |
     | Entries | Solana ledger entries (low-level, rare use case) |
     | Block notifications | Full blocks as they're produced, optionally with their transactions and accounts |
     | Block metadata | Block headers only, without the transaction payload |
