@@ -13,19 +13,20 @@ Solana produces a new block every ~400 ms. If you poll RPC every 200 ms, your da
 sequenceDiagram
     participant Client
     participant RPC
-    Note over Client,RPC: Polling: ask repeatedly
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: response (~200 ms stale)
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: response (~200 ms stale)
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: HTTP 429
-    Note over Client,RPC: Streaming: subscribe once
-    Client->>RPC: subscribe (filters)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
+    par Polling: ask repeatedly
+        Client->>RPC: getAccountInfo
+        RPC-->>Client: response (~200 ms stale)
+        Client->>RPC: getAccountInfo
+        RPC-->>Client: response (~200 ms stale)
+        Client->>RPC: getAccountInfo
+        RPC-->>Client: HTTP 429
+    and Streaming: subscribe once
+        Client->>RPC: subscribe (filters)
+        RPC-->>Client: event (intra-slot)
+        RPC-->>Client: event (intra-slot)
+        RPC-->>Client: event (intra-slot)
+        RPC-->>Client: event (intra-slot)
+    end
 ```
 
 You get sub-slot latency, structured Protobuf payloads, and visibility into intra-slot updates that polling can't see. For real-time updates at scale, streaming is also significantly cheaper than the equivalent polling traffic, as it only incurs bandwidth cost.
@@ -70,6 +71,24 @@ It's normal to combine more than one product in a pipeline. Common patterns:
 - **DEX or wallet frontend**: Whirligig WebSockets
 - **Gaming or trading frontends**: Pyth price feeds via Hermes
 - **Indexer, analytics, or compliance**: Fumarole for live with confirmed Faithful streams for history
+
+<CardGroup cols={3}>
+  <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth/quickstart">
+    Sub-slot account, transaction, slot, and block subscriptions over Yellowstone gRPC.
+  </Card>
+  <Card title="Whirligig" icon="rotate-cw" href="/solana/streaming/whirligig/quickstart">
+    Drop-in for native Solana WebSockets with custom `transactionSubscribe`.
+  </Card>
+  <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole/quickstart">
+    Multi-node merge, persistent storage, resume from cursor on disconnect.
+  </Card>
+  <Card title="Hermes" icon="activity" href="/pyth/pyth-hermes">
+    Pyth price feed API. REST plus WebSocket. Powers the Pyth JS SDK.
+  </Card>
+  <Card title="Old Faithful streams" icon="archive" href="/solana/streaming/old-faithful-streams">
+    Replay every block from genesis over the same gRPC dialect as live streams.
+  </Card>
+</CardGroup>
 
 ## Pricing
 
