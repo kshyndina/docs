@@ -1,7 +1,5 @@
 ---
-title: "Streaming quickstart"
-description: "Connect to any Triton streaming service in five minutes. Covers Dragon's Mouth gRPC, Whirligig WebSocket, Fumarole, Old Faithful streams, and Deshred transactions."
-sidebarTitle: "Quickstart"
+title: "Quickstart"
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
@@ -25,10 +23,6 @@ The five streaming services covered:
 - **Old Faithful streams** -- every block from genesis over the same gRPC dialect as live streams. Built for history indexers and researchers.
 - **Deshred transactions** -- pre-execution transaction stream, separate gRPC method. Built for arbitrage, market making, copy trading, HFT.
 
-<Note>
-Tabs in each step below don't sync across steps. Click the same service tab in each step to stay on one product's path.
-</Note>
-
 ## Step 1. Install
 
 Set up a fresh project for the service you want to try.
@@ -36,6 +30,7 @@ Set up a fresh project for the service you want to try.
 <Tabs>
   <Tab title="Dragon's Mouth">
     <CodeGroup>
+
     ```bash TypeScript
     mkdir solana-grpc-stream && cd solana-grpc-stream
     npm init -y
@@ -58,15 +53,18 @@ Set up a fresh project for the service you want to try.
     go mod init example.com/solana-grpc-stream
     go get github.com/rpcpool/yellowstone-grpc/examples/golang@latest
     ```
+
     </CodeGroup>
 
     Other languages, see the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory.
   </Tab>
-
   <Tab title="Whirligig">
-    Whirligig speaks the standard Solana WebSocket protocol, so any WebSocket client works.
+    Whirligig uses the standard Solana WebSocket protocol, so any WebSocket client works.
+
+    [https://github.com/rpcpool/yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client)???
 
     <CodeGroup>
+
     ```bash TypeScript
     mkdir whirligig-stream && cd whirligig-stream
     npm init -y
@@ -74,15 +72,14 @@ Set up a fresh project for the service you want to try.
     npm install --save-dev typescript ts-node @types/node @types/ws
     npx tsc --init
     ```
+
     </CodeGroup>
-
-    A reference Rust CLI client is available at [yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client).
   </Tab>
-
   <Tab title="Fumarole">
     Fumarole adds a persistent-subscriber layer on top of Dragon's Mouth.
 
     <CodeGroup>
+
     ```bash TypeScript
     mkdir fumarole-stream && cd fumarole-stream
     npm init -y
@@ -98,15 +95,14 @@ Set up a fresh project for the service you want to try.
     tokio = { version = "1", features = ["full"] }
     futures = "0.3"
     ```
+
     </CodeGroup>
-
-    Examples for additional languages live in [yellowstone-fumarole/examples](https://github.com/rpcpool/yellowstone-fumarole/tree/main/examples).
   </Tab>
-
   <Tab title="Old Faithful streams">
     Old Faithful uses the same `yellowstone-grpc` client as Dragon's Mouth. Install identically and point the endpoint at your Old Faithful URL.
 
     <CodeGroup>
+
     ```bash TypeScript
     mkdir old-faithful-stream && cd old-faithful-stream
     npm init -y
@@ -114,15 +110,16 @@ Set up a fresh project for the service you want to try.
     npm install --save-dev typescript ts-node @types/node
     npx tsc --init
     ```
+
     </CodeGroup>
 
     See the [yellowstone-faithful repo](https://github.com/rpcpool/yellowstone-faithful) for the gRPC method definitions and example clients.
   </Tab>
-
   <Tab title="Deshred">
     Deshred is a separate gRPC method on the same `yellowstone-grpc` service. Same install as Dragon's Mouth.
 
     <CodeGroup>
+
     ```bash TypeScript
     mkdir deshred-stream && cd deshred-stream
     npm init -y
@@ -141,9 +138,8 @@ Set up a fresh project for the service you want to try.
     tonic = { version = "0.12", features = ["tls"] }
     anyhow = "1"
     ```
-    </CodeGroup>
 
-    Deshred is currently a paid beta on Triton infrastructure. See [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/) for context.
+    </CodeGroup>
   </Tab>
 </Tabs>
 
@@ -156,34 +152,37 @@ Set up a fresh project for the service you want to try.
     First, initialise the client and connect:
 
     <CodeGroup>
+
     ```typescript TypeScript
     import Client from "@triton-one/yellowstone-grpc";
-
+    
     const client = new Client(
       "https://<your-endpoint>.mainnet.rpcpool.com",
       "<your-token>",
       undefined
     );
-
+    
     await client.connect();
-
+    
     const version = await client.getVersion();
     console.log(version);
     ```
+
     </CodeGroup>
 
     Then open a subscription stream, attach a data handler, and send the subscribe request:
 
     <CodeGroup>
+
     ```typescript TypeScript
     import { CommitmentLevel, SubscribeRequest } from "@triton-one/yellowstone-grpc";
-
+    
     const stream = await client.subscribe();
-
+    
     stream.on("data", (data) => {
       console.log("data", data);
     });
-
+    
     const request: SubscribeRequest = {
       slots: { slots: {} },
       accounts: {
@@ -202,7 +201,7 @@ Set up a fresh project for the service you want to try.
       commitment: CommitmentLevel.CONFIRMED,
       ping: undefined,
     };
-
+    
     await new Promise<void>((resolve, reject) => {
       stream.write(request, (err) => {
         if (err === null || err === undefined) {
@@ -225,22 +224,23 @@ Set up a fresh project for the service you want to try.
       api.rpcpool.com:443 \
       geyser.Geyser/Subscribe
     ```
+
     </CodeGroup>
 
     For Rust, Go, and other languages: [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples).
   </Tab>
-
   <Tab title="Whirligig">
     **What we're doing:** open a Solana-standard WebSocket connection to Whirligig and subscribe to changes on the system clock sysvar.
 
     <CodeGroup>
+
     ```typescript TypeScript
     import WebSocket from "ws";
-
+    
     const ws = new WebSocket(
       "wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/whirligig"
     );
-
+    
     ws.on("open", () => {
       ws.send(
         JSON.stringify({
@@ -254,43 +254,46 @@ Set up a fresh project for the service you want to try.
         })
       );
     });
-
+    
     ws.on("message", (data) => {
       console.log("Update:", JSON.parse(data.toString()));
     });
     ```
+
     </CodeGroup>
 
     Whirligig speaks the [standard Solana WebSocket API](https://docs.solana.com/api/websocket) plus an extended `transactionSubscribe` method. Full method reference: [Whirligig WebSocket API](/solana/streaming/whirligig-websockets).
   </Tab>
-
   <Tab title="Fumarole">
     **What we're doing:** connect to a regional Fumarole endpoint, create a persistent subscriber, and stream all account writes for the SPL Token program. Reconnecting with the same subscriber name resumes from where the cursor left off.
 
     Connect to a regional endpoint (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US):
 
     <CodeGroup>
+
     ```typescript TypeScript
     import {
       FumaroleClient,
       InitialOffsetPolicy,
     } from "@triton-one/yellowstone-fumarole";
     import { CommitmentLevel, SubscribeRequest } from "@triton-one/yellowstone-grpc";
-
+    
     const TOKEN_ADDRESS = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
     const subscriberName = "helloworld";
-
+    
     const client = await FumaroleClient.connect({
       endpoint: process.env.FUMAROLE_ENDPOINT!, // e.g. https://ams.rpcpool.com
       xToken: process.env.FUMAROLE_X_TOKEN!,
       maxDecodingMessageSizeBytes: 100 * 1024 * 1024,
     });
     ```
+
     </CodeGroup>
 
     Build the subscribe request:
 
     <CodeGroup>
+
     ```typescript TypeScript
     const request: SubscribeRequest = {
       commitment: CommitmentLevel.PROCESSED,
@@ -318,31 +321,31 @@ Set up a fresh project for the service you want to try.
       fromSlot: undefined,
     };
     ```
+
     </CodeGroup>
 
     Create the persistent subscriber and consume:
 
     <CodeGroup>
+
     ```typescript TypeScript
     await client.createPersistentSubscriber({
       consumerGroupName: subscriberName,
       initialOffsetPolicy: InitialOffsetPolicy.LATEST,
     });
-
+    
     const { sink: _sink, source } = await client.dragonsmouthSubscribe(
       subscriberName,
       request
     );
-
+    
     await source.forEach((update) => {
       console.log("Update:", update);
     });
     ```
+
     </CodeGroup>
-
-    Source: [yellowstone-fumarole/typescript-sdk README](https://github.com/rpcpool/yellowstone-fumarole/blob/main/typescript-sdk/README.md). For Rust, see [yellowstone-fumarole/examples](https://github.com/rpcpool/yellowstone-fumarole/tree/main/examples).
   </Tab>
-
   <Tab title="Old Faithful streams">
     **What we're doing:** connect to Old Faithful with the same `yellowstone-grpc` client used for Dragon's Mouth, then call `StreamBlocks` (an Old-Faithful-specific gRPC method) to replay a range of historical blocks.
 
@@ -355,11 +358,13 @@ Set up a fresh project for the service you want to try.
 
     Live and historical pipelines look identical to your client code, so anything you build for Dragon's Mouth adapts to Old Faithful with minimal changes.
   </Tab>
-
   <Tab title="Deshred">
-    **What we're doing:** subscribe to the `SubscribeDeshred` gRPC stream on Triton's Yellowstone server, filter out vote transactions, and log every transaction signature with its slot. Deshred delivers transactions reconstructed from shreds *before* the validator executes them, so you see intent earlier than any other stream.
+    **What we're doing:** subscribe to the `SubscribeDeshred` gRPC stream, filter out vote transactions, and log every transaction signature with its slot. 
+
+    Deshred delivers transactions reconstructed from shreds **_before_** the validator executes them, so you see intent earlier than with any other stream.
 
     <CodeGroup>
+
     ```rust Rust
     use {
         futures::{sink::SinkExt, stream::StreamExt},
@@ -372,13 +377,13 @@ Set up a fresh project for the service you want to try.
             SubscribeRequestFilterDeshredTransactions, SubscribeRequestPing,
         },
     };
-
+    
     #[tokio::main]
     async fn main() -> anyhow::Result<()> {
         let endpoint = std::env::var("ENDPOINT")
             .unwrap_or("https://<endpoint>".into());
         let x_token = std::env::var("X_TOKEN").ok();
-
+    
         let mut client = GeyserGrpcClient::build_from_shared(endpoint)?
             .x_token(x_token)?
             .tls_config(ClientTlsConfig::new().with_native_roots())?
@@ -387,7 +392,7 @@ Set up a fresh project for the service you want to try.
             .initial_stream_window_size(4 * 1024 * 1024)
             .connect()
             .await?;
-
+    
         let request = SubscribeDeshredRequest {
             deshred_transactions: HashMap::from([(
                 "deshred".into(),
@@ -400,10 +405,10 @@ Set up a fresh project for the service you want to try.
             )]),
             ping: None,
         };
-
+    
         let (mut tx, mut stream) =
             client.subscribe_deshred_with_request(Some(request)).await?;
-
+    
         while let Some(msg) = stream.next().await {
             match msg?.update_oneof {
                 Some(UpdateOneof::DeshredTransaction(update)) => {
@@ -422,13 +427,12 @@ Set up a fresh project for the service you want to try.
                 None => break,
             }
         }
-
+    
         Ok(())
     }
     ```
-    </CodeGroup>
 
-    For TypeScript, see the `subscribeDeshredCommand` in [yellowstone-grpc/examples/typescript/src/client.ts](https://github.com/rpcpool/yellowstone-grpc/blob/master/examples/typescript/src/client.ts).
+    </CodeGroup>
   </Tab>
 </Tabs>
 
@@ -466,7 +470,6 @@ Run your code and walk through this checklist:
     }
     ```
   </Tab>
-
   <Tab title="Whirligig">
     JSON-RPC notification payloads matching the Solana WebSocket API:
 
@@ -490,7 +493,6 @@ Run your code and walk through this checklist:
     }
     ```
   </Tab>
-
   <Tab title="Fumarole">
     Same Protobuf payloads as Dragon's Mouth, delivered through the persistent subscriber:
 
@@ -506,9 +508,8 @@ Run your code and walk through this checklist:
     }
     ```
   </Tab>
-
   <Tab title="Old Faithful streams">
-    Block-by-block payloads in the same gRPC dialect as Dragon's Mouth:
+    Block-by-block payloads via the gRPC:
 
     ```text
     Block: { slot: 100000000, blockhash: 'F1z3...', parentSlot: 99999999, ... }
@@ -516,7 +517,6 @@ Run your code and walk through this checklist:
     Block: { slot: 100000002, blockhash: 'Cy8w...', parentSlot: 100000001, ... }
     ```
   </Tab>
-
   <Tab title="Deshred">
     One line per pre-execution transaction:
 
@@ -562,12 +562,15 @@ Run your code and walk through this checklist:
   <Card title="Dragon's Mouth full reference" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
     Subscribe-request shape, all filter types, replay from a slot, intra-slot updates.
   </Card>
+
   <Card title="Whirligig WebSocket API" icon="rotate-cw" href="/solana/streaming/whirligig-websockets">
     Full method list, custom transactionSubscribe, commitment levels, keepalive.
   </Card>
+
   <Card title="Fumarole reliability patterns" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
     Persistent subscribers, regional endpoints, parallel subscription, cross-region failover.
   </Card>
+
   <Card title="Old Faithful streams" icon="archive" href="/solana/streaming/old-faithful-streams">
     StreamTransactions, StreamBlocks, historical replay from genesis.
   </Card>
