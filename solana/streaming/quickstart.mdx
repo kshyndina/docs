@@ -449,9 +449,49 @@ Set up a fresh project for the service you want to try.
     </CodeGroup>
   </Tab>
   <Tab title="Old Faithful streams">
-    **What we're doing:** connect to Old Faithful's gRPC server and call `stream_blocks` to replay a range of historical blocks (slots 100,000,000 to 100,000,100). Old Faithful's streaming methods are `StreamBlocks` and `StreamTransactions` -- both replay historical data with server-side filters.
+    **What we're doing:** stream a range of historical blocks (slots 307,152,000 to 307,152,010) from Old Faithful. The two streaming methods are `OldFaithful.OldFaithful/StreamBlocks` and `OldFaithful.OldFaithful/StreamTransactions`. Both accept `start_slot` + `end_slot` and optional filters.
+
+    `StreamBlocks` filters: `account_include` (base58 pubkey array).
+
+    `StreamTransactions` filters: `vote`, `failed`, `account_include`, `account_exclude`, `account_required`.
 
     <CodeGroup>
+
+    ```shell grpcurl (StreamBlocks)
+    grpcurl \
+      -proto old-faithful.proto \
+      -H 'x-token: <your-token>' \
+      -d '{"start_slot": 307152000, "end_slot": 307152010}' \
+      <your-endpoint>.mainnet.rpcpool.com:443 \
+      OldFaithful.OldFaithful/StreamBlocks
+    ```
+
+    ```shell grpcurl (StreamBlocks filtered)
+    grpcurl \
+      -proto old-faithful.proto \
+      -H 'x-token: <your-token>' \
+      -d '{"start_slot": 307152000, "end_slot": 307152010, "filter": {"account_include": ["Vote111111111111111111111111111111111111111"]}}' \
+      <your-endpoint>.mainnet.rpcpool.com:443 \
+      OldFaithful.OldFaithful/StreamBlocks
+    ```
+
+    ```shell grpcurl (StreamTransactions)
+    grpcurl \
+      -proto old-faithful.proto \
+      -H 'x-token: <your-token>' \
+      -d '{"start_slot": 307152000, "end_slot": 307152010}' \
+      <your-endpoint>.mainnet.rpcpool.com:443 \
+      OldFaithful.OldFaithful/StreamTransactions
+    ```
+
+    ```shell grpcurl (StreamTransactions filtered)
+    grpcurl \
+      -proto old-faithful.proto \
+      -H 'x-token: <your-token>' \
+      -d '{"start_slot": 307152000, "end_slot": 307152010, "filter": {"vote": false, "failed": true}}' \
+      <your-endpoint>.mainnet.rpcpool.com:443 \
+      OldFaithful.OldFaithful/StreamTransactions
+    ```
 
     ```rust Rust
     use {

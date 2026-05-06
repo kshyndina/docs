@@ -84,6 +84,12 @@ Connecting to streaming services from backend code, browsers, or via Geyser plug
   <Accordion title="How can I use Geyser plugins?">
     Geyser plugins can be enabled on our dedicated Solana nodes. They provide powerful, real-time streams of on-chain data. Contact our support team to discuss your specific needs and we can configure a node for you.
   </Accordion>
+
+  <Accordion title="I keep getting errors on my gRPC subscription. How can I check if the issue is with my endpoint or my code?">
+    Run our prebuilt `client-ubuntu` test client. It's a small Linux CLI we ship for exactly this purpose -- known-good code that hits your endpoint with the same gRPC subscription patterns your app does. If it errors, the issue is on the endpoint and we should look at it. If it streams cleanly, the issue is in your application code.
+
+    Full guide: [Verify your gRPC endpoint](/solana-guides/error-handling/verify-grpc-endpoint).
+  </Accordion>
 </AccordionGroup>
 
 ---

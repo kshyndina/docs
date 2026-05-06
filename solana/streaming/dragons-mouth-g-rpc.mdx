@@ -921,23 +921,6 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
     Self-hosters can drop the `x-token` header.
   </Tab>
-  <Tab title="client-ubuntu">
-    Prebuilt CLI binary for Ubuntu 22.04 and 24.04. Download from the [releases page](https://github.com/rpcpool/yellowstone-grpc/releases).
-
-    Subscribe to all accounts:
-
-    ```shell
-    ./client-ubuntu-22.04 --endpoint https://<endpoint> --x-token <token> subscribe --accounts --slots
-    ```
-
-    Subscribe to a specific program (e.g. Raydium):
-
-    ```shell
-    ./client-ubuntu-22.04 --endpoint https://<endpoint> --x-token <token> subscribe --accounts --slots --accounts-owner 675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8
-    ```
-
-    Add `--stats` to see total accounts, slots, and bandwidth in real time.
-  </Tab>
   <Tab title="TypeScript / NodeJS">
     From `5.1.x` the TypeScript SDK is supercharged with a Rust NAPI backend. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
 
