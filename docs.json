@@ -108,18 +108,21 @@
                   "solana/streaming/dragons-mouth-g-rpc",
                   "solana/streaming/whirligig-websockets",
                   "solana/streaming/fumarole-persistent-streams",
-                  "solana/streaming/old-faithful-streams"
+                  "solana/streaming/old-faithful-streams",
+                  "solana/streaming/best-practices"
                 ]
               },
               {
                 "group": "Reading state",
                 "pages": [
                   "solana/reading-state/overview",
+                  "solana/reading-state/quickstart",
                   "solana/reading-state/account-sync",
                   "solana/reading-state/standard-rpc",
                   "solana/reading-state/steamboat-indexed-accounts",
                   "solana/reading-state/metaplex-das-api",
-                  "solana/reading-state/zk-compression-photon"
+                  "solana/reading-state/zk-compression-photon",
+                  "solana/reading-state/best-practices"
                 ]
               },
               {
@@ -127,7 +130,8 @@
                 "pages": [
                   "solana/history/overview",
                   "solana/history/quickstart",
-                  "solana/history/hydrant"
+                  "solana/history/hydrant",
+                  "solana/history/best-practices"
                 ]
               },
               {
@@ -135,12 +139,12 @@
                 "pages": [
                   "solana/sending-transactions/overview",
                   "solana/sending-transactions/quickstart",
-                  "solana/sending-transactions/transaction-sending-best-practices",
                   "solana/sending-transactions/jet-sender",
                   "solana/sending-transactions/priority-fees-api",
                   "solana/sending-transactions/metis-swap-api",
                   "solana/sending-transactions/titan-swap-api",
-                  "solana/sending-transactions/jito-bundles"
+                  "solana/sending-transactions/jito-bundles",
+                  "solana/sending-transactions/transaction-sending-best-practices"
                 ]
               },
               {
@@ -214,9 +218,12 @@
                   {
                     "group": "Account management",
                     "pages": [
-                      "solana-guides/getting-started/account-management"
+                      "how-to-sign-up",
+                      "untitled-page",
+                      "analyse-your-usage"
                     ]
-                  }
+                  },
+                  "best-practices"
                 ]
               },
               {
@@ -237,30 +244,8 @@
               {
                 "group": "Solana concepts",
                 "pages": [
-                  {
-                    "group": "Streaming",
-                    "root": "solana-guides/streaming-guides",
-                    "expanded": false,
-                    "pages": [
-                      "solana-guides/streaming-guides"
-                    ]
-                  },
-                  {
-                    "group": "Transaction sending",
-                    "root": "solana-guides/transaction-guides",
-                    "expanded": false,
-                    "pages": [
-                      "solana-guides/transaction-guides"
-                    ]
-                  },
-                  {
-                    "group": "NFTs and digital assets",
-                    "root": "solana-guides/nfts-and-digital-assets",
-                    "expanded": false,
-                    "pages": [
-                      "solana-guides/nfts-and-digital-assets"
-                    ]
-                  }
+                  "nfts-and-digital-assets",
+                  "transactions-with-sw-qos"
                 ]
               }
             ]
