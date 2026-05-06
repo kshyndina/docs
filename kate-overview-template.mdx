@@ -57,7 +57,7 @@ The right product depends on the access pattern: one-off lookups vs scans, reads
 | `getProgramAccounts` over a 100k-account program | Steamboat | Native scan is O(n); Steamboat reads off a hot index. |
 | NFT and cNFT collection feeds | DAS API | Triton helped author the spec. |
 | Always-current account state for a watch list | Account Sync | Push-based, no polling, no rate-limit pressure. |
-| Real-time slot-by-slot account updates | [Dragon's Mouth gRPC](/solana/streaming/dragons-mouth/overview) | Streaming sits in the next section, but it's often the right answer. |
+| Real-time slot-by-slot account updates | [Dragon's Mouth gRPC](/solana/streaming/dragons-mouth-g-rpc) | Streaming sits in the next section, but it's often the right answer. |
 
 ## How these fit together
 

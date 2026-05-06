@@ -16,7 +16,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
     - **Endpoint URL**: `<your-endpoint>.mainnet.rpcpool.com`
     - **Secret token**: a long random string
 
-    Keep the token server-side only. Frontend code uses an origin allowlist instead. See [Auth and security](/solana/get-started/account-management/auth-and-security-best-practices).
+    Keep the token server-side only. Frontend code uses an origin allowlist instead. See [Auth and security](/solana/get-started/auth-and-security).
 
     Full walkthrough: [Set up your account](/solana/get-started/account-management/set-up-your-account-and-add-users).
   </Step>
@@ -33,7 +33,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
     ```javascript Solana Kit
     import { createSolanaRpc } from "@solana/kit";
-    
+
     const rpc = createSolanaRpc("https://<endpoint>.mainnet.rpcpool.com/<token>");
     const slot = await rpc.getSlot().send();
     console.log(slot);
@@ -41,7 +41,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
     ```javascript web3.js
     import { Connection } from '@solana/web3.js';
-    
+
     const conn = new Connection(
       'https://<endpoint>.mainnet.rpcpool.com/<token>',
       'confirmed'
@@ -51,7 +51,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
     ```python python
     import requests
-    
+
     r = requests.post(
         'https://<endpoint>.mainnet.rpcpool.com/<token>',
         json={'jsonrpc': '2.0', 'id': 1, 'method': 'getSlot'},
@@ -61,7 +61,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
     ```rust rust
     use solana_client::rpc_client::RpcClient;
-    
+
     let client = RpcClient::new(
         "https://<endpoint>.mainnet.rpcpool.com/<token>".to_string(),
     );
@@ -105,15 +105,15 @@ Two ways in. Pick the tab that fits.
     ### Streaming
 
     <CardGroup cols={2}>
-      <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth/overview">
+      <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
         Sub-slot account, transaction, slot, block subscriptions.
       </Card>
 
-      <Card title="Whirligig" icon="rotate-cw" href="/solana/streaming/whirligig/overview">
+      <Card title="Whirligig" icon="rotate-cw" href="/solana/streaming/whirligig-websockets">
         Drop-in for native Solana WebSockets. Custom `transactionSubscribe`.
       </Card>
 
-      <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole/overview">
+      <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
         Multi-node merge, persistent storage, resume from cursor.
       </Card>
 
@@ -129,7 +129,7 @@ Two ways in. Pick the tab that fits.
         Millisecond ledger queries from genesis. 400\+ TB.
       </Card>
 
-      <Card title="Old Faithful" icon="archive" href="/solana/history/old-faithful/overview">
+      <Card title="Old Faithful" icon="archive" href="/solana/streaming/old-faithful-streams">
         Open archive of every block from genesis. JSON-RPC and gRPC.
       </Card>
     </CardGroup>

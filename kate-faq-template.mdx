@@ -43,7 +43,7 @@ This page covers connection setup, errors, performance, and billing. For walkthr
   </Accordion>
 
   <Accordion title="Can I use the token client-side, in browser code?">
-    No. The token is a server-side secret. For browser apps, set up an **origin allowlist** in the dashboard so requests are authorised by the page origin, not the token. See [Auth and security](/solana/get-started/account-management/auth-and-security-best-practices).
+    No. The token is a server-side secret. For browser apps, set up an **origin allowlist** in the dashboard so requests are authorised by the page origin, not the token. See [Auth and security](/solana/get-started/auth-and-security).
   </Accordion>
 
   <Accordion title="Does Triton support devnet and testnet?">
@@ -60,7 +60,7 @@ This page covers connection setup, errors, performance, and billing. For walkthr
     Three causes, in order of likelihood:
 
     1. The token is expired or rotated. Check the dashboard.
-    2. The request origin isn't on the allowlist. See [Auth and security](/solana/get-started/account-management/auth-and-security-best-practices).
+    2. The request origin isn't on the allowlist. See [Auth and security](/solana/get-started/auth-and-security).
     3. The token is being passed in a header that isn't `Authorization: Bearer <token>` -- check your client.
 
     Full debug flow: [Error handling -- RPC](/solana-guides/error-handling/rpc).
