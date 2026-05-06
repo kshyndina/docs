@@ -1,8 +1,7 @@
 ---
 title: "Quickstart"
+description: "Test all Triton streaming solutions in 5 minutes. For the streaming overview and product comparison, see the overview page."
 ---
-
-Test all Triton streaming solutions in 5 minutes. For the streaming overview and product comparison, see the[ overview page](/solana/streaming/overview).
 
 ## Step 0. Prerequisites
 
@@ -19,15 +18,19 @@ The five streaming services covered:
   <Card title="Dragon's Mouth gRPC" icon="radio">
     Sub-slot live data, the canonical Yellowstone stream. Backend services only.
   </Card>
+
   <Card title="Whirligig WebSocket" icon="rotate-cw">
     Same data as Dragon's Mouth, for browsers and dApps that can't use gRPC.
   </Card>
+
   <Card title="Fumarole" icon="layers">
     Persistent gRPC streams with deduplication and resume-from-cursor. Built for indexers and analytics pipelines.
   </Card>
+
   <Card title="Old Faithful streams" icon="archive">
     Every block from genesis over the same gRPC dialect as live streams. Built for history indexers and researchers.
   </Card>
+
   <Card title="Deshred transactions" icon="zap">
     Pre-execution transaction stream, separate gRPC method. Built for arbitrage, market making, copy trading, HFT.
   </Card>
@@ -286,28 +289,28 @@ Set up a fresh project for the service you want to try.
         solana_sdk::commitment_config::CommitmentConfig,
         std::str::FromStr,
     };
-
+    
     #[tokio::main]
     async fn main() -> anyhow::Result<()> {
         let endpoint =
             "wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/whirligig";
-
+    
         let client = PubsubClient::new(endpoint).await?;
-
+    
         let pubkey = Pubkey::from_str("SysvarC1ock11111111111111111111111111111111")?;
         let config = RpcAccountInfoConfig {
             encoding: Some(UiAccountEncoding::Base58),
             commitment: Some(CommitmentConfig::processed()),
             ..Default::default()
         };
-
+    
         let (mut stream, _unsubscribe) =
             client.account_subscribe(&pubkey, Some(config)).await?;
-
+    
         while let Some(account) = stream.next().await {
             println!("Update: {:?}", account);
         }
-
+    
         Ok(())
     }
     ```
@@ -405,7 +408,7 @@ Set up a fresh project for the service you want to try.
             subscribe_update::UpdateOneof,
         },
     };
-
+    
     #[tokio::main]
     async fn main() -> anyhow::Result<()> {
         let config = FumaroleConfig {
@@ -414,7 +417,7 @@ Set up a fresh project for the service you want to try.
             ..Default::default()
         };
         let mut client = FumaroleClient::connect(config).await?;
-
+    
         let mut accounts = std::collections::HashMap::new();
         accounts.insert(
             "token".to_string(),
@@ -425,23 +428,23 @@ Set up a fresh project for the service you want to try.
                 ..Default::default()
             },
         );
-
+    
         let request = SubscribeRequest {
             accounts,
             commitment: Some(CommitmentLevel::Processed.into()),
             ..Default::default()
         };
-
+    
         let (_sink, mut source) = client
             .dragonsmouth_subscribe("helloworld", request)
             .await?;
-
+    
         while let Some(update) = source.next().await {
             if let Some(UpdateOneof::Account(acc)) = update?.update_oneof {
                 println!("Account update at slot {}", acc.slot);
             }
         }
-
+    
         Ok(())
     }
     ```
@@ -449,7 +452,7 @@ Set up a fresh project for the service you want to try.
     </CodeGroup>
   </Tab>
   <Tab title="Old Faithful streams">
-    **What we're doing:** stream a range of historical blocks (slots 307,152,000 to 307,152,010) from Old Faithful. The two streaming methods are `OldFaithful.OldFaithful/StreamBlocks` and `OldFaithful.OldFaithful/StreamTransactions`. Both accept `start_slot` + `end_slot` and optional filters.
+    **What we're doing:** stream a range of historical blocks (slots 307,152,000 to 307,152,010) from Old Faithful. The two streaming methods are `OldFaithful.OldFaithful/StreamBlocks` and `OldFaithful.OldFaithful/StreamTransactions`. Both accept `start_slot` \+ `end_slot` and optional filters.
 
     `StreamBlocks` filters: `account_include` (base58 pubkey array).
 
@@ -498,20 +501,20 @@ Set up a fresh project for the service you want to try.
         futures::StreamExt,
         yellowstone_faithful_client::{connect_with_config, GrpcConfig},
     };
-
+    
     #[tokio::main]
     async fn main() -> anyhow::Result<()> {
         let mut config = GrpcConfig::new(
             "https://<your-old-faithful-endpoint>".to_string(),
         );
         config = config.with_token("<your-token>".to_string());
-
+    
         let mut client = connect_with_config(config).await?;
-
+    
         let mut stream = client
             .stream_blocks(100_000_000, Some(100_000_100), None)
             .await?;
-
+    
         let mut count = 0;
         while let Some(result) = stream.next().await {
             match result {
@@ -528,14 +531,14 @@ Set up a fresh project for the service you want to try.
                 Err(e) => eprintln!("Error: {}", e),
             }
         }
-
+    
         Ok(())
     }
     ```
 
     </CodeGroup>
 
-    Verbatim source: [yellowstone-faithful-client/examples/stream_blocks.rs](https://github.com/rpcpool/yellowstone-faithful/blob/main/yellowstone-faithful-client/examples/stream_blocks.rs). The repo also has `stream_transactions.rs` for transaction-level streaming. There's no published TypeScript SDK for Old Faithful streaming today.
+    Verbatim source: [yellowstone-faithful-client/examples/stream\_blocks.rs](https://github.com/rpcpool/yellowstone-faithful/blob/main/yellowstone-faithful-client/examples/stream_blocks.rs). The repo also has `stream_transactions.rs` for transaction-level streaming. There's no published TypeScript SDK for Old Faithful streaming today.
   </Tab>
   <Tab title="Deshred">
     **What we're doing:** subscribe to the `SubscribeDeshred` gRPC stream, filter out vote transactions, and log every transaction signature with its slot. 
@@ -548,19 +551,19 @@ Set up a fresh project for the service you want to try.
     import Client, {
       SubscribeDeshredRequest,
     } from "@triton-one/yellowstone-grpc";
-
+    
     const client = new Client(
       "https://<your-endpoint>.mainnet.rpcpool.com",
       "<your-token>",
       undefined
     );
-
+    
     const stream = await client.subscribeDeshred();
-
+    
     stream.on("data", (data) => {
       console.log("data", data);
     });
-
+    
     const request: SubscribeDeshredRequest = {
       deshredTransactions: {
         client: {
@@ -572,7 +575,7 @@ Set up a fresh project for the service you want to try.
       },
       ping: undefined,
     };
-
+    
     await new Promise<void>((resolve, reject) => {
       stream.write(request, (err) =>
         err ? reject(err) : resolve()
@@ -656,6 +659,7 @@ Set up a fresh project for the service you want to try.
 Run your code:
 
 <CodeGroup>
+
 ```bash TypeScript
 npx ts-node main.ts
 ```
@@ -667,13 +671,15 @@ cargo run
 ```bash Go
 go run main.go
 ```
+
 </CodeGroup>
 
 Then walk through this checklist:
 
 1. **Confirm the stream is open.** Your first matching event should arrive within 1-2 slots (~800 ms). For Whirligig, you'll see a subscription-ID confirmation first: `{ "jsonrpc": "2.0", "result": 42, "id": 1 }`. For gRPC services, the client logs an active connection on `connect()` and events start arriving immediately.
 2. **Watch matching events flow.** If nothing arrives after 5 seconds, your filter is probably too narrow.
-3. **Widen the filter to test, then tighten back.** Subscribe to all transactions or all writes for a busy program (e.g. SPL Token) to confirm data is reaching you. Once you see traffic, narrow the filter to what your app actually needs.
+3. Keep alive ??? did we include it in code? 
+4. **Widen the filter to test, then tighten back.** Subscribe to all transactions or all writes for a busy program (e.g. SPL Token) to confirm data is reaching you. Once you see traffic, narrow the filter to what your app actually needs.
 
 ### Expected first message
 
@@ -813,5 +819,7 @@ Then walk through this checklist:
 </CardGroup>
 
 ---
+
+<FooterLinks />
 
 <FooterLinks />

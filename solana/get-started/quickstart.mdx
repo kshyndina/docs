@@ -33,7 +33,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
     ```javascript Solana Kit
     import { createSolanaRpc } from "@solana/kit";
-
+    
     const rpc = createSolanaRpc("https://<endpoint>.mainnet.rpcpool.com/<token>");
     const slot = await rpc.getSlot().send();
     console.log(slot);
@@ -41,7 +41,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
     ```javascript web3.js
     import { Connection } from '@solana/web3.js';
-
+    
     const conn = new Connection(
       'https://<endpoint>.mainnet.rpcpool.com/<token>',
       'confirmed'
@@ -51,7 +51,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
     ```python python
     import requests
-
+    
     r = requests.post(
         'https://<endpoint>.mainnet.rpcpool.com/<token>',
         json={'jsonrpc': '2.0', 'id': 1, 'method': 'getSlot'},
@@ -61,7 +61,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
     ```rust rust
     use solana_client::rpc_client::RpcClient;
-
+    
     let client = RpcClient::new(
         "https://<endpoint>.mainnet.rpcpool.com/<token>".to_string(),
     );
@@ -206,5 +206,15 @@ Two ways in. Pick the tab that fits.
 </Tabs>
 
 ---
+
+<div className="footer-links not-prose">
+  <p><Icon icon="life-buoy" /> Need help? Click the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)</p>
+
+  <p><Icon icon="user-cog" /> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)</p>
+
+  <p><Icon icon="briefcase" /> Sales questions? [Contact sales](https://triton.one/contact)</p>
+
+  <p><Icon icon="sparkles" /> AI agent? [Read llms.txt](/llms.txt)</p>
+</div>
 
 <FooterLinks />

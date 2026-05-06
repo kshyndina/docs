@@ -2,53 +2,50 @@
 title: "Overview"
 ---
 
-import FooterLinks from '/snippets/footer-links.mdx'
-
-
+Triton offers multiple streaming services on Solana. This page covers what streaming is, what each service does, and how to pick the right one for your build.
 
 ## What is streaming?
 
-Solana produces a new block every ~400 ms. If you poll RPC every 200 ms, your data is at best 200 ms stale by the time you see it, and you'll easily hit rate limits hammering the same endpoint. Streaming inverts the model: you open one connection, say what you need (specific accounts, programs, transaction patterns), and the node pushes you matching events the instant they happen.
+Solana produces a new block every ~400 ms. If you poll RPC every 200 ms, your data is at best 200 ms stale by the time you see it, and you'll easily hit rate limits hammering the same endpoint. 
+
+Streaming inverts the model: you open one connection, say what you need (specific accounts, programs, transaction patterns), and the node pushes you matching events the instant they happen.
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div>
+  <div>
+    ```mermaid
+    %%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
+    sequenceDiagram
+        participant Client
+        participant RPC
+        Note over Client,RPC: Polling: ask repeatedly
+        Client->>RPC: getAccountInfo
+        RPC-->>Client: response (~200 ms stale)
+        Client->>RPC: getAccountInfo
+        RPC-->>Client: response (~200 ms stale)
+        Client->>RPC: getAccountInfo
+        RPC-->>Client: HTTP 429
+    ```
+  </div>
 
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
-sequenceDiagram
-    participant Client
-    participant RPC
-    Note over Client,RPC: Polling: ask repeatedly
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: response (~200 ms stale)
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: response (~200 ms stale)
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: HTTP 429
-```
-
-</div>
-<div>
-
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
-sequenceDiagram
-    participant Client
-    participant RPC
-    Note over Client,RPC: Streaming: subscribe once
-    Client->>RPC: subscribe (filters)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
-```
-
-</div>
+  <div>
+    ```mermaid
+    %%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
+    sequenceDiagram
+        participant Client
+        participant RPC
+        Note over Client,RPC: Streaming: subscribe once
+        Client->>RPC: subscribe (filters)
+        RPC-->>Client: event (intra-slot)
+        RPC-->>Client: event (intra-slot)
+        RPC-->>Client: event (intra-slot)
+        RPC-->>Client: event (intra-slot)
+    ```
+  </div>
 </div>
 
-You get sub-slot latency, structured Protobuf payloads, and visibility into intra-slot updates that polling can't see. For real-time updates at scale, streaming is also significantly cheaper than the equivalent polling traffic, as it only incurs bandwidth cost.
+You get sub-slot latency, structured Protobuf payloads, and lower costs, also significantly cheaper than the equivalent polling traffic, as it only incurs bandwidth cost.
 
-Streaming is the right tool when you're building:
+It's the right tool when you're building:
 
 - **Trading and MEV systems** where 50 ms of staleness costs money
 - **Indexers, accounting, and analytics pipelines** that need every block processed exactly once
@@ -75,62 +72,61 @@ Three things matter in streaming: **latency, reliability, and replay**. Years of
 - Fumarole consumes multiple Dragon's Mouth nodes, deduplicates, and persists a cursor on the server side so you can resume exactly where you left off after disconnects. 
 - Old Faithful taps the historical archive but uses the same gRPC interface, so the live and historical pipelines appear identical to your client code.
 
-| Capability | Dragon's Mouth | Deshred tx | Whirligig websocket | Fumarole | Old Faithful | Pyth Hermes |
-| --- | :-: | :-: | :-: | :-: | :-: | :-: |
-| Real-time data | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ |
-| Pre-execution transactions | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ |
-| Historical replay | ✗ | ✗ | ✗ | 4 days | Entire ledger | ✗ |
-| Persistent cursor | ✗ | ✗ | ✗ | ✓ | slot range | ✗ |
-| Browser-compatible | ✗ | ✗ | ✓ | ✗ | ✗ | ✓ |
-| Commitment | all | ✗ | all | all (confirmed latency) | finalised | ✗ |
-| Protocol | gRPC | gRPC | WebSocket | gRPC | gRPC | REST \+ WS |
+| Capability | Dragon's Mouth | Deshred tx | Whirligig websocket | Fumarole | Old Faithful |
+| --- | :-: | :-: | :-: | :-: | :-: |
+| Real-time data | ✓ | ✓ | ✓ | ✓ | ✗ |
+| Pre-execution transactions | ✗ | ✓ | ✗ | ✗ | ✗ |
+| Historical replay | ✗ | ✗ | ✗ | 4 days | Entire ledger |
+| Persistent cursor | ✗ | ✗ | ✗ | ✓ | slot range |
+| Browser-compatible | ✗ | ✗ | ✓ | ✗ | ✗ |
+| Commitment | all | ✗ | all | all (confirmed latency) | finalised |
+| Protocol | gRPC | gRPC | WebSocket | gRPC | gRPC |
 
 It's normal to combine more than one product in a pipeline. Common patterns:
 
 - **Trading and MEV**: Dragon's Mouth gRPC for processed data, Deshred for pre-execution tx
 - **DEX or wallet frontend**: Whirligig WebSockets
-- **Gaming or trading frontends**: Pyth price feeds via Hermes
 - **Indexer, analytics, or compliance**: Fumarole for live with confirmed Faithful streams for history
 
-<CardGroup cols={3}>
-  <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth/quickstart">
-    Sub-slot account, transaction, slot, and block subscriptions over Yellowstone gRPC.
-  </Card>
+<Columns cols={2}>
+  <Column>
+    <Card title="Dragon's Mouth gRPC" icon="sparkles">
+      Sub-slot account, transaction, slot, and block subscriptions over Yellowstone gRPC.
+    </Card>
+  </Column>
+  <Column>
+    <Card title="Whirligig" icon="sparkles">
+      Drop-in for native Solana WebSockets with custom `transactionSubscribe`.
+    </Card>
+  </Column>
+</Columns>
 
-  <Card title="Whirligig" icon="rotate-cw" href="/solana/streaming/whirligig/quickstart">
-    Drop-in for native Solana WebSockets with custom `transactionSubscribe`.
-  </Card>
-
-  <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole/quickstart">
-    Multi-node merge, persistent storage, resume from cursor on disconnect.
-  </Card>
-
-  <Card title="Hermes" icon="activity" href="/pyth/pyth-hermes">
-    Pyth price feed API. REST plus WebSocket. Powers the Pyth JS SDK.
-  </Card>
-
-  <Card title="Old Faithful streams" icon="archive" href="/solana/streaming/old-faithful-streams">
-    Replay every block from genesis over the same gRPC dialect as live streams.
-  </Card>
-</CardGroup>
+<Columns cols={2}>
+  <Column>
+    <Card title="Fumarole" icon="sparkles">
+      Multi-node merge, persistent storage, resume from cursor on disconnect.
+    </Card>
+  </Column>
+  <Column>
+    <Card title="Old Faithful streams" icon="sparkles">
+      Replay every block from genesis over the same gRPC dialect as live streams.
+    </Card>
+  </Column>
+</Columns>
 
 ## Pricing
 
 All streaming services are billed at `$0.08 / GB` of bandwidth, and you only pay for the data sent. See [streaming best practices](/solana/streaming/best-practices) for filtering, guides, and other ways to reduce it.
 
-## Related sections
+## What's next
 
 <CardGroup cols={2}>
-  <Card title="Reading state" href="/solana/reading-state/overview">
-    Standard RPC, indexed reads, DAS API, account sync.
+  <Card title="Quickstart" href="/solana/streaming-data/quickstart">
+    Test all Triton streaming solutions in 5 minutes. 
   </Card>
 
   <Card title="Account Sync SDK" href="/solana/reading-state/account-sync">
     One-line swap for polling codebases. Streaming-grade reads, no rewrite.
-  </Card>
-
-  <Card title="Historical data" href="/solana/history/hydrant/overview">
-    Hydrant for millisecond ledger queries; Old Faithful for archival.
   </Card>
 </CardGroup>
 

@@ -1,11 +1,7 @@
 ---
 title: "Rate and connection limits"
-description: "Two kinds of limits: rate limits for HTTP requests (per IP, 10-second window) and connection limits for streaming (simultaneous connections per endpoint)."
+description: "We apply 2 kinds of limits: rate limits for HTTP requests (per IP, 10-second window) and connection limits for streaming (simultaneous connections per endpoint)."
 ---
-
-import FooterLinks from '/snippets/footer-links.mdx'
-
-Triton has two kinds of limits: rate limits for HTTP requests (per IP, 10-second window) and connection limits for streaming (simultaneous connections per endpoint).
 
 ## Rate limits
 
@@ -27,7 +23,7 @@ flowchart LR
 If either check fails, the response is `HTTP 429 Too Many Requests`. In practice, most 429s come from the per-method limit, not the total.
 
 <Info>
-**Per IP** means the IP making the request. Backends sharing one IP share one budget.
+  **Per IP** means the IP making the request. Backends sharing one IP share one budget.
 </Info>
 
 ## Defaults
@@ -41,7 +37,7 @@ Methods not listed below fall back to the 2,000-per-10s global budget. Limits gr
 ### Standard JSON-RPC
 
 | Per 10s | Methods |
-|---|---|
+| --- | --- |
 | 2,000 | Total RPS per IP, `getAccountInfo`, `getTransaction` |
 | 400 | `getMultipleAccounts`, `getVoteAccounts`, `getClusterNodes` |
 | 200 | `getBlock`, `getConfirmedTransaction`, `getLeaderSchedule` |
@@ -51,7 +47,7 @@ Methods not listed below fall back to the 2,000-per-10s global budget. Limits gr
 ### Streaming services (gRPC)
 
 | Per 10s | Service | Methods |
-|---|---|---|
+| --- | --- | --- |
 | 5,000 | Old Faithful | `GetBlockTime`, `StreamBlocks`, `StreamTransactions` |
 | 2,000 | Fumarole | all methods |
 | 1,000 | Old Faithful | `GetBlock`, `GetTransaction`, `Get`, `GetVersion` |
@@ -70,7 +66,7 @@ The response is JSON, listing the request budget per window, every per-method ov
 Every JSON-RPC response also carries `X-Ratelimit-*` headers. Watch them in your client to back off **before** you hit a 429:
 
 | Header | What it tells you |
-|---|---|
+| --- | --- |
 | `X-Ratelimit-Limit` | Total budget for the current 10-second window |
 | `X-Ratelimit-Remaining` | How many total requests you have left |
 | `X-Ratelimit-Reset` | Seconds until the window resets |
@@ -94,7 +90,7 @@ Streaming products (Yellowstone gRPC, Whirligig WebSockets, Fumarole) cap **simu
 Connection limits are flexible. If you hit one, click the chat icon in your [customer dashboard](https://customers.triton.one) and we'll work with you to either optimise usage or raise the cap.
 
 <Info>
-A single gRPC connection can multiplex many subscriptions. The right pattern is one connection plus many subscribe messages, not one connection per filter. See the [Dragon's Mouth quickstart](/solana/streaming/dragons-mouth/quickstart) for the canonical multiplex example.
+  A single gRPC connection can multiplex many subscriptions. The right pattern is one connection plus many subscribe messages, not one connection per filter. See the [Dragon's Mouth quickstart](/solana/streaming/dragons-mouth/quickstart) for the canonical multiplex example.
 </Info>
 
 ## What's next
@@ -103,6 +99,7 @@ A single gRPC connection can multiplex many subscriptions. The right pattern is 
   <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
     Per-service rates, invoicing, when to move to dedicated.
   </Card>
+
   <Card title="Dedicated nodes" icon="server" href="/solana/dedicated-nodes/overview">
     Custom limits, isolated capacity, dedicated regions.
   </Card>

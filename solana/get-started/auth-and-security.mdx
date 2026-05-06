@@ -1,10 +1,8 @@
 ---
-title: "Authentication and security"
+title: "Auth and security"
 description: "Defence-in-depth on Triton's side, plus the practical patterns -- secret tokens, allowed origins, endpoint hygiene -- that keep your traffic safe on yours."
 sidebarTitle: "Auth and security"
 ---
-
-import FooterLinks from '/snippets/footer-links.mdx'
 
 We are committed to a defence-in-depth security model to protect our global infrastructure and our customers' services.
 
@@ -68,7 +66,7 @@ Triton endpoints support two authentication methods, each for a different contex
 
 **Secret tokens, backend only.** The token is appended directly to your endpoint URL:
 
-```
+```text
 https://<your-endpoint>.rpcpool.com/<your-secret-token>
 ```
 
@@ -78,7 +76,7 @@ Designed for server-side use: Rust backends, Node.js servers, scripts, trading b
 
 **Allowed origins, frontend.** Browser apps use the bare endpoint URL (no token) and configure allowed origins in the customer dashboard:
 
-```
+```text
 https://<your-endpoint>.rpcpool.com/
 ```
 
@@ -174,6 +172,7 @@ Additional filters return 403 errors to requests that appear to originate from a
   <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
     Per-endpoint rate limits, 429 handling, streaming connection caps.
   </Card>
+
   <Card title="Account management" icon="user-cog" href="/solana/get-started/account-management/platform-overview">
     Where endpoints, billing, and team management live in the portal.
   </Card>
