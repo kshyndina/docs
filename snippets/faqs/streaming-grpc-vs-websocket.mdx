@@ -1,0 +1,3 @@
+<Accordion title="Should I use gRPC or WebSocket for streaming?">
+  Use gRPC (Dragon's Mouth, Fumarole) for backends, indexers, trading bots, and anything server-side. It's faster, supports binary Protobuf payloads, and has finer-grained filters. Use WebSocket (Whirligig) for browser clients and anywhere you can't easily run a gRPC dependency. Both share the same Yellowstone foundation. See [Streaming overview](/solana/streaming/overview) for the full comparison table.
+</Accordion>

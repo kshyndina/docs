@@ -1,0 +1,27 @@
+{/*
+FAQ snippets registry
+
+Each Q+A is a single Accordion in its own .mdx file.
+Pages assemble FAQ sections by importing exactly the questions they need.
+A central FAQs page imports them all.
+
+Naming convention: [topic]-[short-slug].mdx
+  e.g. billing-payg-vs-invoiced.mdx
+       streaming-grpc-vs-websocket.mdx
+       endpoint-rate-limits.mdx
+
+Each snippet file should contain:
+  <Accordion title="The question, phrased as the user would ask it">
+    Answer body. One short paragraph. Link out to the full doc page if there's depth.
+  </Accordion>
+
+To use on a page:
+  import BillingPaygVsInvoiced from '/snippets/faqs/billing-payg-vs-invoiced.mdx'
+  ...
+  <AccordionGroup>
+    <BillingPaygVsInvoiced />
+    <StreamingCost />
+  </AccordionGroup>
+
+To use on the central FAQs page, import every Q snippet and group them by topic.
+*/}
