@@ -8,13 +8,13 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
 Dragon's Mouth is Triton's Geyser-fed gRPC interface for streaming Solana data. It taps the validator's Geyser plugin directly, so you get account, transaction, slot, and block updates as the validator processes them, giving you up to a 400 ms head start over a polling client.
 
-It's the fastest live data path available and the recommended choice for any backend service where latency matters. For browser clients that can't communicate with gRPC, use [Whirligig WebSockets](/solana/streaming/whirligig-websockets) instead.
-
-## Use cases
+It's the fastest live data path available and the recommended choice for any backend service where latency matters.
 
 - **Trading and MEV.** Lowest-latency reads of pool state, oracles, AMM accounts, and price-impacting transactions
 - **Real-time UIs (backend).** Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers
 - **Compliance and analytics.** Watch specific addresses or programs, route updates downstream
+
+For browser clients that can't communicate with gRPC, use [Whirligig WebSockets](https://tritonone.mintlify.app/solana/streaming/whirligig-websockets) instead.
 
 ## Features and benefits
 
