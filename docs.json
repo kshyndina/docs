@@ -227,6 +227,16 @@
                 ]
               },
               {
+                "group": "Error handling",
+                "root": "solana-guides/error-handling/how-to-troubleshoot",
+                "expanded": false,
+                "pages": [
+                  "solana-guides/error-handling/how-to-troubleshoot",
+                  "solana-guides/error-handling/common-solana-errors",
+                  "solana-guides/error-handling/triton-rpc-error-codes"
+                ]
+              },
+              {
                 "group": "End-to-end builds",
                 "pages": [
                   "solana-guides/end-to-end-builds/stream-solana-grpc",
