@@ -4,23 +4,17 @@ title: "My account"
 
 import FooterLinks from '/snippets/footer-links.mdx'
 
+Sign-in, security, billing, and invoicing for your Triton customer account.
+
+## Sign-in and getting help
+
+Logging in, recovering your username, and where to find support when something breaks.
+
 <AccordionGroup>
   <Accordion title="Where can I get help with my Triton account?">
     You can contact us anytime through the support channel on your [customer dashboard](https://customers.triton.one).
   </Accordion>
 
-  <Accordion title="How can I add domains to the allowed origins?">
-    Let us know what domain you'd like to add. All subdomains will be automatically allowed.
-  </Accordion>
-
-  <Accordion title="I exposed my API key. What should I do?">
-    Please contact us ASAP through the support channel on your customer dashboard. We will urgently provide you with a new one and decommission the exposed key.
-  </Accordion>
-</AccordionGroup>
-
-## Sign-in
-
-<AccordionGroup>
   <Accordion title="Why can't I sign in with Google?">
     Google single sign-on is reserved for Triton One employees and isn't available on customer accounts. Sign in with your Triton username and password instead.
   </Accordion>
@@ -30,7 +24,23 @@ import FooterLinks from '/snippets/footer-links.mdx'
   </Accordion>
 </AccordionGroup>
 
+## Account security
+
+Configuring allowed origins on your endpoints, and what to do if an API key leaks.
+
+<AccordionGroup>
+  <Accordion title="How can I add domains to the allowed origins?">
+    Let us know what domain you'd like to add. All subdomains will be automatically allowed.
+  </Accordion>
+
+  <Accordion title="I exposed my API key. What should I do?">
+    Please contact us ASAP through the support channel on your customer dashboard. We will urgently provide you with a new one and decommission the exposed key.
+  </Accordion>
+</AccordionGroup>
+
 ## Billing and usage
+
+Topping up, low-balance alerts, reading usage, and gRPC drawdown timing.
 
 <AccordionGroup>
   <Accordion title="How do I top up my balance?">
@@ -59,6 +69,8 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
 ## Invoicing and payments
 
+Invoice cycles, accepted payment methods, and how to cancel.
+
 <AccordionGroup>
   <Accordion title="When will I receive my invoice, and what period does it cover?">
     We send two kinds of invoices:
@@ -81,9 +93,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
     Credit card payments are available only for customers using shared services. For any billing or account-related questions, please [contact us](https://triton.one/contact).
   </Accordion>
-</AccordionGroup>
 
-<AccordionGroup>
   <Accordion title="How do I cancel my subscription?">
     For dedicated nodes and invoiced clients, we require one calendar month's notice. This aligns with the notice periods from our own infrastructure vendors.
 
