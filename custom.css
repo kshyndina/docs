@@ -2,6 +2,37 @@
 
 /*! purgecss start ignore */
 
+/* ---- 0a. Layout safety net --------------------------------------
+   1. scroll-margin-top on every heading: when a TOC link click
+      triggers smooth-scroll, the IntersectionObserver that drives
+      Mintlify's active-dot picks the section whose top crosses the
+      viewport threshold last. Without scroll-margin, that's often
+      the previous section, leaving the wrong dot lit. 6rem matches
+      the Mintlify chrome (sticky nav + small breathing room).
+   2. max-width:100% / min-width:0 on the welcome-page custom blocks
+      so a child with `width: max-content` (the logo marquee track)
+      or a long table can never push the article column wider than
+      the viewport. Defensive only -- their parents already clip
+      overflow, but this prevents a regression if a child grows. */
+.prose h2, .prose h3, .prose h4,
+article h2, article h3, article h4 {
+  scroll-margin-top: 6rem !important;
+}
+.logo-marquee, .stack-map, .triton-try {
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+/* Tables on narrow viewports: when a wide table can't fit the
+   article column, scroll it horizontally inside its own bounds
+   instead of pushing the page wider. Desktop unaffected. */
+@media (max-width: 768px) {
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+}
+
 /* ---- 0. Triton brand palette (CSS variables) --------------------
    LOCKED -- DO NOT REVERT. The palette is the source of truth for
    every colour used across docs. Picks for shared components:

@@ -7,7 +7,7 @@ Triton supports two authentication patterns: **token in URL path** for backend s
 ## The two patterns
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
 flowchart LR
     A[Backend service<br/>server-side, no untrusted clients] -->|token in URL or Bearer header| T[Triton endpoint]
     B[Browser app<br/>untrusted client] -->|public endpoint, no token| T
@@ -41,7 +41,7 @@ For frontends, **never put a token in the page**. Anyone with devtools can read 
 Triton checks the request's `Origin` header against the allowlist on every call.
 
 ```javascript
-// Frontend — no token, no secrets
+// Frontend (no token, no secrets)
 import { Connection } from '@solana/web3.js';
 const connection = new Connection(
   'https://<your-public-endpoint>.mainnet.rpcpool.com',
@@ -73,19 +73,19 @@ The `Origin` header is set by the browser and **cannot be reliably spoofed by we
 ## What to do if a token leaks
 
 <Steps>
-  <Step title="Revoke immediately">
+  <Step titleSize="h3" title="Revoke immediately">
     **Auth → Tokens → \<token\> → Revoke**. The token stops working within seconds across our edge fleet.
   </Step>
-  <Step title="Issue a replacement">
+  <Step titleSize="h3" title="Issue a replacement">
     Same screen, **New token**. Copy the value once -- it's only displayed at creation.
   </Step>
-  <Step title="Roll services">
+  <Step titleSize="h3" title="Roll services">
     Update your secret store and roll the dependent services. With per-service tokens, only the affected service needs to roll.
   </Step>
-  <Step title="Audit usage during the leaked window">
+  <Step titleSize="h3" title="Audit usage during the leaked window">
     Open **Logs** for the endpoint, filter by the leaked token, and look at IPs / methods. If you see anything you don't recognise, [contact support](/solana/get-started/account-management/reach-out-to-support) -- we can help correlate with our edge logs.
   </Step>
-  <Step title="If GitHub flagged the leak">
+  <Step titleSize="h3" title="If GitHub flagged the leak">
     GitHub's secret-scanning partners with Triton. If they emailed you, the token has likely already been revoked automatically. Verify in the portal and re-issue.
   </Step>
 </Steps>
