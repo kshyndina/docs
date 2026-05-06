@@ -67,10 +67,10 @@ Triton was first to ship gRPC streaming on Solana with **Yellowstone gRPC**, the
 
 Three things matter in streaming: **latency, reliability, and replay**. Years of running Yellowstone at scale taught us that no single product leads on all of them. So we built one for each, all on the Yellowstone Geyser foundation.
 
-- Dragon's Mouth is the source of truth for live data, with Deshred giving you pre-execution transaction data on the same gRPC service. 
-- Whirligig translates Dragon's Mouth output into standard Solana WebSocket messages for browsers. 
-- Fumarole consumes multiple Dragon's Mouth nodes, deduplicates, and persists a cursor on the server side so you can resume exactly where you left off after disconnects. 
-- Old Faithful taps the historical archive but uses the same gRPC interface, so the live and historical pipelines appear identical to your client code.
+- [Dragon's Mouth](/solana/streaming/dragons-mouth-g-rpc) is the source of truth for live data, with [Deshred](/solana/streaming/deshred-transactions) giving you pre-execution transaction data on the same gRPC service.
+- [Whirligig](/solana/streaming/whirligig-websockets) translates Dragon's Mouth output into standard Solana WebSocket messages for browsers.
+- [Fumarole](/solana/streaming/fumarole-persistent-streams) consumes multiple Dragon's Mouth nodes, deduplicates, and persists a cursor on the server side so you can resume exactly where you left off after disconnects.
+- [Old Faithful](/solana/streaming/old-faithful-streams) taps the historical archive but uses the same gRPC interface, so the live and historical pipelines appear identical to your client code.
 
 | Capability | Dragon's Mouth | Deshred tx | Whirligig websocket | Fumarole | Old Faithful |
 | --- | :-: | :-: | :-: | :-: | :-: |
@@ -90,25 +90,33 @@ It's normal to combine more than one product in a pipeline. Common patterns:
 
 <Columns cols={2}>
   <Column>
-    <Card title="Dragon's Mouth gRPC" icon="sparkles">
+    <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
       Sub-slot account, transaction, slot, and block subscriptions over Yellowstone gRPC.
     </Card>
   </Column>
   <Column>
-    <Card title="Whirligig" icon="sparkles">
-      Drop-in for native Solana WebSockets with custom `transactionSubscribe`.
+    <Card title="Deshred transactions" icon="zap" href="/solana/streaming/deshred-transactions">
+      Pre-execution transaction stream from shreds, before the validator runs them.
     </Card>
   </Column>
 </Columns>
 
 <Columns cols={2}>
   <Column>
-    <Card title="Fumarole" icon="sparkles">
-      Multi-node merge, persistent storage, resume from cursor on disconnect.
+    <Card title="Whirligig" icon="rotate-cw" href="/solana/streaming/whirligig-websockets">
+      Drop-in for native Solana WebSockets with custom `transactionSubscribe`.
     </Card>
   </Column>
   <Column>
-    <Card title="Old Faithful streams" icon="sparkles">
+    <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
+      Multi-node merge, persistent storage, resume from cursor on disconnect.
+    </Card>
+  </Column>
+</Columns>
+
+<Columns cols={2}>
+  <Column>
+    <Card title="Old Faithful streams" icon="archive" href="/solana/streaming/old-faithful-streams">
       Replay every block from genesis over the same gRPC dialect as live streams.
     </Card>
   </Column>

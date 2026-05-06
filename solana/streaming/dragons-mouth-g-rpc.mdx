@@ -91,6 +91,11 @@ You send it once when you open the stream; then you can send it again at any tim
 
     Example: `[{ "offset": 32, "length": 40 }]` returns 40 bytes starting at byte 32.
   </Tab>
+  <Tab title="fromSlot">
+    Replay buffered updates starting from this slot, then continue live on the same stream. Optional. Used for reconnection after short disconnections.
+
+    See [replay from a slot](#replay-from-a-slot).
+  </Tab>
 </Tabs>
 
 ### Filter configuration
@@ -910,53 +915,45 @@ enum SlotStatus {
 | `SLOT_COMPLETED` | All shreds for this slot received. Not necessarily replayed yet. |
 | `SLOT_DEAD` | The slot was rejected (invalid signature, bad PoH, wrong entry count). It's discarded by the network. Can happen at any point, even after `SLOT_COMPLETED`. |
 
-Lifecycle of a typical slot:
+Lifecycle of a typical slot, grouped into three phases (download, replay, consensus):
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','clusterBkg':'#F7F4FA','clusterBorder':'#7A4BA0','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
 flowchart LR
-    A[FIRST_SHRED_RECEIVED] --> B[shred 2 ... shred N]
-    B --> C[COMPLETED]
-    C --> D[CREATED_BANK]
-    D --> E[account updates]
-    E --> F[transactions]
-    F --> G[entries]
-    G --> H[BLOCK_META]
-    H --> I[PROCESSED]
-    I --> J[CONFIRMED]
-    J --> K[FINALIZED]
-    A -.dead path.-> X[DEAD]
-    C -.dead path.-> X
-    D -.dead path.-> X
+    subgraph SD["Slot download"]
+      direction LR
+      S1[FIRST_SHRED_RECEIVED] --> S2[shred 2 ... shred N]
+      S2 --> S3[COMPLETED]
+    end
+
+    subgraph RS["Replay stage"]
+      direction LR
+      R1[CREATED_BANK] --> R2[account updates]
+      R2 --> R3[transactions]
+      R3 --> R4[entries]
+      R4 --> R5[BLOCK_META]
+      R5 --> R6[PROCESSED]
+    end
+
+    subgraph CN["Consensus"]
+      direction LR
+      C1[CONFIRMED] --> C2[FINALIZED]
+    end
+
+    SD --> RS --> CN
+
+    S1 -.dead.-> X[DEAD]
+    S3 -.dead.-> X
+    R1 -.dead.-> X
 ```
 
-## Deshred transactions
+Time flows left to right. **Slot download** covers shred receipt up to the slot being marked complete. **Replay stage** is where the bank executes transactions and emits the events your subscription receives (account updates, transactions, entries, block meta), ending with `PROCESSED`. **Consensus** runs after replay -- the network votes the slot to `CONFIRMED` and eventually `FINALIZED`. A slot can drop out as `DEAD` at any point during download or replay.
 
-Dragon's Mouth also supports `SubscribeDeshred`, a separate gRPC method that delivers transactions reconstructed from shreds _before_ the validator executes them. This is the earliest usable on-chain signal -- designed for arbitrage, market making, copy trading, liquidations, and HFT pipelines.
+## Related: Deshred transactions
 
-A deshred update contains:
+Triton runs a separate gRPC method, `SubscribeDeshred`, on the same yellowstone-grpc service. It delivers transactions reconstructed from shreds _before_ the validator executes them, so you see intent earlier than any other stream. Designed for arbitrage, market making, copy trading, liquidations, and HFT.
 
-- `slot`
-- `signature`
-- vote flag
-- raw transaction
-- `loaded_writable_addresses` (resolved from address lookup tables)
-- `loaded_readonly_addresses`
-
-Filters supported on `SubscribeDeshred`:
-
-- `vote`
-- `account_include`
-- `account_exclude`
-- `account_required`
-
-<Warning>
-  **Deshred has no execution context.** No status, logs, inner instructions, balance changes, compute units, or `TransactionStatusMeta`. There's also no confirmation or finality guarantee -- a transaction may fail, land on a dead fork, or never confirm. If you need execution results, use Deshred together with the normal `transactions` stream.
-</Warning>
-
-`SubscribeDeshred` is currently a paid beta on Triton infrastructure. For the wire format and proto definitions, see [`geyser.proto`](https://github.com/rpcpool/yellowstone-grpc/blob/master/yellowstone-grpc-proto/proto/geyser.proto). For architecture and tradeoffs, see [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/).
-
-A full Rust example is in the [streaming quickstart](/solana/streaming/quickstart).
+It's a separate product with its own filter set, no execution metadata, and paid-beta access. See [Deshred transactions](/solana/streaming/deshred-transactions) for the full reference.
 
 ## Excluded programs
 
@@ -1076,12 +1073,20 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 ## What's next?
 
 <CardGroup cols={2}>
+  <Card title="Deshred transactions" icon="zap" href="/solana/streaming/deshred-transactions">
+    Pre-execution transaction stream on the same gRPC service. Earliest signal.
+  </Card>
+
   <Card title="Whirligig WebSockets" icon="rotate-cw" href="/solana/streaming/whirligig-websockets">
     Browser-friendly version of the same data over WebSocket.
   </Card>
 
   <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
     Add deduplication and resume-from-cursor on top of Dragon's Mouth.
+  </Card>
+
+  <Card title="Streaming overview" icon="radio" href="/solana/streaming/overview">
+    Compare Dragon's Mouth against the rest of the streaming stack.
   </Card>
 </CardGroup>
 

@@ -1,0 +1,207 @@
+---
+title: "Deshred transactions"
+description: "Pre-execution transaction stream reconstructed from shreds, before the validator executes them. The earliest usable on-chain signal exposed by Yellowstone gRPC."
+---
+
+import FooterLinks from '/snippets/footer-links.mdx'
+
+## What is Deshred
+
+Deshred is a separate gRPC method (`SubscribeDeshred`) on the same yellowstone-grpc service as [Dragon's Mouth](/solana/streaming/dragons-mouth-g-rpc). It delivers transactions reconstructed from shreds **before** the validator executes them.
+
+This is the earliest usable on-chain signal Triton exposes. It's designed for latency-sensitive systems that care about transaction intent as early as possible: arbitrage, market making, copy trading, liquidations, HFT.
+
+Unlike the standard `Subscribe` transaction stream, deshred updates are emitted **before** Replay. You receive the decoded transaction earlier, but without execution context.
+
+## Features and benefits
+
+<CardGroup cols={2}>
+  <Card title="Earliest signal" icon="zap">
+    Transactions reconstructed from shreds before validator execution.
+  </Card>
+
+  <Card title="Same gRPC service" icon="radio">
+    Drops into your existing Dragon's Mouth pipeline. Separate method, same client.
+  </Card>
+
+  <Card title="Resolved ALT addresses" icon="route">
+    Includes writable + readonly addresses resolved from Address Lookup Tables.
+  </Card>
+
+  <Card title="Server-side filtering" icon="filter">
+    Filter by vote, account_include, account_exclude, account_required.
+  </Card>
+</CardGroup>
+
+## Update payload
+
+A deshred update includes:
+
+- `slot`
+- `signature`
+- vote flag
+- raw transaction
+- `loaded_writable_addresses` (resolved from Address Lookup Tables)
+- `loaded_readonly_addresses`
+
+The loaded address fields contain addresses resolved from Address Lookup Tables (ALTs), so deshred filters match both static account keys and dynamically loaded addresses.
+
+## Filters
+
+`SubscribeDeshred` supports:
+
+- `vote`
+- `account_include`
+- `account_exclude`
+- `account_required`
+
+## Important limitations
+
+- `SubscribeDeshred` is a separate RPC, not a field on `SubscribeRequest`.
+- Deshred data has **no execution metadata**: no status, logs, inner instructions, balance changes, compute units, or `TransactionStatusMeta`.
+- Deshred data has **no confirmation or finality guarantee**: a transaction may fail, land on a dead fork, or never confirm.
+- If you need confirmation and execution results, use Deshred together with the normal `transactions` stream from [Dragon's Mouth](/solana/streaming/dragons-mouth-g-rpc).
+
+<Warning>
+  **No execution context.** Deshred only carries the raw transaction. If your pipeline needs status, logs, or balance deltas, run a parallel Dragon's Mouth `transactions` subscription and join on `signature`.
+</Warning>
+
+## Availability
+
+`SubscribeDeshred` is currently available only on Triton One gRPC servers and is in **paid beta**. It depends on Triton's validator-side extension and does not work out of the box on a stock Agave node.
+
+For a deeper overview of architecture and tradeoffs, see [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/). For the wire format and RPC definitions, see [`geyser.proto`](https://github.com/rpcpool/yellowstone-grpc/blob/master/yellowstone-grpc-proto/proto/geyser.proto).
+
+## Subscribe and consume
+
+The example below subscribes to the `SubscribeDeshred` stream, filters out vote transactions, and logs every transaction signature with its slot.
+
+<CodeGroup>
+
+```typescript TypeScript
+import Client, {
+  SubscribeDeshredRequest,
+} from "@triton-one/yellowstone-grpc";
+
+const client = new Client(
+  "https://<your-endpoint>.mainnet.rpcpool.com",
+  "<your-token>",
+  undefined
+);
+
+const stream = await client.subscribeDeshred();
+
+stream.on("data", (data) => {
+  console.log("data", data);
+});
+
+const request: SubscribeDeshredRequest = {
+  deshredTransactions: {
+    client: {
+      vote: false,
+      accountInclude: [],
+      accountExclude: [],
+      accountRequired: [],
+    },
+  },
+  ping: undefined,
+};
+
+await new Promise<void>((resolve, reject) => {
+  stream.write(request, (err) =>
+    err ? reject(err) : resolve()
+  );
+});
+```
+
+```rust Rust
+use {
+    futures::{sink::SinkExt, stream::StreamExt},
+    solana_signature::Signature,
+    std::collections::HashMap,
+    tonic::transport::channel::ClientTlsConfig,
+    yellowstone_grpc_client::GeyserGrpcClient,
+    yellowstone_grpc_proto::prelude::{
+        subscribe_update_deshred::UpdateOneof, SubscribeDeshredRequest,
+        SubscribeRequestFilterDeshredTransactions, SubscribeRequestPing,
+    },
+};
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let endpoint = std::env::var("ENDPOINT")
+        .unwrap_or("https://<endpoint>".into());
+    let x_token = std::env::var("X_TOKEN").ok();
+
+    let mut client = GeyserGrpcClient::build_from_shared(endpoint)?
+        .x_token(x_token)?
+        .tls_config(ClientTlsConfig::new().with_native_roots())?
+        .http2_adaptive_window(true)
+        .initial_connection_window_size(8 * 1024 * 1024) // 8 MiB
+        .initial_stream_window_size(4 * 1024 * 1024) // 4 MiB
+        .connect()
+        .await?;
+
+    let request = SubscribeDeshredRequest {
+        deshred_transactions: HashMap::from([(
+            "deshred".into(),
+            SubscribeRequestFilterDeshredTransactions {
+                vote: Some(false),
+                account_include: vec![],
+                account_exclude: vec![],
+                account_required: vec![],
+            },
+        )]),
+        ping: None,
+    };
+
+    let (mut tx, mut stream) =
+        client.subscribe_deshred_with_request(Some(request)).await?;
+
+    while let Some(msg) = stream.next().await {
+        match msg?.update_oneof {
+            Some(UpdateOneof::DeshredTransaction(update)) => {
+                let info = update.transaction.as_ref().unwrap();
+                let sig = Signature::try_from(info.signature.as_slice())?;
+                println!("slot={} sig={sig} vote={}", update.slot, info.is_vote);
+            }
+            Some(UpdateOneof::Ping(_)) => {
+                tx.send(SubscribeDeshredRequest {
+                    ping: Some(SubscribeRequestPing { id: 1 }),
+                    ..Default::default()
+                }).await?;
+            }
+            Some(UpdateOneof::Pong(_)) => {}
+            None => break,
+        }
+    }
+
+    Ok(())
+}
+```
+
+</CodeGroup>
+
+## What's next?
+
+<CardGroup cols={2}>
+  <Card title="Streaming quickstart" icon="rocket" href="/solana/streaming/quickstart">
+    Get a Deshred stream running in five minutes alongside Dragon's Mouth.
+  </Card>
+
+  <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
+    Standard subscriptions for accounts, transactions, slots, blocks.
+  </Card>
+
+  <Card title="Deshred blog post" icon="book-open" href="https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/">
+    Architecture, tradeoffs, and how Deshred fits the Solana shred pipeline.
+  </Card>
+
+  <Card title="Streaming overview" icon="radio" href="/solana/streaming/overview">
+    Compare Deshred against the rest of the streaming stack.
+  </Card>
+</CardGroup>
+
+---
+
+<FooterLinks />
