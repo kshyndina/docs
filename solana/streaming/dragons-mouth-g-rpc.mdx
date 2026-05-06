@@ -156,6 +156,152 @@ Each `SubscribeRequest` has a map per stream type. The key is a label you choose
 
 \[you'll need\>....\]
 
+\[placeholder for use cases??\]
+
+## Features and benefits
+
+\[placeholder\]
+
+## Stream types and unary operations
+
+Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions and one-shot unary calls.
+
+**Streaming subscriptions** (open a subscribe stream, receive matching events):
+
+| Stream | What you receive |
+| --- | --- |
+| Account writes | Updates whenever a matching account's data, lamports, or owner changes |
+| Transactions | Every transaction matching your filter, with full `meta` (logs, status, balance deltas) |
+| Deshred transactions (paid beta) | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](#deshred-transactions) |
+| Entries | Solana ledger entries (low-level, rare use case) |
+| Block notifications | Full blocks as they're produced, optionally with their transactions and accounts |
+| Block metadata | Block headers only, without the transaction payload |
+| Slot notifications | Slot-status events (processed/confirmed/finalized plus intra-slot lifecycle) |
+
+**Unary operations** (one request, one response):
+
+| Method | Returns |
+| --- | --- |
+| `getLatestBlockhash` | The latest blockhash \+ last valid block height at a commitment level |
+| `getBlockHeight` | The current block height at a commitment level |
+| `getSlot` | The current slot at a commitment level |
+| `isValidBlockhash` | Whether a given blockhash is still valid |
+| `subscribeReplayInfo` | Earliest slot still available for stream replay |
+
+## Subscribe request
+
+Every stream subscription is a single `SubscribeRequest` message. It has fields that apply across all stream types and a per-stream filter map. Send it once when you open the stream; send it again at any time to modify (the new request fully replaces the old one).
+
+<Tabs>
+  <Tab title="commitment">
+    Commitment level for buffering. Optional. Defaults to `processed`.
+
+    | Value | Meaning |
+    | --- | --- |
+    | `PROCESSED` (0) | Highest slot seen, possibly on a fork. Lowest latency. |
+    | `CONFIRMED` (1) | Voted on by supermajority. Some buffering. |
+    | `FINALIZED` (2) | Max vote lockout. Most buffering. |
+
+    For maximum performance, work at `processed` and manage commitment client-side using [slot notifications](#slots).
+  </Tab>
+  <Tab title="ping">
+    Sends a periodic keepalive to prevent idle-connection drops by load balancers and NATs. Server replies with `pong`. Optional but recommended for long-running streams.
+
+    See [pings](#pings).
+  </Tab>
+  <Tab title="accountsDataSlice">
+    Truncates account data payloads to a byte range, reducing bandwidth. Optional. Empty array means full payload.
+
+    Example: `[{ "offset": 32, "length": 40 }]` returns 40 bytes starting at byte 32.
+  </Tab>
+  <Tab title="fromSlot">
+    Replay buffered updates starting from this slot, then continue live. Optional. Used for reconnection logic.
+
+    See [replaying from a slot](#replay-from-a-slot).
+  </Tab>
+</Tabs>
+
+### Filter logic
+
+Within a single filter category (e.g. one transaction filter), values are combined as follows:
+
+- **Within an array, OR.** `account_include: [A, B]` matches transactions mentioning A _or_ B.
+- **Across fields, AND.** `vote: false, account_include: [A]` matches non-vote transactions mentioning A.
+
+For transactions specifically:
+
+```text
+match = (accountInclude OR empty) AND (accountRequired AND all) AND NOT accountExclude
+```
+
+Across multiple named filters in the same category (e.g. two transaction filters), you receive matches from any of them. Each match comes tagged with the filter name(s) that produced it, so you can route updates downstream.
+
+## Filter configuration
+
+Each `SubscribeRequest` has a map per stream type. The key is a label you choose (returned with each match so you can route it); the value is the filter spec.
+
+<AccordionGroup>
+  <Accordion title="Account filters">
+    Match account writes by pubkey, owner program, or content-based filters.
+
+    | Field | Type | Purpose |
+    | --- | --- | --- |
+    | `account` | `string[]` | List of pubkeys to subscribe to directly |
+    | `owner` | `string[]` | List of program owners (subscribes to every account owned by these programs) |
+    | `filters` | `AccountsFilter[]` | Additional content-based filters: `memcmp`, `datasize`, `tokenAccountState`, `lamports` |
+
+    See [account subscriptions](#accounts) for examples.
+  </Accordion>
+
+  <Accordion title="Transaction filters">
+    Match transactions by participating accounts, signature, vote/failed flags.
+
+    | Field | Type | Purpose |
+    | --- | --- | --- |
+    | `vote` | `bool?` | Include or exclude vote transactions. `false` excludes votes. |
+    | `failed` | `bool?` | Include or exclude failed transactions. `false` excludes failures. |
+    | `signature` | `string?` | Subscribe to a specific signature's status updates |
+    | `account_include` | `string[]` | Accounts mentioned anywhere in the transaction |
+    | `account_exclude` | `string[]` | Exclude transactions mentioning these accounts |
+    | `account_required` | `string[]` | Accounts that MUST all be mentioned (every one of them) |
+
+    See [transaction subscriptions](#transactions) for examples.
+  </Accordion>
+
+  <Accordion title="Block filters">
+    Match block updates and control payload size.
+
+    | Field | Type | Purpose |
+    | --- | --- | --- |
+    | `account_include` | `string[]` | Only deliver transactions/accounts in the block that mention these |
+    | `include_transactions` | `bool` | Include the block's transactions. Default `true`. |
+    | `include_accounts` | `bool` | Include accounts updated during the block. Default `false`. |
+    | `include_entries` | `bool` | Include the block's entries |
+
+    See [block subscriptions](#blocks) for examples.
+  </Accordion>
+
+  <Accordion title="Slot filters">
+    Match slot-status updates.
+
+    | Field | Type | Purpose |
+    | --- | --- | --- |
+    | `filter_by_commitment` | `bool` | If `true`, only receive updates matching the request's `commitment`. If `false` (default), receive every status change |
+
+    See [slot subscriptions](#slots) for examples.
+  </Accordion>
+
+  <Accordion title="Entry filters">
+    No filter parameters. Subscribe by adding any named entry to the `entry` map.
+
+    See [entry subscriptions](#entries) for examples.
+  </Accordion>
+</AccordionGroup>
+
+## Subscribing to each stream type
+
+\[you'll need\>....\]
+
 - An active Triton subscription
 - Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/)
 - A backend environment in TypeScript, Rust, Go, or another language with a gRPC client
@@ -971,5 +1117,7 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 </CardGroup>
 
 ---
+
+<FooterLinks />
 
 <FooterLinks />
