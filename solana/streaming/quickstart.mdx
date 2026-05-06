@@ -352,7 +352,7 @@ Set up a fresh project for the service you want to try.
     - `StreamTransactions` -- replay every transaction in a slot range, with server-side filters
     - `StreamBlocks` -- replay every block in a slot range
 
-    Examples and method definitions: [yellowstone-faithful repo](https://github.com/rpcpool/yellowstone-faithful), [Old Faithful gRPC docs](https://docs.old-faithful.net/usage-and-installation/grpc-methods).
+    Examples and method definitions: [Yellowstone-faithful repo](https://github.com/rpcpool/yellowstone-faithful), [Old Faithful gRPC docs](https://docs.old-faithful.net/usage-and-installation/grpc-methods).
 
     Live and historical pipelines look identical to your client code, so anything you build for Dragon's Mouth adapts to Old Faithful with minimal changes.
   </Tab>
@@ -441,7 +441,8 @@ Run your code and walk through this checklist:
 1. **Confirm the connection.** A "subscribed" or "connected" log message should appear within a second of starting.
 2. **Watch for events.** Matching events should start flowing within 1-2 slots (roughly 800 ms).
 3. **Verify your filter.** If nothing arrives after 5 seconds, your filter is probably too narrow. Widen it (e.g. all transactions instead of one program), then tighten back once you see data flowing.
-4. **Test reconnection (optional).** Drop your network briefly and confirm your client reconnects and resumes.
+4. Keep alive ??? did we include it in code? 
+5. **Test reconnection (optional).** Drop your network briefly and confirm your client reconnects and resumes.
 
 ### Expected output
 
@@ -557,7 +558,7 @@ Run your code and walk through this checklist:
 ## What's next
 
 <CardGroup cols={2}>
-  <Card title="Dragon's Mouth full reference" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
+  <Card title="Dragon's Mouth docs" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
     Subscribe-request shape, all filter types, replay from a slot, intra-slot updates.
   </Card>
 
