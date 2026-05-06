@@ -634,76 +634,21 @@
 
 
 /* ============================================================
-   Sidebar dropdowns: persist user-toggled state across pages
+   Sidebar dropdowns: REMOVED 2026-05-06
    ============================================================
-   Mintlify auto-collapses sidebar groups that aren't on the active
-   route. Kate wants groups to stay open once a user opens them, only
-   closing when the user clicks the toggle again. This module:
+   Previous version watched the DOM with a MutationObserver and
+   programmatically clicked Toggle buttons to restore a saved
+   "open groups" state from localStorage.
 
-   1. Watches the DOM for `<button aria-label="Toggle X section" ...>`.
-   2. On first sight, reads localStorage for the saved set of opened
-      groups; if a group is in the set but currently collapsed, it
-      simulates a click to open it.
-   3. On user click, writes the new state back to localStorage after
-      the framework toggles aria-expanded.
+   That fought Mintlify's SPA router: Mintlify re-renders the sidebar
+   on every navigation and auto-collapses groups whose pages aren't
+   active. Our restore-click would re-open the group, the framework
+   would close it again, our observer would fire on the resulting DOM
+   change and click again -- twitching at animation-frame rate
+   (visible as Account management ↔ Set up your account flickering
+   on every page load).
+
+   Mintlify's default behaviour (auto-open the group containing the
+   current page) is enough. If we ever need true persistence, do it
+   on a `popstate` / pathname-change basis, NOT a MutationObserver.
    ============================================================ */
-(function () {
-  if (typeof window === 'undefined') return;
-
-  var STORAGE_KEY = 'triton-sidebar-open-groups';
-
-  function readState() {
-    try {
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return new Set();
-      return new Set(JSON.parse(raw));
-    } catch (e) {
-      return new Set();
-    }
-  }
-  function writeState(set) {
-    try {
-      var arr = [];
-      set.forEach(function (v) { arr.push(v); });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
-    } catch (e) {}
-  }
-
-  function bindToggles() {
-    var btns = document.querySelectorAll('button[aria-label^="Toggle "][aria-label$=" section"]');
-    if (!btns.length) return;
-    var state = readState();
-
-    btns.forEach(function (btn) {
-      var label = btn.getAttribute('aria-label');
-      if (!label) return;
-
-      // Restore state if needed
-      var isOpen = btn.getAttribute('aria-expanded') === 'true';
-      var wantOpen = state.has(label);
-      if (wantOpen && !isOpen && !btn.__tritonRestored) {
-        btn.__tritonRestored = true;
-        // Click without scroll-into-view side-effects
-        try { btn.click(); } catch (e) {}
-      }
-
-      if (btn.__tritonStickyBound) return;
-      btn.__tritonStickyBound = true;
-      btn.addEventListener('click', function () {
-        // Wait a tick for aria-expanded to flip, then save
-        setTimeout(function () {
-          var nowOpen = btn.getAttribute('aria-expanded') === 'true';
-          var s = readState();
-          if (nowOpen) s.add(label); else s.delete(label);
-          writeState(s);
-        }, 60);
-      });
-    });
-  }
-
-  bindToggles();
-  var obs = new MutationObserver(function () {
-    requestAnimationFrame(bindToggles);
-  });
-  obs.observe(document.documentElement, { childList: true, subtree: true });
-})();
