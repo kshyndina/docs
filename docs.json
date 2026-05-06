@@ -128,8 +128,8 @@
                 "group": "Streaming data",
                 "pages": [
                   "solana/streaming/overview",
-                  "solana/streaming/quickstart",
                   "solana/streaming/dragons-mouth-g-rpc",
+                  "solana/streaming/whirligig-websockets",
                   "solana/streaming/fumarole-persistent-streams",
                   "solana/streaming/old-faithful-streams"
                 ]
