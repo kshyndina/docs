@@ -1,6 +1,6 @@
 ---
 title: "Streaming quickstart"
-description: "Connect to any Triton streaming service in five minutes. Covers Dragon's Mouth gRPC, Whirligig WebSocket, Fumarole, and Old Faithful streams."
+description: "Connect to any Triton streaming service in five minutes. Covers Dragon's Mouth gRPC, Whirligig WebSocket, Fumarole, Old Faithful streams, and Deshred transactions."
 sidebarTitle: "Quickstart"
 ---
 
@@ -8,281 +8,525 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
 Test out any Triton streaming service in five minutes. For the full overview and product comparison, see the [streaming overview](/solana/streaming/overview).
 
-## Prerequisites
+## Step 0. Prerequisites
 
-All four services use Triton-issued endpoints with token-based authentication. Before starting:
+All five services use Triton-issued endpoints with token-based authentication. Before starting:
 
 - An active Triton subscription
 - Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) ([how to get them](/solana/get-started/account-management/set-up-your-account-and-add-users))
 - A backend environment in TypeScript, Rust, Go, or Python
-- You've picked a service to try (skim the cards below)
+- You've picked a service to try
 
-<CardGroup cols={2}>
-  <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth/overview">
-    Sub-slot live data, the canonical Yellowstone stream. Backend services only.
-  </Card>
-  <Card title="Whirligig WebSocket" icon="rotate-cw" href="/solana/streaming/whirligig/overview">
-    Same data as Dragon's Mouth, for browsers and dApps that can't use gRPC.
-  </Card>
-  <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole/overview">
-    Persistent gRPC streams with deduplication and resume-from-cursor. Built for indexers and analytics pipelines.
-  </Card>
-  <Card title="Old Faithful streams" icon="archive" href="/solana/streaming/old-faithful-streams">
-    Every block from genesis over the same gRPC dialect as live streams. Built for history indexers and researchers.
-  </Card>
-</CardGroup>
+The five streaming services covered:
 
-<Steps>
-  <Step title="Install">
-    Dragon's Mouth, Fumarole, and Old Faithful streams share the same `yellowstone-grpc` client across languages. Fumarole adds a small client on top for persistent-subscriber management. Whirligig works with any standard WebSocket client and doesn't need a Triton-specific SDK.
+- **Dragon's Mouth gRPC** -- sub-slot live data, the canonical Yellowstone stream. Backend services only.
+- **Whirligig WebSocket** -- same data as Dragon's Mouth, for browsers and dApps that can't use gRPC.
+- **Fumarole** -- persistent gRPC streams with deduplication and resume-from-cursor. Built for indexers and analytics pipelines.
+- **Old Faithful streams** -- every block from genesis over the same gRPC dialect as live streams. Built for history indexers and researchers.
+- **Deshred transactions** -- pre-execution transaction stream, separate gRPC method. Built for arbitrage, market making, copy trading, HFT.
 
-    <Tabs>
-      <Tab title="TypeScript">
-        ```bash
-        npm install @triton-one/yellowstone-grpc
+<Note>
+Tabs in each step below don't sync across steps. Click the same service tab in each step to stay on one product's path.
+</Note>
 
-        # For Fumarole specifically:
-        npm install @triton-one/yellowstone-fumarole-client
+## Step 1. Install
 
-        # For Whirligig (any WebSocket library works):
-        npm install ws
-        ```
-      </Tab>
-      <Tab title="Rust">
-        ```toml
-        [dependencies]
-        yellowstone-grpc-client = "1.13.0"
-        yellowstone-grpc-proto = "1.13.0"
-        # For Fumarole:
-        yellowstone-fumarole-client = "0.5"
-        tokio = { version = "1", features = ["full"] }
-        futures = "0.3"
-        ```
-      </Tab>
-      <Tab title="Go">
-        ```bash
-        go get github.com/rpcpool/yellowstone-grpc/examples/golang@latest
-        go get google.golang.org/grpc@v1.67.1
-        ```
-      </Tab>
-      <Tab title="Python">
-        ```bash
-        pip install grpcio grpcio-tools
+Set up a fresh project for the service you want to try.
 
-        # Yellowstone proto bindings via the official examples repo:
-        git clone https://github.com/rpcpool/yellowstone-grpc.git
-        ```
-      </Tab>
-    </Tabs>
-  </Step>
+<Tabs>
+  <Tab title="Dragon's Mouth">
+    <CodeGroup>
+    ```bash TypeScript
+    mkdir solana-grpc-stream && cd solana-grpc-stream
+    npm init -y
+    npm install @triton-one/yellowstone-grpc
+    npm install --save-dev typescript ts-node @types/node
+    npx tsc --init
+    ```
 
-  <Step title="Connect and subscribe">
-    Each tab shows minimal TypeScript code to connect, subscribe, and read events. For Rust, Go, and Python examples, follow the link below each block.
+    ```toml Rust
+    [dependencies]
+    yellowstone-grpc-client = "1.13"
+    yellowstone-grpc-proto = "1.13"
+    tokio = { version = "1", features = ["full"] }
+    futures = "0.3"
+    tonic = { version = "0.12", features = ["tls"] }
+    ```
 
-    <Tabs>
-      <Tab title="Dragon's Mouth">
-        Connect over gRPC, subscribe to all token-program account updates, log each event.
+    ```bash Go
+    mkdir solana-grpc-stream && cd solana-grpc-stream
+    go mod init example.com/solana-grpc-stream
+    go get github.com/rpcpool/yellowstone-grpc/examples/golang@latest
+    ```
+    </CodeGroup>
 
-        ```typescript
-        import Client, { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+    Other languages, see the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory.
+  </Tab>
 
-        const client = new Client(
-          "https://<your-endpoint>.mainnet.rpcpool.com",
-          "<your-token>",
-          undefined
-        );
+  <Tab title="Whirligig">
+    Whirligig speaks the standard Solana WebSocket protocol, so any WebSocket client works.
 
-        const stream = await client.subscribe();
+    <CodeGroup>
+    ```bash TypeScript
+    mkdir whirligig-stream && cd whirligig-stream
+    npm init -y
+    npm install ws
+    npm install --save-dev typescript ts-node @types/node @types/ws
+    npx tsc --init
+    ```
+    </CodeGroup>
 
-        stream.on("data", (data) => {
-          console.log("Update:", data);
-        });
+    A reference Rust CLI client is available at [yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client).
+  </Tab>
 
-        await new Promise<void>((resolve, reject) => {
-          stream.write({
-            accounts: {
-              tokenProgram: {
-                owner: ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
-                account: [],
-                filters: [],
-              },
-            },
-            slots: {},
-            transactions: {},
-            blocks: {},
-            blocksMeta: {},
-            entry: {},
-            accountsDataSlice: [],
-            commitment: CommitmentLevel.PROCESSED,
-          }, (err) => err ? reject(err) : resolve());
-        });
-        ```
+  <Tab title="Fumarole">
+    Fumarole adds a persistent-subscriber layer on top of Dragon's Mouth.
 
-        Rust, Go, and Python examples: [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples).
-      </Tab>
-      <Tab title="Whirligig">
-        Connect over WebSocket using any standard client. No Triton-specific SDK required.
+    <CodeGroup>
+    ```bash TypeScript
+    mkdir fumarole-stream && cd fumarole-stream
+    npm init -y
+    npm install @triton-one/yellowstone-fumarole
+    npm install --save-dev typescript ts-node @types/node
+    npx tsc --init
+    ```
 
-        ```typescript
-        import WebSocket from "ws";
+    ```toml Rust
+    [dependencies]
+    yellowstone-fumarole-client = "0.5"
+    yellowstone-grpc-proto = "1.13"
+    tokio = { version = "1", features = ["full"] }
+    futures = "0.3"
+    ```
+    </CodeGroup>
 
-        const ws = new WebSocket(
-          "wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/whirligig"
-        );
+    Examples for additional languages live in [yellowstone-fumarole/examples](https://github.com/rpcpool/yellowstone-fumarole/tree/main/examples).
+  </Tab>
 
-        ws.on("open", () => {
-          ws.send(JSON.stringify({
-            jsonrpc: "2.0",
-            id: 1,
-            method: "accountSubscribe",
-            params: [
-              "SysvarC1ock11111111111111111111111111111111",
-              { commitment: "processed", encoding: "base58" },
-            ],
-          }));
-        });
+  <Tab title="Old Faithful streams">
+    Old Faithful uses the same `yellowstone-grpc` client as Dragon's Mouth. Install identically and point the endpoint at your Old Faithful URL.
 
-        ws.on("message", (data) => {
-          console.log("Update:", JSON.parse(data.toString()));
-        });
-        ```
+    <CodeGroup>
+    ```bash TypeScript
+    mkdir old-faithful-stream && cd old-faithful-stream
+    npm init -y
+    npm install @triton-one/yellowstone-grpc
+    npm install --save-dev typescript ts-node @types/node
+    npx tsc --init
+    ```
+    </CodeGroup>
 
-        Whirligig speaks the standard Solana WebSocket API plus an extended `transactionSubscribe` method. Full method reference: [Whirligig WebSocket API](/solana/streaming/whirligig/overview).
-      </Tab>
-      <Tab title="Fumarole">
-        Fumarole adds a persistent subscriber on top of Dragon's Mouth. Connect to a regional endpoint (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US) and pick a subscriber name.
+    See the [yellowstone-faithful repo](https://github.com/rpcpool/yellowstone-faithful) for the gRPC method definitions and example clients.
+  </Tab>
 
-        ```typescript
-        import { FumaroleClient } from "@triton-one/yellowstone-fumarole-client";
+  <Tab title="Deshred">
+    Deshred is a separate gRPC method on the same `yellowstone-grpc` service. Same install as Dragon's Mouth.
 
-        const client = await FumaroleClient.connect({
-          endpoint: "https://ams.rpcpool.com",
-          xToken: "<your-token>",
-        });
+    <CodeGroup>
+    ```bash TypeScript
+    mkdir deshred-stream && cd deshred-stream
+    npm init -y
+    npm install @triton-one/yellowstone-grpc
+    npm install --save-dev typescript ts-node @types/node
+    npx tsc --init
+    ```
 
-        const session = await client.dragonsmouthSubscribe("my-subscriber", {
-          transactions: {
-            all: { vote: false, failed: false },
-          },
-        });
+    ```toml Rust
+    [dependencies]
+    yellowstone-grpc-client = "1.13"
+    yellowstone-grpc-proto = "1.13"
+    solana-signature = "2"
+    tokio = { version = "1", features = ["full"] }
+    futures = "0.3"
+    tonic = { version = "0.12", features = ["tls"] }
+    anyhow = "1"
+    ```
+    </CodeGroup>
 
-        for await (const event of session.source) {
-          console.log("Update:", event);
+    Deshred is currently a paid beta on Triton infrastructure. See [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/) for context.
+  </Tab>
+</Tabs>
+
+## Step 2. Connect and subscribe
+
+<Tabs>
+  <Tab title="Dragon's Mouth">
+    **What we're doing:** subscribe to all writes on a specific account (the wSOL/USDC OpenBook market) and log each Protobuf-decoded update.
+
+    First, initialise the client and connect:
+
+    <CodeGroup>
+    ```typescript TypeScript
+    import Client from "@triton-one/yellowstone-grpc";
+
+    const client = new Client(
+      "https://<your-endpoint>.mainnet.rpcpool.com",
+      "<your-token>",
+      undefined
+    );
+
+    await client.connect();
+
+    const version = await client.getVersion();
+    console.log(version);
+    ```
+    </CodeGroup>
+
+    Then open a subscription stream, attach a data handler, and send the subscribe request:
+
+    <CodeGroup>
+    ```typescript TypeScript
+    import { CommitmentLevel, SubscribeRequest } from "@triton-one/yellowstone-grpc";
+
+    const stream = await client.subscribe();
+
+    stream.on("data", (data) => {
+      console.log("data", data);
+    });
+
+    const request: SubscribeRequest = {
+      slots: { slots: {} },
+      accounts: {
+        "wsol/usdc": {
+          account: ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"],
+          owner: [],
+          filters: [],
+        },
+      },
+      transactions: {},
+      transactionsStatus: {},
+      entry: {},
+      blocks: {},
+      blocksMeta: {},
+      accountsDataSlice: [],
+      commitment: CommitmentLevel.CONFIRMED,
+      ping: undefined,
+    };
+
+    await new Promise<void>((resolve, reject) => {
+      stream.write(request, (err) => {
+        if (err === null || err === undefined) {
+          resolve();
+        } else {
+          reject(err);
         }
-        ```
+      });
+    }).catch((reason) => {
+      console.error(reason);
+      throw reason;
+    });
+    ```
 
-        The first time you call `dragonsmouthSubscribe` with a new subscriber name, Fumarole creates the persistent subscriber. Reconnect with the same name and you resume from where you left off. Rust example and full configuration: [yellowstone-fumarole](https://github.com/rpcpool/yellowstone-fumarole).
-      </Tab>
-      <Tab title="Old Faithful streams">
-        Old Faithful uses the same gRPC dialect as Dragon's Mouth. The streaming methods are `StreamTransactions` and `StreamBlocks`, replaying historical data from any starting slot.
+    ```shell grpcurl
+    ./grpcurl \
+      -proto geyser.proto \
+      -d '{"slots": { "slots": {} }, "accounts": { "wsol/usdc": { "account": ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
+      -H "x-token: <token>" \
+      api.rpcpool.com:443 \
+      geyser.Geyser/Subscribe
+    ```
+    </CodeGroup>
 
-        ```typescript
-        import { OldFaithfulClient } from "@triton-one/yellowstone-grpc";
+    For Rust, Go, and other languages: [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples).
+  </Tab>
 
-        const client = new OldFaithfulClient(
-          "https://<your-old-faithful-endpoint>",
-          "<your-token>"
-        );
+  <Tab title="Whirligig">
+    **What we're doing:** open a Solana-standard WebSocket connection to Whirligig and subscribe to changes on the system clock sysvar.
 
-        const stream = await client.streamBlocks({
-          startSlot: 100_000_000,
-          endSlot: 100_000_100,
-        });
+    <CodeGroup>
+    ```typescript TypeScript
+    import WebSocket from "ws";
 
-        for await (const block of stream) {
-          console.log("Block:", block.slot);
+    const ws = new WebSocket(
+      "wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/whirligig"
+    );
+
+    ws.on("open", () => {
+      ws.send(
+        JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "accountSubscribe",
+          params: [
+            "SysvarC1ock11111111111111111111111111111111",
+            { commitment: "processed", encoding: "base58" },
+          ],
+        })
+      );
+    });
+
+    ws.on("message", (data) => {
+      console.log("Update:", JSON.parse(data.toString()));
+    });
+    ```
+    </CodeGroup>
+
+    Whirligig speaks the [standard Solana WebSocket API](https://docs.solana.com/api/websocket) plus an extended `transactionSubscribe` method. Full method reference: [Whirligig WebSocket API](/solana/streaming/whirligig-websockets).
+  </Tab>
+
+  <Tab title="Fumarole">
+    **What we're doing:** connect to a regional Fumarole endpoint, create a persistent subscriber, and stream all account writes for the SPL Token program. Reconnecting with the same subscriber name resumes from where the cursor left off.
+
+    Connect to a regional endpoint (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US):
+
+    <CodeGroup>
+    ```typescript TypeScript
+    import {
+      FumaroleClient,
+      InitialOffsetPolicy,
+    } from "@triton-one/yellowstone-fumarole";
+    import { CommitmentLevel, SubscribeRequest } from "@triton-one/yellowstone-grpc";
+
+    const TOKEN_ADDRESS = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+    const subscriberName = "helloworld";
+
+    const client = await FumaroleClient.connect({
+      endpoint: process.env.FUMAROLE_ENDPOINT!, // e.g. https://ams.rpcpool.com
+      xToken: process.env.FUMAROLE_X_TOKEN!,
+      maxDecodingMessageSizeBytes: 100 * 1024 * 1024,
+    });
+    ```
+    </CodeGroup>
+
+    Build the subscribe request:
+
+    <CodeGroup>
+    ```typescript TypeScript
+    const request: SubscribeRequest = {
+      commitment: CommitmentLevel.PROCESSED,
+      accounts: {
+        token: {
+          account: [],
+          owner: [TOKEN_ADDRESS],
+          filters: [],
+        },
+      },
+      transactions: {
+        token: {
+          accountInclude: [TOKEN_ADDRESS],
+          accountExclude: [],
+          accountRequired: [],
+        },
+      },
+      slots: { test: { filterByCommitment: true } },
+      transactionsStatus: {},
+      blocks: {},
+      blocksMeta: {},
+      entry: {},
+      ping: { id: Date.now() },
+      accountsDataSlice: [],
+      fromSlot: undefined,
+    };
+    ```
+    </CodeGroup>
+
+    Create the persistent subscriber and consume:
+
+    <CodeGroup>
+    ```typescript TypeScript
+    await client.createPersistentSubscriber({
+      consumerGroupName: subscriberName,
+      initialOffsetPolicy: InitialOffsetPolicy.LATEST,
+    });
+
+    const { sink: _sink, source } = await client.dragonsmouthSubscribe(
+      subscriberName,
+      request
+    );
+
+    await source.forEach((update) => {
+      console.log("Update:", update);
+    });
+    ```
+    </CodeGroup>
+
+    Source: [yellowstone-fumarole/typescript-sdk README](https://github.com/rpcpool/yellowstone-fumarole/blob/main/typescript-sdk/README.md). For Rust, see [yellowstone-fumarole/examples](https://github.com/rpcpool/yellowstone-fumarole/tree/main/examples).
+  </Tab>
+
+  <Tab title="Old Faithful streams">
+    **What we're doing:** connect to Old Faithful with the same `yellowstone-grpc` client used for Dragon's Mouth, then call `StreamBlocks` (an Old-Faithful-specific gRPC method) to replay a range of historical blocks.
+
+    Old Faithful's gRPC service exposes two stream methods that aren't on Dragon's Mouth:
+
+    - `StreamTransactions` -- replay every transaction in a slot range, with server-side filters
+    - `StreamBlocks` -- replay every block in a slot range
+
+    Examples and method definitions: [yellowstone-faithful repo](https://github.com/rpcpool/yellowstone-faithful), [Old Faithful gRPC docs](https://docs.old-faithful.net/usage-and-installation/grpc-methods).
+
+    Live and historical pipelines look identical to your client code, so anything you build for Dragon's Mouth adapts to Old Faithful with minimal changes.
+  </Tab>
+
+  <Tab title="Deshred">
+    **What we're doing:** subscribe to the `SubscribeDeshred` gRPC stream on Triton's Yellowstone server, filter out vote transactions, and log every transaction signature with its slot. Deshred delivers transactions reconstructed from shreds *before* the validator executes them, so you see intent earlier than any other stream.
+
+    <CodeGroup>
+    ```rust Rust
+    use {
+        futures::{sink::SinkExt, stream::StreamExt},
+        solana_signature::Signature,
+        std::collections::HashMap,
+        tonic::transport::channel::ClientTlsConfig,
+        yellowstone_grpc_client::GeyserGrpcClient,
+        yellowstone_grpc_proto::prelude::{
+            subscribe_update_deshred::UpdateOneof, SubscribeDeshredRequest,
+            SubscribeRequestFilterDeshredTransactions, SubscribeRequestPing,
+        },
+    };
+
+    #[tokio::main]
+    async fn main() -> anyhow::Result<()> {
+        let endpoint = std::env::var("ENDPOINT")
+            .unwrap_or("https://<endpoint>".into());
+        let x_token = std::env::var("X_TOKEN").ok();
+
+        let mut client = GeyserGrpcClient::build_from_shared(endpoint)?
+            .x_token(x_token)?
+            .tls_config(ClientTlsConfig::new().with_native_roots())?
+            .http2_adaptive_window(true)
+            .initial_connection_window_size(8 * 1024 * 1024)
+            .initial_stream_window_size(4 * 1024 * 1024)
+            .connect()
+            .await?;
+
+        let request = SubscribeDeshredRequest {
+            deshred_transactions: HashMap::from([(
+                "deshred".into(),
+                SubscribeRequestFilterDeshredTransactions {
+                    vote: Some(false),
+                    account_include: vec![],
+                    account_exclude: vec![],
+                    account_required: vec![],
+                },
+            )]),
+            ping: None,
+        };
+
+        let (mut tx, mut stream) =
+            client.subscribe_deshred_with_request(Some(request)).await?;
+
+        while let Some(msg) = stream.next().await {
+            match msg?.update_oneof {
+                Some(UpdateOneof::DeshredTransaction(update)) => {
+                    let info = update.transaction.as_ref().unwrap();
+                    let sig = Signature::try_from(info.signature.as_slice())?;
+                    println!("slot={} sig={sig} vote={}", update.slot, info.is_vote);
+                }
+                Some(UpdateOneof::Ping(_)) => {
+                    tx.send(SubscribeDeshredRequest {
+                        ping: Some(SubscribeRequestPing { id: 1 }),
+                        ..Default::default()
+                    })
+                    .await?;
+                }
+                Some(UpdateOneof::Pong(_)) => {}
+                None => break,
+            }
         }
-        ```
 
-        Live and historical pipelines look identical to your client code, so anything you build for Dragon's Mouth adapts to Old Faithful with minimal changes. Full method list: [Old Faithful gRPC methods](/solana/streaming/old-faithful-streams).
-      </Tab>
-    </Tabs>
-  </Step>
+        Ok(())
+    }
+    ```
+    </CodeGroup>
 
-  <Step title="Test your stream">
-    Run your code and walk through this checklist:
+    For TypeScript, see the `subscribeDeshredCommand` in [yellowstone-grpc/examples/typescript/src/client.ts](https://github.com/rpcpool/yellowstone-grpc/blob/master/examples/typescript/src/client.ts).
+  </Tab>
+</Tabs>
 
-    1. **Confirm the connection.** A "subscribed" or "connected" log message should appear within a second of starting.
-    2. **Watch for events.** Matching events should start flowing within 1-2 slots (roughly 800 ms).
-    3. **Verify your filter.** If nothing arrives after 5 seconds, your filter is probably too narrow. Widen it (e.g. all transactions instead of one program), then tighten back once you see data flowing.
-    4. **Test reconnection (optional).** Drop your network briefly and confirm your client reconnects and resumes.
+## Step 3. Test your stream
 
-    **Expected output**
+Run your code and walk through this checklist:
 
-    <Tabs>
-      <Tab title="Dragon's Mouth">
-        Protobuf-decoded `SubscribeUpdate` messages with the matching payload type:
+1. **Confirm the connection.** A "subscribed" or "connected" log message should appear within a second of starting.
+2. **Watch for events.** Matching events should start flowing within 1-2 slots (roughly 800 ms).
+3. **Verify your filter.** If nothing arrives after 5 seconds, your filter is probably too narrow. Widen it (e.g. all transactions instead of one program), then tighten back once you see data flowing.
+4. **Test reconnection (optional).** Drop your network briefly and confirm your client reconnects and resumes.
 
-        ```text
-        Update: {
-          filters: [ 'tokenProgram' ],
-          account: {
-            account: {
-              pubkey: <Buffer ...>,
-              lamports: '2039280',
-              owner: <Buffer ...>,
-              executable: false,
-              rentEpoch: '0',
-              data: <Buffer ...>,
-              writeVersion: '...'
-            },
-            slot: '275123456',
-            isStartup: false
+### Expected output
+
+<Tabs>
+  <Tab title="Dragon's Mouth">
+    Protobuf-decoded `SubscribeUpdate` messages with the matching payload type:
+
+    ```text
+    data {
+      filters: [ 'wsol/usdc' ],
+      account: {
+        account: {
+          pubkey: <Buffer ...>,
+          lamports: '2039280',
+          owner: <Buffer ...>,
+          executable: false,
+          rentEpoch: '0',
+          data: <Buffer ...>,
+          writeVersion: '...'
+        },
+        slot: '275123456',
+        isStartup: false
+      }
+    }
+    ```
+  </Tab>
+
+  <Tab title="Whirligig">
+    JSON-RPC notification payloads matching the Solana WebSocket API:
+
+    ```json
+    {
+      "jsonrpc": "2.0",
+      "method": "accountNotification",
+      "params": {
+        "result": {
+          "context": { "slot": 275123456 },
+          "value": {
+            "lamports": 1169280,
+            "owner": "Sysvar1111111111111111111111111111111111111",
+            "data": ["9AAG2zomYcUVKQfondw13yz193crQ5R5...", "base58"],
+            "executable": false,
+            "rentEpoch": 361
           }
-        }
-        ```
-      </Tab>
-      <Tab title="Whirligig">
-        JSON-RPC notification payloads matching the Solana WebSocket API:
+        },
+        "subscription": 0
+      }
+    }
+    ```
+  </Tab>
 
-        ```json
-        {
-          "jsonrpc": "2.0",
-          "method": "accountNotification",
-          "params": {
-            "result": {
-              "context": { "slot": 275123456 },
-              "value": {
-                "lamports": 1169280,
-                "owner": "Sysvar1111111111111111111111111111111111111",
-                "data": ["9AAG2zomYcUVKQfondw13yz193crQ5R5...", "base58"],
-                "executable": false,
-                "rentEpoch": 361
-              }
-            },
-            "subscription": 0
-          }
-        }
-        ```
-      </Tab>
-      <Tab title="Fumarole">
-        Same Protobuf payloads as Dragon's Mouth, with persistent-subscriber metadata:
+  <Tab title="Fumarole">
+    Same Protobuf payloads as Dragon's Mouth, delivered through the persistent subscriber:
 
-        ```text
-        Update: {
-          transaction: {
-            signature: <Buffer ...>,
-            isVote: false,
-            transaction: {...},
-            meta: {...}
-          },
-          slot: '275123456',
-          subscriber: 'my-subscriber'
-        }
-        ```
-      </Tab>
-      <Tab title="Old Faithful streams">
-        Block-by-block payloads in the same gRPC dialect as Dragon's Mouth:
+    ```text
+    Update: {
+      transaction: {
+        signature: <Buffer ...>,
+        isVote: false,
+        transaction: {...},
+        meta: {...}
+      },
+      slot: '275123456'
+    }
+    ```
+  </Tab>
 
-        ```text
-        Block: { slot: 100000000, blockhash: 'F1z3...', parentSlot: 99999999, ... }
-        Block: { slot: 100000001, blockhash: 'B7q2...', parentSlot: 100000000, ... }
-        Block: { slot: 100000002, blockhash: 'Cy8w...', parentSlot: 100000001, ... }
-        ```
-      </Tab>
-    </Tabs>
-  </Step>
-</Steps>
+  <Tab title="Old Faithful streams">
+    Block-by-block payloads in the same gRPC dialect as Dragon's Mouth:
+
+    ```text
+    Block: { slot: 100000000, blockhash: 'F1z3...', parentSlot: 99999999, ... }
+    Block: { slot: 100000001, blockhash: 'B7q2...', parentSlot: 100000000, ... }
+    Block: { slot: 100000002, blockhash: 'Cy8w...', parentSlot: 100000001, ... }
+    ```
+  </Tab>
+
+  <Tab title="Deshred">
+    One line per pre-execution transaction:
+
+    ```text
+    slot=275123456 sig=5j7s4Hk3...QmZ9xT vote=false
+    slot=275123456 sig=2pK8nLm9...VbY3wQ vote=false
+    slot=275123457 sig=8aRf6dGj...XwE5pN vote=false
+    ```
+  </Tab>
+</Tabs>
 
 ## FAQs
 
@@ -315,13 +559,13 @@ All four services use Triton-issued endpoints with token-based authentication. B
 ## What's next
 
 <CardGroup cols={2}>
-  <Card title="Dragon's Mouth full reference" icon="radio" href="/solana/streaming/dragons-mouth/overview">
-    Subscribe-request shape, all filter types, replay from a slot, intra-slot updates, Deshred transactions.
+  <Card title="Dragon's Mouth full reference" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
+    Subscribe-request shape, all filter types, replay from a slot, intra-slot updates.
   </Card>
-  <Card title="Whirligig WebSocket API" icon="rotate-cw" href="/solana/streaming/whirligig/overview">
+  <Card title="Whirligig WebSocket API" icon="rotate-cw" href="/solana/streaming/whirligig-websockets">
     Full method list, custom transactionSubscribe, commitment levels, keepalive.
   </Card>
-  <Card title="Fumarole reliability patterns" icon="layers" href="/solana/streaming/fumarole/overview">
+  <Card title="Fumarole reliability patterns" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
     Persistent subscribers, regional endpoints, parallel subscription, cross-region failover.
   </Card>
   <Card title="Old Faithful streams" icon="archive" href="/solana/streaming/old-faithful-streams">
