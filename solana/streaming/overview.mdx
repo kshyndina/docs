@@ -73,12 +73,12 @@ Three things matter in streaming: **latency, reliability, and replay**. Years of
 - Fumarole consumes multiple Dragon's Mouth nodes, deduplicates, and persists a cursor on the server side so you can resume exactly where you left off after disconnects. 
 - Old Faithful taps the historical archive but uses the same gRPC interface, so the live and historical pipelines appear identical to your client code.
 
-| Capability | Dragon's Mouth | Deshred | Whirligig | Fumarole | Old Faithful | Hermes |
+| Capability | Dragon's Mouth | Deshred tx | Whirligig websocket | Fumarole | Old Faithful | Pyth Hermes |
 | --- | :-: | :-: | :-: | :-: | :-: | :-: |
 | Real-time data | ✓ |  | ✓ | ✓ |  |  |
 | Pre-execution transactions |  | ✓ |  |  |  |  |
 | Historical replay |  |  |  | 4 days | Entire ledger |  |
-| Persistent cursor / resume on disconnect |  |  |  | ✓ | ✓ |  |
+| Persistent cursor |  |  |  | ✓ | ✓ |  |
 | Browser-compatible |  |  | ✓ |  |  | ✓ |
 | Protocol | gRPC | gRPC | WebSocket | gRPC | gRPC | REST \+ WS |
 
@@ -120,6 +120,10 @@ All streaming services are billed at `$0.08 / GB` of bandwidth, and you only pay
 <CardGroup cols={2}>
   <Card title="Reading state" href="/solana/reading-state/overview">
     Standard RPC, indexed reads, DAS API, account sync.
+  </Card>
+
+  <Card title="Account Sync SDK" href="/solana/reading-state/account-sync">
+    One-line swap for polling codebases. Streaming-grade reads, no rewrite.
   </Card>
 
   <Card title="Historical data" href="/solana/history/hydrant/overview">
