@@ -1,7 +1,5 @@
 ---
 title: "Dragon's Mouth gRPC"
-description: "The canonical Yellowstone gRPC stream for Solana. Sub-slot account, transaction, slot, and block updates with fine-grained server-side filters."
-sidebarTitle: "Dragon's Mouth"
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
@@ -12,14 +10,11 @@ Dragon's Mouth is Triton's Geyser-fed gRPC interface for streaming Solana data. 
 
 It's the fastest live data path available, more stable than the traditional WebSocket interface, and the recommended choice for any backend service where latency matters. For browser clients that can't speak gRPC, use [Whirligig WebSockets](/solana/streaming/whirligig-websockets) instead.
 
-## Prerequisites
+\[placeholder for use cases??\]
 
-- An active Triton subscription
-- Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/)
-- A backend environment in TypeScript, Rust, Go, or another language with a gRPC client
-- Familiarity with gRPC and Protocol Buffers
+## Features and benefits
 
-The latest protobuf files live in the [yellowstone-grpc repo](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto). For Rust, use the [yellowstone-grpc-proto crate](https://crates.io/crates/yellowstone-grpc-proto).
+\[placeholder\]
 
 ## Stream types and unary operations
 
@@ -31,7 +26,7 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 | --- | --- |
 | Account writes | Updates whenever a matching account's data, lamports, or owner changes |
 | Transactions | Every transaction matching your filter, with full `meta` (logs, status, balance deltas) |
-| Deshred transactions (paid beta) | Transactions reconstructed from shreds *before* execution. Separate `SubscribeDeshred` method. See [Deshred transactions](#deshred-transactions) |
+| Deshred transactions (paid beta) | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](#deshred-transactions) |
 | Entries | Solana ledger entries (low-level, rare use case) |
 | Block notifications | Full blocks as they're produced, optionally with their transactions and accounts |
 | Block metadata | Block headers only, without the transaction payload |
@@ -41,7 +36,7 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 
 | Method | Returns |
 | --- | --- |
-| `getLatestBlockhash` | The latest blockhash + last valid block height at a commitment level |
+| `getLatestBlockhash` | The latest blockhash \+ last valid block height at a commitment level |
 | `getBlockHeight` | The current block height at a commitment level |
 | `getSlot` | The current slot at a commitment level |
 | `isValidBlockhash` | Whether a given blockhash is still valid |
@@ -63,19 +58,16 @@ Every stream subscription is a single `SubscribeRequest` message. It has fields 
 
     For maximum performance, work at `processed` and manage commitment client-side using [slot notifications](#slots).
   </Tab>
-
   <Tab title="ping">
     Sends a periodic keepalive to prevent idle-connection drops by load balancers and NATs. Server replies with `pong`. Optional but recommended for long-running streams.
 
     See [pings](#pings).
   </Tab>
-
   <Tab title="accountsDataSlice">
     Truncates account data payloads to a byte range, reducing bandwidth. Optional. Empty array means full payload.
 
     Example: `[{ "offset": 32, "length": 40 }]` returns 40 bytes starting at byte 32.
   </Tab>
-
   <Tab title="fromSlot">
     Replay buffered updates starting from this slot, then continue live. Optional. Used for reconnection logic.
 
@@ -87,7 +79,7 @@ Every stream subscription is a single `SubscribeRequest` message. It has fields 
 
 Within a single filter category (e.g. one transaction filter), values are combined as follows:
 
-- **Within an array, OR.** `account_include: [A, B]` matches transactions mentioning A *or* B.
+- **Within an array, OR.** `account_include: [A, B]` matches transactions mentioning A _or_ B.
 - **Across fields, AND.** `vote: false, account_include: [A]` matches non-vote transactions mentioning A.
 
 For transactions specifically:
@@ -162,6 +154,15 @@ Each `SubscribeRequest` has a map per stream type. The key is a label you choose
 
 ## Subscribing to each stream type
 
+\[you'll need\>....\]
+
+- An active Triton subscription
+- Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/)
+- A backend environment in TypeScript, Rust, Go, or another language with a gRPC client
+- Familiarity with gRPC and Protocol Buffers
+
+The latest protobuf files live in the [yellowstone-grpc repo](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto). For Rust, use the [yellowstone-grpc-proto crate](https://crates.io/crates/yellowstone-grpc-proto).
+
 The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](#clients-and-sdks)).
 
 ### Accounts
@@ -171,6 +172,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
     Subscribe to one or more specific accounts. The label `wsol/usdc` is yours -- it comes back on each match for routing.
 
     <CodeGroup>
+
     ```json gRPC
     {
       "slots": { "slots": {} },
@@ -189,7 +191,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-
+    
     const request = {
       slots: { slots: {} },
       accounts: {
@@ -204,13 +206,14 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       commitment: CommitmentLevel.CONFIRMED,
     };
     ```
+
     </CodeGroup>
   </Tab>
-
   <Tab title="By owner (program)">
     Subscribe to every account owned by a program. The example tracks all Solend accounts.
 
     <CodeGroup>
+
     ```json gRPC
     {
       "slots": { "slots": {} },
@@ -229,7 +232,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-
+    
     const request = {
       slots: { slots: {} },
       accounts: {
@@ -244,15 +247,16 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       commitment: CommitmentLevel.PROCESSED,
     };
     ```
+
     </CodeGroup>
   </Tab>
-
   <Tab title="Multiple programs">
     Combine multiple programs in one filter, or use separate filters for different routing tags.
 
     Both programs in one filter:
 
     <CodeGroup>
+
     ```json gRPC
     {
       "slots": { "slots": {} },
@@ -270,11 +274,13 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       "accounts_data_slice": []
     }
     ```
+
     </CodeGroup>
 
     Separate filters with different tags:
 
     <CodeGroup>
+
     ```json gRPC
     {
       "slots": { "slots": {} },
@@ -288,13 +294,14 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       "accounts_data_slice": []
     }
     ```
+
     </CodeGroup>
   </Tab>
-
   <Tab title="Advanced filters + data slice">
-    Filter by content (memcmp, token account state) and trim the returned payload to save bandwidth. The example tracks USDC token accounts and returns only 40 bytes starting at offset 32 (owner + lamports).
+    Filter by content (memcmp, token account state) and trim the returned payload to save bandwidth. The example tracks USDC token accounts and returns only 40 bytes starting at offset 32 (owner \+ lamports).
 
     <CodeGroup>
+
     ```json gRPC
     {
       "accounts": {
@@ -317,7 +324,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-
+    
     const request = {
       slots: {},
       accounts: {
@@ -342,6 +349,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       accountsDataSlice: [{ offset: 32, length: 40 }],
     };
     ```
+
     </CodeGroup>
   </Tab>
 </Tabs>
@@ -353,6 +361,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
     Subscribe to every successful, non-vote transaction at finalized commitment.
 
     <CodeGroup>
+
     ```json gRPC
     {
       "slots": { "slots": {} },
@@ -369,7 +378,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-
+    
     const request = {
       slots: { slots: {} },
       accounts: {},
@@ -382,13 +391,14 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       commitment: CommitmentLevel.FINALIZED,
     };
     ```
+
     </CodeGroup>
   </Tab>
-
   <Tab title="Mentioning an account">
     Subscribe to non-vote transactions that mention a specific account anywhere.
 
     <CodeGroup>
+
     ```json gRPC
     {
       "transactions": {
@@ -399,13 +409,14 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       }
     }
     ```
+
     </CodeGroup>
   </Tab>
-
   <Tab title="Excluding accounts">
     Drop transactions that mention any of the listed accounts.
 
     <CodeGroup>
+
     ```json gRPC
     {
       "transactions": {
@@ -418,13 +429,14 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       }
     }
     ```
+
     </CodeGroup>
   </Tab>
-
   <Tab title="Combined include + exclude">
-    Combine include + exclude in one filter. The example matches transactions mentioning a Serum program but excludes any that also touch a specific account.
+    Combine include \+ exclude in one filter. The example matches transactions mentioning a Serum program but excludes any that also touch a specific account.
 
     <CodeGroup>
+
     ```json gRPC
     {
       "transactions": {
@@ -435,13 +447,14 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       }
     }
     ```
+
     </CodeGroup>
   </Tab>
-
   <Tab title="By signature">
     Track a specific transaction's lifecycle from confirmed to finalized.
 
     <CodeGroup>
+
     ```json gRPC
     {
       "transactions": {
@@ -451,6 +464,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       }
     }
     ```
+
     </CodeGroup>
   </Tab>
 </Tabs>
@@ -481,7 +495,7 @@ Each transaction update is a `SubscribeUpdateTransaction` containing the full tr
     - `preBalances` / `postBalances` -- SOL balances per account before/after
     - `preTokenBalances` / `postTokenBalances` -- SPL token balance deltas
     - `innerInstructions` -- CPIs (cross-program invocations) emitted by top-level instructions
-    - `loadedAddresses` -- writable + readonly addresses resolved from address lookup tables
+    - `loadedAddresses` -- writable \+ readonly addresses resolved from address lookup tables
   </Accordion>
 
   <Accordion title="Token balance changes">
@@ -513,6 +527,7 @@ Each transaction update is a `SubscribeUpdateTransaction` containing the full tr
 Subscribe to slot status changes. No filter parameters needed beyond a label.
 
 <CodeGroup>
+
 ```json gRPC
 {
   "slots": { "incoming_slots": {} },
@@ -523,6 +538,7 @@ Subscribe to slot status changes. No filter parameters needed beyond a label.
   "accounts_data_slice": []
 }
 ```
+
 </CodeGroup>
 
 Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-updates) for the full lifecycle.
@@ -534,6 +550,7 @@ Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-
     Receive every block as it's produced, with full transaction payload.
 
     <CodeGroup>
+
     ```json gRPC
     {
       "slots": {},
@@ -544,13 +561,14 @@ Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-
       "accounts_data_slice": []
     }
     ```
+
     </CodeGroup>
   </Tab>
-
   <Tab title="Customise payload">
     Trim the block payload by toggling `include_transactions` / `include_accounts`.
 
     <CodeGroup>
+
     ```json gRPC
     {
       "blocks": {
@@ -561,13 +579,14 @@ Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-
       }
     }
     ```
+
     </CodeGroup>
   </Tab>
-
   <Tab title="Filtered by account">
     Restrict the block's transactions and accounts to those mentioning specific addresses.
 
     <CodeGroup>
+
     ```json gRPC
     {
       "blocks": {
@@ -577,19 +596,21 @@ Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-
       }
     }
     ```
+
     </CodeGroup>
   </Tab>
-
   <Tab title="Block metadata only">
     Get block headers without the transaction payload (much smaller messages).
 
     <CodeGroup>
+
     ```json gRPC
     {
       "blocks": {},
       "blocks_meta": { "blockmetadata": {} }
     }
     ```
+
     </CodeGroup>
   </Tab>
 </Tabs>
@@ -599,11 +620,13 @@ Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-
 Subscribe to ledger entries (groups of transactions that make up a slot). No filters; subscribe by adding any named entry filter.
 
 <CodeGroup>
+
 ```json gRPC
 {
   "entry": { "all": {} }
 }
 ```
+
 </CodeGroup>
 
 This is a low-level signal, mostly useful for validator tooling. Most consumers want transactions or blocks instead.
@@ -615,6 +638,7 @@ The subscribe stream is bi-directional. Send a new `SubscribeRequest` at any tim
 To unsubscribe from everything but keep the connection open:
 
 <CodeGroup>
+
 ```json gRPC
 {
   "slots": {},
@@ -624,6 +648,7 @@ To unsubscribe from everything but keep the connection open:
   "blocks_meta": {}
 }
 ```
+
 </CodeGroup>
 
 ## Pings
@@ -631,6 +656,7 @@ To unsubscribe from everything but keep the connection open:
 Some load balancers (e.g. Cloudflare) close idle connections after a minute or two. Send periodic pings to keep your stream alive. The server responds with `pong` every 15 seconds.
 
 <CodeGroup>
+
 ```typescript TypeScript
 const PING_INTERVAL_MS = 30_000;
 
@@ -660,6 +686,7 @@ stream.on("data", (data) => {
   }
 });
 ```
+
 </CodeGroup>
 
 A Rust example: [gist by @lvboudre](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88).
@@ -675,6 +702,7 @@ Use it for short-disconnection recovery:
 3. If the slot is no longer available, fall back to a fresh live subscription or your own backfill path.
 
 <CodeGroup>
+
 ```json gRPC
 {
   "slots": { "incoming_slots": {} },
@@ -702,15 +730,18 @@ const request = {
   fromSlot: 382001234,
 };
 ```
+
 </CodeGroup>
 
 To discover the earliest replayable slot, call the unary `subscribeReplayInfo` RPC:
 
 <CodeGroup>
+
 ```typescript TypeScript
 const info = await client.subscribeReplayInfo();
 console.log(info.firstAvailable);
 ```
+
 </CodeGroup>
 
 **Important details:**
@@ -741,7 +772,7 @@ For maximum performance, work at `processed` and manage commitment client-side. 
 1. Subscribe to [slot notifications](#slots) alongside your data.
 2. Buffer incoming events by slot.
 3. When you see a slot status change to `confirmed` or `finalized`, release the matching buffer.
-4. You'll always receive the slot's events *before* its commitment notification.
+4. You'll always receive the slot's events _before_ its commitment notification.
 
 ### The finalized quirk
 
@@ -790,7 +821,7 @@ flowchart LR
 
 ## Deshred transactions
 
-Dragon's Mouth also supports `SubscribeDeshred`, a separate gRPC method that delivers transactions reconstructed from shreds *before* the validator executes them. This is the earliest usable on-chain signal -- designed for arbitrage, market making, copy trading, liquidations, and HFT pipelines.
+Dragon's Mouth also supports `SubscribeDeshred`, a separate gRPC method that delivers transactions reconstructed from shreds _before_ the validator executes them. This is the earliest usable on-chain signal -- designed for arbitrage, market making, copy trading, liquidations, and HFT pipelines.
 
 A deshred update contains:
 
@@ -834,7 +865,7 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
 <Tabs>
   <Tab title="grpcurl">
-    Good for ad-hoc testing. Needs `geyser.proto` + dependencies.
+    Good for ad-hoc testing. Needs `geyser.proto` \+ dependencies.
 
     ```shell
     ./grpcurl \
@@ -847,7 +878,6 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
     Self-hosters can drop the `x-token` header.
   </Tab>
-
   <Tab title="client-ubuntu">
     Prebuilt CLI binary for Ubuntu 22.04 and 24.04. Download from the [releases page](https://github.com/rpcpool/yellowstone-grpc/releases).
 
@@ -865,7 +895,6 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
     Add `--stats` to see total accounts, slots, and bandwidth in real time.
   </Tab>
-
   <Tab title="TypeScript / NodeJS">
     From `5.1.x` the TypeScript SDK is supercharged with a Rust NAPI backend. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
 
@@ -879,14 +908,14 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
     ```typescript
     import Client from "@triton-one/yellowstone-grpc";
-
+    
     const client = new Client(
       "https://api.rpcpool.com:443",
       "<your-token>"
     );
-
+    
     await client.connect();
-
+    
     const version = await client.getVersion();
     console.log(version);
     ```
@@ -895,15 +924,15 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
     ```typescript
     import { SubscribeRequest } from "@triton-one/yellowstone-grpc";
-
+    
     const stream = client.subscribe();
-
+    
     stream.on("data", (data) => {
       console.log("data", data);
     });
-
+    
     const request: SubscribeRequest = { /* see Subscribe request */ };
-
+    
     await new Promise<void>((resolve, reject) => {
       stream.write(request, (err) =>
         err == null ? resolve() : reject(err)
@@ -913,11 +942,9 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
     Full example: [yellowstone-grpc/examples/typescript](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript).
   </Tab>
-
   <Tab title="Rust">
     Sample client: [yellowstone-grpc/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust).
   </Tab>
-
   <Tab title="Go">
     Sample client: [yellowstone-grpc/examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang).
   </Tab>
@@ -929,12 +956,15 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
   <Card title="Streaming quickstart" icon="zap" href="/solana/streaming/quickstart">
     Get a Dragon's Mouth stream running in five minutes.
   </Card>
+
   <Card title="Whirligig WebSockets" icon="rotate-cw" href="/solana/streaming/whirligig-websockets">
     Browser-friendly version of the same data over WebSocket.
   </Card>
+
   <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
     Add deduplication and resume-from-cursor on top of Dragon's Mouth.
   </Card>
+
   <Card title="Streaming overview" icon="radio" href="/solana/streaming/overview">
     Compare Dragon's Mouth against the rest of the streaming stack.
   </Card>
