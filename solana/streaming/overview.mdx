@@ -38,6 +38,8 @@ Streaming is the right tool when you're building:
 - **Real-time UIs** (DEXs, wallets, explorers) with live balances and transaction feeds
 - **Anything that needs to backfill chain history** at scale
 
+For teams with heavy polling codebases, Yellowstone Accounts Sync delivers streaming-grade reads through a one-line SDK swap.
+
 ## Triton streaming stack
 
 Triton was first to ship gRPC streaming on Solana with **Yellowstone gRPC**, the open-source Geyser plugin that most of the ecosystem now runs on. Self-hosting is great for MVPs. At production scale, running on Triton gives you:
@@ -76,15 +78,19 @@ It's normal to combine more than one product in a pipeline. Common patterns:
   <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth/quickstart">
     Sub-slot account, transaction, slot, and block subscriptions over Yellowstone gRPC.
   </Card>
+
   <Card title="Whirligig" icon="rotate-cw" href="/solana/streaming/whirligig/quickstart">
     Drop-in for native Solana WebSockets with custom `transactionSubscribe`.
   </Card>
+
   <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole/quickstart">
     Multi-node merge, persistent storage, resume from cursor on disconnect.
   </Card>
+
   <Card title="Hermes" icon="activity" href="/pyth/pyth-hermes">
     Pyth price feed API. REST plus WebSocket. Powers the Pyth JS SDK.
   </Card>
+
   <Card title="Old Faithful streams" icon="archive" href="/solana/streaming/old-faithful-streams">
     Replay every block from genesis over the same gRPC dialect as live streams.
   </Card>
@@ -92,7 +98,7 @@ It's normal to combine more than one product in a pipeline. Common patterns:
 
 ## Pricing
 
-All streaming services are billed at `$0.08 / GB` of bandwidth, and you only pay for data sent. See [streaming best practices](/solana/streaming/best-practices) for filtering, guides, and other ways to reduce it.
+All streaming services are billed at `$0.08 / GB` of bandwidth, and you only pay for the data sent. See [streaming best practices](/solana/streaming/best-practices) for filtering, guides, and other ways to reduce it.
 
 ## Related sections
 
