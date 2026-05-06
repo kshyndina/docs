@@ -197,6 +197,30 @@ Set up a fresh project for the service you want to try.
     console.log(version);
     ```
 
+    ```rust Rust
+    use {
+        tonic::transport::channel::ClientTlsConfig,
+        yellowstone_grpc_client::GeyserGrpcClient,
+    };
+
+    #[tokio::main]
+    async fn main() -> anyhow::Result<()> {
+        let endpoint = "https://<your-endpoint>.mainnet.rpcpool.com:443";
+        let x_token = "<your-token>";
+
+        let mut client = GeyserGrpcClient::build_from_shared(endpoint)?
+            .x_token(Some(x_token))?
+            .tls_config(ClientTlsConfig::new().with_native_roots())?
+            .connect()
+            .await?;
+
+        let version = client.get_version().await?;
+        println!("{:?}", version);
+
+        Ok(())
+    }
+    ```
+
     </CodeGroup>
 
     Then open a subscription stream, attach a data handler, and send the subscribe request:
@@ -245,6 +269,44 @@ Set up a fresh project for the service you want to try.
     });
     ```
 
+    ```rust Rust
+    use {
+        futures::stream::StreamExt,
+        std::collections::HashMap,
+        yellowstone_grpc_proto::prelude::{
+            CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
+            SubscribeRequestFilterSlots,
+        },
+    };
+
+    let mut accounts = HashMap::new();
+    accounts.insert(
+        "wsol/usdc".to_string(),
+        SubscribeRequestFilterAccounts {
+            account: vec!["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6".to_string()],
+            owner: vec![],
+            filters: vec![],
+            ..Default::default()
+        },
+    );
+
+    let mut slots = HashMap::new();
+    slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
+
+    let request = SubscribeRequest {
+        accounts,
+        slots,
+        commitment: Some(CommitmentLevel::Confirmed.into()),
+        ..Default::default()
+    };
+
+    let (_sink, mut stream) = client.subscribe_with_request(Some(request)).await?;
+
+    while let Some(message) = stream.next().await {
+        println!("data: {:?}", message?);
+    }
+    ```
+
     ```shell grpcurl
     ./grpcurl \
       -proto geyser.proto \
@@ -256,7 +318,7 @@ Set up a fresh project for the service you want to try.
 
     </CodeGroup>
 
-    For Rust, Go, and other languages: [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples).
+    For Go and other languages: [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples).
   </Tab>
   <Tab title="Whirligig">
     **What we're doing:** open a Solana-standard WebSocket connection to Whirligig and subscribe to changes on the system clock sysvar.

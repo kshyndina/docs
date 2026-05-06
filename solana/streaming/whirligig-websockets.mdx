@@ -32,7 +32,7 @@ For a backend that can speak gRPC, [Dragon's Mouth gRPC](/solana/streaming/drago
     Triton-only subscription for filtered transaction notifications.
   </Card>
 
-  <Card title="All commitment levels" icon="list-checks">
+  <Card title="All commitment levels" icon="signal-high">
     Subscribe at `processed`, `confirmed`, or `finalized`.
   </Card>
 </CardGroup>
@@ -111,6 +111,8 @@ The result is `true` if the subscription was active and removed, `false` if it d
 The same pattern applies to `accountUnsubscribe`, `blockUnsubscribe`, `logsUnsubscribe`, `programUnsubscribe`, `signatureUnsubscribe`, `transactionUnsubscribe` -- pass the `id` from the matching subscribe call.
 
 ## Subscription methods
+
+The JSON below is the wire format sent over the WebSocket. The same pattern works in any client language: open a WebSocket to the endpoint above, send the JSON request, parse JSON notifications. Concrete `accountSubscribe` connect-and-consume examples in TypeScript and Rust are in the [streaming quickstart](/solana/streaming/quickstart). For the full reference of every method, see [Solana's WebSocket API](https://docs.solana.com/api/websocket) -- Whirligig is wire-compatible plus the `transactionSubscribe` extension below.
 
 ### accountSubscribe
 

@@ -113,6 +113,23 @@ Meta cards (cross-cutting):
 | Streaming overview | `compass` | `/snippets/cards/streaming-overview.mdx` |
 | Streaming quickstart | `rocket` | `/snippets/cards/streaming-quickstart.mdx` |
 
+Common feature-card icons (page-local, must be unique within their page):
+
+| Concept | Lucide icon |
+|---|---|
+| Latency / sub-slot | `gauge` |
+| Filtering | `filter` |
+| Replay / resume | `rotate-ccw` |
+| Compact / Protobuf efficiency | `feather` |
+| Connect / drop-in | `plug` |
+| Transaction extension | `receipt` |
+| All commitment levels | `signal-high` |
+| Earliest signal | `flame` |
+| Same gRPC service | `link` |
+| ALT / resolved keys | `key` |
+
+**Icons that previously broke and are banned:** `list-checks`, `key-round`. Use `signal-high` and `key` instead. Mintlify's Lucide bundle didn't render them in production. Always sanity-check icons against [lucide.dev/icons](https://lucide.dev/icons) before shipping.
+
 Use cases:
 
 | Use case | Lucide icon |

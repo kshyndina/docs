@@ -36,8 +36,8 @@ For browser clients that can't communicate with gRPC, use [Whirligig WebSockets]
     Resume from a specific slot after a disconnect. The server replays buffered updates, then continues live on the same stream.
   </Card>
 
-  <Card title="Bi-directional streams" icon="repeat">
-    Modify subscriptions on the fly -- send a new request and the server swaps your filter set without reconnecting.
+  <Card title="Compact Protobuf payloads" icon="feather">
+    Binary serialisation cuts bandwidth and CPU vs JSON-RPC. Less to ship, less to parse.
   </Card>
 </CardGroup>
 
@@ -234,6 +234,37 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
     };
     ```
 
+    ```rust Rust
+    use {
+        std::collections::HashMap,
+        yellowstone_grpc_proto::prelude::{
+            CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
+            SubscribeRequestFilterSlots,
+        },
+    };
+
+    let mut accounts = HashMap::new();
+    accounts.insert(
+        "wsol/usdc".to_string(),
+        SubscribeRequestFilterAccounts {
+            account: vec!["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6".to_string()],
+            owner: vec![],
+            filters: vec![],
+            ..Default::default()
+        },
+    );
+
+    let mut slots = HashMap::new();
+    slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
+
+    let request = SubscribeRequest {
+        accounts,
+        slots,
+        commitment: Some(CommitmentLevel::Confirmed.into()),
+        ..Default::default()
+    };
+    ```
+
     </CodeGroup>
   </Tab>
   <Tab title="By owner (program)">
@@ -272,6 +303,37 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       blocksMeta: {},
       accountsDataSlice: [],
       commitment: CommitmentLevel.PROCESSED,
+    };
+    ```
+
+    ```rust Rust
+    use {
+        std::collections::HashMap,
+        yellowstone_grpc_proto::prelude::{
+            CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
+            SubscribeRequestFilterSlots,
+        },
+    };
+
+    let mut accounts = HashMap::new();
+    accounts.insert(
+        "solend".to_string(),
+        SubscribeRequestFilterAccounts {
+            account: vec![],
+            owner: vec!["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo".to_string()],
+            filters: vec![],
+            ..Default::default()
+        },
+    );
+
+    let mut slots = HashMap::new();
+    slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
+
+    let request = SubscribeRequest {
+        accounts,
+        slots,
+        commitment: Some(CommitmentLevel::Processed.into()),
+        ..Default::default()
     };
     ```
 
@@ -377,6 +439,52 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
     };
     ```
 
+    ```rust Rust
+    use {
+        std::collections::HashMap,
+        yellowstone_grpc_proto::prelude::{
+            subscribe_request_filter_accounts_filter::Filter,
+            subscribe_request_filter_accounts_filter_memcmp::Data,
+            CommitmentLevel, SubscribeRequest, SubscribeRequestAccountsDataSlice,
+            SubscribeRequestFilterAccounts, SubscribeRequestFilterAccountsFilter,
+            SubscribeRequestFilterAccountsFilterMemcmp,
+        },
+    };
+
+    let mut accounts = HashMap::new();
+    accounts.insert(
+        "usdc".to_string(),
+        SubscribeRequestFilterAccounts {
+            account: vec![],
+            owner: vec!["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA".to_string()],
+            filters: vec![
+                SubscribeRequestFilterAccountsFilter {
+                    filter: Some(Filter::TokenAccountState(true)),
+                },
+                SubscribeRequestFilterAccountsFilter {
+                    filter: Some(Filter::Memcmp(SubscribeRequestFilterAccountsFilterMemcmp {
+                        offset: 0,
+                        data: Some(Data::Base58(
+                            "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v".to_string(),
+                        )),
+                    })),
+                },
+            ],
+            ..Default::default()
+        },
+    );
+
+    let request = SubscribeRequest {
+        accounts,
+        accounts_data_slice: vec![SubscribeRequestAccountsDataSlice {
+            offset: 32,
+            length: 40,
+        }],
+        commitment: Some(CommitmentLevel::Confirmed.into()),
+        ..Default::default()
+    };
+    ```
+
     </CodeGroup>
   </Tab>
 </Tabs>
@@ -416,6 +524,31 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
       blocksMeta: {},
       accountsDataSlice: [],
       commitment: CommitmentLevel.FINALIZED,
+    };
+    ```
+
+    ```rust Rust
+    use {
+        std::collections::HashMap,
+        yellowstone_grpc_proto::prelude::{
+            CommitmentLevel, SubscribeRequest, SubscribeRequestFilterTransactions,
+        },
+    };
+
+    let mut transactions = HashMap::new();
+    transactions.insert(
+        "alltxs".to_string(),
+        SubscribeRequestFilterTransactions {
+            vote: Some(false),
+            failed: Some(false),
+            ..Default::default()
+        },
+    );
+
+    let request = SubscribeRequest {
+        transactions,
+        commitment: Some(CommitmentLevel::Finalized.into()),
+        ..Default::default()
     };
     ```
 
@@ -515,6 +648,24 @@ Subscribe to slot status changes. No filter parameters needed beyond a label.
 }
 ```
 
+```rust Rust
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{SubscribeRequest, SubscribeRequestFilterSlots},
+};
+
+let mut slots = HashMap::new();
+slots.insert(
+    "incoming_slots".to_string(),
+    SubscribeRequestFilterSlots::default(),
+);
+
+let request = SubscribeRequest {
+    slots,
+    ..Default::default()
+};
+```
+
 </CodeGroup>
 
 Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-updates) for the full lifecycle.
@@ -536,6 +687,24 @@ Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-
       "blocks_meta": {},
       "accounts_data_slice": []
     }
+    ```
+
+    ```rust Rust
+    use {
+        std::collections::HashMap,
+        yellowstone_grpc_proto::prelude::{SubscribeRequest, SubscribeRequestFilterBlocks},
+    };
+
+    let mut blocks = HashMap::new();
+    blocks.insert(
+        "blocks".to_string(),
+        SubscribeRequestFilterBlocks::default(),
+    );
+
+    let request = SubscribeRequest {
+        blocks,
+        ..Default::default()
+    };
     ```
 
     </CodeGroup>
@@ -601,6 +770,21 @@ Subscribe to ledger entries (groups of transactions that make up a slot). No fil
 {
   "entry": { "all": {} }
 }
+```
+
+```rust Rust
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{SubscribeRequest, SubscribeRequestFilterEntry},
+};
+
+let mut entry = HashMap::new();
+entry.insert("all".to_string(), SubscribeRequestFilterEntry::default());
+
+let request = SubscribeRequest {
+    entry,
+    ..Default::default()
+};
 ```
 
 </CodeGroup>
