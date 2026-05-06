@@ -4,6 +4,11 @@ description: "Test all Triton streaming solutions in 5 minutes. For the streamin
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import DragonsMouthCard from '/snippets/cards/dragons-mouth.mdx'
+import DeshredCard from '/snippets/cards/deshred.mdx'
+import WhirligigCard from '/snippets/cards/whirligig.mdx'
+import FumaroleCard from '/snippets/cards/fumarole.mdx'
+import OldFaithfulCard from '/snippets/cards/old-faithful.mdx'
 
 ## Step 0. Prerequisites
 
@@ -33,7 +38,7 @@ The five streaming services covered:
     Every block from genesis over the same gRPC dialect as live streams. Built for history indexers and researchers.
   </Card>
 
-  <Card title="Deshred transactions" icon="zap">
+  <Card title="Deshred transactions" icon="flame">
     Pre-execution transaction stream, separate gRPC method. Built for arbitrage, market making, copy trading, HFT.
   </Card>
 </CardGroup>
@@ -806,21 +811,11 @@ Then walk through this checklist:
 ## What's next
 
 <CardGroup cols={2}>
-  <Card title="Dragon's Mouth docs" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
-    Subscribe-request shape, all filter types, replay from a slot, intra-slot updates.
-  </Card>
-
-  <Card title="Whirligig WebSocket API" icon="rotate-cw" href="/solana/streaming/whirligig-websockets">
-    Full method list, custom transactionSubscribe, commitment levels, keepalive.
-  </Card>
-
-  <Card title="Fumarole reliable streams" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
-    Persistent subscribers, parallel replay, cross-region failover.
-  </Card>
-
-  <Card title="Old Faithful streams" icon="archive" href="/solana/streaming/old-faithful-streams">
-    StreamTransactions, StreamBlocks, historical replay from genesis.
-  </Card>
+  <DragonsMouthCard />
+  <DeshredCard />
+  <WhirligigCard />
+  <FumaroleCard />
+  <OldFaithfulCard />
 </CardGroup>
 
 ---

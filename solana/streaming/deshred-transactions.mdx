@@ -4,6 +4,8 @@ description: "Pre-execution transaction stream reconstructed from shreds, before
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import StreamingPrerequisites from '/snippets/streaming-prerequisites.mdx'
+import DragonsMouthCard from '/snippets/cards/dragons-mouth.mdx'
 
 ## What is Deshred
 
@@ -16,15 +18,15 @@ Unlike the standard `Subscribe` transaction stream, deshred updates are emitted 
 ## Features and benefits
 
 <CardGroup cols={2}>
-  <Card title="Earliest signal" icon="zap">
+  <Card title="Earliest signal" icon="flame">
     Transactions reconstructed from shreds before validator execution.
   </Card>
 
-  <Card title="Same gRPC service" icon="radio">
+  <Card title="Same gRPC service" icon="link">
     Drops into your existing Dragon's Mouth pipeline. Separate method, same client.
   </Card>
 
-  <Card title="Resolved ALT addresses" icon="route">
+  <Card title="Resolved ALT addresses" icon="key-round">
     Includes writable + readonly addresses resolved from Address Lookup Tables.
   </Card>
 
@@ -35,44 +37,70 @@ Unlike the standard `Subscribe` transaction stream, deshred updates are emitted 
 
 ## Update payload
 
-A deshred update includes:
+A deshred update is a `SubscribeUpdateDeshred` containing a single transaction reconstructed from shreds:
 
-- `slot`
-- `signature`
-- vote flag
-- raw transaction
-- `loaded_writable_addresses` (resolved from Address Lookup Tables)
-- `loaded_readonly_addresses`
+```json Example deshred update
+{
+  "slot": 275123456,
+  "transaction": {
+    "signature": "5j7s4Hk3QmZ9xT2pK8nLm9VbY3wQ8aRf6dGjXwE5pN1",
+    "is_vote": false,
+    "transaction": {
+      "signatures": ["5j7s4Hk3..."],
+      "message": {
+        "header": { "...": "..." },
+        "account_keys": ["...", "..."],
+        "recent_blockhash": "GpJjHvT...",
+        "instructions": [{ "...": "..." }]
+      }
+    },
+    "loaded_writable_addresses": [
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+    ],
+    "loaded_readonly_addresses": []
+  }
+}
+```
 
-The loaded address fields contain addresses resolved from Address Lookup Tables (ALTs), so deshred filters match both static account keys and dynamically loaded addresses.
+The `loaded_writable_addresses` and `loaded_readonly_addresses` fields contain addresses resolved from Address Lookup Tables (ALTs), so deshred filters match both static account keys and dynamically loaded addresses.
 
-## Filters
+For the wire format and proto definitions, see [`geyser.proto`](https://github.com/rpcpool/yellowstone-grpc/blob/master/yellowstone-grpc-proto/proto/geyser.proto).
 
-`SubscribeDeshred` supports:
+## Filter configuration
 
-- `vote`
-- `account_include`
-- `account_exclude`
-- `account_required`
+`SubscribeDeshred` supports four filter fields, combined as logical AND:
+
+<Accordion title="Deshred filters">
+  <ParamField path="vote" type="bool">
+    Include or exclude vote transactions. `false` excludes votes.
+  </ParamField>
+
+  <ParamField path="account_include" type="string[]">
+    Accounts mentioned anywhere in the transaction (including loaded ALT addresses).
+  </ParamField>
+
+  <ParamField path="account_exclude" type="string[]">
+    Exclude transactions mentioning any of these accounts.
+  </ParamField>
+
+  <ParamField path="account_required" type="string[]">
+    Accounts that MUST all be mentioned (every one of them).
+  </ParamField>
+</Accordion>
 
 ## Important limitations
 
-- `SubscribeDeshred` is a separate RPC, not a field on `SubscribeRequest`.
-- Deshred data has **no execution metadata**: no status, logs, inner instructions, balance changes, compute units, or `TransactionStatusMeta`.
-- Deshred data has **no confirmation or finality guarantee**: a transaction may fail, land on a dead fork, or never confirm.
-- If you need confirmation and execution results, use Deshred together with the normal `transactions` stream from [Dragon's Mouth](/solana/streaming/dragons-mouth-g-rpc).
-
 <Warning>
-  **No execution context.** Deshred only carries the raw transaction. If your pipeline needs status, logs, or balance deltas, run a parallel Dragon's Mouth `transactions` subscription and join on `signature`.
+  **No execution context.** Deshred only carries the raw transaction. No status, logs, inner instructions, balance changes, compute units, or `TransactionStatusMeta`. There's also no confirmation or finality guarantee -- a transaction may fail, land on a dead fork, or never confirm.
+
+  If your pipeline needs status, logs, or balance deltas, run a parallel Dragon's Mouth `transactions` subscription and join on `signature`.
 </Warning>
 
-## Availability
-
-`SubscribeDeshred` is currently available only on Triton One gRPC servers and is in **paid beta**. It depends on Triton's validator-side extension and does not work out of the box on a stock Agave node.
-
-For a deeper overview of architecture and tradeoffs, see [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/). For the wire format and RPC definitions, see [`geyser.proto`](https://github.com/rpcpool/yellowstone-grpc/blob/master/yellowstone-grpc-proto/proto/geyser.proto).
+For a deeper overview of architecture and tradeoffs, see [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/).
 
 ## Subscribe and consume
+
+<StreamingPrerequisites />
 
 The example below subscribes to the `SubscribeDeshred` stream, filters out vote transactions, and logs every transaction signature with its slot.
 
@@ -185,20 +213,10 @@ async fn main() -> anyhow::Result<()> {
 ## What's next?
 
 <CardGroup cols={2}>
-  <Card title="Streaming quickstart" icon="rocket" href="/solana/streaming/quickstart">
-    Get a Deshred stream running in five minutes alongside Dragon's Mouth.
-  </Card>
-
-  <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
-    Standard subscriptions for accounts, transactions, slots, blocks.
-  </Card>
+  <DragonsMouthCard />
 
   <Card title="Deshred blog post" icon="book-open" href="https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/">
     Architecture, tradeoffs, and how Deshred fits the Solana shred pipeline.
-  </Card>
-
-  <Card title="Streaming overview" icon="radio" href="/solana/streaming/overview">
-    Compare Deshred against the rest of the streaming stack.
   </Card>
 </CardGroup>
 

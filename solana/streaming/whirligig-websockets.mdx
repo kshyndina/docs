@@ -4,6 +4,10 @@ description: "Better, faster Solana WebSockets. Whirligig is a Rust-based proxy 
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import DragonsMouthCard from '/snippets/cards/dragons-mouth.mdx'
+import FumaroleCard from '/snippets/cards/fumarole.mdx'
+import StreamingQuickstartCard from '/snippets/cards/streaming-quickstart.mdx'
+import StreamingOverviewCard from '/snippets/cards/streaming-overview.mdx'
 
 ## What is Whirligig
 
@@ -20,7 +24,7 @@ For a backend that can speak gRPC, [Dragon's Mouth gRPC](/solana/streaming/drago
     Drop-in replacement for the standard Solana WebSocket API.
   </Card>
 
-  <Card title="Intra-slot updates" icon="zap">
+  <Card title="Intra-slot updates" icon="gauge">
     Account updates up to 400ms faster than standard WebSockets at `processed`.
   </Card>
 
@@ -28,7 +32,7 @@ For a backend that can speak gRPC, [Dragon's Mouth gRPC](/solana/streaming/drago
     Triton-only subscription for filtered transaction notifications.
   </Card>
 
-  <Card title="All commitment levels" icon="layers">
+  <Card title="All commitment levels" icon="list-checks">
     Subscribe at `processed`, `confirmed`, or `finalized`.
   </Card>
 </CardGroup>
@@ -630,21 +634,10 @@ The Whirligig CLI client lives on GitHub: [yellowstone-whirligig-client](https:/
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="Streaming quickstart" icon="zap" href="/solana/streaming/quickstart">
-    Get a Whirligig WebSocket stream running in five minutes.
-  </Card>
-
-  <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
-    Lower-latency gRPC version of the same data, for backends.
-  </Card>
-
-  <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
-    Persistent gRPC subscribers with deduplication and resume from cursor.
-  </Card>
-
-  <Card title="Streaming overview" icon="radio" href="/solana/streaming/overview">
-    Compare Whirligig against the rest of the streaming stack.
-  </Card>
+  <StreamingQuickstartCard />
+  <DragonsMouthCard />
+  <FumaroleCard />
+  <StreamingOverviewCard />
 </CardGroup>
 
 ---

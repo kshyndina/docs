@@ -3,6 +3,11 @@ title: "Dragon's Mouth gRPC"
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import StreamingPrerequisites from '/snippets/streaming-prerequisites.mdx'
+import DeshredCard from '/snippets/cards/deshred.mdx'
+import WhirligigCard from '/snippets/cards/whirligig.mdx'
+import FumaroleCard from '/snippets/cards/fumarole.mdx'
+import StreamingOverviewCard from '/snippets/cards/streaming-overview.mdx'
 
 ## What is Dragon's Mouth
 
@@ -19,11 +24,11 @@ For browser clients that can't communicate with gRPC, use [Whirligig WebSockets]
 ## Features and benefits
 
 <CardGroup cols={2}>
-  <Card title="Sub-slot latency" icon="zap">
+  <Card title="Sub-slot latency" icon="gauge">
     Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.
   </Card>
 
-  <Card title="Server-side filtering" icon="server">
+  <Card title="Server-side filtering" icon="filter">
     Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state.
   </Card>
 
@@ -46,7 +51,7 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
     | :-- | :-- |
     | Account writes | Updates whenever a matching account's data, lamports, or owner changes |
     | Transactions | Every transaction matching your filter, with full `meta` (logs, status, balance deltas) |
-    | Deshred transactions (paid beta) | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](#deshred-transactions). |
+    | Deshred transactions | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](/solana/streaming/deshred-transactions). |
     | Entries | Solana ledger entries (low-level, rare use case) |
     | Block notifications | Full blocks as they're produced, optionally with their transactions and accounts |
     | Block metadata | Block headers only, without the transaction payload |
@@ -183,14 +188,7 @@ Across multiple named filters in the same category (e.g. two transaction filters
 
 ## Subscribing to each stream type
 
-Before you start, make sure you have:
-
-- An active Triton subscription
-- Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/)
-- A backend environment in TypeScript, Rust, Go, or another language with a gRPC client
-- Familiarity with gRPC and Protocol Buffers
-
-The latest protobuf files live in the [yellowstone-grpc repo](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto). For Rust, use the [yellowstone-grpc-proto crate](https://crates.io/crates/yellowstone-grpc-proto).
+<StreamingPrerequisites />
 
 The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](#clients-and-sdks)).
 
@@ -1073,21 +1071,10 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 ## What's next?
 
 <CardGroup cols={2}>
-  <Card title="Deshred transactions" icon="zap" href="/solana/streaming/deshred-transactions">
-    Pre-execution transaction stream on the same gRPC service. Earliest signal.
-  </Card>
-
-  <Card title="Whirligig WebSockets" icon="rotate-cw" href="/solana/streaming/whirligig-websockets">
-    Browser-friendly version of the same data over WebSocket.
-  </Card>
-
-  <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
-    Add deduplication and resume-from-cursor on top of Dragon's Mouth.
-  </Card>
-
-  <Card title="Streaming overview" icon="radio" href="/solana/streaming/overview">
-    Compare Dragon's Mouth against the rest of the streaming stack.
-  </Card>
+  <DeshredCard />
+  <WhirligigCard />
+  <FumaroleCard />
+  <StreamingOverviewCard />
 </CardGroup>
 
 ---

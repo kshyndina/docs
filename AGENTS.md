@@ -70,12 +70,61 @@ Other usage:
 - Components: use the Mintlify skill (auto-loads via the plugin) for full props reference
 - Common components: `<Note>`, `<Info>`, `<Tip>`, `<Warning>`, `<Check>`, `<Danger>`, `<Steps>`, `<Tabs>`, `<CodeGroup>`, `<Cards>`, `<Columns>`, `<AccordionGroup>`
 
-### Snippets (footer, customer logos, FAQs)
+### Snippets (footer, customer logos, FAQs, product cards)
 
-Reusable blocks live in `/snippets`. Two rules:
+Reusable blocks live in `/snippets`. Three rules:
 
 1. **Import once, render once.** A page that imports `<FooterLinks />` should render it exactly once, at the bottom, after a `---` divider. Never paste the snippet's inner HTML inline -- always use the component.
 2. **Before saving, search the file for duplicates.** Run `grep -c "<FooterLinks" path/to/file.mdx` -- the answer must be `1`. Same for `<CustomerLogoMarquee />` and any other snippet. Mintlify's visual editor sometimes appends a copy of the snippet rather than replacing it; agents that paste large blocks can also accidentally duplicate snippets. The visual difference between rendered output and the source markdown can hide this -- always check the source.
+3. **Use product-card snippets, don't write Card markup inline.** Each Triton product has a canonical card under `/snippets/cards/<product>.mdx` (icon, title, description, href all locked). When listing related products on a page, import the snippet and use `<DragonsMouthCard />`, `<DeshredCard />`, etc. inside a `<CardGroup>`. This guarantees the icon/copy stays consistent across every page and makes a future copy or icon change a one-file edit.
+
+#### Product icon registry
+
+Each product has ONE icon. Never reuse it for a different product on the same page. Cross-page consistency is hard-required.
+
+| Product | Lucide icon | Snippet |
+|---|---|---|
+| Standard RPC | `zap` | _todo_ |
+| Steamboat | `database` | _todo_ |
+| DAS API | `image` | _todo_ |
+| Account Sync | `refresh-cw` | _todo_ |
+| ZK Compression | `shrink` | _todo_ |
+| Dragon's Mouth gRPC | `radio` | `/snippets/cards/dragons-mouth.mdx` |
+| Deshred transactions | `flame` | `/snippets/cards/deshred.mdx` |
+| Whirligig WebSockets | `rotate-cw` | `/snippets/cards/whirligig.mdx` |
+| Fumarole | `layers` | `/snippets/cards/fumarole.mdx` |
+| Old Faithful streams | `archive` | `/snippets/cards/old-faithful.mdx` |
+| Hermes | `activity` | _todo_ |
+| Pythnet | `globe` | _todo_ |
+| Hydrant | `history` | _todo_ |
+| Yellowstone Jet | `send` | _todo_ |
+| Priority Fees API | `trending-up` | _todo_ |
+| Metis | `git-branch` | _todo_ |
+| Titan Prime | `route` | _todo_ |
+| Jito Bundles | `package` | _todo_ |
+| Dedicated gRPC | `server` | _todo_ |
+| White-label validator | `shield` | _todo_ |
+| Private trusted validator | `lock` | _todo_ |
+
+Meta cards (cross-cutting):
+
+| Card | Lucide icon | Snippet |
+|---|---|---|
+| Streaming overview | `compass` | `/snippets/cards/streaming-overview.mdx` |
+| Streaming quickstart | `rocket` | `/snippets/cards/streaming-quickstart.mdx` |
+
+Use cases:
+
+| Use case | Lucide icon |
+|---|---|
+| Trading and MEV | `coins` |
+| DEX or DeFi | `git-merge` |
+| Wallet or consumer app | `wallet` |
+| NFT or compressed-asset platform | `palette` |
+| Indexer or analytics | `bar-chart-3` |
+| Institutional | `building` |
+| Gaming | `gamepad-2` |
+| AI agent | `bot` |
 
 ## Workflow
 
