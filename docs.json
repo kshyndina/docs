@@ -97,33 +97,31 @@
                   "solana/get-started/plans-and-billing",
                   "solana/get-started/rate-and-connection-limits",
                   {
-                    "group": "Account management",
+                    "group": "Auth and security",
+                    "pages": [
+                      "secur",
+                      "data-sa",
+                      "f"
+                    ]
+                  },
+                  "solana/get-started/account-management/platform-overview",
+                  {
+                    "group": "Account management API",
                     "pages": [
                       "solana/get-started/account-management/set-up-your-account-and-add-users",
-                      "solana/get-started/account-management/platform-overview",
-                      "solana/get-started/account-management/auth-and-security-best-practices",
-                      "solana/get-started/account-management/how-to-top-up-credits",
-                      "solana/get-started/account-management/reach-out-to-support",
-                      {
-                        "group": "Account management API",
-                        "pages": [
-                          "solana/get-started/account-management/account-management-api/overview",
-                          "solana/get-started/account-management/account-management-api/auth-and-headers",
-                          "solana/get-started/account-management/account-management-api/accounts",
-                          "solana/get-started/account-management/account-management-api/address-watch-lists",
-                          "solana/get-started/account-management/account-management-api/subscriptions",
-                          "solana/get-started/account-management/account-management-api/subscription-types",
-                          "solana/get-started/account-management/account-management-api/endpoints",
-                          "solana/get-started/account-management/account-management-api/tokens",
-                          "solana/get-started/account-management/account-management-api/rate-tiers"
-                        ],
-                        "root": "solana/get-started/account-management/account-management-api/overview",
-                        "expanded": false
-                      }
+                      "solana/get-started/account-management/account-management-api/auth-and-headers",
+                      "solana/get-started/account-management/account-management-api/accounts",
+                      "solana/get-started/account-management/account-management-api/address-watch-lists",
+                      "solana/get-started/account-management/account-management-api/subscriptions",
+                      "solana/get-started/account-management/account-management-api/subscription-types",
+                      "solana/get-started/account-management/account-management-api/endpoints",
+                      "solana/get-started/account-management/account-management-api/tokens",
+                      "solana/get-started/account-management/account-management-api/rate-tiers"
                     ],
-                    "root": "solana/get-started/account-management/set-up-your-account-and-add-users",
+                    "root": "solana/get-started/account-management/account-management-api/overview",
                     "expanded": false
-                  }
+                  },
+                  "solana/get-started/account-management/reach-out-to-support"
                 ]
               },
               {
@@ -131,38 +129,8 @@
                 "pages": [
                   "solana/streaming/overview",
                   "solana/streaming/quickstart",
-                  {
-                    "group": "Dragon's Mouth gRPC",
-                    "root": "solana/streaming/dragons-mouth/overview",
-                    "expanded": false,
-                    "pages": [
-                      "solana/streaming/dragons-mouth/overview",
-                      "solana/streaming/dragons-mouth/quickstart",
-                      "solana/streaming/dragons-mouth/sdks-and-client-libraries",
-                      "solana/streaming/dragons-mouth/deshred-transactions"
-                    ]
-                  },
-                  {
-                    "group": "Whirligig WebSockets",
-                    "root": "solana/streaming/whirligig/overview",
-                    "expanded": false,
-                    "pages": [
-                      "solana/streaming/whirligig/overview",
-                      "solana/streaming/whirligig/quickstart",
-                      "solana/streaming/whirligig/whirligig-client"
-                    ]
-                  },
-                  {
-                    "group": "Fumarole reliable streams",
-                    "root": "solana/streaming/fumarole/overview",
-                    "expanded": false,
-                    "pages": [
-                      "solana/streaming/fumarole/overview",
-                      "solana/streaming/fumarole/quickstart",
-                      "solana/streaming/fumarole/sdk-clients-setup",
-                      "solana/streaming/fumarole/migration-from-dragons-mouth"
-                    ]
-                  },
+                  "solana/streaming/dragons-mouth-g-rpc",
+                  "solana/streaming/fumarole-persistent-streams",
                   "solana/streaming/old-faithful-streams"
                 ]
               },
@@ -182,8 +150,7 @@
                 "pages": [
                   "solana/history/overview",
                   "solana/history/quickstart",
-                  "solana/history/hydrant",
-                  "solana/history/faithful-streams"
+                  "solana/history/hydrant"
                 ]
               },
               {
@@ -191,12 +158,12 @@
                 "pages": [
                   "solana/sending-transactions/overview",
                   "solana/sending-transactions/quickstart",
+                  "solana/sending-transactions/transaction-sending-best-practices",
                   "solana/sending-transactions/jet-sender",
                   "solana/sending-transactions/priority-fees-api",
                   "solana/sending-transactions/metis-swap-api",
                   "solana/sending-transactions/titan-swap-api",
-                  "solana/sending-transactions/jito-bundles",
-                  "solana/sending-transactions/transaction-sending-best-practices"
+                  "solana/sending-transactions/jito-bundles"
                 ]
               },
               {
@@ -270,25 +237,8 @@
                 ]
               },
               {
-                "group": "Solana beginners",
+                "group": "Solana concepts",
                 "pages": [
-                  {
-                    "group": "Error handling",
-                    "root": "solana-guides/error-handling/overview",
-                    "expanded": false,
-                    "pages": [
-                      "solana-guides/error-handling/overview",
-                      "solana-guides/error-handling/how-to-troubleshoot",
-                      "solana-guides/error-handling/common-solana-errors",
-                      "solana-guides/error-handling/triton-rpc-error-codes",
-                      "solana-guides/error-handling/rpc",
-                      "solana-guides/error-handling/streaming",
-                      "solana-guides/error-handling/transaction-sending",
-                      "solana-guides/error-handling/history",
-                      "solana-guides/error-handling/billing",
-                      "solana-guides/error-handling/connection-pooling"
-                    ]
-                  },
                   {
                     "group": "Streaming",
                     "root": "solana-guides/streaming-guides",
@@ -496,14 +446,9 @@
             "icon": "messages-square",
             "pages": [
               "solana-faqs/general",
+              "solana-faqs/account",
               "solana-faqs/rpc",
               "solana-faqs/streaming",
-              "solana-faqs/das",
-              "solana-faqs/account",
-              "solana-faqs/billing",
-              "solana-faqs/trading",
-              "solana-faqs/pyth-oracle",
-              "solana-faqs/validator",
               "solana-faqs/transactions"
             ]
           }

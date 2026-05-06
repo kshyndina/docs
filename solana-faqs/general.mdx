@@ -1,7 +1,5 @@
 ---
 title: "General"
-description: "Common questions about Triton, our products, and getting started."
-sidebarTitle: "General"
 ---
 
 Whether you're just exploring Triton or have recently joined as a customer, this guide will help you get up to speed.
@@ -86,5 +84,27 @@ Whether you're just exploring Triton or have recently joined as a customer, this
     No. We offer managed services; therefore, no one outside the Triton team has access to the infrastructure. We don't provide SSH access to our infrastructure. If you have dedicated nodes, we can set up the supported add-ons you request.
   </Accordion>
 </AccordionGroup>
+
+## Product questions
+
+<Accordion title="What Pyth oracle products do you offer?">
+  We provide infrastructure for PythNet RPC and Hermes for streaming price updates. We don't offer benchmarks. For publishers, we offer dedicated RPC to publish onto PythNet and Validators to bolster the Pyth Network.
+
+  We work closely with Douro Labs (Pyth Team) to ensure a smooth onboarding and service experience.
+</Accordion>
+
+<Accordion title="How can I access Pyth Hermes?">
+  To access Hermes, you need to point your endpoint to access Hermes and Pythnet. Make sure your path looks like:
+
+  ```text
+  https://<endpoint>.mainnet.pythnet.rpcpool.com/<secret token>/hermes/v2/<rest of the call>
+  ```
+
+  The most common mistake is omitting the token, `v2`, or `hermes` parts of the path.
+</Accordion>
+
+<Accordion title="Does Triton have a validator?">
+  Yes. You can stake directly with our Private Trusted Validator to earn weekly USDC rewards.
+</Accordion>
 
 If you're already a customer, you can reach us directly through the support channel in your [customer dashboard](https://customers.triton.one).
