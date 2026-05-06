@@ -70,6 +70,13 @@ Other usage:
 - Components: use the Mintlify skill (auto-loads via the plugin) for full props reference
 - Common components: `<Note>`, `<Info>`, `<Tip>`, `<Warning>`, `<Check>`, `<Danger>`, `<Steps>`, `<Tabs>`, `<CodeGroup>`, `<Cards>`, `<Columns>`, `<AccordionGroup>`
 
+### Snippets (footer, customer logos, FAQs)
+
+Reusable blocks live in `/snippets`. Two rules:
+
+1. **Import once, render once.** A page that imports `<FooterLinks />` should render it exactly once, at the bottom, after a `---` divider. Never paste the snippet's inner HTML inline -- always use the component.
+2. **Before saving, search the file for duplicates.** Run `grep -c "<FooterLinks" path/to/file.mdx` -- the answer must be `1`. Same for `<CustomerLogoMarquee />` and any other snippet. Mintlify's visual editor sometimes appends a copy of the snippet rather than replacing it; agents that paste large blocks can also accidentally duplicate snippets. The visual difference between rendered output and the source markdown can hide this -- always check the source.
+
 ## Workflow
 
 - Production branch: `main` -- merges deploy to docs.triton.one

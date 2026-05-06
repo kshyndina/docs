@@ -14,7 +14,7 @@ It's the fastest live data path available and the recommended choice for any bac
 - **Real-time UIs (backend).** Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers
 - **Compliance and analytics.** Watch specific addresses or programs, route updates downstream
 
-For browser clients that can't communicate with gRPC, use [Whirligig WebSockets](https://tritonone.mintlify.app/solana/streaming/whirligig-websockets) instead.
+For browser clients that can't communicate with gRPC, use [Whirligig WebSockets](/solana/streaming/whirligig-websockets) instead.
 
 ## Features and benefits
 
@@ -27,7 +27,7 @@ For browser clients that can't communicate with gRPC, use [Whirligig WebSockets]
     Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state. 
   </Card>
 
-  <Card title="Minimal serialisation overhead" icon="weight">
+  <Card title="Replay from a slot" icon="rotate-ccw">
     Resume from a specific slot after a disconnect. The server replays buffered updates, then continues live on the same stream.
   </Card>
 
@@ -46,7 +46,7 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
     | :-- | :-- |
     | Account writes | Updates whenever a matching account's data, lamports, or owner changes |
     | Transactions | Every transaction matching your filter, with full `meta` (logs, status, balance deltas) |
-    | Deshred transactions (paid beta) | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](https://tritonone.mintlify.app/#deshred-transactions). |
+    | Deshred transactions (paid beta) | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](#deshred-transactions). |
     | Entries | Solana ledger entries (low-level, rare use case) |
     | Block notifications | Full blocks as they're produced, optionally with their transactions and accounts |
     | Block metadata | Block headers only, without the transaction payload |
@@ -67,7 +67,7 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 
 Every stream subscription is a single `SubscribeRequest` message. It has fields that apply across all stream types and a per-stream filter map. 
 
-You send it once when you open the stream; then you can send it again at any time to modify it (the new request fully replaces the old one). **If you're tracking large account sets, [compressed account filters](#compressed-account-filters) reduce payload size ~10x.**
+You send it once when you open the stream; then you can send it again at any time to modify it (the new request fully replaces the old one).
 
 <Tabs>
   <Tab title="commitment">
@@ -178,7 +178,7 @@ Across multiple named filters in the same category (e.g. two transaction filters
 
 ## Subscribing to each stream type
 
-xxxxxxxplaceholdertextxxxxxx
+Before you start, make sure you have:
 
 - An active Triton subscription
 - Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/)
@@ -187,16 +187,7 @@ xxxxxxxplaceholdertextxxxxxx
 
 The latest protobuf files live in the [yellowstone-grpc repo](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto). For Rust, use the [yellowstone-grpc-proto crate](https://crates.io/crates/yellowstone-grpc-proto).
 
-- **Within an array, OR.** `account_include: [A, B]` matches transactions mentioning A _or_ B.
-- **Across fields, AND.** `vote: false, account_include: [A]` matches non-vote transactions mentioning A.
-
-For transactions specifically:
-
-```text
-match = (accountInclude OR empty) AND (accountRequired AND all) AND NOT accountExclude
-```
-
-Across multiple named filters in the same category (e.g. two transaction filters), you receive matches from any of them. Each match comes tagged with the filter name(s) that produced it, so you can route updates downstream.
+The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](#clients-and-sdks)).
 
 ### Accounts
 
@@ -502,58 +493,7 @@ Across multiple named filters in the same category (e.g. two transaction filters
   </Tab>
 </Tabs>
 
-#### Transaction data structure
-
-[Each transaction update is a `SubscribeUpdateTransaction` containing the full transaction info plus its execution metadata.](#clients-and-sdks)
-
-<AccordionGroup>
-  <Accordion title="Transaction message structure">
-    Top-level fields on the update:
-
-    - `signature` -- the transaction signature, as a byte buffer
-    - `isVote` -- boolean, whether this is a vote transaction
-    - `transaction.message` -- the transaction's `Message` (account keys, recent blockhash, instructions, address table lookups)
-    - `transaction.signatures` -- list of signatures
-    - `meta` -- execution metadata, see below
-    - `slot` -- the slot in which this transaction was included
-  </Accordion>
-
-  <Accordion title="Execution meta">
-    Contained in `meta` on the transaction update:
-
-    - `err` -- transaction error (null on success)
-    - `fee` -- fee paid in lamports
-    - `computeUnitsConsumed` -- CU consumed during execution
-    - `logMessages` -- log lines from the program(s) invoked
-    - `preBalances` / `postBalances` -- SOL balances per account before/after
-    - `preTokenBalances` / `postTokenBalances` -- SPL token balance deltas
-    - `innerInstructions` -- CPIs (cross-program invocations) emitted by top-level instructions
-    - `loadedAddresses` -- writable \+ readonly addresses resolved from address lookup tables
-  </Accordion>
-
-  <Accordion title="Token balance changes">
-    Each entry in `preTokenBalances` and `postTokenBalances`:
-
-    - `accountIndex` -- index into the transaction's account keys
-    - `mint` -- token mint pubkey
-    - `owner` -- account owner
-    - `programId` -- which token program (Token vs Token-2022)
-    - `uiTokenAmount.amount` -- raw amount as string
-    - `uiTokenAmount.decimals` -- token decimals
-    - `uiTokenAmount.uiAmount` -- decimal-formatted amount as number
-    - `uiTokenAmount.uiAmountString` -- decimal-formatted amount as string
-  </Accordion>
-
-  <Accordion title="Instruction details">
-    Within `transaction.message.instructions`:
-
-    - `programIdIndex` -- index of the invoked program in the account keys array
-    - `accounts` -- byte array of account-key indices used by the instruction
-    - `data` -- instruction data, base58-encoded
-
-    Inner instructions (CPIs) follow the same shape, grouped by their parent's index in `meta.innerInstructions`.
-  </Accordion>
-</AccordionGroup>
+For the wire format of each transaction update, see [`geyser.proto`](https://github.com/rpcpool/yellowstone-grpc/blob/master/yellowstone-grpc-proto/proto/geyser.proto) (search for `SubscribeUpdateTransaction`).
 
 ### Slots
 
@@ -662,8 +602,6 @@ Subscribe to ledger entries (groups of transactions that make up a slot). No fil
 
 </CodeGroup>
 
-[This is a low-level signal, mostly useful for validator tooling. Most consumers want transactions or blocks instead.](#intra-slot-updates)
-
 ## Modifying and unsubscribing
 
 The subscribe stream is bi-directional. Send a new `SubscribeRequest` at any time to update filters -- it fully replaces the previous subscription, so your client must keep a local copy of the full config it wants.
@@ -720,9 +658,149 @@ stream.on("data", (data) => {
 });
 ```
 
+```rust Rust
+use {
+    crate::grpc::geyser::{
+        SubscribeRequest, SubscribeRequestPing, geyser_client::GeyserClient,
+        subscribe_update::UpdateOneof,
+    },
+    bytes::Bytes,
+    tokio::sync::mpsc,
+    tokio_stream::{StreamExt, wrappers::ReceiverStream},
+    tonic::{
+        metadata::{Ascii, MetadataValue},
+        service::Interceptor,
+        transport::{Channel, ClientTlsConfig},
+    },
+    tower::{ServiceBuilder, ServiceExt, util::BoxService},
+};
+
+const MAX_DECODING_MESSAGE_SIZE_BYTES: usize = 100_000_000; // 100 MB
+
+#[derive(Clone)]
+struct TritonAuthInterceptor {
+    x_token: MetadataValue<Ascii>,
+}
+
+impl Interceptor for TritonAuthInterceptor {
+    fn call(&mut self, request: tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status> {
+        let mut request = request;
+        let metadata = request.metadata_mut();
+        metadata.insert("x-token", self.x_token.clone());
+        Ok(request)
+    }
+}
+
+pub type GeyserGrpcService = BoxService<
+    hyper::Request<tonic::body::BoxBody>,
+    hyper::Response<tonic::body::BoxBody>,
+    tonic::transport::Error,
+>;
+
+pub async fn build_geyser_grpc_endpoint(
+    endpoint: impl Into<Bytes>,
+    x_token: Option<String>,
+) -> anyhow::Result<GeyserClient<GeyserGrpcService>> {
+    let tls_config = ClientTlsConfig::new().with_native_roots();
+    let endpoint = Channel::from_shared(endpoint)?
+        .tls_config(tls_config)?
+        .connect_lazy();
+    let svc = if let Some(x_token) = x_token {
+        let metadata = x_token.try_into()?;
+        let interceptor = TritonAuthInterceptor { x_token: metadata };
+        ServiceBuilder::new()
+            .layer(tonic::service::interceptor(interceptor))
+            .service(endpoint)
+            .boxed()
+    } else {
+        endpoint.boxed()
+    };
+    let client = GeyserClient::new(svc).max_decoding_message_size(MAX_DECODING_MESSAGE_SIZE_BYTES);
+    Ok(client)
+}
+
+pub async fn build_geyser_blockchain_event_stream(
+    endpoint: impl Into<Bytes> + Send + 'static,
+    x_token: Option<String>,
+    request: SubscribeRequest,
+    tx: mpsc::Sender<UpdateOneof>,
+) -> impl Future<Output = ()> {
+    let mut geyser_client = build_geyser_grpc_endpoint(endpoint, x_token)
+        .await
+        .expect("failed to build geyser grpc endpoint");
+
+    // Keep `subscribe_tx` alive to send ping requests to the geyser server.
+    // Necessary to keep the connection alive for some proxy setups.
+    let (subscribe_tx, subscribe_rx) = mpsc::channel(20000);
+    subscribe_tx
+        .send(request)
+        .await
+        .expect("failed to send subscribe request");
+
+    let response = geyser_client
+        .subscribe(ReceiverStream::new(subscribe_rx))
+        .await
+        .expect("failed to subscribe to geyser");
+    let geyser_source = response.into_inner();
+
+    async move {
+        let tx = tx;
+        let mut geyser_source = geyser_source;
+        let mut ping_cnt: i32 = 0;
+        loop {
+            let result = geyser_source.next().await;
+            match result {
+                Some(event) => match event {
+                    Ok(event) => {
+                        let event = match event.update_oneof {
+                            Some(value) => value,
+                            None => continue,
+                        };
+
+                        let blockchain_event: Option<UpdateOneof> = match event {
+                            // Answer Ping requests using `subscribe_tx`
+                            UpdateOneof::Ping(_req) => {
+                                if subscribe_tx
+                                    .send(SubscribeRequest {
+                                        ping: Some(SubscribeRequestPing { id: ping_cnt }),
+                                        ..Default::default()
+                                    })
+                                    .await
+                                    .is_err()
+                                {
+                                    panic!("failed to send ping");
+                                }
+                                ping_cnt += 1;
+                                tracing::info!("Ping sent: {:?}", ping_cnt);
+                                None
+                            }
+                            UpdateOneof::Pong(_) => None,
+                            other => Some(other),
+                        };
+                        if let Some(blockchain_event) = blockchain_event {
+                            if tx.send(blockchain_event).await.is_err() {
+                                break;
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        tracing::error!("disconnected from geyser: {:?}", e);
+                        break;
+                    }
+                },
+                _ => {
+                    tracing::error!("geyser stream ended");
+                    break;
+                }
+            }
+        }
+    }
+}
+```
+
 </CodeGroup>
 
-A Rust example: [gist by @lvboudre](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88).
+Rust source: [gist by @lvboudre](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88).
 
 ## Replay from a slot
 
@@ -766,7 +844,7 @@ const request = {
 
 </CodeGroup>
 
-[To discover the earliest replayable slot, call the unary `subscribeReplayInfo` RPC:](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88)
+To discover the earliest replayable slot, call the unary `subscribeReplayInfo` RPC:
 
 <CodeGroup>
 
@@ -890,7 +968,7 @@ Certain programs are excluded from all Dragon's Mouth gRPC streams and are also 
 
 **Why is ZK Compression excluded?** It generates extremely high-volume account updates -- each update is a ~10MB blob, producing several gigabits per second of data. That volume isn't practical to include in standard streams.
 
-[Most consumers of this data want the **end result** processed by the ](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/)[Photon indexer](https://github.com/helius-labs/photon), not raw account blobs. Triton offers a [hosted Photon service](https://docs.triton.one/chains/solana/photon) -- use that instead.
+Most consumers of this data want the **end result** processed by the [Photon indexer](https://github.com/helius-labs/photon), not raw account blobs. Triton offers a [hosted Photon service](https://docs.triton.one/chains/solana/photon) -- use that instead.
 
 ## Clients and SDKs
 
@@ -948,7 +1026,7 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
     Full example: [yellowstone-grpc/examples/typescript](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript).
   </Tab>
   <Tab title="grpcurl">
-    Good for ad-hoc testing. Needs `geyser.proto` \+ dependencies.
+    `grpcurl` is good for testing. You need the corresponding Protobuf `.proto` files (starting with `geyser.proto` and its dependencies) so `grpcurl` can describe the protocol.
 
     ```shell
     ./grpcurl \
@@ -962,7 +1040,36 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
     Self-hosters can drop the `x-token` header.
   </Tab>
   <Tab title="Go">
-    Sample client: [yellowstone-grpc/examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang).
+    Requires Go 1.21. Run the sample client straight from the repo:
+
+    ```shell
+    go run ./cmd/grpc-client/ \
+      -endpoint https://api.rpcpool.com:443 \
+      -x-token <your-token> \
+      -slots
+    ```
+
+    Non-SSL connections work too:
+
+    ```shell
+    go run ./cmd/grpc-client/ \
+      -endpoint http://api.rpcpool.com:80 \
+      -x-token <your-token> \
+      -blocks
+    ```
+
+    Updating proto files needs `protoc` plus the Go plugins:
+
+    ```shell
+    go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.35.1
+    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
+    ```
+
+    Run `make` to regenerate. Full source: [yellowstone-grpc/examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang).
+
+    <Note>
+      The Go example may lag the latest stable proto version. For production-ready code, the Rust client is the reference implementation.
+    </Note>
   </Tab>
 </Tabs>
 
@@ -979,7 +1086,5 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 </CardGroup>
 
 ---
-
-<FooterLinks />
 
 <FooterLinks />
