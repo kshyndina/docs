@@ -7,12 +7,12 @@ Triton has two billing methods (pay as you go, invoiced) and two infrastructure 
 
 ## Pay as you go vs invoiced
 
-| | Pay as you go | Invoiced |
-|---|---|---|
+|  | Pay as you go | Invoiced |
+| --- | --- | --- |
 | **Sign up** | Self-onboard at [customers.triton.one](https://customers.triton.one/users/sign-up) | Contact sales |
-| **Minimum** | {"$"}125 prepaid deposit | {"$"}125 monthly invoice |
+| **Minimum** |  |  |
 | **Billing** | Drawn from your prepaid balance | Billed at the start of each month for the month |
-| **Overages** | Not allowed. Top up to avoid service interruptions | Billed in {"$"}100 increments at the same rate at the start of next month |
+| **Overages** | Not allowed. Top up to avoid service interruptions |  |
 | **Payment** | Stablecoins only | Card, USDC, wire, hel.io |
 | **Cancellation** | None, balance valid for 12 months | 1 calendar month notice |
 
@@ -37,178 +37,207 @@ Pricing is simple: you pay for what you use. Per-million rates for calls, per-GB
 - **Dedicated node.** Fixed monthly price covers gRPC streaming. Other services use the same rates as shared infrastructure.
 
 <div className="triton-calc not-prose" data-triton-calc>
+<div className="triton-calc-modes">
+  <button type="button" className="triton-calc-mode-btn active" data-mode="custom">Custom PAYG</button>
+  <button type="button" className="triton-calc-mode-btn" data-mode="dedicated">Dedicated nodes</button>
+</div>
 
-  <div className="triton-calc-modes">
-    <button type="button" className="triton-calc-mode-btn active" data-mode="custom">Custom PAYG</button>
-    <button type="button" className="triton-calc-mode-btn" data-mode="dedicated">Dedicated nodes</button>
-  </div>
+<div className="triton-calc-panel" data-panel="payg">
+  <div className="triton-calc-grid">
+    <div className="triton-calc-summary">
+      <div className="triton-calc-badge">Minimum deposit is {"$"}125</div>
+      <div className="triton-calc-total" data-total>{"$"}125.00</div>
+      <div className="triton-calc-total-label">USD</div>
 
-  <div className="triton-calc-panel" data-panel="payg">
-    <div className="triton-calc-grid">
-      <div className="triton-calc-summary">
-        <div className="triton-calc-badge">Minimum deposit is {"$"}125</div>
-        <div className="triton-calc-total" data-total>{"$"}125.00</div>
-        <div className="triton-calc-total-label">USD</div>
+      <div className="triton-calc-features-label">Start shipping with</div>
 
-        <div className="triton-calc-features-label">Start shipping with</div>
-        <ul className="triton-calc-features">
-          <li>Global bare-metal node network</li>
-          <li>GeoDNS routing, auto-failover</li>
-          <li>1-on-1 support from senior engineers</li>
-          <li>Overage billed at the base rate</li>
-          <li>gRPC and WebSockets streaming</li>
-          <li>Full access to Yellowstone suite tools</li>
-          <li>Turnkey access to advanced APIs</li>
-          <li>Solana, Pythnet, Sui, and Monad</li>
-        </ul>
+      <ul className="triton-calc-features">
+        <li>Global bare-metal node network</li>
+        <li>GeoDNS routing, auto-failover</li>
+        <li>1-on-1 support from senior engineers</li>
+        <li>Overage billed at the base rate</li>
+        <li>gRPC and WebSockets streaming</li>
+        <li>Full access to Yellowstone suite tools</li>
+        <li>Turnkey access to advanced APIs</li>
+        <li>Solana, Pythnet, Sui, and Monad</li>
+      </ul>
 
-        <p className="triton-calc-fineprint">Deposit is prepaid, non-refundable, and valid for 12 months.</p>
+      <p className="triton-calc-fineprint">Deposit is prepaid, non-refundable, and valid for 12 months.</p>
 
-        <div className="triton-calc-cta-row">
-          <a className="triton-calc-cta" href="https://customers.triton.one/onboarding" data-cta>Get started →</a>
-          <span className="triton-calc-cta-warn" data-warn hidden>Minimum deposit is {"$"}125.00</span>
-        </div>
-      </div>
-
-      <div className="triton-calc-controls">
-
-        <div className="triton-calc-custom" data-custom>
-          <div className="triton-calc-row" data-slider data-key="bandwidthAll" data-price="0.08" data-min="0" data-max="10000" data-step="100" data-format="bandwidth">
-            <div className="triton-calc-row-head">
-              <div>
-                <div className="triton-calc-row-title">Bandwidth across all services</div>
-                <div className="triton-calc-row-rate">$0.08 / GB bandwidth</div>
-              </div>
-              <div className="triton-calc-row-amount" data-amount>$0.00</div>
-            </div>
-            <div className="triton-calc-slider-wrap">
-              <div className="triton-calc-slider-track"><div className="triton-calc-slider-fill" data-fill></div></div>
-              <input type="range" min="0" max="10000" step="100" defaultValue="0" data-input />
-              <div className="triton-calc-slider-label" data-label hidden></div>
-            </div>
-          </div>
-
-          <div className="triton-calc-row" data-slider data-key="standardRpc" data-price="10" data-min="0" data-max="10" data-step="0.1" data-format="millions">
-            <div className="triton-calc-row-head">
-              <div>
-                <div className="triton-calc-row-title">Standard RPC, indexed accounts, ledger queries</div>
-                <div className="triton-calc-row-rate">$10 / million calls + bandwidth</div>
-              </div>
-              <div className="triton-calc-row-amount" data-amount>$0.00</div>
-            </div>
-            <div className="triton-calc-slider-wrap">
-              <div className="triton-calc-slider-track"><div className="triton-calc-slider-fill" data-fill></div></div>
-              <input type="range" min="0" max="10" step="0.1" defaultValue="0" data-input />
-              <div className="triton-calc-slider-label" data-label hidden></div>
-            </div>
-          </div>
-
-          <div className="triton-calc-row" data-slider data-key="streaming" data-price="0.08" data-min="0" data-max="10000" data-step="100" data-format="bandwidth">
-            <div className="triton-calc-row-head">
-              <div>
-                <div className="triton-calc-row-title">Streaming services, Titan Prime API</div>
-                <div className="triton-calc-row-rate">$0.08 / GB bandwidth</div>
-              </div>
-              <div className="triton-calc-row-amount" data-amount>$0.00</div>
-            </div>
-            <div className="triton-calc-slider-wrap">
-              <div className="triton-calc-slider-track"><div className="triton-calc-slider-fill" data-fill></div></div>
-              <input type="range" min="0" max="10000" step="100" defaultValue="0" data-input />
-              <div className="triton-calc-slider-label" data-label hidden></div>
-            </div>
-          </div>
-
-          <div className="triton-calc-row" data-slider data-key="metaplex" data-price="50" data-min="0" data-max="10" data-step="0.1" data-format="millions">
-            <div className="triton-calc-row-head">
-              <div>
-                <div className="triton-calc-row-title">Metaplex, Photon APIs</div>
-                <div className="triton-calc-row-rate">$50 / million calls + bandwidth</div>
-              </div>
-              <div className="triton-calc-row-amount" data-amount>$0.00</div>
-            </div>
-            <div className="triton-calc-slider-wrap">
-              <div className="triton-calc-slider-track"><div className="triton-calc-slider-fill" data-fill></div></div>
-              <input type="range" min="0" max="10" step="0.1" defaultValue="0" data-input />
-              <div className="triton-calc-slider-label" data-label hidden></div>
-            </div>
-          </div>
-
-          <div className="triton-calc-row" data-slider data-key="metis" data-price="80" data-min="0" data-max="10" data-step="0.1" data-format="millions">
-            <div className="triton-calc-row-head">
-              <div>
-                <div className="triton-calc-row-title">Metis API</div>
-                <div className="triton-calc-row-rate">$80 / million calls + bandwidth</div>
-              </div>
-              <div className="triton-calc-row-amount" data-amount>$0.00</div>
-            </div>
-            <div className="triton-calc-slider-wrap">
-              <div className="triton-calc-slider-track"><div className="triton-calc-slider-fill" data-fill></div></div>
-              <input type="range" min="0" max="10" step="0.1" defaultValue="0" data-input />
-              <div className="triton-calc-slider-label" data-label hidden></div>
-            </div>
-          </div>
-
-        </div>
-
+      <div className="triton-calc-cta-row">
+        <a className="triton-calc-cta" href="https://customers.triton.one/onboarding" data-cta>Get started →</a>
+        <span className="triton-calc-cta-warn" data-warn hidden>Minimum deposit is {"$"}125.00</span>
       </div>
     </div>
-  </div>
 
-  <div className="triton-calc-panel" data-panel="dedicated" hidden>
-    <div className="triton-calc-grid">
-      <div className="triton-calc-summary">
-        <div className="triton-calc-chain-label">Solana dedicated node</div>
+    <div className="triton-calc-controls">
+      <div className="triton-calc-custom" data-custom>
+        <div className="triton-calc-row" data-slider data-key="bandwidthAll" data-price="0.08" data-min="0" data-max="10000" data-step="100" data-format="bandwidth">
+          <div className="triton-calc-row-head">
+            <div>
+              <div className="triton-calc-row-title">Bandwidth across all services</div>
+              <div className="triton-calc-row-rate">$0.08 / GB bandwidth</div>
+            </div>
 
-        <div className="triton-calc-total" data-chain-price>{"$"}2,900+</div>
-        <div className="triton-calc-total-label">USD per month</div>
+            <div className="triton-calc-row-amount" data-amount>$0.00</div>
+          </div>
 
-        <div className="triton-calc-features-label">Start shipping with</div>
-        <ul className="triton-calc-features" data-chain-features>
-          <li>Unmetered gRPC streaming</li>
-          <li>Full access to Yellowstone suite and advanced APIs</li>
-          <li>Custom geolocated deployment</li>
-          <li>Isolated performance, dedicated to your traffic</li>
-          <li>Advanced controls and tuning for your workload</li>
-          <li>GeoDNS routing and automatic failover</li>
-          <li>1-on-1 support from senior engineers</li>
-        </ul>
-      </div>
+          <div className="triton-calc-slider-wrap">
+            <div className="triton-calc-slider-track">
+              <div className="triton-calc-slider-fill" data-fill />
+            </div>
 
-      <div className="triton-calc-controls">
-        <div className="triton-calc-services" data-chain-services>
-          <div className="triton-calc-row triton-calc-row-static">
-            <div className="triton-calc-row-title">gRPC streaming (Dragon's Mouth)</div>
-            <div className="triton-calc-row-rate">Included in the node price, no overage fees</div>
-          </div>
-          <div className="triton-calc-row triton-calc-row-static">
-            <div className="triton-calc-row-title">Fumarole, Whirligig, WebSockets, other streaming</div>
-            <div className="triton-calc-row-rate">$0.08 / GB bandwidth</div>
-          </div>
-          <div className="triton-calc-row triton-calc-row-static">
-            <div className="triton-calc-row-title">Standard RPC, indexed accounts, ledger queries</div>
-            <div className="triton-calc-row-rate">$0.08 / GB bandwidth + $10 / million calls</div>
-          </div>
-          <div className="triton-calc-row triton-calc-row-static">
-            <div className="triton-calc-row-title">Metaplex, Photon APIs</div>
-            <div className="triton-calc-row-rate">$0.08 / GB bandwidth + $50 / million calls</div>
-          </div>
-          <div className="triton-calc-row triton-calc-row-static">
-            <div className="triton-calc-row-title">Metis API</div>
-            <div className="triton-calc-row-rate">$0.08 / GB bandwidth + $80 / million calls</div>
-          </div>
-          <div className="triton-calc-row triton-calc-row-static">
-            <div className="triton-calc-row-title">Titan API</div>
-            <div className="triton-calc-row-rate">$0.08 / GB bandwidth + $80 / million calls</div>
+            <input type="range" min="0" max="10000" step="100" defaultValue="0" data-input />
+
+            <div className="triton-calc-slider-label" data-label hidden />
           </div>
         </div>
 
-        <div className="triton-calc-cta-row">
-          <a className="triton-calc-cta" href="https://triton.one/contact" data-cta>Contact sales →</a>
+        <div className="triton-calc-row" data-slider data-key="standardRpc" data-price="10" data-min="0" data-max="10" data-step="0.1" data-format="millions">
+          <div className="triton-calc-row-head">
+            <div>
+              <div className="triton-calc-row-title">Standard RPC, indexed accounts, ledger queries</div>
+              <div className="triton-calc-row-rate">$10 / million calls + bandwidth</div>
+            </div>
+
+            <div className="triton-calc-row-amount" data-amount>$0.00</div>
+          </div>
+
+          <div className="triton-calc-slider-wrap">
+            <div className="triton-calc-slider-track">
+              <div className="triton-calc-slider-fill" data-fill />
+            </div>
+
+            <input type="range" min="0" max="10" step="0.1" defaultValue="0" data-input />
+
+            <div className="triton-calc-slider-label" data-label hidden />
+          </div>
+        </div>
+
+        <div className="triton-calc-row" data-slider data-key="streaming" data-price="0.08" data-min="0" data-max="10000" data-step="100" data-format="bandwidth">
+          <div className="triton-calc-row-head">
+            <div>
+              <div className="triton-calc-row-title">Streaming services, Titan Prime API</div>
+              <div className="triton-calc-row-rate">$0.08 / GB bandwidth</div>
+            </div>
+
+            <div className="triton-calc-row-amount" data-amount>$0.00</div>
+          </div>
+
+          <div className="triton-calc-slider-wrap">
+            <div className="triton-calc-slider-track">
+              <div className="triton-calc-slider-fill" data-fill />
+            </div>
+
+            <input type="range" min="0" max="10000" step="100" defaultValue="0" data-input />
+
+            <div className="triton-calc-slider-label" data-label hidden />
+          </div>
+        </div>
+
+        <div className="triton-calc-row" data-slider data-key="metaplex" data-price="50" data-min="0" data-max="10" data-step="0.1" data-format="millions">
+          <div className="triton-calc-row-head">
+            <div>
+              <div className="triton-calc-row-title">Metaplex, Photon APIs</div>
+              <div className="triton-calc-row-rate">$50 / million calls + bandwidth</div>
+            </div>
+
+            <div className="triton-calc-row-amount" data-amount>$0.00</div>
+          </div>
+
+          <div className="triton-calc-slider-wrap">
+            <div className="triton-calc-slider-track">
+              <div className="triton-calc-slider-fill" data-fill />
+            </div>
+
+            <input type="range" min="0" max="10" step="0.1" defaultValue="0" data-input />
+
+            <div className="triton-calc-slider-label" data-label hidden />
+          </div>
+        </div>
+
+        <div className="triton-calc-row" data-slider data-key="metis" data-price="80" data-min="0" data-max="10" data-step="0.1" data-format="millions">
+          <div className="triton-calc-row-head">
+            <div>
+              <div className="triton-calc-row-title">Metis API</div>
+              <div className="triton-calc-row-rate">$80 / million calls + bandwidth</div>
+            </div>
+
+            <div className="triton-calc-row-amount" data-amount>$0.00</div>
+          </div>
+
+          <div className="triton-calc-slider-wrap">
+            <div className="triton-calc-slider-track">
+              <div className="triton-calc-slider-fill" data-fill />
+            </div>
+
+            <input type="range" min="0" max="10" step="0.1" defaultValue="0" data-input />
+
+            <div className="triton-calc-slider-label" data-label hidden />
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
+<div className="triton-calc-panel" data-panel="dedicated" hidden>
+<div className="triton-calc-grid">
+<div className="triton-calc-summary">
+  <div className="triton-calc-chain-label">Solana dedicated node</div>
+
+  <div className="triton-calc-total" data-chain-price>{"$"}2,900+</div>
+  <div className="triton-calc-total-label">USD per month</div>
+
+  <div className="triton-calc-features-label">Start shipping with</div>
+
+  <ul className="triton-calc-features" data-chain-features>
+    <li>Unmetered gRPC streaming</li>
+    <li>Full access to Yellowstone suite and advanced APIs</li>
+    <li>Custom geolocated deployment</li>
+    <li>Isolated performance, dedicated to your traffic</li>
+    <li>Advanced controls and tuning for your workload</li>
+    <li>GeoDNS routing and automatic failover</li>
+    <li>1-on-1 support from senior engineers</li>
+  </ul>
+</div>
+
+<div className="triton-calc-controls">
+<div className="triton-calc-services" data-chain-services>
+<div className="triton-calc-row triton-calc-row-static">
+  <div className="triton-calc-row-title">gRPC streaming (Dragon's Mouth)</div>
+  <div className="triton-calc-row-rate">Included in the node price, no overage fees</div>
+</div>
+
+<div className="triton-calc-row triton-calc-row-static">
+  <div className="triton-calc-row-title">Fumarole, Whirligig, WebSockets, other streaming</div>
+  <div className="triton-calc-row-rate">$0.08 / GB bandwidth</div>
+</div>
+
+<div className="triton-calc-row triton-calc-row-static">
+ 
+</div>
+
+<div className="triton-calc-row triton-calc-row-static">
+ 
+</div>
+
+<div className="triton-calc-row triton-calc-row-static">
+ 
+</div>
+
+<div className="triton-calc-row triton-calc-row-static">
+ 
+</div>
+</div>
+
+<div className="triton-calc-cta-row">
+  <a className="triton-calc-cta" href="https://triton.one/contact" data-cta>Contact sales →</a>
+</div>
+
+</div>
+</div>
+</div>
 </div>
 
 ## How pay as you go works
@@ -218,52 +247,25 @@ Once you've made a deposit, it's valid for a year and draws down as you use the 
 There is no free trial, as the deposit replaces it: you get a year of testing room with the same account, endpoint, and tokens you'd ship to production.
 
 <Info>
-[Sign up at customers.triton.one](https://customers.triton.one/users/sign-up). For a step-by-step, see [How to sign up](/solana/get-started/account-management/set-up-your-account-and-add-users). Issues? Email [support@triton.one](mailto:support@triton.one).
+  [Sign up at customers.triton.one](https://customers.triton.one/users/sign-up). For a step-by-step, see [How to sign up](/solana/get-started/account-management/set-up-your-account-and-add-users). 
 </Info>
 
 ## What's next
 
-<Columns cols={2}>
+<Columns cols={4}>
   <Card title="Quickstart" icon="rocket" href="/solana/get-started/quickstart">
     Sign up, deposit, get an endpoint, send your first request.
   </Card>
+
   <Card title="Account management" icon="user-cog" href="/solana/get-started/account-management/platform-overview">
     Where everything lives in the portal.
   </Card>
+
   <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
     Per-endpoint rate limits and 429 handling.
   </Card>
+
   <Card title="Metered billing breakdown" icon="chart-bar" href="/solana/get-started/account-management/metered-billing">
     How calls and bandwidth map to your monthly bill.
-  </Card>
-</Columns>
-
-## Cancellation
-
-| | PAYG (shared) | PAYG (dedicated) | Invoiced |
-|---|---|---|---|
-| **Notice period** | None. Credits expire after 1 year if unused, otherwise burn down | 1 calendar month notice | 1 calendar month notice |
-| **Cancel from** | Portal or support | Support | Support |
-
-PAYG on shared is the lightest commitment: stop using the service and the credits eventually expire. Dedicated and invoiced both require a calendar-month notice so we can wind the infrastructure down cleanly.
-
-## Payment methods
-
-Card via Coinflow, USDC (SPL on Solana, ERC-20 on Ethereum), hel.io, and wire (USD / GBP) for invoiced customers. See [How to top up credits](/solana/get-started/account-management/how-to-top-up-credits) for the per-method walkthrough.
-
-## What's next
-
-<Columns cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/solana/get-started/quickstart">
-    Sign up, deposit, get an endpoint, send your first request.
-  </Card>
-  <Card title="Account management" icon="user-cog" href="/solana/get-started/account-management/platform-overview">
-    Where everything lives in the portal.
-  </Card>
-  <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
-    Per-endpoint rate limits and 429 handling.
-  </Card>
-  <Card title="Dedicated nodes" icon="server" href="/solana/dedicated-nodes/overview">
-    When and how to move to dedicated.
   </Card>
 </Columns>
