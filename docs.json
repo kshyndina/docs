@@ -233,7 +233,8 @@
                 "pages": [
                   "solana-guides/error-handling/how-to-troubleshoot",
                   "solana-guides/error-handling/common-solana-errors",
-                  "solana-guides/error-handling/triton-rpc-error-codes"
+                  "solana-guides/error-handling/triton-rpc-error-codes",
+                  "solana-guides/error-handling/web3js-connection-issues"
                 ]
               },
               {
