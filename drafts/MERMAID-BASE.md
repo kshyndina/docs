@@ -7,14 +7,14 @@ Paste-ready init directive + working examples. Use this as the starting point fo
 ## The init directive (paste at the top of every mermaid block)
 
 ```
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
 ```
 
 ## Working sequenceDiagram template (canonical RPC flow on welcome page)
 
 ````
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
 sequenceDiagram
     participant You as Your client
     participant Triton
@@ -29,6 +29,24 @@ sequenceDiagram
     Triton->>Net: route to current slot leader TPU<br/>(SWQoS, QUIC)
     Net-->>Triton: leader includes tx in block
     Triton-->>You: signature confirmed
+```
+````
+
+## Working flowchart template (rate-limit gate on rate-and-connection-limits page)
+
+Note the two flowchart-specific quirks:
+- All nodes use `(...)` (rounded rectangle), never `{...}` (diamond — never rounds) or `[...]` (rectangle — only slight rounding). Round-only rule.
+- `edgeLabelBackground:'transparent'` removes the white box mermaid puts behind `|Yes|` / `|No|` arrow labels by default. Sequence diagrams don't have edge labels so this token only matters for flowcharts.
+
+````
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'},'flowchart':{'nodeSpacing':18,'rankSpacing':32,'padding':6,'curve':'linear'}}}%%
+flowchart LR
+    Req("Request from your IP") --> Total("Total RPS<br/>< 2,000 per 10s?")
+    Total -->|No| Block("HTTP 429")
+    Total -->|Yes| Method("Per-method RPS<br/>under cap?")
+    Method -->|No| Block
+    Method -->|Yes| OK("Request processed")
 ```
 ````
 
@@ -51,11 +69,12 @@ sequenceDiagram
 | `signalColor` | `#492D60` | Arrow label text |
 | `labelBoxBkgColor` | `#7A4BA0` | Labelled-box fill |
 | `labelTextColor` | `#F7F7F7` | Labelled-box text |
+| `edgeLabelBackground` | `transparent` | Removes white box behind flowchart edge labels (`|Yes|` / `|No|`) |
 
 ## Rules
 
 - **Don't drift.** Apply these exact values to every new mermaid block. No grays, no off-palette purples.
-- **For flowcharts**, the same theme works; primary/secondary/tertiary are used for node tiers automatically.
+- **For flowcharts**, the same theme works; primary/secondary/tertiary are used for node tiers automatically. Always use `(...)` rounded-rectangle nodes -- not `{...}` (diamonds, never round) or `[...]` (sharp-ish rectangles).
 - **classDef overrides** for specific node groups (pillar/branch/leaf) are fine on top of this base, but use Triton purples (`#7A4BA0` / `#492D60` / `#F2EDF6` / `#E0D2EC`) for fill/stroke.
 - **Text wrap**: use `<br/>` inside arrow labels to break long lines (e.g. `route to current slot leader TPU<br/>(SWQoS, QUIC)`).
 - **No emoji** in diagrams.

@@ -13,13 +13,13 @@ Two budgets apply at the same time, both reset every 10 seconds, both keyed to t
 - **Per-method RPS** is a separate budget for each individual RPC method. Even if your total is under the cap, you can hit the per-method cap on a single hot method (most often `getProgramAccounts`, `sendTransaction`, or `getBlock`).
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7'},'flowchart':{'nodeSpacing':18,'rankSpacing':32,'padding':6,'curve':'linear'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'},'flowchart':{'nodeSpacing':18,'rankSpacing':32,'padding':6,'curve':'linear'}}}%%
 flowchart LR
-    Req["Request from your IP"] --> Total{"Total RPS<br/>< 2,000 per 10s?"}
-    Total -->|No| Block["HTTP 429"]
-    Total -->|Yes| Method{"Per-method RPS<br/>under cap?"}
+    Req("Request from your IP") --> Total("Total RPS<br/>< 2,000 per 10s?")
+    Total -->|No| Block("HTTP 429")
+    Total -->|Yes| Method("Per-method RPS<br/>under cap?")
     Method -->|No| Block
-    Method -->|Yes| OK["Request processed"]
+    Method -->|Yes| OK("Request processed")
 ```
 
 If either check fails, the response is `HTTP 429 Too Many Requests`. In practice, most 429s come from the per-method limit, not the total.
@@ -34,38 +34,26 @@ New accounts on the shared service default to a tier sized for typical workloads
 
 ## Per-method limits
 
-Methods not listed below fall back to the 2,000-per-10s global budget.
+Methods not listed below fall back to the 2,000-per-10s global budget. Limits group by cap, so methods that share a budget appear on the same row.
 
-<AccordionGroup>
-  <Accordion title="Standard JSON-RPC" icon="zap">
-    | Method | Default limit per 10s |
-    |---|---|
-    | Total RPS per IP | 2,000 |
-    | `getAccountInfo` | 2,000 |
-    | `getTransaction` | 2,000 |
-    | `getMultipleAccounts` | 400 |
-    | `getVoteAccounts` | 400 |
-    | `getClusterNodes` | 400 |
-    | `getBlock` | 200 |
-    | `getConfirmedTransaction` | 200 |
-    | `getLeaderSchedule` | 200 |
-    | `getRecentPerformanceSamples` | 100 |
-    | `getLatestBlockhash` | 100 |
-    | `getTokenAccountsByOwner` | 100 |
-    | `sendTransaction` | 100 |
-    | `getProgramAccounts` | 50 |
-    | `getTokenLargestAccounts` | 50 |
-  </Accordion>
+### Standard JSON-RPC
 
-  <Accordion title="Streaming services (gRPC)" icon="radio">
-    | Service | Method | Limit per 10s |
-    |---|---|---|
-    | Fumarole | All methods | 2,000 |
-    | Old Faithful | `GetBlockTime`, `StreamBlocks`, `StreamTransactions` | 5,000 |
-    | Old Faithful | `GetBlock`, `GetTransaction`, `Get`, `GetVersion` | 1,000 |
-    | Vixen | `Subscribe`, `ProgramStreams.Subscribe` | 1,000 |
-  </Accordion>
-</AccordionGroup>
+| Per 10s | Methods |
+|---|---|
+| 2,000 | Total RPS per IP, `getAccountInfo`, `getTransaction` |
+| 400 | `getMultipleAccounts`, `getVoteAccounts`, `getClusterNodes` |
+| 200 | `getBlock`, `getConfirmedTransaction`, `getLeaderSchedule` |
+| 100 | `getRecentPerformanceSamples`, `getLatestBlockhash`, `getTokenAccountsByOwner`, `sendTransaction` |
+| 50 | `getProgramAccounts`, `getTokenLargestAccounts` |
+
+### Streaming services (gRPC)
+
+| Per 10s | Service | Methods |
+|---|---|---|
+| 5,000 | Old Faithful | `GetBlockTime`, `StreamBlocks`, `StreamTransactions` |
+| 2,000 | Fumarole | all methods |
+| 1,000 | Old Faithful | `GetBlock`, `GetTransaction`, `Get`, `GetVersion` |
+| 1,000 | Vixen | `Subscribe`, `ProgramStreams.Subscribe` |
 
 ## Read your live limits
 
