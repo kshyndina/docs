@@ -1,8 +1,8 @@
 ---
-title: "Streaming"
-description: "Real-time Solana data and historical replay on the Yellowstone Geyser plugin most of the ecosystem now runs on. Pick the product that matches your latency, reliability, and replay needs."
-sidebarTitle: "Overview"
+title: "Overview"
 ---
+
+
 
 ## What is streaming?
 
@@ -43,12 +43,26 @@ Triton was first to ship gRPC streaming on Solana with **Yellowstone gRPC**, the
 
 - **Dedicated streaming clusters.** Specialised infrastructure that doesn't serve general RPC traffic, tuned for the I/O profile of pushing events to thousands of subscribers.
 - **Co-located with high-stake validators.** Streaming clusters sit next to high-stake validators in top-tier data centres and ingest shreds from our own validators, Jito, DoubleZero, and Turbine, so updates hit the edge as fast as physically possible.
-- **Globally distributed across 20+ points of presence.** GeoDNS routes you to the nearest cluster; automatic failover handles outages.
+- **Globally distributed across 20\+ points of presence.** GeoDNS routes you to the nearest cluster; automatic failover handles outages.
 - **Isolated services.** All the streaming services (Whirligig, Fumarole, Faithful streams) run on modular infrastructure, so a spike in one can't degrade the others.
+
+## Pick your stream
 
 Three things matter in streaming: **latency, reliability, and replay**. Years of running Yellowstone at scale taught us that no single product leads on all of them. So we built one for each, all on the Yellowstone Geyser foundation.
 
-## Pick your stream
+- Dragon's Mouth is the source of truth for live data, with Deshred giving you pre-execution transaction data on the same gRPC service. 
+- Whirligig translates Dragon's Mouth output into standard Solana WebSocket messages for browsers. 
+- Fumarole consumes multiple Dragon's Mouth nodes, deduplicates, and persists a cursor on the server side so you can resume exactly where you left off after disconnects. 
+- Old Faithful taps the historical archive but uses the same gRPC interface, so the live and historical pipelines appear identical to your client code.
+
+| Capability | Dragon's Mouth | Deshred | Whirligig | Fumarole | Old Faithful | Hermes |
+| --- | :-: | :-: | :-: | :-: | :-: | :-: |
+| Real-time data | ✓ |  | ✓ | ✓ |  |  |
+| Pre-execution transactions |  | ✓ |  |  |  |  |
+| Historical replay |  |  |  | 4 days | Entire ledger |  |
+| Persistent cursor / resume on disconnect |  |  |  | ✓ | ✓ |  |
+| Browser-compatible |  |  | ✓ |  |  | ✓ |
+| Protocol | gRPC | gRPC | WebSocket | gRPC | gRPC | REST \+ WS |
 
 It's normal to combine more than one product in a pipeline. Common patterns:
 
@@ -57,41 +71,9 @@ It's normal to combine more than one product in a pipeline. Common patterns:
 - **Gaming or trading frontends**: Pyth price feeds via Hermes
 - **Indexer, analytics, or compliance**: Fumarole for live with confirmed Faithful streams for history
 
-| Capability | Dragon's Mouth | Deshred | Whirligig | Fumarole | Old Faithful | Hermes |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| Real-time data | ✓ | | ✓ | ✓ | | |
-| Pre-execution transactions | | ✓ | | | | |
-| Historical replay | | | | 4 days | Entire ledger | |
-| Persistent cursor / resume on disconnect | | | | ✓ | ✓ | |
-| Browser-compatible | | | ✓ | | | ✓ |
-| Protocol | gRPC | gRPC | WebSocket | gRPC | gRPC | REST + WS |
-
-## How they fit together
-
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
-flowchart LR
-    DM("Yellowstone +<br/>Dragon's Mouth gRPC") --> Whirligig("Whirligig<br/>WebSocket proxy")
-    DM --> Fumarole("Fumarole<br/>multi-node + cursor")
-    DM --> Deshred("Deshred<br/>pre-execution")
-    DM --> A("Trading / MEV")
-    Deshred --> A
-    Whirligig --> B("Browser / wallet UI")
-    Fumarole --> C("Indexers / analytics / compliance")
-    Archive("Old Faithful<br/>historical archive") --> D("Backfill / audits / cold starts")
-```
-
-All share Yellowstone gRPC as the underlying interface. Dragon's Mouth is the source of truth for live data, with Deshred giving you pre-execution transaction data on the same gRPC service. Whirligig translates Dragon's Mouth output into standard Solana WebSocket messages for browsers. Fumarole consumes multiple Dragon's Mouth nodes, deduplicates, and persists a cursor server-side so consumers can resume after disconnects. Old Faithful taps the historical archive but speaks the same gRPC dialect, so live and historical pipelines look identical to your client code.
-
 ## Pricing
 
 All streaming services are billed at `$0.08 / GB` of bandwidth, and you only pay for data sent. See [streaming best practices](/solana/streaming/best-practices) for filtering guides and other ways to reduce that.
-
-## Quickstart
-
-<Card title="Quickstart: subscribe in 5 minutes" icon="rocket" href="/solana/streaming/dragons-mouth/quickstart">
-  Connect to a Dragon's Mouth endpoint, subscribe to your first program, and parse updates with the reference client.
-</Card>
 
 ## Related sections
 
@@ -99,6 +81,7 @@ All streaming services are billed at `$0.08 / GB` of bandwidth, and you only pay
   <Card title="Reading state" href="/solana/reading-state/overview">
     Standard RPC, indexed reads, DAS API, account sync.
   </Card>
+
   <Card title="Historical data" href="/solana/history/hydrant/overview">
     Hydrant for millisecond ledger queries; Old Faithful for archival.
   </Card>
