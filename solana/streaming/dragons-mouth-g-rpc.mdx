@@ -24,7 +24,7 @@ For browser clients that can't communicate with gRPC, use [Whirligig WebSockets]
   </Card>
 
   <Card title="Server-side filtering" icon="server">
-    Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state. 
+    Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state.
   </Card>
 
   <Card title="Replay from a slot" icon="rotate-ccw">
@@ -65,7 +65,7 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 
 ## Subscribe request
 
-Every stream subscription is a single `SubscribeRequest` message. It has fields that apply across all stream types and a per-stream filter map. 
+Every stream subscription is a single `SubscribeRequest` message. It has fields that apply across all stream types and a per-stream filter map.
 
 You send it once when you open the stream; then you can send it again at any time to modify it (the new request fully replaces the old one).
 
@@ -220,7 +220,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-    
+
     const request = {
       slots: { slots: {} },
       accounts: {
@@ -261,7 +261,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-    
+
     const request = {
       slots: { slots: {} },
       accounts: {
@@ -353,7 +353,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-    
+
     const request = {
       slots: {},
       accounts: {
@@ -407,7 +407,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-    
+
     const request = {
       slots: { slots: {} },
       accounts: {},
@@ -988,14 +988,14 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
     ```typescript
     import Client from "@triton-one/yellowstone-grpc";
-    
+
     const client = new Client(
       "https://api.rpcpool.com:443",
       "<your-token>"
     );
-    
+
     await client.connect();
-    
+
     const version = await client.getVersion();
     console.log(version);
     ```
@@ -1004,15 +1004,15 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
     ```typescript
     import { SubscribeRequest } from "@triton-one/yellowstone-grpc";
-    
+
     const stream = client.subscribe();
-    
+
     stream.on("data", (data) => {
       console.log("data", data);
     });
-    
+
     const request: SubscribeRequest = { /* see Subscribe request */ };
-    
+
     await new Promise<void>((resolve, reject) => {
       stream.write(request, (err) =>
         err == null ? resolve() : reject(err)

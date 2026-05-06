@@ -3,6 +3,8 @@ title: "Quickstart"
 description: "Test all Triton streaming solutions in 5 minutes. For the streaming overview and product comparison, see the overview page."
 ---
 
+import FooterLinks from '/snippets/footer-links.mdx'
+
 ## Step 0. Prerequisites
 
 All five streaming services we'll be testing use Triton endpoints with token-based authentication. Before starting, here's what you need:
@@ -177,15 +179,15 @@ Set up a fresh project for the service you want to try.
 
     ```typescript TypeScript
     import Client from "@triton-one/yellowstone-grpc";
-    
+
     const client = new Client(
       "https://<your-endpoint>.mainnet.rpcpool.com",
       "<your-token>",
       undefined
     );
-    
+
     await client.connect();
-    
+
     const version = await client.getVersion();
     console.log(version);
     ```
@@ -198,13 +200,13 @@ Set up a fresh project for the service you want to try.
 
     ```typescript TypeScript
     import { CommitmentLevel, SubscribeRequest } from "@triton-one/yellowstone-grpc";
-    
+
     const stream = await client.subscribe();
-    
+
     stream.on("data", (data) => {
       console.log("data", data);
     });
-    
+
     const request: SubscribeRequest = {
       slots: { slots: {} },
       accounts: {
@@ -223,7 +225,7 @@ Set up a fresh project for the service you want to try.
       commitment: CommitmentLevel.CONFIRMED,
       ping: undefined,
     };
-    
+
     await new Promise<void>((resolve, reject) => {
       stream.write(request, (err) => {
         if (err === null || err === undefined) {
@@ -258,11 +260,11 @@ Set up a fresh project for the service you want to try.
 
     ```typescript TypeScript
     import WebSocket from "ws";
-    
+
     const ws = new WebSocket(
       "wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/whirligig"
     );
-    
+
     ws.on("open", () => {
       ws.send(
         JSON.stringify({
@@ -276,7 +278,7 @@ Set up a fresh project for the service you want to try.
         })
       );
     });
-    
+
     ws.on("message", (data) => {
       console.log("Update:", JSON.parse(data.toString()));
     });
@@ -292,28 +294,28 @@ Set up a fresh project for the service you want to try.
         solana_sdk::commitment_config::CommitmentConfig,
         std::str::FromStr,
     };
-    
+
     #[tokio::main]
     async fn main() -> anyhow::Result<()> {
         let endpoint =
             "wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/whirligig";
-    
+
         let client = PubsubClient::new(endpoint).await?;
-    
+
         let pubkey = Pubkey::from_str("SysvarC1ock11111111111111111111111111111111")?;
         let config = RpcAccountInfoConfig {
             encoding: Some(UiAccountEncoding::Base58),
             commitment: Some(CommitmentConfig::processed()),
             ..Default::default()
         };
-    
+
         let (mut stream, _unsubscribe) =
             client.account_subscribe(&pubkey, Some(config)).await?;
-    
+
         while let Some(account) = stream.next().await {
             println!("Update: {:?}", account);
         }
-    
+
         Ok(())
     }
     ```
@@ -335,10 +337,10 @@ Set up a fresh project for the service you want to try.
       InitialOffsetPolicy,
     } from "@triton-one/yellowstone-fumarole";
     import { CommitmentLevel, SubscribeRequest } from "@triton-one/yellowstone-grpc";
-    
+
     const TOKEN_ADDRESS = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
     const subscriberName = "helloworld";
-    
+
     const client = await FumaroleClient.connect({
       endpoint: process.env.FUMAROLE_ENDPOINT!, // e.g. https://ams.rpcpool.com
       xToken: process.env.FUMAROLE_X_TOKEN!,
@@ -391,12 +393,12 @@ Set up a fresh project for the service you want to try.
       consumerGroupName: subscriberName,
       initialOffsetPolicy: InitialOffsetPolicy.LATEST,
     });
-    
+
     const { sink: _sink, source } = await client.dragonsmouthSubscribe(
       subscriberName,
       request
     );
-    
+
     await source.forEach((update) => {
       console.log("Update:", update);
     });
@@ -411,7 +413,7 @@ Set up a fresh project for the service you want to try.
             subscribe_update::UpdateOneof,
         },
     };
-    
+
     #[tokio::main]
     async fn main() -> anyhow::Result<()> {
         let config = FumaroleConfig {
@@ -420,7 +422,7 @@ Set up a fresh project for the service you want to try.
             ..Default::default()
         };
         let mut client = FumaroleClient::connect(config).await?;
-    
+
         let mut accounts = std::collections::HashMap::new();
         accounts.insert(
             "token".to_string(),
@@ -431,23 +433,23 @@ Set up a fresh project for the service you want to try.
                 ..Default::default()
             },
         );
-    
+
         let request = SubscribeRequest {
             accounts,
             commitment: Some(CommitmentLevel::Processed.into()),
             ..Default::default()
         };
-    
+
         let (_sink, mut source) = client
             .dragonsmouth_subscribe("helloworld", request)
             .await?;
-    
+
         while let Some(update) = source.next().await {
             if let Some(UpdateOneof::Account(acc)) = update?.update_oneof {
                 println!("Account update at slot {}", acc.slot);
             }
         }
-    
+
         Ok(())
     }
     ```
@@ -504,20 +506,20 @@ Set up a fresh project for the service you want to try.
         futures::StreamExt,
         yellowstone_faithful_client::{connect_with_config, GrpcConfig},
     };
-    
+
     #[tokio::main]
     async fn main() -> anyhow::Result<()> {
         let mut config = GrpcConfig::new(
             "https://<your-old-faithful-endpoint>".to_string(),
         );
         config = config.with_token("<your-token>".to_string());
-    
+
         let mut client = connect_with_config(config).await?;
-    
+
         let mut stream = client
             .stream_blocks(100_000_000, Some(100_000_100), None)
             .await?;
-    
+
         let mut count = 0;
         while let Some(result) = stream.next().await {
             match result {
@@ -534,7 +536,7 @@ Set up a fresh project for the service you want to try.
                 Err(e) => eprintln!("Error: {}", e),
             }
         }
-    
+
         Ok(())
     }
     ```
@@ -544,7 +546,7 @@ Set up a fresh project for the service you want to try.
     Verbatim source: [yellowstone-faithful-client/examples/stream\_blocks.rs](https://github.com/rpcpool/yellowstone-faithful/blob/main/yellowstone-faithful-client/examples/stream_blocks.rs). The repo also has `stream_transactions.rs` for transaction-level streaming. There's no published TypeScript SDK for Old Faithful streaming today.
   </Tab>
   <Tab title="Deshred">
-    **What we're doing:** subscribe to the `SubscribeDeshred` gRPC stream, filter out vote transactions, and log every transaction signature with its slot. 
+    **What we're doing:** subscribe to the `SubscribeDeshred` gRPC stream, filter out vote transactions, and log every transaction signature with its slot.
 
     Deshred delivers transactions reconstructed from shreds **_before_** the validator executes them, so you see intent earlier than with any other stream.
 
@@ -554,19 +556,19 @@ Set up a fresh project for the service you want to try.
     import Client, {
       SubscribeDeshredRequest,
     } from "@triton-one/yellowstone-grpc";
-    
+
     const client = new Client(
       "https://<your-endpoint>.mainnet.rpcpool.com",
       "<your-token>",
       undefined
     );
-    
+
     const stream = await client.subscribeDeshred();
-    
+
     stream.on("data", (data) => {
       console.log("data", data);
     });
-    
+
     const request: SubscribeDeshredRequest = {
       deshredTransactions: {
         client: {
@@ -578,7 +580,7 @@ Set up a fresh project for the service you want to try.
       },
       ping: undefined,
     };
-    
+
     await new Promise<void>((resolve, reject) => {
       stream.write(request, (err) =>
         err ? reject(err) : resolve()
@@ -598,13 +600,13 @@ Set up a fresh project for the service you want to try.
             SubscribeRequestFilterDeshredTransactions, SubscribeRequestPing,
         },
     };
-    
+
     #[tokio::main]
     async fn main() -> anyhow::Result<()> {
         let endpoint = std::env::var("ENDPOINT")
             .unwrap_or("https://<endpoint>".into());
         let x_token = std::env::var("X_TOKEN").ok();
-    
+
         let mut client = GeyserGrpcClient::build_from_shared(endpoint)?
             .x_token(x_token)?
             .tls_config(ClientTlsConfig::new().with_native_roots())?
@@ -613,7 +615,7 @@ Set up a fresh project for the service you want to try.
             .initial_stream_window_size(4 * 1024 * 1024)
             .connect()
             .await?;
-    
+
         let request = SubscribeDeshredRequest {
             deshred_transactions: HashMap::from([(
                 "deshred".into(),
@@ -626,10 +628,10 @@ Set up a fresh project for the service you want to try.
             )]),
             ping: None,
         };
-    
+
         let (mut tx, mut stream) =
             client.subscribe_deshred_with_request(Some(request)).await?;
-    
+
         while let Some(msg) = stream.next().await {
             match msg?.update_oneof {
                 Some(UpdateOneof::DeshredTransaction(update)) => {
@@ -648,7 +650,7 @@ Set up a fresh project for the service you want to try.
                 None => break,
             }
         }
-    
+
         Ok(())
     }
     ```
@@ -681,7 +683,7 @@ Then walk through this checklist:
 
 1. **Confirm the stream is open.** Your first matching event should arrive within 1-2 slots (~800 ms). For Whirligig, you'll see a subscription-ID confirmation first: `{ "jsonrpc": "2.0", "result": 42, "id": 1 }`. For gRPC services, the client logs an active connection on `connect()` and events start arriving immediately.
 2. **Watch matching events flow.** If nothing arrives after 5 seconds, your filter is probably too narrow.
-3. Keep alive ??? did we include it in code? 
+3. Keep alive ??? did we include it in code?
 4. **Widen the filter to test, then tighten back.** Subscribe to all transactions or all writes for a busy program (e.g. SPL Token) to confirm data is reaching you. Once you see traffic, narrow the filter to what your app actually needs.
 
 ### Expected first message
@@ -812,8 +814,8 @@ Then walk through this checklist:
     Full method list, custom transactionSubscribe, commitment levels, keepalive.
   </Card>
 
-  <Card title="Fumarole reliability patterns" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
-    Persistent subscribers, regional endpoints, parallel subscription, cross-region failover.
+  <Card title="Fumarole reliable streams" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
+    Persistent subscribers, parallel replay, cross-region failover.
   </Card>
 
   <Card title="Old Faithful streams" icon="archive" href="/solana/streaming/old-faithful-streams">

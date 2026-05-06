@@ -1,12 +1,15 @@
 ---
 title: "Overview"
+description: "Triton offers multiple streaming services on Solana. This page covers what streaming is, what each service does, and how to pick the right one for your build."
 ---
+
+import FooterLinks from '/snippets/footer-links.mdx'
 
 Triton offers multiple streaming services on Solana. This page covers what streaming is, what each service does, and how to pick the right one for your build.
 
 ## What is streaming?
 
-Solana produces a new block every ~400 ms. If you poll RPC every 200 ms, your data is at best 200 ms stale by the time you see it, and you'll easily hit rate limits hammering the same endpoint. 
+Solana produces a new block every ~400 ms. If you poll RPC every 200 ms, your data is at best 200 ms stale by the time you see it, and you'll easily hit rate limits hammering the same endpoint.
 
 Streaming inverts the model: you open one connection, say what you need (specific accounts, programs, transaction patterns), and the node pushes you matching events the instant they happen.
 
@@ -129,11 +132,11 @@ All streaming services are billed at `$0.08 / GB` of bandwidth, and you only pay
 ## What's next
 
 <CardGroup cols={2}>
-  <Card title="Quickstart" href="/solana/streaming-data/quickstart">
-    Test all Triton streaming solutions in 5 minutes. 
+  <Card title="Streaming quickstart" icon="rocket" href="/solana/streaming/quickstart">
+    Test all Triton streaming solutions in 5 minutes.
   </Card>
 
-  <Card title="Account Sync SDK" href="/solana/reading-state/account-sync">
+  <Card title="Account Sync SDK" icon="refresh-cw" href="/solana/reading-state/account-sync">
     One-line swap for polling codebases. Streaming-grade reads, no rewrite.
   </Card>
 </CardGroup>
