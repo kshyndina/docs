@@ -161,10 +161,6 @@ Each `SubscribeRequest` has a map per stream type. The key is a label you choose
   </ParamField>
 </Accordion>
 
-<Accordion title="Entry filters">
-  No filter parameters. Subscribe by adding any named entry to the `entry` map.
-</Accordion>
-
 ### Filter logic
 
 Within a single filter category (e.g. one transaction filter), values are combined as follows:
@@ -901,36 +897,8 @@ Certain programs are excluded from all Dragon's Mouth gRPC streams and are also 
 Sample clients in multiple languages live in the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory. Match your client to the current proto version.
 
 <Tabs>
-  <Tab title="grpcurl">
-    Good for ad-hoc testing. Needs `geyser.proto` \+ dependencies.
-
-    ```shell
-    ./grpcurl \
-      -proto geyser.proto \
-      -d '{"slots": { "slots": {} }, "accounts": { "usdc": { "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
-      -H "x-token: <token>" \
-      api.rpcpool.com:443 \
-      geyser.Geyser/Subscribe
-    ```
-
-    Self-hosters can drop the `x-token` header.
-  </Tab>
-  <Tab title="client-ubuntu">
-    Prebuilt CLI binary for Ubuntu 22.04 and 24.04. Download from the [releases page](https://github.com/rpcpool/yellowstone-grpc/releases).
-
-    Subscribe to all accounts:
-
-    ```shell
-    ./client-ubuntu-22.04 --endpoint https://<endpoint> --x-token <token> subscribe --accounts --slots
-    ```
-
-    Subscribe to a specific program (e.g. Raydium):
-
-    ```shell
-    ./client-ubuntu-22.04 --endpoint https://<endpoint> --x-token <token> subscribe --accounts --slots --accounts-owner 675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8
-    ```
-
-    Add `--stats` to see total accounts, slots, and bandwidth in real time.
+  <Tab title="Rust">
+    Sample client: [yellowstone-grpc/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust).
   </Tab>
   <Tab title="TypeScript / NodeJS">
     From `5.1.x` the TypeScript SDK is supercharged with a Rust NAPI backend. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
@@ -979,21 +947,28 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
     Full example: [yellowstone-grpc/examples/typescript](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript).
   </Tab>
-  <Tab title="Rust">
-    Sample client: [yellowstone-grpc/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust).
+  <Tab title="grpcurl">
+    Good for ad-hoc testing. Needs `geyser.proto` \+ dependencies.
+
+    ```shell
+    ./grpcurl \
+      -proto geyser.proto \
+      -d '{"slots": { "slots": {} }, "accounts": { "usdc": { "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
+      -H "x-token: <token>" \
+      api.rpcpool.com:443 \
+      geyser.Geyser/Subscribe
+    ```
+
+    Self-hosters can drop the `x-token` header.
   </Tab>
   <Tab title="Go">
     Sample client: [yellowstone-grpc/examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang).
   </Tab>
 </Tabs>
 
-## Related
+## What's next?
 
 <CardGroup cols={2}>
-  <Card title="Streaming quickstart" icon="zap" href="/solana/streaming/quickstart">
-    Get a Dragon's Mouth stream running in five minutes.
-  </Card>
-
   <Card title="Whirligig WebSockets" icon="rotate-cw" href="/solana/streaming/whirligig-websockets">
     Browser-friendly version of the same data over WebSocket.
   </Card>
@@ -1001,87 +976,9 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
   <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
     Add deduplication and resume-from-cursor on top of Dragon's Mouth.
   </Card>
-
-  <Card title="Streaming overview" icon="radio" href="/solana/streaming/overview">
-    Compare Dragon's Mouth against the rest of the streaming stack.
-  </Card>
 </CardGroup>
 
 ---
-
-<FooterLinks />
-
-<FooterLinks />
-
-<Tabs>
-  <Tab title="grpcurl">
-    Good for ad-hoc testing. Needs `geyser.proto` \+ dependencies.
-
-    ```shell
-    ./grpcurl \
-      -proto geyser.proto \
-      -d '{"slots": { "slots": {} }, "accounts": { "usdc": { "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
-      -H "x-token: <token>" \
-      api.rpcpool.com:443 \
-      geyser.Geyser/Subscribe
-    ```
-
-    Self-hosters can drop the `x-token` header.
-  </Tab>
-  <Tab title="TypeScript / NodeJS">
-    From `5.1.x` the TypeScript SDK is supercharged with a Rust NAPI backend. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
-
-    Install:
-
-    ```bash
-    npm install --save @triton-one/yellowstone-grpc
-    ```
-
-    Initialise:
-
-    ```typescript
-    import Client from "@triton-one/yellowstone-grpc";
-    
-    const client = new Client(
-      "https://api.rpcpool.com:443",
-      "<your-token>"
-    );
-    
-    await client.connect();
-    
-    const version = await client.getVersion();
-    console.log(version);
-    ```
-
-    Open a subscription stream:
-
-    ```typescript
-    import { SubscribeRequest } from "@triton-one/yellowstone-grpc";
-    
-    const stream = client.subscribe();
-    
-    stream.on("data", (data) => {
-      console.log("data", data);
-    });
-    
-    const request: SubscribeRequest = { /* see Subscribe request */ };
-    
-    await new Promise<void>((resolve, reject) => {
-      stream.write(request, (err) =>
-        err == null ? resolve() : reject(err)
-      );
-    });
-    ```
-
-    Full example: [yellowstone-grpc/examples/typescript](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript).
-  </Tab>
-  <Tab title="Rust">
-    Sample client: [yellowstone-grpc/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust).
-  </Tab>
-  <Tab title="Go">
-    Sample client: [yellowstone-grpc/examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang).
-  </Tab>
-</Tabs>
 
 <FooterLinks />
 
