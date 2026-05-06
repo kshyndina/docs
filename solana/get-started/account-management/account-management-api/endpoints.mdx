@@ -2,6 +2,8 @@
 title: "Endpoints"
 ---
 
+import FooterLinks from '/snippets/footer-links.mdx'
+
 The Endpoints resource is the most-used part of the Account Management API. Provision endpoints in code, configure them, and tear them down -- typically wired into Terraform or a CI pipeline.
 
 Resource path: `/v1/endpoints`
@@ -152,3 +154,7 @@ curl https://api.triton.one/v1/endpoints/ep_abc123 \
     Read and configure per-endpoint rate limits.
   </Card>
 </Columns>
+
+---
+
+<FooterLinks />

@@ -2,6 +2,8 @@
 title: "Sending transactions"
 ---
 
+import FooterLinks from '/snippets/footer-links.mdx'
+
 <AccordionGroup>
   <Accordion title="My transactions aren't landing successfully. What should I do?">
     Triton ensures reliable transaction delivery to the network, but for optimal transaction finalisation, we recommend configuring appropriate priority fees. See our [Priority Fees API](/solana/sending-transactions/priority-fees/overview) for how to set them.
@@ -15,3 +17,7 @@ title: "Sending transactions"
     Yes. A transaction is only final once it reaches `confirmed` or `finalized` commitment. Slots containing `processed` transactions can still be dropped during minority forks or network congestion.
   </Accordion>
 </AccordionGroup>
+
+---
+
+<FooterLinks />

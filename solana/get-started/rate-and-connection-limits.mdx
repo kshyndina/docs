@@ -3,6 +3,8 @@ title: "Rate and connection limits"
 description: "Two kinds of limits: rate limits for HTTP requests (per IP, 10-second window) and connection limits for streaming (simultaneous connections per endpoint)."
 ---
 
+import FooterLinks from '/snippets/footer-links.mdx'
+
 Triton has two kinds of limits: rate limits for HTTP requests (per IP, 10-second window) and connection limits for streaming (simultaneous connections per endpoint).
 
 ## Rate limits
@@ -105,3 +107,7 @@ A single gRPC connection can multiplex many subscriptions. The right pattern is 
     Custom limits, isolated capacity, dedicated regions.
   </Card>
 </Columns>
+
+---
+
+<FooterLinks />

@@ -2,6 +2,8 @@
 title: "Tokens"
 ---
 
+import FooterLinks from '/snippets/footer-links.mdx'
+
 Each Triton endpoint has its own set of tokens. The Tokens API is for programmatic issue / rotate / revoke -- typically wired into a scheduled rotation job or your CI's secret-rolling flow.
 
 Resource path: `/v1/endpoints/{endpoint_id}/tokens`
@@ -134,3 +136,7 @@ Higher limits available on dedicated. Talk to support if you have legitimate per
     The parent resource.
   </Card>
 </Columns>
+
+---
+
+<FooterLinks />
