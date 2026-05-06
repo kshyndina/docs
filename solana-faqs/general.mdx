@@ -30,7 +30,7 @@ What Triton is, what we build, and how Project Yellowstone fits into the stack.
     | --- | --- |
     | Dragon's Mouth | Core gRPC streaming engine for Solana. Delivers raw real-time data directly from the validator with ultra-low latency using Protobuf. |
     | Whirligig | WebSocket counterpart to Dragon's Mouth -- built for front-end or browser-based apps needing live account and transaction feeds. |
-    | Fumarole | Persistent streaming layer with automatic redundancy and 23-hour caching. Ensures no data loss even if the connection drops. |
+    | Fumarole | Persistent streaming layer with automatic redundancy and 4-day caching. Ensures no data loss even if the connection drops. |
     | Vixen | Parser delivering decoded JSON data instead of raw binary -- simplifies client integration with Yellowstone streams. |
     | Steamboat | Custom indexing engine that accelerates heavy gPA queries by up to 99%, cutting latency for large programs. |
     | Old Faithful | Full-ledger archival service providing access to Solana's complete historical transaction data -- ideal for analytics, re-indexing, and backtesting. |
