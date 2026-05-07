@@ -1748,23 +1748,6 @@ flowchart LR
     SD --> RS --> CN
 ```
 
-## Excluded programs
-
-Certain programs are excluded from all Dragon's Mouth gRPC streams and are also unavailable via `getProgramAccounts`.
-
-| Program | Address |
-| --- | --- |
-| Light Protocol / ZK Compression | `compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq` |
-
-1. Subscribe to [slot notifications](#slots) alongside your data.
-2. Buffer incoming events by slot.
-3. When you see a slot status change to `confirmed` or `finalized`, release the matching buffer.
-4. You'll always receive the slot's events _before_ its commitment notification.
-
-### The finalized quirk
-
-Due to a Geyser quirk (fixed in `master` of solana, may not be on your validator yet), not every slot's `finalized` notification is emitted. To handle finalized correctly: when you see a `finalized` notification for slot N, retroactively mark all of slot N's ancestors as `finalized` too, even if you never received notifications for them.
-
 ## Intra-slot updates
 
 Subscribers can listen for "intra-slot" lifecycle events that show what's happening inside a slot, from the first shred received to a fully replayed bank.
@@ -1819,12 +1802,6 @@ flowchart LR
 ```
 
 Time flows left to right. **Slot download** covers shred receipt up to the slot being marked complete. **Replay stage** is where the bank executes transactions and emits the events your subscription receives (account updates, transactions, entries, block meta), ending with `PROCESSED`. **Consensus** runs after replay -- the network votes the slot to `CONFIRMED` and eventually `FINALIZED`. A slot can drop out as `DEAD` at any point during download or replay.
-
-## Related: Deshred transactions
-
-Triton runs a separate gRPC method, `SubscribeDeshred`, on the same yellowstone-grpc service. It delivers transactions reconstructed from shreds _before_ the validator executes them, so you see intent earlier than any other stream. Designed for arbitrage, market making, copy trading, liquidations, and HFT.
-
-It's a separate product with its own filter set, no execution metadata, and paid-beta access. See [Deshred transactions](/solana/streaming/deshred-transactions) for the full reference.
 
 ## Excluded programs
 
