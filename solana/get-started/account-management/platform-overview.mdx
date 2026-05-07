@@ -20,7 +20,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
     Live request count, RPS, error rate, and cost-to-date. Drilldowns by method.
   </Card>
 
-  <Card title="Billing" icon="credit-card">
+  <Card title="Billing" icon="wallet">
     Deposits, top-ups, payment methods, invoices, and credit balance.
   </Card>
 
@@ -77,25 +77,7 @@ Each endpoint has six tabs:
 5. **Limits** -- rate, concurrency, per-method overrides (configurable on dedicated; read-only on shared by default -- support can tune).
 6. **Logs** -- recent requests with timestamp, method, status, and latency. Useful for debugging 429s and unusual responses.
 
-## What's next
-
-<Columns cols={2}>
-  <Card title="Set up your account" icon="user-plus" href="/solana/get-started/account-management/platform-overview">
-    Create the organisation and invite teammates.
-  </Card>
-
-  <Card title="Auth and security" icon="shield" href="/solana/get-started/auth-and-security">
-    Token rotation, allowlists, and what to do if a token leaks.
-  </Card>
-
-  <Card title="How to top up credits" icon="wallet" href="/solana/get-started/plans-and-billing">
-    Manual top-ups and auto-top-up.
-  </Card>
-
-  <Card title="Account management API" icon="code" href="/solana/get-started/account-management/account-management-api/overview">
-    Programmatically manage endpoints, tokens, and members.
-  </Card>
-</Columns>
+## Set up your account
 
 Five minutes from "I just signed up" to "the team is in and we have a working endpoint". Follow the steps below.
 
@@ -148,19 +130,27 @@ Owners and admins must enable 2FA. From your profile (top-right avatar), open **
 
 ## Single sign-on (SSO)
 
-SSO via Google, GitHub, and SAML is available on enterprise plans. To enable, [reach out to support](https://tritonone.mintlify.apphttps://customers.triton.one) with your IdP details.
+SSO via Google, GitHub, and SAML is available on enterprise plans. To enable, contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one) with your IdP details.
 
 ## What's next
 
-<Columns cols={2}>
+<CardGroup cols={2}>
+  <Card title="How to sign up" icon="user-plus" href="/solana-guides/account/how-to-sign-up">
+    Step by step from zero to a Triton endpoint.
+  </Card>
+
+  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
+    PAYG vs invoiced, top-ups, and the cost calculator.
+  </Card>
+
   <Card title="Auth and security" icon="shield" href="/solana/get-started/auth-and-security">
     Token rotation, allowlists, and incident response.
   </Card>
 
-  <Card title="Platform overview" icon="layout" href="/solana/get-started/account-management/platform-overview">
-    Tour of the customer portal: where everything lives.
+  <Card title="Account management API" icon="code" href="/solana/get-started/account-management/account-management-api/overview">
+    Programmatically manage endpoints, tokens, and members.
   </Card>
-</Columns>
+</CardGroup>
 
 ---
 
