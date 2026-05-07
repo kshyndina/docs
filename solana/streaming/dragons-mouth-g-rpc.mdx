@@ -1,5 +1,6 @@
 ---
 title: "Dragon's Mouth gRPC"
+description: "Triton's Geyser-fed gRPC streaming interface for Solana. Sub-slot account, transaction, slot, and block subscriptions. The fastest live data path available for processed events."
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
@@ -13,7 +14,7 @@ import StreamingOverviewCard from '/snippets/cards/streaming-overview.mdx'
 
 Dragon's Mouth is Triton's Geyser-fed gRPC interface for streaming Solana data. It taps the validator's Geyser plugin directly, so you get account, transaction, slot, and block updates as the validator processes them, giving you up to a 400 ms head start over a polling client.
 
-It's the fastest live data path available and the recommended choice for any backend service where latency matters.
+It's the fastest live data path available for `processed` events and the recommended choice for any backend service where latency matters.
 
 - **Trading and MEV.** Lowest-latency reads of pool state, oracles, AMM accounts, and price-impacting transactions
 - **Real-time UIs (backend).** Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers
@@ -88,7 +89,7 @@ You send it once when you open the stream; then you can send it again at any tim
     For maximum performance, work at `processed` and manage commitment client-side using [slot notifications](#slots).
   </Tab>
   <Tab title="ping">
-    Sends a periodic keepalive to prevent idle-connection drops by load balancers and NATs. Server replies with `pong`. Optional but recommended for long-running streams.
+    Sends a periodic keepalive to prevent idle-stream drops by upstream cloud providers (e.g. Cloudflare). Server replies with `pong`. Optional but recommended for long-running streams.
 
     See [pings](#pings).
   </Tab>
@@ -498,6 +499,8 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
 ### Transactions
 
+If you want the **earliest possible signal** on a transaction, we expose [Deshred transactions](/solana/streaming/deshred-transactions) -- a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
+
 <Tabs>
   <Tab title="All non-vote, non-failed">
     Subscribe to every successful, non-vote transaction at finalized commitment.
@@ -818,7 +821,7 @@ To unsubscribe from everything but keep the connection open:
 
 ## Pings
 
-Some load balancers (e.g. Cloudflare) close idle connections after a minute or two. Send periodic pings to keep your stream alive. The server responds with `pong` every 15 seconds.
+Some cloud providers (e.g. Cloudflare) close idle streams. To avoid this, you need to keep sending pings to the server. The server responds with a `pong` message every 15 seconds.
 
 <CodeGroup>
 
@@ -1079,10 +1082,6 @@ For maximum performance, work at `processed` and manage commitment client-side. 
 3. When you see a slot status change to `confirmed` or `finalized`, release the matching buffer.
 4. You'll always receive the slot's events _before_ its commitment notification.
 
-### The finalized quirk
-
-Due to a Geyser quirk (fixed in `master` of solana, may not be on your validator yet), not every slot's `finalized` notification is emitted. To handle finalized correctly: when you see a `finalized` notification for slot N, retroactively mark all of slot N's ancestors as `finalized` too, even if you never received notifications for them.
-
 ## Intra-slot updates
 
 Subscribers can listen for "intra-slot" lifecycle events that show what's happening inside a slot, from the first shred received to a fully replayed bank.
@@ -1104,24 +1103,19 @@ enum SlotStatus {
 | `SLOT_COMPLETED` | All shreds for this slot received. Not necessarily replayed yet. |
 | `SLOT_DEAD` | The slot was rejected (invalid signature, bad PoH, wrong entry count). It's discarded by the network. Can happen at any point, even after `SLOT_COMPLETED`. |
 
-Lifecycle of a typical slot, grouped into three phases (download, replay, consensus):
+Simplified lifecycle of a slot, time flowing left to right:
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','clusterBkg':'#F7F4FA','clusterBorder':'#7A4BA0','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
+%%{init: {'theme':'base','themeVariables':{'fontSize':'16px','primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','clusterBkg':'#F7F4FA','clusterBorder':'#7A4BA0','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'},'flowchart':{'nodeSpacing':14,'rankSpacing':22,'padding':4,'curve':'linear'}}}%%
 flowchart LR
     subgraph SD["Slot download"]
       direction LR
-      S1[FIRST_SHRED_RECEIVED] --> S2[shred 2 ... shred N]
-      S2 --> S3[COMPLETED]
+      S1[FIRST_SHRED] --> S2[SHRED 2] --> S3[...] --> S4[SHRED N] --> S5[COMPLETED]
     end
 
     subgraph RS["Replay stage"]
       direction LR
-      R1[CREATED_BANK] --> R2[account updates]
-      R2 --> R3[transactions]
-      R3 --> R4[entries]
-      R4 --> R5[BLOCK_META]
-      R5 --> R6[PROCESSED]
+      R1[BANK_CREATED] --> R2[ACCOUNT UPDATE] --> R3[TX1] --> R4[TX2] --> R5[ENTRY1] --> R6[...] --> R7[BLOCK_META] --> R8[PROCESSED]
     end
 
     subgraph CN["Consensus"]
@@ -1130,19 +1124,7 @@ flowchart LR
     end
 
     SD --> RS --> CN
-
-    S1 -.dead.-> X[DEAD]
-    S3 -.dead.-> X
-    R1 -.dead.-> X
 ```
-
-Time flows left to right. **Slot download** covers shred receipt up to the slot being marked complete. **Replay stage** is where the bank executes transactions and emits the events your subscription receives (account updates, transactions, entries, block meta), ending with `PROCESSED`. **Consensus** runs after replay -- the network votes the slot to `CONFIRMED` and eventually `FINALIZED`. A slot can drop out as `DEAD` at any point during download or replay.
-
-## Related: Deshred transactions
-
-Triton runs a separate gRPC method, `SubscribeDeshred`, on the same yellowstone-grpc service. It delivers transactions reconstructed from shreds _before_ the validator executes them, so you see intent earlier than any other stream. Designed for arbitrage, market making, copy trading, liquidations, and HFT.
-
-It's a separate product with its own filter set, no execution metadata, and paid-beta access. See [Deshred transactions](/solana/streaming/deshred-transactions) for the full reference.
 
 ## Excluded programs
 
@@ -1162,7 +1144,67 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
 <Tabs>
   <Tab title="Rust">
-    Sample client: [yellowstone-grpc/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust).
+    The repo's [yellowstone-grpc/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust) directory ships a `client` binary that exercises every subscribe and unary method against any endpoint.
+
+    Subscribe to account updates:
+
+    ```shell
+    cargo run --bin client -- \
+      -e https://api.rpcpool.com \
+      --x-token <token> \
+      subscribe \
+      --accounts \
+      --accounts-account <Pubkey>
+    ```
+
+    Subscribe to slots (with commitment override):
+
+    ```shell
+    cargo run --bin client -- \
+      -e https://api.rpcpool.com \
+      --x-token <token> \
+      --commitment processed \
+      subscribe \
+      --slots
+    ```
+
+    Subscribe to non-vote, non-failed transactions touching an account:
+
+    ```shell
+    cargo run --bin client -- \
+      -e https://api.rpcpool.com \
+      --x-token <token> \
+      subscribe \
+      --transactions \
+      --transactions-vote false \
+      --transactions-failed false \
+      --transactions-account-include <Pubkey>
+    ```
+
+    Subscribe to deshred transactions (Triton-only):
+
+    ```shell
+    cargo run --bin client -- \
+      -e https://api.rpcpool.com \
+      --x-token <token> \
+      subscribe-deshred \
+      --vote false \
+      --account-include <Pubkey>
+    ```
+
+    Unary calls (`ping`, `get-latest-blockhash`, `get-block-height`, `get-slot`, `is-blockhash-valid`, `get-version`):
+
+    ```shell
+    cargo run --bin client -- \
+      -e https://api.rpcpool.com \
+      --x-token <token> \
+      get-slot
+    # response: GetSlotResponse { slot: 196214563 }
+    ```
+
+    <Note>
+      `subscribe-deshred` only works against Triton extension servers. The open-source `yellowstone-grpc-geyser` returns `UNIMPLEMENTED`.
+    </Note>
   </Tab>
   <Tab title="TypeScript / NodeJS">
     From `5.1.x` the TypeScript SDK is supercharged with a Rust NAPI backend. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
