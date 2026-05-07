@@ -30,12 +30,12 @@ For browser clients that can't communicate with gRPC, use [Whirligig WebSockets]
     Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.
   </Card>
 
-  <Card title="Server-side filtering" icon="filter">
+  <Card title="Server-side filtering" icon="sliders-horizontal">
     Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state.
   </Card>
 
-  <Card title="Replay from a slot" icon="rotate-ccw">
-    Resume from a specific slot after a disconnect. The server replays buffered updates, then continues live on the same stream.
+  <Card title="Bi-directional streams" icon="repeat">
+    Modify subscriptions on the fly -- send a new request and the server swaps your filter set without reconnecting.
   </Card>
 
   <Card title="Compact Protobuf payloads" icon="feather">
