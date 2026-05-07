@@ -4,6 +4,10 @@ description: "Triton customer portal is where you get your endpoint and token, m
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import AuthAndSecurityCard from '/snippets/cards/auth-and-security.mdx'
+import PlansAndBillingCard from '/snippets/cards/plans-and-billing.mdx'
+import HowToSignUpCard from '/snippets/cards/how-to-sign-up.mdx'
+import AccountManagementApiCard from '/snippets/cards/account-management-api.mdx'
 
 ## What's in the portal
 
@@ -91,7 +95,7 @@ Five minutes from "I just signed up" to "the team is in and we have a working en
     On first sign-in, you'll be prompted to create an organisation. Use your company name. The organisation is the billing root -- everything (endpoints, members, payment methods) belongs to it.
   </Step>
   <Step title="Add a payment method" titleSize="h3">
-    **Billing → Payment methods → Add**. Card, USDC, hel.io, or wire. PAYG is enabled by default; you can move to a [committed plan](https://tritonone.mintlify.app/solana/get-started/plans-and-billing) later.
+    **Billing → Payment methods → Add**. Card, USDC, hel.io, or wire. PAYG is enabled by default; you can move to a [committed plan](/solana/get-started/plans-and-billing) later.
   </Step>
   <Step title="Provision your first endpoint" titleSize="h3">
     **Endpoints → New**. Pick `Solana mainnet`, choose your closest region, click **Create**. Copy the URL and token from the **Auth** tab.
@@ -135,21 +139,13 @@ SSO via Google, GitHub, and SAML is available on enterprise plans. To enable, co
 ## What's next
 
 <CardGroup cols={2}>
-  <Card title="How to sign up" icon="user-plus" href="/solana-guides/account/how-to-sign-up">
-    Step by step from zero to a Triton endpoint.
-  </Card>
+  <HowToSignUpCard />
 
-  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
-    PAYG vs invoiced, top-ups, and the cost calculator.
-  </Card>
+  <PlansAndBillingCard />
 
-  <Card title="Auth and security" icon="shield" href="/solana/get-started/auth-and-security">
-    Token rotation, allowlists, and incident response.
-  </Card>
+  <AuthAndSecurityCard />
 
-  <Card title="Account management API" icon="code" href="/solana/get-started/account-management/account-management-api/overview">
-    Programmatically manage endpoints, tokens, and members.
-  </Card>
+  <AccountManagementApiCard />
 </CardGroup>
 
 ---

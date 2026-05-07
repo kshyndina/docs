@@ -4,6 +4,8 @@ description: "How to benchmark Solana RPC and Yellowstone gRPC endpoints the rig
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import AuthAndSecurityCard from '/snippets/cards/auth-and-security.mdx'
+import RateAndConnectionLimitsCard from '/snippets/cards/rate-and-connection-limits.mdx'
 
 Most Solana RPC benchmarks are misleading. They measure ping or one cherry-picked method, then publish numbers that don't reflect real workloads. **Thorofare** is the tool we built to benchmark the way that actually matters: realistic request mixes, realistic concurrency, and metrics that match what your application sees.
 
@@ -41,17 +43,13 @@ The full setup, profile examples, and metric interpretation are in the [Thorofar
 ## What's next
 
 <CardGroup cols={2}>
-  <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
-    What the budgets are, how 429s work, and how to size concurrency before you benchmark.
-  </Card>
+  <RateAndConnectionLimitsCard />
 
   <Card title="Streaming overview" icon="compass" href="/solana/streaming/overview">
     Pick the right streaming product before benchmarking the wrong one.
   </Card>
 
-  <Card title="Auth and security" icon="shield" href="/solana/get-started/auth-and-security">
-    Set up the token and origin allowlist Thorofare will need.
-  </Card>
+  <AuthAndSecurityCard />
 
   <Card title="Thorofare blog post" icon="book-open" href="https://blog.triton.one/how-to-benchmark-solana-rpc-endpoints/">
     Why most RPC benchmarks are wrong and how to do them right.

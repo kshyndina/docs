@@ -3,6 +3,7 @@ title: "Subscription types"
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import PlansAndBillingCard from '/snippets/cards/plans-and-billing.mdx'
 
 `/v1/subscription-types` is the read-only catalogue of plans and add-ons Triton offers. Use it to populate your billing UI or to programmatically pick what to attach via [Subscriptions](/solana/get-started/account-management/account-management-api/subscriptions).
 
@@ -73,9 +74,7 @@ An organisation has exactly one `base` and zero-or-more `addon` subscriptions at
   <Card title="Subscriptions" icon="rss" href="/solana/get-started/account-management/account-management-api/subscriptions">
     Attach a type to your organisation.
   </Card>
-  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
-    Pricing in plain English.
-  </Card>
+  <PlansAndBillingCard />
 </Columns>
 
 ---

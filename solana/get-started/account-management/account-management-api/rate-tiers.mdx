@@ -3,6 +3,8 @@ title: "Rate tiers"
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import PlansAndBillingCard from '/snippets/cards/plans-and-billing.mdx'
+import RateAndConnectionLimitsCard from '/snippets/cards/rate-and-connection-limits.mdx'
 
 The Rate tiers resource exposes the per-endpoint rate-limit configuration. Configurable on dedicated; read-only on shared by default (support can tune on request).
 
@@ -121,12 +123,8 @@ The Account Management API exposes the *configuration*. The actual per-second co
 ## What's next
 
 <Columns cols={2}>
-  <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
-    Conceptual overview, headers, 429 handling.
-  </Card>
-  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
-    Per-service rates and how to choose between shared and dedicated.
-  </Card>
+  <RateAndConnectionLimitsCard />
+  <PlansAndBillingCard />
 </Columns>
 
 ---

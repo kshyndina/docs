@@ -4,6 +4,9 @@ description: "Triton has two billing methods (pay as you go, invoiced) and two i
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import AccountManagementCard from '/snippets/cards/account-management.mdx'
+import RateAndConnectionLimitsCard from '/snippets/cards/rate-and-connection-limits.mdx'
+import QuickstartCard from '/snippets/cards/quickstart.mdx'
 
 ## Pay as you go vs invoiced
 
@@ -253,17 +256,11 @@ There is no free trial, as the deposit replaces it: you get a year of testing ro
 ## What's next
 
 <CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/solana/get-started/quickstart">
-    Sign up, deposit, get an endpoint, send your first request.
-  </Card>
+  <QuickstartCard />
 
-  <Card title="Account management" icon="user-cog" href="/solana/get-started/account-management/platform-overview">
-    Where everything lives in the portal.
-  </Card>
+  <AccountManagementCard />
 
-  <Card title="Rate and connection limits" icon="gauge" href="/solana/get-started/rate-and-connection-limits">
-    Per-endpoint rate limits and 429 handling.
-  </Card>
+  <RateAndConnectionLimitsCard />
 
   <Card title="Metered billing breakdown" icon="chart-bar" href="/solana/get-started/plans-and-billing">
     How calls and bandwidth map to your monthly bill.

@@ -2189,6 +2189,24 @@ html.dark .stack-leaf:hover {
   overflow: visible;
 }
 
+/* ---- 0p. ParamField rows: kill the white horizontal dividers ----
+   Mintlify's default <ParamField> renders each row with a thin white
+   horizontal divider above and below. White-on-white is invisible on
+   white backgrounds and looks broken/empty when present. We don't use
+   white dividers anywhere else in Triton docs -- match by removing
+   them here too. Tightens the spacing between rows so a list of
+   params reads as one block. */
+.mdx-content [class*="param-field"],
+.mdx-content [class*="ParamField"] {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+.mdx-content [class*="param-field"] + [class*="param-field"],
+.mdx-content [class*="ParamField"] + [class*="ParamField"] {
+  border-top: none !important;
+  margin-top: 0.5rem;
+}
+
 /* ---- 0n. Mermaid edge labels: kill the dark default background ----
    Mermaid v10+ ignores `edgeLabelBackground:'transparent'` in the theme
    directive and ships an opaque grey rect behind every flowchart edge

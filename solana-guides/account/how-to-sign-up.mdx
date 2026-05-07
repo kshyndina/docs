@@ -4,6 +4,10 @@ description: "Step by step from zero to a Triton endpoint. Self-serve via the cu
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import AuthAndSecurityCard from '/snippets/cards/auth-and-security.mdx'
+import PlansAndBillingCard from '/snippets/cards/plans-and-billing.mdx'
+import AccountManagementCard from '/snippets/cards/account-management.mdx'
+import QuickstartCard from '/snippets/cards/quickstart.mdx'
 
 <Steps>
   <Step title="Open the customer portal" titleSize="h3">
@@ -33,21 +37,13 @@ import FooterLinks from '/snippets/footer-links.mdx'
 ## What's next
 
 <CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/solana/get-started/quickstart">
-    Send your first request with curl, Solana Kit, web3.js, Python, or Rust.
-  </Card>
+  <QuickstartCard />
 
-  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
-    PAYG vs invoiced, shared vs dedicated, and the cost calculator.
-  </Card>
+  <PlansAndBillingCard />
 
-  <Card title="Auth and security" icon="shield" href="/solana/get-started/auth-and-security">
-    Tokens for backends, origin allowlists for browsers, what happens if a token leaks.
-  </Card>
+  <AuthAndSecurityCard />
 
-  <Card title="Account management" icon="user-cog" href="/solana/get-started/account-management/platform-overview">
-    Where endpoints, billing, and team management live in the portal.
-  </Card>
+  <AccountManagementCard />
 </CardGroup>
 
 ---
