@@ -252,7 +252,8 @@
                   "solana-guides/end-to-end-builds/solana-telegram-bot",
                   "solana-guides/end-to-end-builds/jupiter-swap-api",
                   "solana-guides/end-to-end-builds/send-transactions-during-congestion",
-                  "solana-guides/end-to-end-builds/benchmark-grpc-with-thorofare"
+                  "solana-guides/end-to-end-builds/benchmark-grpc-with-thorofare",
+                  "solana-guides/account/how-to-sign-up"
                 ]
               },
               {

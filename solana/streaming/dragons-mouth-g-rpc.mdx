@@ -104,6 +104,12 @@ You send it once when you open the stream; then you can send it again at any tim
   </Tab>
 </Tabs>
 
+### Multiplexing in one connection
+
+A single gRPC connection can carry many subscriptions. Add multiple named entries to any of the filter maps (`accounts`, `transactions`, `slots`, `blocks`, `blocksMeta`, `entry`) and they all stream over the same connection. Each match is tagged with the filter name(s) that produced it, so you can route updates downstream without splitting connections.
+
+The canonical multiplex example is the [Multiple programs Accounts subscription](#accounts) -- two named owner filters under `accounts`, one connection. The same pattern works across stream types: subscribe to accounts AND transactions AND slots in one request.
+
 ### Filter configuration
 
 Each `SubscribeRequest` has a map per stream type. The key is a label you choose (returned with each match so you can route it); the value is the filter spec.

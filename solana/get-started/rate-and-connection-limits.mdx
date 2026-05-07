@@ -30,7 +30,7 @@ If either check fails, the response is `HTTP 429 Too Many Requests`. In practice
 
 ## Defaults
 
-New accounts on the shared service default to a tier sized for typical workloads (frontends, indexers, light backends). Heavier traffic, especially trading bots and analytics pipelines, often wants higher per-method caps. We can raise yours on request; click the chat icon in your [customer dashboard](https://customers.triton.one).
+New accounts on the shared service default to a tier sized for typical workloads (frontends, indexers, light backends). Heavier traffic, especially trading bots and analytics pipelines, often wants higher per-method caps. We can raise yours on request; contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).
 
 ## Per-method limits
 
@@ -89,10 +89,10 @@ Browsers cap parallel HTTP/2 streams to a single host, so a frontend with many p
 
 Streaming products (Yellowstone gRPC, Whirligig WebSockets, Fumarole) cap **simultaneous connections per endpoint**, not request rate.
 
-Connection limits are flexible. If you hit one, click the chat icon in your [customer dashboard](https://customers.triton.one) and we'll work with you to either optimise usage or raise the cap.
+Connection limits are flexible. If you hit one, contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one) and we'll work with you to either optimise usage or raise the cap.
 
 <Info>
-  A single gRPC connection can multiplex many subscriptions. The right pattern is one connection plus many subscribe messages, not one connection per filter. See the [Dragon's Mouth quickstart](/solana/streaming/dragons-mouth/quickstart) for the canonical multiplex example.
+  A single gRPC connection can multiplex many subscriptions. The right pattern is one connection plus many subscribe messages, not one connection per filter. See [Multiplexing in one connection](/solana/streaming/dragons-mouth-g-rpc#multiplexing-in-one-connection) on Dragon's Mouth for the canonical example.
 </Info>
 
 ## What's next

@@ -2189,6 +2189,29 @@ html.dark .stack-leaf:hover {
   overflow: visible;
 }
 
+/* ---- 0n. Mermaid edge labels: kill the dark default background ----
+   Mermaid v10+ ignores `edgeLabelBackground:'transparent'` in the theme
+   directive and ships an opaque grey rect behind every flowchart edge
+   label (the "Yes" / "No" boxes). That collides with our dark text and
+   reads as broken contrast. Force the rect transparent and the text
+   to the standard near-black, so edge labels float on the page bg. */
+.mermaid svg .edgeLabel,
+.mermaid svg .edgeLabel rect,
+.mermaid svg .edgeLabel foreignObject,
+.mermaid svg .edgeLabel foreignObject div {
+  background: transparent !important;
+  background-color: transparent !important;
+  fill: transparent !important;
+}
+.mermaid svg .edgeLabel span,
+.mermaid svg .edgeLabel p,
+.mermaid svg .edgeLabel text,
+.mermaid svg .edgeLabel tspan {
+  background: transparent !important;
+  color: #171717 !important;
+  fill: #171717 !important;
+}
+
 /* ---- 0o. Pricing calculator (plans-and-billing) ----
    Ported from the Vue PricingCalculator on triton.one. Pure HTML +
    custom.js drives interactivity. Visual style matches the Triton

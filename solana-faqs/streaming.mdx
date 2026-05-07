@@ -3,6 +3,12 @@ title: "Streaming data"
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import FaqStreamNoEvents from '/snippets/faqs/streaming-no-events-flowing.mdx'
+import FaqStream401 from '/snippets/faqs/streaming-401-403-errors.mdx'
+import FaqStreamDisconnects from '/snippets/faqs/streaming-disconnects.mdx'
+import FaqStreamSlow from '/snippets/faqs/streaming-events-slow.mdx'
+import FaqStreamMemory from '/snippets/faqs/streaming-memory-grows.mdx'
+import FaqStreamPings from '/snippets/faqs/streaming-keepalive-pings.mdx'
 
 Questions about gRPC streaming, WebSocket connections, and the Yellowstone ecosystem of streaming components.
 
@@ -90,6 +96,19 @@ Connecting to streaming services from backend code, browsers, or via Geyser plug
 
     Full guide: [Verify your gRPC endpoint](/solana-guides/error-handling/verify-grpc-endpoint).
   </Accordion>
+</AccordionGroup>
+
+## Troubleshooting
+
+Common operational questions when a stream isn't behaving the way you expect. The same six entries are mirrored on the [streaming quickstart](/solana/streaming/quickstart#fa-qs).
+
+<AccordionGroup>
+  <FaqStreamNoEvents />
+  <FaqStream401 />
+  <FaqStreamDisconnects />
+  <FaqStreamSlow />
+  <FaqStreamMemory />
+  <FaqStreamPings />
 </AccordionGroup>
 
 ---

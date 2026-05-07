@@ -1,0 +1,55 @@
+---
+title: "How to sign up"
+description: "Step by step from zero to a Triton endpoint. Self-serve via the customer portal, $125 minimum deposit, no card required."
+---
+
+import FooterLinks from '/snippets/footer-links.mdx'
+
+<Steps>
+  <Step title="Open the customer portal" titleSize="h3">
+    Go to [customers.triton.one/users/sign-up](https://customers.triton.one/users/sign-up). Sign up with email, GitHub, or Google.
+  </Step>
+  <Step title="Verify your email" titleSize="h3">
+    Click the link in the verification email. The portal will open to your dashboard.
+  </Step>
+  <Step title="Top up the $125 minimum" titleSize="h3">
+    Open Billing, then Buy credits. Pay in stablecoins (USDC, USDT, DAI) via Wallet Connect or any external wallet/exchange. The deposit is prepaid, non-refundable, and valid for 12 months. There is no free trial -- the deposit replaces it.
+
+    For card or wire payment, switch to [invoiced billing](/solana/get-started/plans-and-billing) -- contact support by clicking the chat icon in the bottom right of your customer dashboard.
+  </Step>
+  <Step title="Create your first endpoint" titleSize="h3">
+    Click **Create endpoint**, pick **Solana mainnet** (or devnet for testing), and choose a region. The portal returns:
+
+    - **Endpoint URL** -- `<your-endpoint>.mainnet.rpcpool.com`
+    - **Secret token** -- a long random string
+
+    Keep the token server-side. For browser apps, set up an [origin allowlist](/solana/get-started/auth-and-security) instead of using the token.
+  </Step>
+  <Step title="Send your first request" titleSize="h3">
+    Follow the [Quickstart](/solana/get-started/quickstart) to call `getSlot` and confirm the endpoint is live. About five minutes end to end.
+  </Step>
+</Steps>
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/solana/get-started/quickstart">
+    Send your first request with curl, Solana Kit, web3.js, Python, or Rust.
+  </Card>
+
+  <Card title="Plans and billing" icon="credit-card" href="/solana/get-started/plans-and-billing">
+    PAYG vs invoiced, shared vs dedicated, and the cost calculator.
+  </Card>
+
+  <Card title="Auth and security" icon="shield" href="/solana/get-started/auth-and-security">
+    Tokens for backends, origin allowlists for browsers, what happens if a token leaks.
+  </Card>
+
+  <Card title="Account management" icon="user-cog" href="/solana/get-started/account-management/platform-overview">
+    Where endpoints, billing, and team management live in the portal.
+  </Card>
+</CardGroup>
+
+---
+
+<FooterLinks />

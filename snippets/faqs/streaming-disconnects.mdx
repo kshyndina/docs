@@ -1,0 +1,3 @@
+<Accordion title="My stream keeps disconnecting">
+  Networks drop. Production clients should implement reconnect-and-resubscribe logic with exponential backoff. For Dragon's Mouth, you can resume from your last-seen slot using the `from_slot` field on `SubscribeRequest`. For Fumarole, reconnect with the same persistent-subscriber name and the cursor server-side picks up where you left off.
+</Accordion>

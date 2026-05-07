@@ -9,6 +9,12 @@ import DeshredCard from '/snippets/cards/deshred.mdx'
 import WhirligigCard from '/snippets/cards/whirligig.mdx'
 import FumaroleCard from '/snippets/cards/fumarole.mdx'
 import OldFaithfulCard from '/snippets/cards/old-faithful.mdx'
+import FaqStreamNoEvents from '/snippets/faqs/streaming-no-events-flowing.mdx'
+import FaqStream401 from '/snippets/faqs/streaming-401-403-errors.mdx'
+import FaqStreamDisconnects from '/snippets/faqs/streaming-disconnects.mdx'
+import FaqStreamSlow from '/snippets/faqs/streaming-events-slow.mdx'
+import FaqStreamMemory from '/snippets/faqs/streaming-memory-grows.mdx'
+import FaqStreamPings from '/snippets/faqs/streaming-keepalive-pings.mdx'
 
 ## Step 0. Prerequisites
 
@@ -845,29 +851,12 @@ Then walk through this checklist:
 ## FAQs
 
 <AccordionGroup>
-  <Accordion title="My stream connects but no events are flowing">
-    The most common cause is a filter that's too narrow. Try widening it (subscribe to all transactions or all token-program account writes) to confirm data is reaching you, then tighten back to what you actually need. Also check your commitment level: `processed` shows everything as soon as the validator sees it, while `confirmed` and `finalized` add buffering.
-  </Accordion>
-
-  <Accordion title="I'm getting 401 or 403 errors">
-    Verify your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one). For Whirligig, the token is part of the URL: `wss://<endpoint>.mainnet.rpcpool.com/<token>/whirligig`. For gRPC services, the token is passed as the `x-token` metadata header, not in the URL. If you've recently configured allowed origins, double-check your origin matches what's whitelisted.
-  </Accordion>
-
-  <Accordion title="My stream keeps disconnecting">
-    Networks drop. Production clients should implement reconnect-and-resubscribe logic with exponential backoff. For Dragon's Mouth, you can resume from your last-seen slot using the `from_slot` field on `SubscribeRequest`. For Fumarole, reconnect with the same persistent-subscriber name and the cursor server-side picks up where you left off.
-  </Accordion>
-
-  <Accordion title="Events feel slower than expected">
-    Three things to check. First, your commitment level: `processed` is fastest, `confirmed` and `finalized` add latency. Second, geographic distance: connect from a backend close to our streaming clusters. Third, your processing speed: if your event handler can't keep up, the server-side queue backs up and you fall behind.
-  </Accordion>
-
-  <Accordion title="Memory grows over time">
-    Your handler is processing events slower than they arrive. Filter more aggressively to reduce volume, parallelise your handler across workers, or move heavy processing to a background queue and keep the stream loop minimal.
-  </Accordion>
-
-  <Accordion title="Do I need to send keepalive pings?">
-    Sometimes. Some load balancers and NATs close idle TCP connections after a minute or two. If you see disconnections after periods of low traffic, send a periodic ping. Dragon's Mouth gRPC accepts a `ping` field on the subscribe request; Whirligig accepts `{"jsonrpc":"2.0","method":"ping"}`. The server returns `pong` you can use to confirm liveness.
-  </Accordion>
+  <FaqStreamNoEvents />
+  <FaqStream401 />
+  <FaqStreamDisconnects />
+  <FaqStreamSlow />
+  <FaqStreamMemory />
+  <FaqStreamPings />
 </AccordionGroup>
 
 ## What's next
