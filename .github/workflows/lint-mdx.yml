@@ -1,0 +1,119 @@
+name: Lint MDX
+
+on:
+  pull_request:
+    paths:
+      - "**/*.mdx"
+      - "**/*.json"
+      - ".github/workflows/lint-mdx.yml"
+  push:
+    branches:
+      - main
+      - proposed-structure
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run MDX lint
+        run: |
+          python3 - <<'PYEOF'
+          import re, sys
+          from pathlib import Path
+          from collections import Counter
+
+          ROOT = Path(".")
+
+          all_pages = set()
+          for p in ROOT.rglob("*.mdx"):
+              all_pages.add("/" + p.as_posix().removeprefix("./").removesuffix(".mdx"))
+          all_assets = set()
+          for ext in ("svg","png","jpg","jpeg","gif","webp","txt","css","js","json"):
+              for p in ROOT.rglob(f"*.{ext}"):
+                  all_assets.add("/" + p.as_posix().removeprefix("./"))
+
+          BANNED_ICONS = {"list-checks","key-round","filter","right-to-bracket","paper-plane","gauge-high","clock-rotate-left","user-gear","circle-question"}
+
+          all_issues = {}
+          for p in ROOT.rglob("*.mdx"):
+              rel = p.as_posix().removeprefix("./")
+              if rel.startswith("kate-") or rel.startswith("drafts/"): continue
+              content = p.read_text()
+              fi = []
+
+              for m in re.finditer(r'href=["\']([^"\']+)["\']|\[(?:[^\]]+)\]\(([^)\s]+)\)', content):
+                  link = m.group(1) or m.group(2)
+                  if link.startswith(("http","mailto:","#")): continue
+                  path = link.split("#")[0].split("?")[0]
+                  if not path.startswith("/"): continue
+                  if path.startswith(("/api/","/api-reference")): continue
+                  if path in all_pages or path in all_assets or path.rstrip("/") in all_pages: continue
+                  fi.append(f"broken intra-link: {link}")
+
+              if "claude.ai/local_sessions" in content:
+                  fi.append("contains claude.ai placeholder link")
+              if "tritonone.mintlify.app" in content:
+                  fi.append("contains tritonone.mintlify.app preview URL")
+
+              h = re.findall(r'^#{2,3} ([^\n]+)$', content, re.MULTILINE)
+              for hh, c in Counter(h).items():
+                  if c > 1: fi.append(f"duplicate heading: '{hh}' x{c}")
+
+              if re.search(r'^##[ ]+([A-Z][^\n#]{4,})\1', content, re.MULTILINE):
+                  fi.append("concatenated heading")
+
+              if "<FooterLinks" in content and "import FooterLinks" not in content:
+                  fi.append("FooterLinks rendered but not imported")
+              if content.count("<FooterLinks") > 1:
+                  fi.append("FooterLinks rendered multiple times")
+              if "<CustomerLogoMarquee" in content and "import CustomerLogoMarquee" not in content:
+                  fi.append("CustomerLogoMarquee rendered but not imported")
+
+              icons = {}
+              for m in re.finditer(r'<Card\s+title="([^"]+)"\s+icon="([^"]+)"', content):
+                  icons.setdefault(m.group(2), set()).add(m.group(1))
+              for icon, titles in icons.items():
+                  if len(titles) > 1:
+                      fi.append(f"icon '{icon}' on {len(titles)} cards: {sorted(titles)}")
+
+              for bi in BANNED_ICONS:
+                  if f'icon="{bi}"' in content:
+                      fi.append(f"banned icon '{bi}' (won't render)")
+
+              parts = re.split(r'(```[^\n]*\n.*?\n```)', content, flags=re.DOTALL)
+              for i, part in enumerate(parts):
+                  if i % 2 == 0 and re.search(r'\n\n\n', part):
+                      fi.append("3+ newlines outside code"); break
+
+              bad = sum(1 for line in content.split("\n") if line != line.rstrip())
+              if bad: fi.append(f"{bad} trailing whitespace lines")
+
+              if re.search(r'([A-Z][^.\n]{40,90}\.) ?\1', content):
+                  fi.append("inline duplicated sentence")
+
+              prose_only = re.sub(r'```[^\n]*\n.*?\n```', '', content, flags=re.DOTALL)
+              for m in re.finditer(r"^import\s+(\w+)\s+from\s+['\"](/snippets/[^'\"]+)", prose_only, re.MULTILINE):
+                  if not re.search(r'<' + m.group(1) + r'\b\s*/?>', content):
+                      fi.append(f"unused snippet import: {m.group(1)}")
+
+              if "—" in content:
+                  fi.append(f"{content.count('—')} em-dash chars (use --)")
+
+              if fi: all_issues[rel] = fi
+
+          if all_issues:
+              print(f"::error::Lint failed on {len(all_issues)} files\n")
+              for f, items in sorted(all_issues.items()):
+                  print(f"\n--- {f} ---")
+                  for it in items: print(f"  • {it}")
+              sys.exit(1)
+          else:
+              print(f"✅ Lint clean. Checked {sum(1 for _ in ROOT.rglob('*.mdx'))} mdx files.")
+          PYEOF
