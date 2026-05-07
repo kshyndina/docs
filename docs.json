@@ -145,6 +145,7 @@
                   "solana/sending-transactions/metis-swap-api",
                   "solana/sending-transactions/titan-swap-api",
                   "solana/sending-transactions/jito-bundles",
+                  "solana/sending-transactions/shield-mev-protection",
                   "solana/sending-transactions/transaction-sending-best-practices"
                 ]
               },
