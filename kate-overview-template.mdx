@@ -36,10 +36,10 @@ The right product depends on the access pattern: one-off lookups vs scans, reads
   <Card title="Standard RPC" icon="zap" href="/solana/reading-state/standard-rpc">
     JSON-RPC over HTTPS. Every standard Solana method. **Use when:** one-off account lookups, low-frequency dashboards.
   </Card>
-  <Card title="Steamboat" icon="database" href="/solana/streaming/steamboat/overview">
+  <Card title="Steamboat" icon="database" href="/solana/reading-state/steamboat-indexed-accounts">
     Custom indexes from your gRPC stream. **Use when:** `getProgramAccounts` is slow or expensive at your scale.
   </Card>
-  <Card title="DAS API" icon="image" href="/solana/digital-assets/das-api/overview">
+  <Card title="DAS API" icon="image" href="/solana/reading-state/metaplex-das-api">
     Unified read for NFTs, cNFTs, SPL, Token-2022. **Use when:** anything NFT or compressed-NFT.
   </Card>
   <Card title="Account Sync" icon="refresh-cw" href="/solana/reading-state/account-sync">
@@ -97,7 +97,7 @@ All four read paths share the same underlying validator. Standard RPC and DAS AP
   <Card title="Streaming data" href="/solana/streaming/overview">
     Sub-slot subscriptions, gRPC streams, WebSockets.
   </Card>
-  <Card title="Historical data" href="/solana/history/hydrant/overview">
+  <Card title="Historical data" href="/solana/history/hydrant">
     Millisecond ledger queries from genesis to now.
   </Card>
 </CardGroup>

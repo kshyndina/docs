@@ -18,7 +18,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
     Keep the token server-side only. Frontend code uses an origin allowlist instead. See [Auth and security](/solana/get-started/auth-and-security).
 
-    Full walkthrough: [Set up your account](/solana/get-started/account-management/set-up-your-account-and-add-users).
+    Full walkthrough: [Set up your account](/solana/get-started/account-management/platform-overview).
   </Step>
   <Step title="Send your first request" titleSize="h3">
     Call `getSlot` to confirm the endpoint is live. Pick your stack:
@@ -70,7 +70,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
     </CodeGroup>
 
-    If you got back something like `{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }`, you're connected. If you hit a 401, 429, timeout, or gRPC 403, see the [Error handling guide](/solana-guides/error-handling/overview) for the full debug flow.
+    If you got back something like `{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }`, you're connected. If you hit a 401, 429, timeout, or gRPC 403, see the [Error handling guide](/solana-guides/error-handling/how-to-troubleshoot) for the full debug flow.
   </Step>
 </Steps>
 
@@ -89,11 +89,11 @@ Two ways in. Pick the tab that fits.
         JSON-RPC over HTTPS. Every standard Solana method.
       </Card>
 
-      <Card title="Steamboat" icon="database" href="/solana/streaming/steamboat/overview">
+      <Card title="Steamboat" icon="database" href="/solana/reading-state/steamboat-indexed-accounts">
         Custom indexes from your gRPC stream. 50x faster than `getProgramAccounts`.
       </Card>
 
-      <Card title="DAS API" icon="image" href="/solana/digital-assets/das-api/overview">
+      <Card title="DAS API" icon="image" href="/solana/reading-state/metaplex-das-api">
         Unified read for NFTs, cNFTs, SPL, Token-2022.
       </Card>
 
@@ -117,7 +117,7 @@ Two ways in. Pick the tab that fits.
         Multi-node merge, persistent storage, resume from cursor.
       </Card>
 
-      <Card title="Hermes" icon="activity" href="/solana/streaming/hermes/overview">
+      <Card title="Hermes" icon="activity" href="/pyth/pyth-hermes">
         Pyth price feed API. REST plus WebSocket. Powers Pyth JS SDK.
       </Card>
     </CardGroup>
@@ -125,7 +125,7 @@ Two ways in. Pick the tab that fits.
     ### History
 
     <CardGroup cols={2}>
-      <Card title="Hydrant" icon="history" href="/solana/history/hydrant/overview">
+      <Card title="Hydrant" icon="history" href="/solana/history/hydrant">
         Millisecond ledger queries from genesis. 400\+ TB.
       </Card>
 
@@ -137,23 +137,23 @@ Two ways in. Pick the tab that fits.
     ### Sending transactions
 
     <CardGroup cols={2}>
-      <Card title="Yellowstone Jet" icon="send" href="/solana/sending-transactions/yellowstone-jet/overview">
+      <Card title="Yellowstone Jet" icon="send" href="/solana/sending-transactions/jet-sender">
         SWQoS TPU client. Direct-to-leader via QUIC.
       </Card>
 
-      <Card title="Priority Fees API" icon="trending-up" href="/solana/sending-transactions/priority-fees/overview">
+      <Card title="Priority Fees API" icon="trending-up" href="/solana/sending-transactions/priority-fees-api">
         Smart per-program fee estimation.
       </Card>
 
-      <Card title="Metis" icon="git-branch" href="/solana/trading-apis/metis/overview">
+      <Card title="Metis" icon="git-branch" href="/solana/sending-transactions/metis-swap-api">
         Jupiter swap routing. 20\+ DEXes scanned.
       </Card>
 
-      <Card title="Titan Prime" icon="route" href="/solana/trading-apis/titan-prime/overview">
+      <Card title="Titan Prime" icon="route" href="/solana/sending-transactions/titan-swap-api">
         Streaming swaps with DART live re-optimisation.
       </Card>
 
-      <Card title="Jito Bundles" icon="package" href="/solana/sending-transactions/jito-bundles/overview">
+      <Card title="Jito Bundles" icon="package" href="/solana/sending-transactions/jito-bundles">
         Tips-based bundle ordering. Skip the standard queue.
       </Card>
     </CardGroup>
@@ -161,11 +161,11 @@ Two ways in. Pick the tab that fits.
     ### Dedicated and validator services
 
     <CardGroup cols={2}>
-      <Card title="Dedicated gRPC node" icon="server" href="/solana/reading-state/dedicated-grpc">
+      <Card title="Dedicated gRPC node" icon="server" href="/solana/dedicated-nodes/overview">
         Private endpoint, no shared limits, Yellowstone gRPC included.
       </Card>
 
-      <Card title="White-label validator" icon="shield" href="/solana/validators/white-label/overview">
+      <Card title="White-label validator" icon="shield" href="/solana/validators/introduction">
         Branded validator on Triton infra. We run ops, you keep the brand.
       </Card>
     </CardGroup>

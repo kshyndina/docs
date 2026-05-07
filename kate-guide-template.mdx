@@ -103,7 +103,7 @@ node bot.ts
 
 ## Step 2: Decode the swap instruction
 
-Triton's [Vixen parsing framework](/solana/streaming/steamboat/overview) covers Jupiter, Raydium, Orca, and Meteora out of the box.
+Triton's [Vixen parsing framework](/solana/reading-state/steamboat-indexed-accounts) covers Jupiter, Raydium, Orca, and Meteora out of the box.
 
 ```typescript
 import { parseJupiterSwap } from "@triton-one/vixen/parsers";
@@ -155,7 +155,7 @@ async function forwardCopyTrade(swap) {
     The whale sent a swap that, sized down to your bankroll, is too small to clear the same pool's depth. Increase `slippageBps` or add a minimum-size guard.
   </Accordion>
   <Accordion title="Jet returns 'leader unavailable'">
-    Slot rotation, no leader for the next few slots. The Jet client retries automatically; if you see this for >5 seconds, check the [Jet status page](/solana/sending-transactions/yellowstone-jet/overview).
+    Slot rotation, no leader for the next few slots. The Jet client retries automatically; if you see this for >5 seconds, check the [Jet status page](/solana/sending-transactions/jet-sender).
   </Accordion>
 </AccordionGroup>
 

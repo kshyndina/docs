@@ -133,7 +133,7 @@ println!("Balance: {} SOL", lamports as f64 / 1_000_000_000.0);
 | `-32602` | Invalid params | The pubkey isn't a valid base58 string, or commitment isn't recognised. |
 | `-32602` | Account does not exist | The pubkey is valid but no account exists at that address. |
 
-For 401, 429, timeout, and gRPC-403 patterns, see the [Error handling guide](/solana-guides/error-handling/overview).
+For 401, 429, timeout, and gRPC-403 patterns, see the [Error handling guide](/solana-guides/error-handling/how-to-troubleshoot).
 
 ### Rate limits
 
@@ -163,7 +163,7 @@ Standard tier shares the global rate limit. See [Rate and connection limits](/so
   <Card title="accountSubscribe" href="#">
     WebSocket subscription for live balance updates.
   </Card>
-  <Card title="Error handling" href="/solana-guides/error-handling/overview">
+  <Card title="Error handling" href="/solana-guides/error-handling/how-to-troubleshoot">
     Standard transport-level error responses and the recommended retry shape.
   </Card>
 </CardGroup>

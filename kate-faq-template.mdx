@@ -39,7 +39,7 @@ This page covers connection setup, errors, performance, and billing. For walkthr
     - **Endpoint URL** -- `<your-endpoint>.mainnet.rpcpool.com`
     - **Secret token** -- a long random string
 
-    Full walkthrough: [Set up your account](/solana/get-started/account-management/set-up-your-account-and-add-users).
+    Full walkthrough: [Set up your account](/solana/get-started/account-management/platform-overview).
   </Accordion>
 
   <Accordion title="Can I use the token client-side, in browser code?">
@@ -86,7 +86,7 @@ This page covers connection setup, errors, performance, and billing. For walkthr
   </Accordion>
 
   <Accordion title="Why is `getProgramAccounts` slow at scale?">
-    The native Solana RPC scans the validator's account index linearly. For programs with >100k accounts that's tens of seconds. Use [Steamboat](/solana/streaming/steamboat/overview) for a hot index keyed exactly on the lookup pattern your app uses; reads return in milliseconds.
+    The native Solana RPC scans the validator's account index linearly. For programs with >100k accounts that's tens of seconds. Use [Steamboat](/solana/reading-state/steamboat-indexed-accounts) for a hot index keyed exactly on the lookup pattern your app uses; reads return in milliseconds.
   </Accordion>
 </AccordionGroup>
 

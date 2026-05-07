@@ -5,7 +5,6 @@ description: "We apply 2 kinds of limits: rate limits for HTTP requests (per IP,
 
 import FooterLinks from '/snippets/footer-links.mdx'
 
-
 ## Rate limits
 
 Two budgets apply at the same time, both reset every 10 seconds, both keyed to the IP making the request:
@@ -76,7 +75,7 @@ Every JSON-RPC response also carries `X-Ratelimit-*` headers. Watch them in your
 | `X-Ratelimit-Method-Limit` | Per-method cap for this RPC |
 | `X-Ratelimit-Method-Remaining` | How many of this method you have left |
 
-If you do hit a 429, see the [Error handling guide](/solana-guides/error-handling/overview) for the full debug flow.
+If you do hit a 429, see the [Error handling guide](/solana-guides/error-handling/how-to-troubleshoot) for the full debug flow.
 
 ## Browser concurrency
 
