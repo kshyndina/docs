@@ -167,8 +167,7 @@
                       "solana/validators/vote-account-setup",
                       "solana/validators/node-identity-protection"
                     ]
-                  },
-                  "staking-sol"
+                  }
                 ]
               },
               {
@@ -220,12 +219,10 @@
                   {
                     "group": "Account management",
                     "pages": [
-                      "how-to-sign-up",
-                      "untitled-page",
-                      "analyse-your-usage"
+                      "solana-guides/account/how-to-sign-up",
+                      "solana-guides/account/access-endpoint-and-token"
                     ]
-                  },
-                  "best-practices"
+                  }
                 ]
               },
               {
@@ -253,16 +250,7 @@
                   "solana-guides/end-to-end-builds/solana-telegram-bot",
                   "solana-guides/end-to-end-builds/jupiter-swap-api",
                   "solana-guides/end-to-end-builds/send-transactions-during-congestion",
-                  "solana-guides/end-to-end-builds/benchmark-grpc-with-thorofare",
-                  "solana-guides/account/how-to-sign-up",
-                  "solana-guides/account/access-endpoint-and-token"
-                ]
-              },
-              {
-                "group": "Solana concepts",
-                "pages": [
-                  "nfts-and-digital-assets",
-                  "transactions-with-sw-qos"
+                  "solana-guides/end-to-end-builds/benchmark-grpc-with-thorofare"
                 ]
               }
             ]
