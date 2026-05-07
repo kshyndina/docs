@@ -61,7 +61,7 @@ Methods not listed below fall back to the 2,000-per-10s global budget. Limits gr
 Every endpoint exposes its current limits at `/ratelimits`:
 
 ```bash
-curl https://<your-app>.mainnet.rpcpool.com/ratelimits
+curl https://<your-app>.mainnet.rpcpool.com/<token>/ratelimits
 ```
 
 The response is JSON, listing the request budget per window, every per-method override, and the connection cap. It's the source of truth for **your** endpoint's exact numbers, which can differ from the defaults above if support has tuned them.
