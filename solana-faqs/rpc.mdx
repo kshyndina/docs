@@ -43,7 +43,7 @@ How fast and reliable Triton's RPC service is, and what happens during congestio
   </Accordion>
 
   <Accordion title="Can I run scripts on the shared service?">
-    Yes. Our shared infrastructure is perfectly capable of handling backend workloads and essentially it absorbs traffic very well.
+Yes. Shared infrastructure handles backend workloads (scripts, trading bots, indexers) and is sized to absorb traffic spikes. If you expect sustained heavy load (heavy subscriptions, full-chain streams, custom Geyser configurations), a [dedicated node](/solana/dedicated-nodes/overview) is usually the right choice.
   </Accordion>
 </AccordionGroup>
 
@@ -53,7 +53,9 @@ Tokens, endpoints, allowed origins, regions, and the capabilities Triton support
 
 <AccordionGroup>
   <Accordion title="How do I monitor my RPC usage?">
-    Users with dedicated nodes get access to a Grafana dashboard with real-time metrics: request volume, latency, error rates, and bandwidth usage. Users with a shared subscription can check metrics on our customer dashboard.
+Customers with [dedicated nodes](/solana/dedicated-nodes/overview) get a Grafana dashboard with real-time metrics: request volume, latency, error rates, and bandwidth usage.
+
+    For shared (pay-as-you-go) customers, open the **v3 Billing** tab in your [customer dashboard](https://customers.triton.one). You'll see total requests and GB used (the two dimensions you're billed on), plus a per-service breakdown table with product-level detail. Click **Export CSV** in the top-right corner to download.
   </Accordion>
 
   <Accordion title="Can I create new tokens or endpoints myself?">
