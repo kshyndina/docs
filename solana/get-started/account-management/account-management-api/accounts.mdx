@@ -5,6 +5,8 @@ description: "List, create, rotate, and revoke organisation members via the Acco
 
 import FooterLinks from '/snippets/footer-links.mdx'
 
+import AmaAuthAndHeadersCard from '/snippets/cards/ama/auth-and-headers.mdx'
+import AmaEndpointsCard from '/snippets/cards/ama/endpoints.mdx'
 The Accounts resource is the API equivalent of the **Members** tab in the portal. Use it to provision and deprovision team members in code -- typically wired into your HRIS / SSO joiners-and-leavers workflow.
 
 Resource path: `/v1/members`
@@ -119,12 +121,8 @@ For members in `status: invited` whose email got lost or expired (invites expire
 ## What's next
 
 <Columns cols={2}>
-  <Card title="Auth and headers" icon="key" href="/solana/get-started/account-management/account-management-api/auth-and-headers">
-    Headers for the calls above.
-  </Card>
-  <Card title="Endpoints" icon="link" href="/solana/get-started/account-management/account-management-api/endpoints">
-    Provision endpoints once members are in place.
-  </Card>
+  <AmaAuthAndHeadersCard />
+  <AmaEndpointsCard />
 </Columns>
 
 ---

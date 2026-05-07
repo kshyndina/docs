@@ -9,6 +9,10 @@ import DeshredCard from '/snippets/cards/deshred.mdx'
 import WhirligigCard from '/snippets/cards/whirligig.mdx'
 import FumaroleCard from '/snippets/cards/fumarole.mdx'
 import StreamingOverviewCard from '/snippets/cards/streaming-overview.mdx'
+import DmSubSlotLatencyCard from '/snippets/cards/features/dm-sub-slot-latency.mdx'
+import DmServerFilteringCard from '/snippets/cards/features/dm-server-filtering.mdx'
+import DmBidirectionalStreamsCard from '/snippets/cards/features/dm-bidirectional-streams.mdx'
+import DmCompactProtobufCard from '/snippets/cards/features/dm-compact-protobuf.mdx'
 
 ## What is Dragon's Mouth
 
@@ -26,21 +30,13 @@ For browser clients that can't communicate with gRPC, use [Whirligig WebSockets]
 ## Features and benefits
 
 <CardGroup cols={2}>
-  <Card title="Sub-slot latency" icon="gauge">
-    Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.
-  </Card>
+  <DmSubSlotLatencyCard />
 
-  <Card title="Server-side filtering" icon="sliders-horizontal">
-    Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state.
-  </Card>
+  <DmServerFilteringCard />
 
-  <Card title="Bi-directional streams" icon="repeat">
-    Modify subscriptions on the fly -- send a new request and the server swaps your filter set without reconnecting.
-  </Card>
+  <DmBidirectionalStreamsCard />
 
-  <Card title="Compact Protobuf payloads" icon="feather">
-    Binary serialisation cuts bandwidth and CPU vs JSON-RPC. Less to ship, less to parse.
-  </Card>
+  <DmCompactProtobufCard />
 </CardGroup>
 
 ## Stream types and unary operations

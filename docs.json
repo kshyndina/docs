@@ -431,6 +431,11 @@
               "solana-faqs/streaming",
               "solana-faqs/transactions"
             ]
+          },
+          {
+            "tab": "Blog",
+            "icon": "arrow-up-right",
+            "href": "https://blog.triton.one"
           }
         ]
       },

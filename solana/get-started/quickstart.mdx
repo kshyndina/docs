@@ -5,7 +5,30 @@ sidebarTitle: "Quickstart"
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import StandardRpcCard from '/snippets/cards/standard-rpc.mdx'
 import SteamboatCard from '/snippets/cards/steamboat.mdx'
+import DasApiCard from '/snippets/cards/das-api.mdx'
+import AccountSyncCard from '/snippets/cards/account-sync.mdx'
+import DragonsMouthCard from '/snippets/cards/dragons-mouth.mdx'
+import WhirligigCard from '/snippets/cards/whirligig.mdx'
+import FumaroleCard from '/snippets/cards/fumarole.mdx'
+import HermesCard from '/snippets/cards/hermes.mdx'
+import HydrantCard from '/snippets/cards/hydrant.mdx'
+import OldFaithfulCard from '/snippets/cards/old-faithful.mdx'
+import JetSenderCard from '/snippets/cards/jet-sender.mdx'
+import PriorityFeesCard from '/snippets/cards/priority-fees-api.mdx'
+import MetisSwapCard from '/snippets/cards/metis-swap-api.mdx'
+import TitanSwapCard from '/snippets/cards/titan-swap-api.mdx'
+import JitoBundlesCard from '/snippets/cards/jito-bundles.mdx'
+import DedicatedGrpcCard from '/snippets/cards/dedicated-grpc-node.mdx'
+import WhiteLabelValidatorCard from '/snippets/cards/white-label-validator.mdx'
+import UseCaseTradingCard from '/snippets/cards/use-cases/trading.mdx'
+import UseCaseDefiCard from '/snippets/cards/use-cases/defi.mdx'
+import UseCaseWalletCard from '/snippets/cards/use-cases/wallet.mdx'
+import UseCaseNftCard from '/snippets/cards/use-cases/nft-marketplace.mdx'
+import UseCaseIndexerCard from '/snippets/cards/use-cases/indexer.mdx'
+import UseCaseGamingCard from '/snippets/cards/use-cases/gaming.mdx'
+import UseCaseAiAgentCard from '/snippets/cards/use-cases/ai-agent.mdx'
 
 <Steps>
   <Step title="Sign up and deposit $125" titleSize="h3">
@@ -84,120 +107,74 @@ Two ways in. Pick the tab that fits.
     ### Reading state
 
     <CardGroup cols={2}>
-      <Card title="Standard RPC" icon="zap" href="/solana/reading-state/standard-rpc">
-        JSON-RPC over HTTPS. Every standard Solana method.
-      </Card>
+      <StandardRpcCard />
 
       <SteamboatCard />
 
-      <Card title="DAS API" icon="image" href="/solana/reading-state/metaplex-das-api">
-        Unified read for NFTs, cNFTs, SPL, Token-2022.
-      </Card>
+      <DasApiCard />
 
-      <Card title="Account Sync" icon="refresh-cw" href="/solana/reading-state/account-sync">
-        Live account state mirror. No polling, always current.
-      </Card>
+      <AccountSyncCard />
     </CardGroup>
 
     ### Streaming
 
     <CardGroup cols={2}>
-      <Card title="Dragon's Mouth gRPC" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
-        Sub-slot account, transaction, slot, block subscriptions.
-      </Card>
+      <DragonsMouthCard />
 
-      <Card title="Whirligig" icon="rotate-cw" href="/solana/streaming/whirligig-websockets">
-        Drop-in for native Solana WebSockets. Custom `transactionSubscribe`.
-      </Card>
+      <WhirligigCard />
 
-      <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
-        Multi-node merge, persistent storage, resume from cursor.
-      </Card>
+      <FumaroleCard />
 
-      <Card title="Hermes" icon="activity" href="/pyth/pyth-hermes">
-        Pyth price feed API. REST plus WebSocket. Powers Pyth JS SDK.
-      </Card>
+      <HermesCard />
     </CardGroup>
 
     ### History
 
     <CardGroup cols={2}>
-      <Card title="Hydrant" icon="history" href="/solana/history/hydrant">
-        Millisecond ledger queries from genesis. 400\+ TB.
-      </Card>
+      <HydrantCard />
 
-      <Card title="Old Faithful" icon="archive" href="/solana/streaming/old-faithful-streams">
-        Open archive of every block from genesis. JSON-RPC and gRPC.
-      </Card>
+      <OldFaithfulCard />
     </CardGroup>
 
     ### Sending transactions
 
     <CardGroup cols={2}>
-      <Card title="Yellowstone Jet" icon="send" href="/solana/sending-transactions/jet-sender">
-        SWQoS TPU client. Direct-to-leader via QUIC.
-      </Card>
+      <JetSenderCard />
 
-      <Card title="Priority Fees API" icon="trending-up" href="/solana/sending-transactions/priority-fees-api">
-        Smart per-program fee estimation.
-      </Card>
+      <PriorityFeesCard />
 
-      <Card title="Metis" icon="git-branch" href="/solana/sending-transactions/metis-swap-api">
-        Jupiter swap routing. 20\+ DEXes scanned.
-      </Card>
+      <MetisSwapCard />
 
-      <Card title="Titan Prime" icon="route" href="/solana/sending-transactions/titan-swap-api">
-        Streaming swaps with DART live re-optimisation.
-      </Card>
+      <TitanSwapCard />
 
-      <Card title="Jito Bundles" icon="package" href="/solana/sending-transactions/jito-bundles">
-        Tips-based bundle ordering. Skip the standard queue.
-      </Card>
+      <JitoBundlesCard />
     </CardGroup>
 
     ### Dedicated and validator services
 
     <CardGroup cols={2}>
-      <Card title="Dedicated gRPC node" icon="server" href="/solana/dedicated-nodes/overview">
-        Private endpoint, no shared limits, Yellowstone gRPC included.
-      </Card>
+      <DedicatedGrpcCard />
 
-      <Card title="White-label validator" icon="shield" href="/solana/validators/introduction">
-        Branded validator on Triton infra. We run ops, you keep the brand.
-      </Card>
+      <WhiteLabelValidatorCard />
     </CardGroup>
   </Tab>
   <Tab title="By use case (I'm not sure yet)">
     Pick the kind of app you're building. Each card jumps to the matching setup guide.
 
     <CardGroup cols={2}>
-      <Card title="Trading or market making" icon="coins" href="/solana-guides/getting-started/set-up-rpc/trading-or-market-making">
-        Live prices and sub-slot tx landing. **Stack:** Dragon's Mouth, Jet, Priority Fees, Fumarole.
-      </Card>
+      <UseCaseTradingCard />
 
-      <Card title="DEX or DeFi protocol" icon="git-merge" href="/solana-guides/getting-started/set-up-rpc/dex-or-defi-protocol">
-        Pool state, swap activity, tx landing, historical fills. **Stack:** Dragon's Mouth, Jet, Hydrant, Priority Fees.
-      </Card>
+      <UseCaseDefiCard />
 
-      <Card title="Wallet or consumer app" icon="wallet" href="/solana-guides/getting-started/set-up-rpc/wallet-or-consumer-app">
-        Balances, history, NFT portfolio, live updates. **Stack:** Standard RPC, DAS API, Whirligig.
-      </Card>
+      <UseCaseWalletCard />
 
-      <Card title="NFT or compressed-asset platform" icon="palette" href="/solana-guides/getting-started/set-up-rpc/nft-or-compressed-asset-platform">
-        Mints, metadata, collection feeds, sale events. **Stack:** DAS API, ZK Compression, Whirligig.
-      </Card>
+      <UseCaseNftCard />
 
-      <Card title="Indexer or analytics" icon="bar-chart-3" href="/solana-guides/getting-started/set-up-rpc/indexer-or-analytics">
-        Custom indexes, historical backfill, parsed tx. **Stack:** Steamboat, Hydrant, Old Faithful, Vixen.
-      </Card>
+      <UseCaseIndexerCard />
 
-      <Card title="Gaming" icon="gamepad-2" href="/solana-guides/getting-started/set-up-rpc/gaming">
-        On-chain item state, real-time updates, fast reads. **Stack:** Standard RPC, DAS API, Dragon's Mouth, Whirligig.
-      </Card>
+      <UseCaseGamingCard />
 
-      <Card title="AI agent or LLM app" icon="bot" href="/solana-guides/getting-started/set-up-rpc/ai-agent-or-llm-app">
-        MCP access, llms.txt context, autonomous setup. **Stack:** MCP, llms.txt, Standard RPC, DAS API.
-      </Card>
+      <UseCaseAiAgentCard />
     </CardGroup>
   </Tab>
 </Tabs>

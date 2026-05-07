@@ -5,6 +5,8 @@ description: "Bearer-token authentication, organisation context, and required he
 
 import FooterLinks from '/snippets/footer-links.mdx'
 
+import AmaEndpointsCard from '/snippets/cards/ama/endpoints.mdx'
+import AmaTokensCard from '/snippets/cards/ama/tokens.mdx'
 Every Account Management API call carries the same handful of headers. This page is the reference for what to set and why.
 
 ## Required: `Authorization`
@@ -120,12 +122,8 @@ console.log(await res.json());
 ## What's next
 
 <Columns cols={2}>
-  <Card title="Endpoints" icon="link" href="/solana/get-started/account-management/account-management-api/endpoints">
-    Provision and configure endpoints.
-  </Card>
-  <Card title="Tokens" icon="lock" href="/solana/get-started/account-management/account-management-api/tokens">
-    Issue and rotate endpoint tokens.
-  </Card>
+  <AmaEndpointsCard />
+  <AmaTokensCard />
 </Columns>
 
 ---

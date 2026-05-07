@@ -5,6 +5,10 @@ description: "Triton's REST API for programmatically managing organisations, mem
 
 import FooterLinks from '/snippets/footer-links.mdx'
 
+import AmaAccountsCard from '/snippets/cards/ama/accounts.mdx'
+import AmaAuthAndHeadersCard from '/snippets/cards/ama/auth-and-headers.mdx'
+import AmaEndpointsCard from '/snippets/cards/ama/endpoints.mdx'
+import AmaTokensCard from '/snippets/cards/ama/tokens.mdx'
 Everything you can do in the portal -- create endpoints, rotate tokens, manage origin allowlists, change rate limits, invite teammates -- is also available as a REST API. Use it for IaC, CI pipelines, automated rotation, and provisioning per-customer endpoints in your own product.
 
 ## When to use the API
@@ -20,18 +24,10 @@ Everything you can do in the portal -- create endpoints, rotate tokens, manage o
 ## Where to start
 
 <Columns cols={2}>
-  <Card title="Auth and headers" icon="key" href="/solana/get-started/account-management/account-management-api/auth-and-headers">
-    Bearer tokens, organisation context, common headers.
-  </Card>
-  <Card title="Accounts" icon="user" href="/solana/get-started/account-management/account-management-api/accounts">
-    List, create, rotate, and revoke organisation members.
-  </Card>
-  <Card title="Endpoints" icon="link" href="/solana/get-started/account-management/account-management-api/endpoints">
-    Provision, list, configure, and delete endpoints.
-  </Card>
-  <Card title="Tokens" icon="lock" href="/solana/get-started/account-management/account-management-api/tokens">
-    Issue, list, rotate, and revoke endpoint tokens.
-  </Card>
+  <AmaAuthAndHeadersCard />
+  <AmaAccountsCard />
+  <AmaEndpointsCard />
+  <AmaTokensCard />
 </Columns>
 
 ## Resource model
@@ -127,12 +123,8 @@ This is separate from your *RPC* rate limits. The API token authenticates portal
 ## What's next
 
 <Columns cols={2}>
-  <Card title="Auth and headers" icon="key" href="/solana/get-started/account-management/account-management-api/auth-and-headers">
-    Token format, headers, organisation switching.
-  </Card>
-  <Card title="Endpoints" icon="link" href="/solana/get-started/account-management/account-management-api/endpoints">
-    Most-used resource: provisioning and configuration.
-  </Card>
+  <AmaAuthAndHeadersCard />
+  <AmaEndpointsCard />
 </Columns>
 
 ---

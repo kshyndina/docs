@@ -5,6 +5,8 @@ description: "Manage account watch lists used by gRPC and WebSocket subscription
 
 import FooterLinks from '/snippets/footer-links.mdx'
 
+import AmaSubscriptionsCard from '/snippets/cards/ama/subscriptions.mdx'
+import DragonsMouthCard from '/snippets/cards/dragons-mouth.mdx'
 Address watch lists let you maintain a named, server-side list of Solana addresses that any of your streaming subscriptions can reference. Update the list once and every active subscription using it picks up the change without reconnecting.
 
 Resource path: `/v1/endpoints/{endpoint_id}/address-watch-lists`
@@ -123,12 +125,9 @@ Higher limits available on dedicated -- talk to support.
 ## What's next
 
 <Columns cols={2}>
-  <Card title="Subscriptions" icon="rss" href="/solana/get-started/account-management/account-management-api/subscriptions">
-    Reference watch lists from gRPC / WS subscriptions.
-  </Card>
-  <Card title="Dragon's Mouth quickstart" icon="zap" href="/solana/streaming/dragons-mouth-g-rpc">
-    See watch lists wired into a real subscribe message.
-  </Card>
+  <AmaSubscriptionsCard />
+
+  <DragonsMouthCard />
 </Columns>
 
 ---

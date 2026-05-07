@@ -5,6 +5,9 @@ description: "What HTTP 429 means on Triton, why you hit it, and how to back off
 
 import FooterLinks from '/snippets/footer-links.mdx'
 import RateAndConnectionLimitsCard from '/snippets/cards/rate-and-connection-limits.mdx'
+import CommonSolanaErrorsCard from '/snippets/cards/troubleshooting/common-solana-errors.mdx'
+import TritonRpcErrorCodesCard from '/snippets/cards/troubleshooting/triton-rpc-error-codes.mdx'
+import HowToTroubleshootCard from '/snippets/cards/troubleshooting/how-to-troubleshoot.mdx'
 
 When your traffic exceeds the per-IP rate budget on a Triton endpoint, the server returns `HTTP 429 Too Many Requests`. The request didn't reach the validator -- you can safely retry it once the window resets.
 
@@ -73,17 +76,11 @@ async function rpcWithBackoff(url: string, body: unknown, maxAttempts = 5) {
 <CardGroup cols={2}>
   <RateAndConnectionLimitsCard />
 
-  <Card title="Common Solana errors" icon="circle-help" href="/solana-guides/error-handling/common-solana-errors">
-    Solana JSON-RPC error codes and how to handle each one.
-  </Card>
+  <CommonSolanaErrorsCard />
 
-  <Card title="Triton RPC error codes" icon="alert-triangle" href="/solana-guides/error-handling/triton-rpc-error-codes">
-    Triton-specific error codes you might see and what they mean.
-  </Card>
+  <TritonRpcErrorCodesCard />
 
-  <Card title="How to troubleshoot" icon="wrench" href="/solana-guides/error-handling/how-to-troubleshoot">
-    The full debug flow when something's not working.
-  </Card>
+  <HowToTroubleshootCard />
 </CardGroup>
 
 ---

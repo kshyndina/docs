@@ -6,6 +6,7 @@ description: "Manage subscriptions, attach subscription types, and read billing 
 import FooterLinks from '/snippets/footer-links.mdx'
 import PlansAndBillingCard from '/snippets/cards/plans-and-billing.mdx'
 
+import AmaSubscriptionTypesCard from '/snippets/cards/ama/subscription-types.mdx'
 The Subscriptions resource describes which products your organisation has access to (Solana, Pyth, SUI, Monad) and which add-ons (DAS, Hydrant, Steamboat). The API is read + minor writes; full plan changes go through the portal or your account manager.
 
 Resource path: `/v1/subscriptions`
@@ -102,9 +103,7 @@ Base plan changes (PAYG -> committed, sizing up / down) go through the portal or
 ## What's next
 
 <Columns cols={2}>
-  <Card title="Subscription types" icon="list" href="/solana/get-started/account-management/account-management-api/subscription-types">
-    The catalogue of plans and add-ons you can attach.
-  </Card>
+  <AmaSubscriptionTypesCard />
   <PlansAndBillingCard />
 </Columns>
 

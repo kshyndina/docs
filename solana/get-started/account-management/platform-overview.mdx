@@ -8,33 +8,27 @@ import AuthAndSecurityCard from '/snippets/cards/auth-and-security.mdx'
 import PlansAndBillingCard from '/snippets/cards/plans-and-billing.mdx'
 import HowToSignUpCard from '/snippets/cards/how-to-sign-up.mdx'
 import AccountManagementApiCard from '/snippets/cards/account-management-api.mdx'
+import DashEndpointsCard from '/snippets/cards/dashboard/endpoints.mdx'
+import DashAuthCard from '/snippets/cards/dashboard/auth.mdx'
+import DashUsageCard from '/snippets/cards/dashboard/usage.mdx'
+import DashBillingCard from '/snippets/cards/dashboard/billing.mdx'
+import DashMembersCard from '/snippets/cards/dashboard/members.mdx'
+import DashAuditLogCard from '/snippets/cards/dashboard/audit-log.mdx'
 
 ## What's in the portal
 
 <Columns cols={2}>
-  <Card title="Endpoints" icon="link">
-    Provision, monitor, and configure every endpoint your organisation has -- shared and dedicated.
-  </Card>
+  <DashEndpointsCard />
 
-  <Card title="Auth" icon="key">
-    Manage tokens, public-endpoint origin allowlists, and IP allowlists per endpoint.
-  </Card>
+  <DashAuthCard />
 
-  <Card title="Usage" icon="bar-chart">
-    Live request count, RPS, error rate, and cost-to-date. Drilldowns by method.
-  </Card>
+  <DashUsageCard />
 
-  <Card title="Billing" icon="wallet">
-    Deposits, top-ups, payment methods, invoices, and credit balance.
-  </Card>
+  <DashBillingCard />
 
-  <Card title="Members" icon="users">
-    Invite teammates, set roles (owner, admin, viewer), rotate credentials.
-  </Card>
+  <DashMembersCard />
 
-  <Card title="Audit log" icon="scroll">
-    Every config change with timestamp, actor, and before/after values.
-  </Card>
+  <DashAuditLogCard />
 </Columns>
 
 ## Mental model: organisation -\> endpoint -\> token

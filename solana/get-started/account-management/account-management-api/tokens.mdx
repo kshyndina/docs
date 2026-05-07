@@ -6,6 +6,7 @@ description: "Issue, list, rotate, and revoke endpoint tokens via the Account Ma
 import FooterLinks from '/snippets/footer-links.mdx'
 import AuthAndSecurityCard from '/snippets/cards/auth-and-security.mdx'
 
+import AmaEndpointsCard from '/snippets/cards/ama/endpoints.mdx'
 Each Triton endpoint has its own set of tokens. The Tokens API is for programmatic issue / rotate / revoke -- typically wired into a scheduled rotation job or your CI's secret-rolling flow.
 
 Resource path: `/v1/endpoints/{endpoint_id}/tokens`
@@ -132,9 +133,7 @@ Higher limits available on dedicated. Talk to support if you have legitimate per
 
 <Columns cols={2}>
   <AuthAndSecurityCard />
-  <Card title="Endpoints" icon="link" href="/solana/get-started/account-management/account-management-api/endpoints">
-    The parent resource.
-  </Card>
+  <AmaEndpointsCard />
 </Columns>
 
 ---

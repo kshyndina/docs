@@ -28,25 +28,15 @@ All five streaming services we'll be testing use Triton endpoints with token-bas
 The five streaming services covered:
 
 <CardGroup cols={2}>
-  <Card title="Dragon's Mouth gRPC" icon="radio">
-    Sub-slot live data, the canonical Yellowstone stream. Backend services only.
-  </Card>
+  <DragonsMouthCard />
 
-  <Card title="Whirligig WebSocket" icon="rotate-cw">
-    Same data as Dragon's Mouth, for browsers and dApps that can't use gRPC.
-  </Card>
+  <WhirligigCard />
 
-  <Card title="Fumarole" icon="layers">
-    Persistent gRPC streams with deduplication and resume-from-cursor. Built for indexers and analytics pipelines.
-  </Card>
+  <FumaroleCard />
 
-  <Card title="Old Faithful streams" icon="archive">
-    Every block from genesis over the same gRPC dialect as live streams. Built for history indexers and researchers.
-  </Card>
+  <OldFaithfulCard />
 
-  <Card title="Deshred transactions" icon="flame">
-    Pre-execution transaction stream, separate gRPC method. Built for arbitrage, market making, copy trading, HFT.
-  </Card>
+  <DeshredCard />
 </CardGroup>
 
 ## Step 1. Install

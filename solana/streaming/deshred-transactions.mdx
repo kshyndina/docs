@@ -6,6 +6,10 @@ description: "Pre-execution transaction stream reconstructed from shreds, before
 import FooterLinks from '/snippets/footer-links.mdx'
 import StreamingPrerequisites from '/snippets/streaming-prerequisites.mdx'
 import DragonsMouthCard from '/snippets/cards/dragons-mouth.mdx'
+import DsEarliestSignalCard from '/snippets/cards/features/ds-earliest-signal.mdx'
+import DsSameGrpcCard from '/snippets/cards/features/ds-same-grpc.mdx'
+import DsResolvedAltCard from '/snippets/cards/features/ds-resolved-alt.mdx'
+import BlogDeshredCard from '/snippets/cards/blog/deshred.mdx'
 
 ## What is Deshred
 
@@ -18,21 +22,11 @@ Unlike the standard `Subscribe` transaction stream, deshred updates are emitted 
 ## Features and benefits
 
 <CardGroup cols={2}>
-  <Card title="Earliest signal" icon="flame">
-    Transactions reconstructed from shreds before validator execution.
-  </Card>
+  <DsEarliestSignalCard />
 
-  <Card title="Same gRPC service" icon="link">
-    Drops into your existing Dragon's Mouth pipeline. Separate method, same client.
-  </Card>
+  <DsSameGrpcCard />
 
-  <Card title="Resolved ALT addresses" icon="key">
-    Includes writable + readonly addresses resolved from Address Lookup Tables.
-  </Card>
-
-  <Card title="Server-side filtering" icon="sliders-horizontal">
-    Filter by vote, account_include, account_exclude, account_required.
-  </Card>
+  <DsResolvedAltCard />
 </CardGroup>
 
 ## Filter configuration
@@ -209,9 +203,7 @@ For a deeper overview of architecture and tradeoffs, see [Deshred transactions: 
 <CardGroup cols={2}>
   <DragonsMouthCard />
 
-  <Card title="Deshred blog post" icon="book-open" href="https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/">
-    Architecture, tradeoffs, and how Deshred fits the Solana shred pipeline.
-  </Card>
+  <BlogDeshredCard />
 </CardGroup>
 
 ---

@@ -8,6 +8,10 @@ import DragonsMouthCard from '/snippets/cards/dragons-mouth.mdx'
 import FumaroleCard from '/snippets/cards/fumarole.mdx'
 import StreamingQuickstartCard from '/snippets/cards/streaming-quickstart.mdx'
 import StreamingOverviewCard from '/snippets/cards/streaming-overview.mdx'
+import WgWebSocketCompatibleCard from '/snippets/cards/features/wg-websocket-compatible.mdx'
+import WgTransactionSubscribeCard from '/snippets/cards/features/wg-transaction-subscribe.mdx'
+import WgCommitmentLevelsCard from '/snippets/cards/features/wg-commitment-levels.mdx'
+import WgReliabilityLimitsCard from '/snippets/cards/features/wg-reliability-limits.mdx'
 
 ## What is Whirligig
 
@@ -20,21 +24,13 @@ For a backend that can speak gRPC, [Dragon's Mouth gRPC](/solana/streaming/drago
 ## Features and benefits
 
 <CardGroup cols={2}>
-  <Card title="Solana WebSocket compatible" icon="plug">
-    Drop-in replacement for the standard Solana WebSocket API.
-  </Card>
+  <WgWebSocketCompatibleCard />
 
-  <Card title="Intra-slot updates" icon="gauge">
-    Account updates up to 400ms faster than standard WebSockets at `processed`.
-  </Card>
+  <WgTransactionSubscribeCard />
 
-  <Card title="transactionSubscribe extension" icon="receipt">
-    Triton-only subscription for filtered transaction notifications.
-  </Card>
+  <WgCommitmentLevelsCard />
 
-  <Card title="All commitment levels" icon="signal-high">
-    Subscribe at `processed`, `confirmed`, or `finalized`.
-  </Card>
+  <WgReliabilityLimitsCard />
 </CardGroup>
 
 ## Endpoint and connection

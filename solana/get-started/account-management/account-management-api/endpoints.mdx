@@ -5,6 +5,8 @@ description: "Provision, list, configure, and delete endpoints via the Account M
 
 import FooterLinks from '/snippets/footer-links.mdx'
 
+import AmaRateTiersCard from '/snippets/cards/ama/rate-tiers.mdx'
+import AmaTokensCard from '/snippets/cards/ama/tokens.mdx'
 The Endpoints resource is the most-used part of the Account Management API. Provision endpoints in code, configure them, and tear them down -- typically wired into Terraform or a CI pipeline.
 
 Resource path: `/v1/endpoints`
@@ -148,12 +150,8 @@ curl https://api.triton.one/v1/endpoints/ep_abc123 \
 ## What's next
 
 <Columns cols={2}>
-  <Card title="Tokens" icon="lock" href="/solana/get-started/account-management/account-management-api/tokens">
-    Issue and rotate tokens.
-  </Card>
-  <Card title="Rate tiers" icon="gauge" href="/solana/get-started/account-management/account-management-api/rate-tiers">
-    Read and configure per-endpoint rate limits.
-  </Card>
+  <AmaTokensCard />
+  <AmaRateTiersCard />
 </Columns>
 
 ---

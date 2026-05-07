@@ -8,6 +8,15 @@ import CustomerLogoMarquee from '/snippets/customer-logo-marquee.mdx'
 import FooterLinks from '/snippets/footer-links.mdx'
 import PlansAndBillingCard from '/snippets/cards/plans-and-billing.mdx'
 import QuickstartCard from '/snippets/cards/quickstart.mdx'
+import AccountManagementCard from '/snippets/cards/account-management.mdx'
+import HowToSignUpCard from '/snippets/cards/how-to-sign-up.mdx'
+import StreamGrpcCard from '/snippets/cards/walkthroughs/stream-grpc.mdx'
+import TokenMetadataCard from '/snippets/cards/walkthroughs/token-metadata.mdx'
+import CopyTradeCard from '/snippets/cards/walkthroughs/copy-trade.mdx'
+import CalculateFeesCard from '/snippets/cards/walkthroughs/calculate-fees.mdx'
+import StreamRaydiumCard from '/snippets/cards/walkthroughs/stream-raydium.mdx'
+import MintTokenCard from '/snippets/cards/walkthroughs/mint-token.mdx'
+import TitanPrimeCard from '/snippets/cards/walkthroughs/titan-prime.mdx'
 
 Here you'll find everything you need to integrate with Triton's Solana infrastructure. If you're new here, start with the Quickstart for a five-minute walk-through, or jump to the common build guides for the path that matches what you're shipping.
 
@@ -160,33 +169,19 @@ Every Solana app starts with an RPC call. Try the most common ones live, right h
 The most-asked builder paths. Each card jumps to a working walkthrough with code.
 
 <CardGroup cols={2}>
-  <Card title="Stream Solana with gRPC" icon="radio" href="/solana-guides/end-to-end-builds/stream-solana-grpc">
-    Subscribe to accounts, transactions, and blocks via Dragon's Mouth.
-  </Card>
+  <StreamGrpcCard />
 
-  <Card title="Get token metadata" icon="image" href="/solana-guides/end-to-end-builds/get-token-metadata">
-    One DAS API call returns fungible, NFT, cNFT, and Token-2022 metadata.
-  </Card>
+  <TokenMetadataCard />
 
-  <Card title="Copy trade a wallet" icon="copy" href="/solana-guides/end-to-end-builds/copy-trade-wallet">
-    Watch any wallet in real time and mirror its trades.
-  </Card>
+  <CopyTradeCard />
 
-  <Card title="Calculate Solana fees end to end" icon="calculator" href="/solana-guides/end-to-end-builds/calculate-solana-fees">
-    Base transaction fees, priority fees, and account rent in one walkthrough.
-  </Card>
+  <CalculateFeesCard />
 
-  <Card title="Stream a Raydium AMM pool" icon="droplet" href="/solana-guides/end-to-end-builds/stream-raydium-amm-pool">
-    Subscribe to pool state and trade events sub-slot.
-  </Card>
+  <StreamRaydiumCard />
 
-  <Card title="Mint a Solana token" icon="coins" href="/solana-guides/end-to-end-builds/mint-solana-token">
-    Create an SPL or Token-2022 mint, set metadata, and airdrop to test wallets.
-  </Card>
+  <MintTokenCard />
 
-  <Card title="Integrate Titan Prime" icon="route" href="/solana-guides/end-to-end-builds/integrate-titan-prime">
-    Get streaming swap quotes that re-optimise live as the market moves.
-  </Card>
+  <TitanPrimeCard />
 </CardGroup>
 
 ---
@@ -196,17 +191,13 @@ The most-asked builder paths. Each card jumps to a working walkthrough with code
 New to Triton? Four steps from here to a production endpoint.
 
 <CardGroup cols={2}>
-  <Card title="Set up your account" icon="user-plus" href="/solana/get-started/account-management/platform-overview">
-    Create a workspace and invite your team.
-  </Card>
+  <AccountManagementCard />
 
   <PlansAndBillingCard />
 
   <QuickstartCard />
 
-  <Card title="Get an endpoint" icon="rocket" href="https://customers.triton.one/onboarding">
-    Standard RPC or dedicated gRPC in minutes. Pay as you go.
-  </Card>
+  <HowToSignUpCard />
 </CardGroup>
 
 ---
