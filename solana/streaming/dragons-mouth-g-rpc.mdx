@@ -1,5 +1,6 @@
 ---
 title: "Dragon's Mouth gRPC"
+description: "Triton's Geyser-fed gRPC streaming interface for Solana. Sub-slot account, transaction, slot, and block subscriptions. The fastest live data path available for processed events."
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
@@ -85,7 +86,12 @@ You send it once when you open the stream; then you can send it again at any tim
     | `CONFIRMED` (1) | Voted on by supermajority. Some buffering. |
     | `FINALIZED` (2) | Max vote lockout. Most buffering. |
 
-    For maximum performance, work at `processed` and manage commitment client-side using [slot notifications](#slots).
+    For maximum performance, work at `processed` and manage commitment client-side by subscribing to [slot notifications](#slots) alongside your data. The pattern:
+
+    1. Subscribe to slot notifications alongside your data stream.
+    2. Buffer incoming events by slot.
+    3. When you see a slot status change to `confirmed` or `finalized`, release the matching buffer.
+    4. You'll always receive the slot's events _before_ its commitment notification.
   </Tab>
   <Tab title="ping">
     Sends a periodic keepalive to prevent idle-stream drops by upstream cloud providers (e.g. Cloudflare). Server replies with `pong`. Optional but recommended for long-running streams.
@@ -1112,25 +1118,6 @@ console.log(info.firstAvailable);
 <Note>
   For teams self-hosting a Yellowstone gRPC server, replay must be enabled by setting `replay_stored_slots` to a value greater than `0`.
 </Note>
-
-## Commitment levels
-
-Streams default to `processed`. You can buffer updates server-side at `confirmed` or `finalized` by setting `commitment` on `SubscribeRequest`:
-
-```protobuf
-enum CommitmentLevel {
-  PROCESSED = 0;
-  CONFIRMED = 1;
-  FINALIZED = 2;
-}
-```
-
-For maximum performance, work at `processed` and manage commitment client-side. The pattern:
-
-1. Subscribe to [slot notifications](#slots) alongside your data.
-2. Buffer incoming events by slot.
-3. When you see a slot status change to `confirmed` or `finalized`, release the matching buffer.
-4. You'll always receive the slot's events _before_ its commitment notification.
 
 ## Intra-slot updates
 
