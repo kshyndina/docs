@@ -116,44 +116,77 @@
               {
                 "group": "Reading state",
                 "pages": [
-                  "solana/reading-state/overview",
-                  "solana/reading-state/quickstart",
+                  {
+                    "page": "solana/reading-state/overview",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana/reading-state/quickstart",
+                    "tag": "WIP"
+                  },
                   "solana/reading-state/account-sync",
                   "solana/reading-state/standard-rpc",
                   "solana/reading-state/steamboat-indexed-accounts",
                   "solana/reading-state/metaplex-das-api",
                   "solana/reading-state/zk-compression-photon",
-                  "solana/reading-state/best-practices"
+                  {
+                    "page": "solana/reading-state/best-practices",
+                    "tag": "WIP"
+                  }
                 ]
               },
               {
                 "group": "Historical data",
                 "pages": [
-                  "solana/history/overview",
-                  "solana/history/quickstart",
+                  {
+                    "page": "solana/history/overview",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana/history/quickstart",
+                    "tag": "WIP"
+                  },
                   "solana/history/hydrant",
-                  "solana/history/best-practices"
+                  {
+                    "page": "solana/history/best-practices",
+                    "tag": "WIP"
+                  }
                 ]
               },
               {
                 "group": "Sending transactions",
                 "pages": [
-                  "solana/sending-transactions/overview",
-                  "solana/sending-transactions/quickstart",
+                  {
+                    "page": "solana/sending-transactions/overview",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana/sending-transactions/quickstart",
+                    "tag": "WIP"
+                  },
                   "solana/sending-transactions/jet-sender",
                   "solana/sending-transactions/priority-fees-api",
                   "solana/sending-transactions/metis-swap-api",
                   "solana/sending-transactions/titan-swap-api",
                   "solana/sending-transactions/jito-bundles",
                   "solana/sending-transactions/shield-mev-protection",
-                  "solana/sending-transactions/transaction-sending-best-practices"
+                  {
+                    "page": "solana/sending-transactions/transaction-sending-best-practices",
+                    "tag": "WIP"
+                  }
                 ]
               },
               {
                 "group": "Agents / MCP",
                 "pages": [
-                  "solana/agents-mcp/overview",
-                  "solana/agents-mcp/quickstart",
+                  {
+                    "page": "solana/agents-mcp/overview",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana/agents-mcp/quickstart",
+                    "tag": "WIP"
+                  },
                   "solana/agents-mcp/mcp-server"
                 ]
               },
@@ -174,8 +207,14 @@
                 "group": "Dedicated nodes",
                 "pages": [
                   "solana/dedicated-nodes/overview",
-                  "solana/dedicated-nodes/quickstart",
-                  "solana/dedicated-nodes/best-practices"
+                  {
+                    "page": "solana/dedicated-nodes/quickstart",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana/dedicated-nodes/best-practices",
+                    "tag": "WIP"
+                  }
                 ]
               },
               {
@@ -232,16 +271,46 @@
               {
                 "group": "End-to-end builds",
                 "pages": [
-                  "solana-guides/end-to-end-builds/stream-solana-grpc",
-                  "solana-guides/end-to-end-builds/get-token-metadata",
-                  "solana-guides/end-to-end-builds/copy-trade-wallet",
-                  "solana-guides/end-to-end-builds/calculate-solana-fees",
-                  "solana-guides/end-to-end-builds/stream-raydium-amm-pool",
-                  "solana-guides/end-to-end-builds/mint-solana-token",
-                  "solana-guides/end-to-end-builds/integrate-titan-prime",
-                  "solana-guides/end-to-end-builds/solana-telegram-bot",
-                  "solana-guides/end-to-end-builds/jupiter-swap-api",
-                  "solana-guides/end-to-end-builds/send-transactions-during-congestion",
+                  {
+                    "page": "solana-guides/end-to-end-builds/stream-solana-grpc",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana-guides/end-to-end-builds/get-token-metadata",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana-guides/end-to-end-builds/copy-trade-wallet",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana-guides/end-to-end-builds/calculate-solana-fees",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana-guides/end-to-end-builds/stream-raydium-amm-pool",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana-guides/end-to-end-builds/mint-solana-token",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana-guides/end-to-end-builds/integrate-titan-prime",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana-guides/end-to-end-builds/solana-telegram-bot",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana-guides/end-to-end-builds/jupiter-swap-api",
+                    "tag": "WIP"
+                  },
+                  {
+                    "page": "solana-guides/end-to-end-builds/send-transactions-during-congestion",
+                    "tag": "WIP"
+                  },
                   "solana-guides/end-to-end-builds/benchmark-grpc-with-thorofare"
                 ]
               }

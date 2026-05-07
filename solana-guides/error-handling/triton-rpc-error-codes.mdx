@@ -14,25 +14,25 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
 **Explanation:** Excessive load on a node or pool (e.g., shared RPC) could exceed capacity, causing timeouts. This might be tied to insufficient scaling or a failure in load balancing.
 
-### Error 500 ("Internal Server Error")
+### Error 500 ("Internal server error")
 
 **Problem:** Unexpected failure in Triton One's server software or database.
 
 **Explanation:** A bug, crash, or resource exhaustion (e.g., memory leak) on our servers could disrupt request processing, unrelated to client input.
 
-### Error 502 ("Bad Gateway") occurs across multiple requests
+### Error 502 ("Bad gateway") occurs across multiple requests
 
 **Problem:** Upstream validator connectivity issue or gateway misconfiguration.
 
 **Explanation:** Triton One's routing to Solana validators might be disrupted (e.g., validator downtime, network partition), breaking the request chain.
 
-### Error 503 ("Service Unavailable") is returned frequently
+### Error 503 ("Service unavailable") is returned frequently
 
 **Problem:** Triton One's servers are overloaded or undergoing maintenance.
 
 **Explanation:** High traffic or an unannounced outage could overwhelm node capacity, triggering this error until load balancing or failover kicks in.
 
-### Error 504 ("Gateway Timeout") persists after retries
+### Error 504 ("Gateway timeout") persists after retries
 
 **Problem:** Slow or unresponsive upstream validator response via Triton One's gateway.
 
@@ -95,10 +95,10 @@ import FooterLinks from '/snippets/footer-links.mdx'
 | Check Triton One's changelog in the customer portal for updated methods. Switch to supported alternatives or request a custom endpoint. | 410 | Client |
 | The request payload exceeds the maximum size limit. Optimise your transaction, remove unnecessary instructions or split into multiple transactions or request an adjustment to your endpoint's capacity through support. | 413 | Client |
 | You've hit the custom rate limit set for your dedicated node plan, or a misconfigured client is overloading the endpoint. Slow down your request frequency or upgrade to a dedicated node with higher limits. | 429 | Client |
-| Internal Server Error. Retry after a short delay. | 500 | Server |
-| Bad Gateway. Retry the request and resubmit the transaction -- priority routing should recover. If the issue persists, contact us. | 502 | Server |
-| Service Unavailable means that the server cannot handle the load requested. Retry after a delay and contact us if the issue persists. | 503 | Server |
-| Gateway Timeout. After a short delay, retry, resubmit with a higher priority fee to expedite processing, and reconnect to the WebSocket endpoint. | 504 | Server |
+| Internal server error. Retry after a short delay. | 500 | Server |
+| Bad gateway. Retry the request and resubmit the transaction -- priority routing should recover. If the issue persists, contact us. | 502 | Server |
+| Service unavailable means that the server cannot handle the load requested. Retry after a delay and contact us if the issue persists. | 503 | Server |
+| Gateway timeout. After a short delay, retry, resubmit with a higher priority fee to expedite processing, and reconnect to the WebSocket endpoint. | 504 | Server |
 | Verify the market ID, as it might be a faulty API endpoint to which you were redirected. Please let us know so that we can add some additional verification of the API's health. | MARKET\_NOT\_FOUND | Client |
 | The connection was closed, not just the streams. Reconnecting the stream will not work; you must establish a new connection. | Stream removed | Client |
 | Verify the token's tradability on a DEX or Solana Explorer. Might need additional verification of the API health. | TOKEN\_NOT\_TRADABLE | Client |
