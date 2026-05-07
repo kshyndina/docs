@@ -13,7 +13,7 @@ Resource path: `/v1/endpoints/{endpoint_id}/tokens`
 
 ## List tokens
 
-```
+```text
 GET /v1/endpoints/{endpoint_id}/tokens
 ```
 
@@ -44,7 +44,7 @@ Returns metadata about each token -- not the secret value (that's only shown at 
 
 ## Issue a new token
 
-```
+```text
 POST /v1/endpoints/{endpoint_id}/tokens
 ```
 
@@ -82,7 +82,7 @@ The `value` field is **only** in the create response. Store it in your secret ma
 
 The recommended pattern: issue a fresh token, deploy services with the new value, revoke the old one. The API has a built-in helper:
 
-```
+```text
 POST /v1/endpoints/{endpoint_id}/tokens/{id}/rotate
 ```
 
@@ -101,7 +101,7 @@ Returns the **new** token value. The old one is auto-revoked after the grace per
 
 ## Revoke a token
 
-```
+```text
 DELETE /v1/endpoints/{endpoint_id}/tokens/{id}
 ```
 

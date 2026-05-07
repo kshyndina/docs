@@ -13,22 +13,22 @@ If you are running high-throughput applications using [`@solana/web3.js`](https:
 These errors often manifest with messages like `fetch failed`, `Connect Timeout Error`, `ECONNREFUSED`, `ECONNRESET`, or `other side closed`. They are a strong indicator that your application is hitting local system limits for network connections.
 
 <Accordion title="Click to see full error examples">
-```
+```text
 cause: ConnectTimeoutError: Connect Timeout Error
 code: 'UND_ERR_CONNECT_TIMEOUT'
 ```
 
-```
+```text
 cause: Error: connect ECONNREFUSED 1.2.3.4:443
 code: 'ECONNREFUSED'
 ```
 
-```
+```text
 cause: Error: Client network socket disconnected before secure TLS connection was established
 code: 'ECONNRESET'
 ```
 
-```
+```text
 cause: SocketError: other side closed
 code: 'UND_ERR_SOCKET'
 ```

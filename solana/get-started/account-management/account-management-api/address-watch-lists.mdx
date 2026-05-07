@@ -27,7 +27,7 @@ With a watch list:
 
 ## List watch lists
 
-```
+```text
 GET /v1/endpoints/{endpoint_id}/address-watch-lists
 ```
 
@@ -38,7 +38,7 @@ curl https://api.triton.one/v1/endpoints/ep_abc123/address-watch-lists \
 
 ## Create a watch list
 
-```
+```text
 POST /v1/endpoints/{endpoint_id}/address-watch-lists
 ```
 
@@ -70,7 +70,7 @@ curl https://api.triton.one/v1/endpoints/ep_abc123/address-watch-lists \
 
 ## Get a watch list
 
-```
+```text
 GET /v1/endpoints/{endpoint_id}/address-watch-lists/{name}
 ```
 
@@ -82,7 +82,7 @@ Two patterns: full replace and incremental.
 
 ### Full replace
 
-```
+```text
 PUT /v1/endpoints/{endpoint_id}/address-watch-lists/{name}
 ```
 
@@ -90,7 +90,7 @@ Replaces `addresses` wholesale. Use when you have a fresh full list (e.g. nightl
 
 ### Incremental add / remove
 
-```
+```text
 POST /v1/endpoints/{endpoint_id}/address-watch-lists/{name}/addresses
 DELETE /v1/endpoints/{endpoint_id}/address-watch-lists/{name}/addresses
 ```
@@ -99,7 +99,7 @@ Body: `{ "addresses": [ "...", "..." ] }`. Use when reconciling small deltas (a 
 
 ## Delete a watch list
 
-```
+```text
 DELETE /v1/endpoints/{endpoint_id}/address-watch-lists/{name}
 ```
 

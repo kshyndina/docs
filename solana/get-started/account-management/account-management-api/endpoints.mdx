@@ -13,7 +13,7 @@ Resource path: `/v1/endpoints`
 
 ## List endpoints
 
-```
+```text
 GET /v1/endpoints
 ```
 
@@ -48,7 +48,7 @@ Filter via `?chain=solana&network=mainnet&status=active`.
 
 ## Create an endpoint
 
-```
+```text
 POST /v1/endpoints
 ```
 
@@ -94,7 +94,7 @@ The response carries the new endpoint with its URL and a freshly-issued default 
 
 ## Get an endpoint
 
-```
+```text
 GET /v1/endpoints/{id}
 ```
 
@@ -102,7 +102,7 @@ Includes everything the list call returns plus current usage (requests in curren
 
 ## Update an endpoint
 
-```
+```text
 PATCH /v1/endpoints/{id}
 ```
 
@@ -117,7 +117,7 @@ curl https://api.triton.one/v1/endpoints/ep_abc123 \
 
 ## Delete an endpoint
 
-```
+```text
 DELETE /v1/endpoints/{id}
 ```
 

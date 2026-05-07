@@ -13,7 +13,7 @@ Resource path: `/v1/endpoints/{endpoint_id}/rate-tier`
 
 ## Get the current rate tier
 
-```
+```text
 GET /v1/endpoints/{endpoint_id}/rate-tier
 ```
 
@@ -56,7 +56,7 @@ curl https://api.triton.one/v1/endpoints/ep_abc123/rate-tier \
 
 ## Update the rate tier (dedicated)
 
-```
+```text
 PATCH /v1/endpoints/{endpoint_id}/rate-tier
 ```
 
@@ -90,7 +90,7 @@ You can't raise limits beyond what your endpoint's ceiling allows. Trying to set
 
 ## Reset to plan defaults
 
-```
+```text
 DELETE /v1/endpoints/{endpoint_id}/rate-tier/overrides
 ```
 
