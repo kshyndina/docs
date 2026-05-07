@@ -9,6 +9,7 @@ import FaqStreamDisconnects from '/snippets/faqs/streaming-disconnects.mdx'
 import FaqStreamSlow from '/snippets/faqs/streaming-events-slow.mdx'
 import FaqStreamMemory from '/snippets/faqs/streaming-memory-grows.mdx'
 import FaqStreamPings from '/snippets/faqs/streaming-keepalive-pings.mdx'
+import FaqWhatIsYellowstone from '/snippets/faqs/general-what-is-yellowstone.mdx'
 
 Questions about gRPC streaming, WebSocket connections, and the Yellowstone ecosystem of streaming components.
 
@@ -17,17 +18,7 @@ Questions about gRPC streaming, WebSocket connections, and the Yellowstone ecosy
 What is Yellowstone and which subscriptions include streaming access?
 
 <AccordionGroup>
-  <Accordion title="What is Project Yellowstone?">
-    Project Yellowstone is Triton's suite of enhancements for Solana RPC services. Key components include:
-
-    - **Dragon's Mouth:** gRPC subscriptions for real-time streaming.
-    - **Steamboat:** Custom indexes to speed up `getProgramAccounts` (gPA) queries.
-    - **Old Faithful:** Alternative access to Solana's full transaction history archive.
-    - **Whirligig:** WebSocket streaming for frontend compatibility.
-    - **Fumarole:** Persistent, scalable streaming system for account and transaction data.
-    - **Vixen:** High-performance gRPC service that delivers real-time, parsed Solana data streams.
-    - **Cascade:** Bandwidth marketplace where trusted validators can sell their SWQoS transaction bandwidth to consumers.
-  </Accordion>
+  <FaqWhatIsYellowstone />
 
   <Accordion title="How can I install Yellowstone on my server?">
     You don't need to install anything. All Geyser streaming products (Dragon's Mouth, Whirligig) are pre-installed on Triton infrastructure and enabled automatically for all subscriptions.
