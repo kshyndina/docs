@@ -220,10 +220,9 @@
               },
               {
                 "group": "Error handling",
-                "root": "solana-guides/error-handling/how-to-troubleshoot",
-                "expanded": false,
                 "pages": [
                   "solana-guides/error-handling/how-to-troubleshoot",
+                  "solana-guides/error-handling/handle-429-rate-limits",
                   "solana-guides/error-handling/common-solana-errors",
                   "solana-guides/error-handling/triton-rpc-error-codes",
                   "solana-guides/error-handling/web3js-connection-issues",

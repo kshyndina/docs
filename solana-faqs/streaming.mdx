@@ -40,17 +40,11 @@ The questions about streaming products built on Yellowstone.
   </Accordion>
 
   <Accordion title="What is Steamboat, and how does it improve latency?">
-    Steamboat is Triton's custom program indexer within Project Yellowstone. By pre-indexing Solana program accounts, `getProgramAccounts` queries are accelerated by up to 400ms compared to unindexed calls.
-
-    Cascade, Fumarole, Vixen Streams, and custom indexes for Steamboat are add-ons that we can activate for you upon request.
-
-    If you want to run these on your own nodes, they're open source.
+    Steamboat is Triton's account indexing engine that delivers `getProgramAccounts`, `getTokenAccountsByOwner`, and `getTokenAccountsByDelegate` up to **50x faster** by serving them from tailored PostgreSQL indexes instead of full account scans. Indexes are built automatically from your query traffic. Available on every Triton plan at standard RPC rates -- no premium for indexed reads. See [Steamboat](/solana/reading-state/steamboat-indexed-accounts).
   </Accordion>
 
   <Accordion title="What is Fumarole, and how can I get access?">
-    Fumarole is a streaming system designed for reliable and scalable streaming of account and transaction data. It aggregates data from multiple downstream Solana nodes to ensure high availability and data persistence with up to 4 days of retained stream history. Fumarole supports horizontal scalability through consumer groups across multiple readers.
-
-    Available on every Triton subscription, with regional endpoints (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US). Full reference: [Fumarole reliable streams](/solana/streaming/fumarole-persistent-streams).
+    Fumarole is a streaming system designed for reliable, scalable streaming of account and transaction data. It aggregates data from multiple Solana nodes for high availability and persistence, with up to 4 days of retained stream history. Available on every Triton subscription, with regional endpoints (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US). See [Fumarole](/solana/streaming/fumarole-persistent-streams).
   </Accordion>
 </AccordionGroup>
 
@@ -60,17 +54,15 @@ Connecting to streaming services from backend code, browsers, or via Geyser plug
 
 <AccordionGroup>
   <Accordion title="Can I use gRPC from a web browser?">
-    No, gRPC is not supported in web browsers due to HTTP/2 and protobuf limitations. It is designed for backend applications. For frontend use, try Whirligig WebSockets instead.
+    No, gRPC is not supported in web browsers due to HTTP/2 and protobuf limitations. It is designed for backend applications. For frontend use, use [Whirligig WebSockets](/solana/streaming/whirligig-websockets) instead.
   </Accordion>
 
   <Accordion title="Do endpoints support WebSocket connections?">
-    Yes. We support both standard WebSockets and Whirligig, our optimised, high-performance implementation, on both shared and dedicated infrastructures.
-
-    We recommend using Whirligig for better stability and throughput.
+    Yes, on both shared and dedicated infrastructure. Your existing WebSocket connections automatically route through [Whirligig WebSockets](/solana/streaming/whirligig-websockets) -- our gRPC-backed WebSocket layer that delivers intra-slot account updates at `processed`, full `blockSubscribe` and `transactionSubscribe`, and significantly higher subscription limits than native pubsub. No code changes required.
   </Accordion>
 
   <Accordion title="How do I connect to WebSockets?">
-    Simply replace `https` with `wss` in your RPC endpoint URL. For example: `wss://your-endpoint.rpcpool.com`. We do recommend, however, using the gRPC interface for streaming purposes if available -- see the [Dragon's Mouth gRPC](/solana/streaming/dragons-mouth-g-rpc) page for details on how to do that on Solana.
+    Replace `https` with `wss` in your RPC endpoint URL. For example: `wss://your-endpoint.rpcpool.com`. For backends, we recommend using gRPC instead -- see [Dragon's Mouth gRPC](/solana/streaming/dragons-mouth-g-rpc) for the lower-latency path.
   </Accordion>
 
   <Accordion title="How can I use Geyser plugins?">

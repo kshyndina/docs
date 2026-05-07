@@ -1,12 +1,9 @@
 ---
 title: "RPC requests"
-description: "Questions about Triton's RPC services, latency, rate limits, dedicated nodes, scripts, monitoring, and Web3.js."
+description: "Questions about Triton's RPC services, latency, rate limits, scripts and monitoring."
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
-
-Questions about Triton's HTTP RPC service: how it performs, how to configure it, and what to do when something goes wrong.
-
 ## Performance and reliability
 
 How fast and reliable Triton's RPC service is, and what happens during congestion, traffic spikes, or rate-limit hits.
@@ -22,16 +19,16 @@ How fast and reliable Triton's RPC service is, and what happens during congestio
     It's a big topic, but at a high level, we do it through:
 
     - **GeoDNS:** Routes traffic to the nearest server in shared pools.
-    - **Geyser Integration:** Streams intra-slot updates via Dragon's Mouth, unlike end-of-slot updates in traditional RPC.
-    - **Custom Indexes:** Steamboat optimises `getProgramAccounts` (gPA) calls to improve query performance.
+    - **Geyser integration:** Streams intra-slot updates via Dragon's Mouth, unlike end-of-slot updates in traditional RPC.
+    - **Custom indexes:** Steamboat optimises `getProgramAccounts` (gPA) calls to improve query performance.
   </Accordion>
 
   <Accordion title="How does Triton handle network congestion on Solana?">
     We mitigate congestion with:
 
-    - **Staked Nodes:** Prioritise transaction delivery to the block producer.
-    - **Load Balancing:** Distribute traffic across our 100\+ nodes.
-    - **Rate Limiting:** Prevent abuse and ensure fair access.
+    - **Staked nodes:** Prioritise transaction delivery to the block producer.
+    - **Load balancing:** Distribute traffic across our 100\+ nodes.
+    - **Rate limiting:** Prevent abuse and ensure fair access.
     - **Redundancy:** Automatic failover systems to maintain uptime during outages.
   </Accordion>
 
@@ -40,7 +37,7 @@ How fast and reliable Triton's RPC service is, and what happens during congestio
   </Accordion>
 
   <Accordion title="What happens if I hit my rate limit?">
-    Your application will receive `HTTP 429` errors. When this happens, you must pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See our [Rate and connection limits](/solana/get-started/rate-and-connection-limits) page for more details.
+    Your application will receive `HTTP 429` errors. When this happens, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See [Handle 429 rate-limit errors](/solana-guides/error-handling/handle-429-rate-limits) for the pattern, or our [Rate and connection limits](/solana/get-started/rate-and-connection-limits) page for the budgets and headers.
   </Accordion>
 
   <Accordion title="Can I run scripts on the shared service?">
@@ -60,7 +57,7 @@ Customers with [dedicated nodes](/solana/dedicated-nodes/overview) get a Grafana
   </Accordion>
 
   <Accordion title="Can I create new tokens or endpoints myself?">
-    Standard accounts can't create tokens or endpoints directly. If you need self-service provisioning, ask support to upgrade you to the **operator** role. Once enabled, you can add tokens and endpoints from the dashboard without going through support.
+    Accounts with standard permissions can't create tokens or endpoints directly. Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one) to provision them. If you need self-service, ask support to upgrade you to the operator role -- once enabled, you can add tokens and endpoints from the dashboard yourself.
   </Accordion>
 
   <Accordion title="What's the __blocked.rpcpool.com origin on my endpoint?">
@@ -92,10 +89,10 @@ Customers with [dedicated nodes](/solana/dedicated-nodes/overview) get a Grafana
     Yes, dedicated node users can opt into archival nodes that store full Solana blockchain history (e.g., past blocks, transactions). This requires additional storage (multi-TB scale) and is priced separately -- reach out for a custom quote.
   </Accordion>
 
-  <Accordion title="Can I use Jito sendBundle with Triton RPCs?">
-    This isn't possible on shared infrastructure.
+  <Accordion title="Can I use Jito sendBundle and bundle simulation with Triton RPCs?">
+    Bundle simulation is available to everyone -- see [Jito bundles](/solana/sending-transactions/jito-bundles) for the full reference.
 
-    If you have dedicated nodes, we can install the Jito software for you. You'll be responsible for whitelisting for the block engine and contacting Jito to obtain access and complete their setup.
+    `sendBundle` itself isn't routed through our infrastructure. Routing bundle sends through Triton would add an extra hop in front of the Jito block engine, which adds latency and works against the reason you're using bundles in the first place. The recommended pattern is to call the Jito block engine directly for sends, and use Triton for everything else (reads, streams, simulation).
   </Accordion>
 </AccordionGroup>
 
@@ -105,7 +102,7 @@ Common issues with WebSocket connections, latency measurement, and gRPC connecti
 
 <AccordionGroup>
   <Accordion title="I have an issue with my Web3.js socket connection. How can I fix it?">
-    If you're experiencing issues with your Web3.js socket connection while using our services, please review our [troubleshooting guide](/solana-guides/error-handling/how-to-troubleshoot). It covers the most common errors, their causes, and practical solutions.
+    If you're hitting persistent socket or connection errors with `@solana/web3.js` (`fetch failed`, `Connect Timeout Error`, `ECONNREFUSED`, `ECONNRESET`, `other side closed`), see [Web3.js socket and connection issues](/solana-guides/error-handling/web3js-connection-issues). It covers the root causes and the standard fixes.
   </Accordion>
 
   <Accordion title="How can I accurately measure latency when using Triton's RPC services?">

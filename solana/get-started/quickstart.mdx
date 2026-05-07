@@ -5,6 +5,7 @@ sidebarTitle: "Quickstart"
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import SteamboatCard from '/snippets/cards/steamboat.mdx'
 
 <Steps>
   <Step title="Sign up and deposit $125" titleSize="h3">
@@ -87,9 +88,7 @@ Two ways in. Pick the tab that fits.
         JSON-RPC over HTTPS. Every standard Solana method.
       </Card>
 
-      <Card title="Steamboat" icon="database" href="/solana/reading-state/steamboat-indexed-accounts">
-        Custom indexes from your gRPC stream. 50x faster than `getProgramAccounts`.
-      </Card>
+      <SteamboatCard />
 
       <Card title="DAS API" icon="image" href="/solana/reading-state/metaplex-das-api">
         Unified read for NFTs, cNFTs, SPL, Token-2022.
