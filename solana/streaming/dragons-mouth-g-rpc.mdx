@@ -494,6 +494,57 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     </CodeGroup>
   </Tab>
+  <Tab title="Compressed filters (large account sets)">
+    For subscriptions tracking thousands of accounts, the explicit pubkey list dominates the payload (1M pubkeys = ~44 MB per resend). Compressed account filters carry your tracked set as a [Cuckoo filter](https://en.wikipedia.org/wiki/Cuckoo_filter), a probabilistic data structure storing small fingerprints instead of full 32-byte pubkeys, cutting payload size ~10x.
+
+    | Tracked accounts | Compressed filter | Explicit pubkey list |
+    | ---------------: | ----------------: | -------------------: |
+    |            1,000 |            ~4 KiB |              ~44 KB |
+    |           10,000 |           ~32 KiB |             ~440 KB |
+    |          100,000 |          ~256 KiB |             ~4.4 MB |
+    |        1,000,000 |            ~4 MiB |              ~44 MB |
+    |        2,000,000 |            ~8 MiB |              ~84 MB |
+
+    Inserts and removes on the filter are O(1), so account-set mutations skip a full filter rebuild.
+
+    **Tradeoffs:**
+
+    - **False positives** stay under 1%. Your client should keep an exact tracked set and drop incoming updates whose pubkey isn't in it. A `HashSet` check is the standard pattern; the probabilistic part lives only on the wire.
+    - **One-time build cost.** A 2M-account filter takes ~390 ms on a release build. Every subsequent insert, remove, and resend is cheap.
+    - **Cross-language compatibility.** SipHash-2-4 produces identical filter bytes across languages and Rust compiler versions, so a TypeScript client and a Rust client emit the same filter for the same pubkey set.
+
+    Rust API today; TypeScript is coming. Build a `CompressedAccountFilterSet` and attach it to your `SubscribeRequest`:
+
+    ```rust Rust
+    use yellowstone_grpc_proto::cuckoo::CompressedAccountFilterSet;
+
+    let mut accounts = CompressedAccountFilterSet::with_capacity(2_000_000)?;
+    for pk in my_tracked_pubkeys() {
+        accounts.insert(*pk)?;
+    }
+
+    let mut req = SubscribeRequest::default();
+    accounts.insert_into_subscribe_request(&mut req, "tracked");
+    ```
+
+    Mutate and resend when the set changes:
+
+    ```rust Rust
+    accounts.insert(new_pubkey)?;
+    accounts.remove(old_pubkey)?;
+    accounts.insert_into_subscribe_request(&mut req, "tracked");
+    ```
+
+    Drop false positives against your local exact set:
+
+    ```rust Rust
+    if accounts.contains(&incoming_pubkey) {
+        // one of your tracked accounts
+    }
+    ```
+
+    Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.one/compressed-filters-yellowstone-grpc).
+  </Tab>
 </Tabs>
 
 ### Transactions
