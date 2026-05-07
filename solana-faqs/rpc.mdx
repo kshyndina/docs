@@ -66,11 +66,11 @@ Customers with [dedicated nodes](/solana/dedicated-nodes/overview) get a Grafana
     Don't remove it. If you do and leave the allowed origins list empty, the endpoint becomes fully open: anyone can query it without a token, and the resulting traffic will be billed to your account.
   </Accordion>
 
-  <Accordion title="How does Triton secure private pool endpoints?">
-    Private endpoints use:
+  <Accordion title="How does Triton secure dedicated node endpoints?">
+    Dedicated node endpoints use:
 
-    - **API Keys:** Unique per client, revocable via the portal.
-    - **Rate Monitoring:** Alerts for unusual spikes to detect misuse.
+    - **API tokens:** unique per client, revocable from the [customer dashboard](https://customers.triton.one).
+    - **Rate monitoring:** alerts for unusual spikes to detect misuse.
   </Accordion>
 
   <Accordion title="Can I have multiple API keys for the dedicated nodes? Can I manage them by myself?">
@@ -82,7 +82,7 @@ Customers with [dedicated nodes](/solana/dedicated-nodes/overview) get a Grafana
   </Accordion>
 
   <Accordion title="Are shared RPC subscriptions restricted to a single domain?">
-    No, shared RPC subscriptions are not limited to one domain. We allow the addition of multiple domains, providing flexibility to meet your project's needs.
+    No. You can whitelist as many domains as you need via the **Allowed origins** list on each endpoint. In your [customer dashboard](https://customers.triton.one), click into the mainnet subscription, click the endpoint name to open its settings, and under **Allowed origins** hit `+` to add a new domain. All subdomains are automatically allowed. See [How can I add domains to the allowed origins?](/solana-faqs/account#how-can-i-add-domains-to-the-allowed-origins) for the full walk-through.
   </Accordion>
 
   <Accordion title="Can Triton provide historical blockchain data?">

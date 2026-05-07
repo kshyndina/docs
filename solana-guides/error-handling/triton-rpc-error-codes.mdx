@@ -68,7 +68,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 
 **Explanation:** Our archival nodes might not be fully synced with Solana's history, or data egress from Clickhouse could be delayed.
 
-### Private pool users see "Access denied" (403) despite valid API keys and IPs
+### Dedicated node users see "Access denied" (403) despite valid API keys and IPs
 
 **Problem:** Configuration mismatch or authentication server error on Triton One's side.
 
@@ -94,7 +94,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 | Retry the request after a short delay. Check your network connection and reduce request size if possible. Resubmit with a higher priority fee to speed up processing. | 408 | Client |
 | Check Triton One's changelog in the customer portal for updated methods. Switch to supported alternatives or request a custom endpoint. | 410 | Client |
 | The request payload exceeds the maximum size limit. Optimise your transaction, remove unnecessary instructions or split into multiple transactions or request an adjustment to your endpoint's capacity through support. | 413 | Client |
-| You've hit the custom rate limit set for your private pool plan, or a misconfigured client is overloading the endpoint. Slow down your request frequency or upgrade to a private pool with higher limits. | 429 | Client |
+| You've hit the custom rate limit set for your dedicated node plan, or a misconfigured client is overloading the endpoint. Slow down your request frequency or upgrade to a dedicated node with higher limits. | 429 | Client |
 | Internal Server Error. Retry after a short delay. | 500 | Server |
 | Bad Gateway. Retry the request and resubmit the transaction -- priority routing should recover. If the issue persists, contact us. | 502 | Server |
 | Service Unavailable means that the server cannot handle the load requested. Retry after a delay and contact us if the issue persists. | 503 | Server |
@@ -120,7 +120,7 @@ import FooterLinks from '/snippets/footer-links.mdx'
 | Switch to a supported compression method. | UNIMPLEMENTED | Server |
 | Ensure your client sends a single request per call. | UNIMPLEMENTED | Server |
 | Wait 10–15 seconds and retry -- load may ease. Check usage in customers.triton.one. Request a higher limit. | RESOURCE\_EXHAUSTED | Server |
-| The client does not have enough memory to hold the server response. Implement exponential backoff and reduce request frequency. Close unused WebSocket subscriptions. Upgrade your private pool for higher limits. | RESOURCE\_EXHAUSTED | Client |
+| The client does not have enough memory to hold the server response. Implement exponential backoff and reduce request frequency. Close unused WebSocket subscriptions. Upgrade to a dedicated node for higher limits. | RESOURCE\_EXHAUSTED | Client |
 | Reduce message size. | RESOURCE\_EXHAUSTED | Both |
 | Verify your API key and IP whitelist. Ensure credentials match channel settings. | UNAUTHENTICATED | Both |
 | The requested resource doesn't exist or isn't synced on the custom node. Verify the resource ID, ensure your custom endpoint is configured to include the resource. | NOT\_FOUND | Client |
