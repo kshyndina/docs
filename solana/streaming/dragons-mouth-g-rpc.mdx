@@ -1,6 +1,5 @@
 ---
 title: "Dragon's Mouth gRPC"
-description: "Triton's Geyser-fed gRPC streaming interface for Solana. Sub-slot account, transaction, slot, and block subscriptions. The fastest live data path available for processed events."
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
@@ -34,12 +33,12 @@ For browser clients that can't communicate with gRPC, use [Whirligig WebSockets]
     Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state.
   </Card>
 
-  <Card title="Bi-directional streams" icon="repeat">
-    Modify subscriptions on the fly -- send a new request and the server swaps your filter set without reconnecting.
-  </Card>
-
   <Card title="Compact Protobuf payloads" icon="feather">
     Binary serialisation cuts bandwidth and CPU vs JSON-RPC. Less to ship, less to parse.
+  </Card>
+
+  <Card title="Bi-directional streams" icon="repeat">
+    Modify subscriptions on the fly -- send a new request and the server swaps your filter set without reconnecting.
   </Card>
 </CardGroup>
 
@@ -78,15 +77,21 @@ You send it once when you open the stream; then you can send it again at any tim
 
 <Tabs>
   <Tab title="commitment">
-    Commitment level for buffering. Optional. Defaults to `processed`.
+    Commitment level for buffering. Optional.
 
-    | Value | Meaning |
-    | --- | --- |
-    | `PROCESSED` (0) | Highest slot seen, possibly on a fork. Lowest latency. |
-    | `CONFIRMED` (1) | Voted on by supermajority. Some buffering. |
-    | `FINALIZED` (2) | Max vote lockout. Most buffering. |
+    Streams default to `processed`. You can buffer updates server-side at `confirmed` or `finalized` by setting `commitment` on `SubscribeRequest`:
 
-    For maximum performance, work at `processed` and manage commitment client-side using [slot notifications](#slots).
+    ```protobuf
+    enum CommitmentLevel {
+      PROCESSED = 0; #Highest slot seen, possibly on a fork. Lowest latency
+      CONFIRMED = 1; #Voted on by supermajority. Some buffering.
+      FINALIZED = 2; #Max vote lockout. Most buffering.
+    }
+    ```
+
+    For maximum performance, work at `processed` and manage commitment client-side by subscribing to [slot notifications](https://tritonone.mintlify.app/#slots) alongside your data. 
+
+    You'll always receive the slot's events _before_ its commitment notification.
   </Tab>
   <Tab title="ping">
     Sends a periodic keepalive to prevent idle-stream drops by upstream cloud providers (e.g. Cloudflare). Server replies with `pong`. Optional but recommended for long-running streams.
@@ -97,6 +102,11 @@ You send it once when you open the stream; then you can send it again at any tim
     Truncates account data payloads to a byte range, reducing bandwidth. Optional. Empty array means full payload.
 
     Example: `[{ "offset": 32, "length": 40 }]` returns 40 bytes starting at byte 32.
+  </Tab>
+  <Tab title="fromSlot">
+    Replay buffered updates starting from this slot, then continue live on the same stream. Optional. Used for reconnection after short disconnections.
+
+    See [replay from a slot](#replay-from-a-slot).
   </Tab>
   <Tab title="fromSlot">
     Replay buffered updates starting from this slot, then continue live on the same stream. Optional. Used for reconnection after short disconnections.
@@ -196,6 +206,8 @@ Across multiple named filters in the same category (e.g. two transaction filters
 
 ## Subscribing to each stream type
 
+[Before you start, make sure you have:Before you start, make sure you have:](#clients-and-sdks)
+
 <StreamingPrerequisites />
 
 The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](#clients-and-sdks)).
@@ -226,7 +238,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-
+    
     const request = {
       slots: { slots: {} },
       accounts: {
@@ -250,7 +262,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
             SubscribeRequestFilterSlots,
         },
     };
-
+    
     let mut accounts = HashMap::new();
     accounts.insert(
         "wsol/usdc".to_string(),
@@ -261,10 +273,10 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
             ..Default::default()
         },
     );
-
+    
     let mut slots = HashMap::new();
     slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
-
+    
     let request = SubscribeRequest {
         accounts,
         slots,
@@ -298,7 +310,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-
+    
     const request = {
       slots: { slots: {} },
       accounts: {
@@ -322,7 +334,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
             SubscribeRequestFilterSlots,
         },
     };
-
+    
     let mut accounts = HashMap::new();
     accounts.insert(
         "solend".to_string(),
@@ -333,10 +345,10 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
             ..Default::default()
         },
     );
-
+    
     let mut slots = HashMap::new();
     slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
-
+    
     let request = SubscribeRequest {
         accounts,
         slots,
@@ -421,7 +433,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-
+    
     const request = {
       slots: {},
       accounts: {
@@ -458,7 +470,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
             SubscribeRequestFilterAccountsFilterMemcmp,
         },
     };
-
+    
     let mut accounts = HashMap::new();
     accounts.insert(
         "usdc".to_string(),
@@ -481,7 +493,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
             ..Default::default()
         },
     );
-
+    
     let request = SubscribeRequest {
         accounts,
         accounts_data_slice: vec![SubscribeRequestAccountsDataSlice {
@@ -499,7 +511,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
 ### Transactions
 
-If you want the **earliest possible signal** on a transaction, we expose [Deshred transactions](/solana/streaming/deshred-transactions) -- a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
+[If you want the **earliest possible signal** on a transaction, we expose ](#clients-and-sdks)[Deshred transactions](/solana/streaming/deshred-transactions) -- a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
 
 <Tabs>
   <Tab title="All non-vote, non-failed">
@@ -523,7 +535,7 @@ If you want the **earliest possible signal** on a transaction, we expose [Deshre
 
     ```typescript TypeScript
     import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-
+    
     const request = {
       slots: { slots: {} },
       accounts: {},
@@ -544,7 +556,7 @@ If you want the **earliest possible signal** on a transaction, we expose [Deshre
             CommitmentLevel, SubscribeRequest, SubscribeRequestFilterTransactions,
         },
     };
-
+    
     let mut transactions = HashMap::new();
     transactions.insert(
         "alltxs".to_string(),
@@ -554,11 +566,319 @@ If you want the **earliest possible signal** on a transaction, we expose [Deshre
             ..Default::default()
         },
     );
-
+    
     let request = SubscribeRequest {
         transactions,
         commitment: Some(CommitmentLevel::Finalized.into()),
         ..Default::default()
+    };
+    ```
+
+    </CodeGroup>
+  </Tab>
+  <Tab title="Mentioning an account">
+    Subscribe to non-vote transactions that mention a specific account anywhere.
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "transactions": {
+        "serum": {
+          "vote": false,
+          "account_include": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"]
+        }
+      }
+    }
+    ```
+
+    </CodeGroup>
+  </Tab>
+  <Tab title="Excluding accounts">
+    Drop transactions that mention any of the listed accounts.
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "transactions": {
+        "serum": {
+          "account_exclude": [
+            "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin",
+            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+          ]
+        }
+      }
+    }
+    ```
+
+    </CodeGroup>
+  </Tab>
+  <Tab title="Combined include + exclude">
+    Combine include \+ exclude in one filter. The example matches transactions mentioning a Serum program but excludes any that also touch a specific account.
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "transactions": {
+        "serum": {
+          "account_include": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"],
+          "account_exclude": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"]
+        }
+      }
+    }
+    ```
+
+    </CodeGroup>
+  </Tab>
+  <Tab title="By signature">
+    Track a specific transaction's lifecycle from confirmed to finalized.
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "transactions": {
+        "sign": {
+          "signature": "5rp2hL9b6kexex11Mugfs3vfU9GhieKruj4CkFFSnu52WLxiGn4VcLLwsB62XURhMmT1j4CZiXT6FFtYbXsLq2Zs"
+        }
+      }
+    }
+    ```
+
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+For the wire format of each transaction update, see [`geyser.proto`](https://github.com/rpcpool/yellowstone-grpc/blob/master/yellowstone-grpc-proto/proto/geyser.proto) (search for `SubscribeUpdateTransaction`).
+
+The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](#clients-and-sdks)).
+
+### Accounts
+
+<Tabs>
+  <Tab title="By pubkey">
+    Subscribe to one or more specific accounts. The label `wsol/usdc` is yours -- it comes back on each match for routing.
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "slots": { "slots": {} },
+      "accounts": {
+        "wsol/usdc": {
+          "account": ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"]
+        }
+      },
+      "transactions": {},
+      "blocks": {},
+      "blocks_meta": {},
+      "accounts_data_slice": [],
+      "commitment": 1
+    }
+    ```
+
+    ```typescript TypeScript
+    import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+    
+    const request = {
+      slots: { slots: {} },
+      accounts: {
+        "wsol/usdc": {
+          account: ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"],
+        },
+      },
+      transactions: {},
+      blocks: {},
+      blocksMeta: {},
+      accountsDataSlice: [],
+      commitment: CommitmentLevel.CONFIRMED,
+    };
+    ```
+
+    </CodeGroup>
+  </Tab>
+  <Tab title="By owner (program)">
+    Subscribe to every account owned by a program. The example tracks all Solend accounts.
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "slots": { "slots": {} },
+      "accounts": {
+        "solend": {
+          "owner": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"]
+        }
+      },
+      "transactions": {},
+      "blocks": {},
+      "blocks_meta": {},
+      "accounts_data_slice": [],
+      "commitment": 0
+    }
+    ```
+
+    ```typescript TypeScript
+    import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+    
+    const request = {
+      slots: { slots: {} },
+      accounts: {
+        solend: {
+          owner: ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"],
+        },
+      },
+      transactions: {},
+      blocks: {},
+      blocksMeta: {},
+      accountsDataSlice: [],
+      commitment: CommitmentLevel.PROCESSED,
+    };
+    ```
+
+    </CodeGroup>
+  </Tab>
+  <Tab title="Multiple programs">
+    Combine multiple programs in one filter, or use separate filters for different routing tags.
+
+    Both programs in one filter:
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "slots": { "slots": {} },
+      "accounts": {
+        "programs": {
+          "owner": [
+            "So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo",
+            "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"
+          ]
+        }
+      },
+      "transactions": {},
+      "blocks": {},
+      "blocks_meta": {},
+      "accounts_data_slice": []
+    }
+    ```
+
+    </CodeGroup>
+
+    Separate filters with different tags:
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "slots": { "slots": {} },
+      "accounts": {
+        "solend": { "owner": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"] },
+        "serum":  { "owner": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"] }
+      },
+      "transactions": {},
+      "blocks": {},
+      "blocks_meta": {},
+      "accounts_data_slice": []
+    }
+    ```
+
+    </CodeGroup>
+  </Tab>
+  <Tab title="Advanced filters + data slice">
+    Filter by content (memcmp, token account state) and trim the returned payload to save bandwidth. The example tracks USDC token accounts and returns only 40 bytes starting at offset 32 (owner \+ lamports).
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "accounts": {
+        "usdc": {
+          "owner": ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
+          "filters": [
+            { "token_account_state": true },
+            {
+              "memcmp": {
+                "offset": 0,
+                "data": { "base58": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" }
+              }
+            }
+          ]
+        }
+      },
+      "accounts_data_slice": [{ "offset": 32, "length": 40 }]
+    }
+    ```
+
+    ```typescript TypeScript
+    import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+    
+    const request = {
+      slots: {},
+      accounts: {
+        usdc: {
+          owner: ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
+          filters: [
+            { tokenAccountState: true },
+            {
+              memcmp: {
+                offset: 0,
+                data: { base58: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" },
+              },
+            },
+          ],
+        },
+      },
+      transactions: {},
+      blocks: {},
+      blocksMeta: {},
+      entry: {},
+      commitment: CommitmentLevel.CONFIRMED,
+      accountsDataSlice: [{ offset: 32, length: 40 }],
+    };
+    ```
+
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+### Transactions
+
+<Tabs>
+  <Tab title="All non-vote, non-failed">
+    Subscribe to every successful, non-vote transaction at finalized commitment.
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "slots": { "slots": {} },
+      "accounts": {},
+      "transactions": {
+        "alltxs": { "vote": false, "failed": false }
+      },
+      "blocks": {},
+      "blocks_meta": {},
+      "accounts_data_slice": [],
+      "commitment": 2
+    }
+    ```
+
+    ```typescript TypeScript
+    import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+    
+    const request = {
+      slots: { slots: {} },
+      accounts: {},
+      transactions: {
+        alltxs: { vote: false, failed: false },
+      },
+      blocks: {},
+      blocksMeta: {},
+      accountsDataSlice: [],
+      commitment: CommitmentLevel.FINALIZED,
     };
     ```
 
@@ -678,6 +998,23 @@ let request = SubscribeRequest {
 
 </CodeGroup>
 
+Subscribe to slot status changes. No filter parameters needed beyond a label.
+
+<CodeGroup>
+
+```json gRPC
+{
+  "slots": { "incoming_slots": {} },
+  "accounts": {},
+  "transactions": {},
+  "blocks": {},
+  "blocks_meta": {},
+  "accounts_data_slice": []
+}
+```
+
+</CodeGroup>
+
 Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-updates) for the full lifecycle.
 
 ### Blocks
@@ -704,13 +1041,13 @@ Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-
         std::collections::HashMap,
         yellowstone_grpc_proto::prelude::{SubscribeRequest, SubscribeRequestFilterBlocks},
     };
-
+    
     let mut blocks = HashMap::new();
     blocks.insert(
         "blocks".to_string(),
         SubscribeRequestFilterBlocks::default(),
     );
-
+    
     let request = SubscribeRequest {
         blocks,
         ..Default::default()
@@ -799,7 +1136,93 @@ let request = SubscribeRequest {
 
 </CodeGroup>
 
-## Modifying and unsubscribing
+### Blocks
+
+<Tabs>
+  <Tab title="All blocks">
+    Receive every block as it's produced, with full transaction payload.
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "slots": {},
+      "accounts": {},
+      "transactions": {},
+      "blocks": { "blocks": {} },
+      "blocks_meta": {},
+      "accounts_data_slice": []
+    }
+    ```
+
+    </CodeGroup>
+  </Tab>
+  <Tab title="Customise payload">
+    Trim the block payload by toggling `include_transactions` / `include_accounts`.
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "blocks": {
+        "blocks": {
+          "include_transactions": false,
+          "include_accounts": true
+        }
+      }
+    }
+    ```
+
+    </CodeGroup>
+  </Tab>
+  <Tab title="Filtered by account">
+    Restrict the block's transactions and accounts to those mentioning specific addresses.
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "blocks": {
+        "blocks": {
+          "account_include": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"]
+        }
+      }
+    }
+    ```
+
+    </CodeGroup>
+  </Tab>
+  <Tab title="Block metadata only">
+    Get block headers without the transaction payload (much smaller messages).
+
+    <CodeGroup>
+
+    ```json gRPC
+    {
+      "blocks": {},
+      "blocks_meta": { "blockmetadata": {} }
+    }
+    ```
+
+    </CodeGroup>
+  </Tab>
+</Tabs>
+
+### Entries
+
+Subscribe to ledger entries (groups of transactions that make up a slot). No filters; subscribe by adding any named entry filter.
+
+<CodeGroup>
+
+```json gRPC
+{
+  "entry": { "all": {} }
+}
+```
+
+</CodeGroup>
+
+## Modifying and unsubscribingModifying and unsubscribing
 
 The subscribe stream is bi-directional. Send a new `SubscribeRequest` at any time to update filters -- it fully replaces the previous subscription, so your client must keep a local copy of the full config it wants.
 
@@ -821,7 +1244,27 @@ To unsubscribe from everything but keep the connection open:
 
 ## Pings
 
-Some cloud providers (e.g. Cloudflare) close idle streams. To avoid this, you need to keep sending pings to the server. The server responds with a `pong` message every 15 seconds.
+The subscribe stream is bi-directional. Send a new `SubscribeRequest` at any time to update filters -- it fully replaces the previous subscription, so your client must keep a local copy of the full config it wants.
+
+To unsubscribe from everything but keep the connection open:
+
+<CodeGroup>
+
+```json gRPC
+{
+  "slots": {},
+  "accounts": {},
+  "transactions": {},
+  "blocks": {},
+  "blocks_meta": {}
+}
+```
+
+</CodeGroup>
+
+## Pings
+
+[Some load balancers (e.g. Cloudflare) close idle connections after a minute or two. Send periodic pings to keep your stream alive. The server responds with `pong` every 15 secondsSome load balancers (e.g. Cloudflare) close idle connections after a minute or two. Send periodic pings to keep your stream alive. The server responds with `pong` every 15 seconds. Some cloud providers (e.g. Cloudflare) close idle streams. To avoid this, you need to keep sending pings to the server. The server responds with a `pong` message every 15 seconds.](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88)
 
 <CodeGroup>
 
@@ -997,7 +1440,181 @@ pub async fn build_geyser_blockchain_event_stream(
 
 </CodeGroup>
 
-Rust source: [gist by @lvboudre](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88).
+<CodeGroup>
+
+```typescript TypeScript
+const PING_INTERVAL_MS = 30_000;
+
+const pingRequest = {
+  ping: { id: 1 },
+  accounts: {},
+  accountsDataSlice: [],
+  transactions: {},
+  transactionsStatus: {},
+  blocks: {},
+  blocksMeta: {},
+  entry: {},
+  slots: {},
+};
+
+setInterval(async () => {
+  await new Promise<void>((resolve, reject) => {
+    stream.write(pingRequest, (err) =>
+      err ? reject(err) : resolve()
+    );
+  });
+}, PING_INTERVAL_MS);
+
+stream.on("data", (data) => {
+  if (data.pong) {
+    console.log("Received pong");
+  }
+});
+```
+
+```rust Rust
+use {
+    crate::grpc::geyser::{
+        SubscribeRequest, SubscribeRequestPing, geyser_client::GeyserClient,
+        subscribe_update::UpdateOneof,
+    },
+    bytes::Bytes,
+    tokio::sync::mpsc,
+    tokio_stream::{StreamExt, wrappers::ReceiverStream},
+    tonic::{
+        metadata::{Ascii, MetadataValue},
+        service::Interceptor,
+        transport::{Channel, ClientTlsConfig},
+    },
+    tower::{ServiceBuilder, ServiceExt, util::BoxService},
+};
+
+const MAX_DECODING_MESSAGE_SIZE_BYTES: usize = 100_000_000; // 100 MB
+
+#[derive(Clone)]
+struct TritonAuthInterceptor {
+    x_token: MetadataValue<Ascii>,
+}
+
+impl Interceptor for TritonAuthInterceptor {
+    fn call(&mut self, request: tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status> {
+        let mut request = request;
+        let metadata = request.metadata_mut();
+        metadata.insert("x-token", self.x_token.clone());
+        Ok(request)
+    }
+}
+
+pub type GeyserGrpcService = BoxService<
+    hyper::Request<tonic::body::BoxBody>,
+    hyper::Response<tonic::body::BoxBody>,
+    tonic::transport::Error,
+>;
+
+pub async fn build_geyser_grpc_endpoint(
+    endpoint: impl Into<Bytes>,
+    x_token: Option<String>,
+) -> anyhow::Result<GeyserClient<GeyserGrpcService>> {
+    let tls_config = ClientTlsConfig::new().with_native_roots();
+    let endpoint = Channel::from_shared(endpoint)?
+        .tls_config(tls_config)?
+        .connect_lazy();
+    let svc = if let Some(x_token) = x_token {
+        let metadata = x_token.try_into()?;
+        let interceptor = TritonAuthInterceptor { x_token: metadata };
+        ServiceBuilder::new()
+            .layer(tonic::service::interceptor(interceptor))
+            .service(endpoint)
+            .boxed()
+    } else {
+        endpoint.boxed()
+    };
+    let client = GeyserClient::new(svc).max_decoding_message_size(MAX_DECODING_MESSAGE_SIZE_BYTES);
+    Ok(client)
+}
+
+pub async fn build_geyser_blockchain_event_stream(
+    endpoint: impl Into<Bytes> + Send + 'static,
+    x_token: Option<String>,
+    request: SubscribeRequest,
+    tx: mpsc::Sender<UpdateOneof>,
+) -> impl Future<Output = ()> {
+    let mut geyser_client = build_geyser_grpc_endpoint(endpoint, x_token)
+        .await
+        .expect("failed to build geyser grpc endpoint");
+
+    // Keep `subscribe_tx` alive to send ping requests to the geyser server.
+    // Necessary to keep the connection alive for some proxy setups.
+    let (subscribe_tx, subscribe_rx) = mpsc::channel(20000);
+    subscribe_tx
+        .send(request)
+        .await
+        .expect("failed to send subscribe request");
+
+    let response = geyser_client
+        .subscribe(ReceiverStream::new(subscribe_rx))
+        .await
+        .expect("failed to subscribe to geyser");
+    let geyser_source = response.into_inner();
+
+    async move {
+        let tx = tx;
+        let mut geyser_source = geyser_source;
+        let mut ping_cnt: i32 = 0;
+        loop {
+            let result = geyser_source.next().await;
+            match result {
+                Some(event) => match event {
+                    Ok(event) => {
+                        let event = match event.update_oneof {
+                            Some(value) => value,
+                            None => continue,
+                        };
+
+                        let blockchain_event: Option<UpdateOneof> = match event {
+                            // Answer Ping requests using `subscribe_tx`
+                            UpdateOneof::Ping(_req) => {
+                                if subscribe_tx
+                                    .send(SubscribeRequest {
+                                        ping: Some(SubscribeRequestPing { id: ping_cnt }),
+                                        ..Default::default()
+                                    })
+                                    .await
+                                    .is_err()
+                                {
+                                    panic!("failed to send ping");
+                                }
+                                ping_cnt += 1;
+                                tracing::info!("Ping sent: {:?}", ping_cnt);
+                                None
+                            }
+                            UpdateOneof::Pong(_) => None,
+                            other => Some(other),
+                        };
+                        if let Some(blockchain_event) = blockchain_event {
+                            if tx.send(blockchain_event).await.is_err() {
+                                break;
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        tracing::error!("disconnected from geyser: {:?}", e);
+                        break;
+                    }
+                },
+                _ => {
+                    tracing::error!("geyser stream ended");
+                    break;
+                }
+            }
+        }
+    }
+}
+```
+
+</CodeGroup>
+
+Rust source: [gist by @lvboudre](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88)Rust source: [gist by @lvboudre](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88).
 
 ## Replay from a slot
 
@@ -1013,6 +1630,16 @@ Use it for short-disconnection recovery:
 
 ```json gRPC
 {
+  "slots": { "incoming_slots": {} },
+  "accounts": {},
+  "transactions": {
+    "alltxs": { "vote": false, "failed": false }
+  },
+  "blocks": {},
+  "blocks_meta": {},
+  "accounts_data_slice": [],
+  "from_slot": 382001234
+}{
   "slots": { "incoming_slots": {} },
   "accounts": {},
   "transactions": {
@@ -1039,9 +1666,23 @@ const request = {
 };
 ```
 
+```typescript TypeScript
+const request = {
+  slots: { incoming_slots: {} },
+  accounts: {},
+  transactions: {
+    alltxs: { vote: false, failed: false },
+  },
+  blocks: {},
+  blocksMeta: {},
+  accountsDataSlice: [],
+  fromSlot: 382001234,
+};
+```
+
 </CodeGroup>
 
-To discover the earliest replayable slot, call the unary `subscribeReplayInfo` RPC:
+To discover the earliest replayable slot, call the unary `subscribeReplayInfo` RPC:To discover the earliest replayable slot, call the unary `subscribeReplayInfo` RPC:
 
 <CodeGroup>
 
@@ -1062,25 +1703,6 @@ console.log(info.firstAvailable);
 <Note>
   For teams self-hosting a Yellowstone gRPC server, replay must be enabled by setting `replay_stored_slots` to a value greater than `0`.
 </Note>
-
-## Commitment levels
-
-Streams default to `processed`. You can buffer updates server-side at `confirmed` or `finalized` by setting `commitment` on `SubscribeRequest`:
-
-```protobuf
-enum CommitmentLevel {
-  PROCESSED = 0;
-  CONFIRMED = 1;
-  FINALIZED = 2;
-}
-```
-
-For maximum performance, work at `processed` and manage commitment client-side. The pattern:
-
-1. Subscribe to [slot notifications](#slots) alongside your data.
-2. Buffer incoming events by slot.
-3. When you see a slot status change to `confirmed` or `finalized`, release the matching buffer.
-4. You'll always receive the slot's events _before_ its commitment notification.
 
 ## Intra-slot updates
 
@@ -1134,13 +1756,93 @@ Certain programs are excluded from all Dragon's Mouth gRPC streams and are also 
 | --- | --- |
 | Light Protocol / ZK Compression | `compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq` |
 
-**Why is ZK Compression excluded?** It generates extremely high-volume account updates -- each update is a ~10MB blob, producing several gigabits per second of data. That volume isn't practical to include in standard streams.
+1. Subscribe to [slot notifications](#slots) alongside your data.
+2. Buffer incoming events by slot.
+3. When you see a slot status change to `confirmed` or `finalized`, release the matching buffer.
+4. You'll always receive the slot's events _before_ its commitment notification.
 
-Most consumers of this data want the **end result** processed by the [Photon indexer](https://github.com/helius-labs/photon), not raw account blobs. Triton offers a [hosted Photon service](https://docs.triton.one/chains/solana/photon) -- use that instead.
+### The finalized quirk
+
+Due to a Geyser quirk (fixed in `master` of solana, may not be on your validator yet), not every slot's `finalized` notification is emitted. To handle finalized correctly: when you see a `finalized` notification for slot N, retroactively mark all of slot N's ancestors as `finalized` too, even if you never received notifications for them.
+
+## Intra-slot updates
+
+Subscribers can listen for "intra-slot" lifecycle events that show what's happening inside a slot, from the first shred received to a fully replayed bank.
+
+```protobuf
+enum SlotStatus {
+  // ... standard commitment statuses ...
+  SLOT_FIRST_SHRED_RECEIVED = 3;
+  SLOT_COMPLETED            = 4;
+  SLOT_CREATED_BANK         = 5;
+  SLOT_DEAD                 = 6;
+}
+```
+
+| Status | What it means |
+| --- | --- |
+| `SLOT_FIRST_SHRED_RECEIVED` | The RPC node has received the first shred of this slot. Not yet replayed. Occurs in the [retransmit stage](https://docs.anza.xyz/validator/tvu#retransmit-stage). |
+| `SLOT_CREATED_BANK` | A bank for this slot has been created on the node. Banks are isolated execution contexts -- one per slot, forming a fork graph through parent-child relationships. |
+| `SLOT_COMPLETED` | All shreds for this slot received. Not necessarily replayed yet. |
+| `SLOT_DEAD` | The slot was rejected (invalid signature, bad PoH, wrong entry count). It's discarded by the network. Can happen at any point, even after `SLOT_COMPLETED`. |
+
+Lifecycle of a typical slot, grouped into three phases (download, replay, consensus):
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','clusterBkg':'#F7F4FA','clusterBorder':'#7A4BA0','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
+flowchart LR
+    subgraph SD["Slot download"]
+      direction LR
+      S1[FIRST_SHRED_RECEIVED] --> S2[shred 2 ... shred N]
+      S2 --> S3[COMPLETED]
+    end
+
+    subgraph RS["Replay stage"]
+      direction LR
+      R1[CREATED_BANK] --> R2[account updates]
+      R2 --> R3[transactions]
+      R3 --> R4[entries]
+      R4 --> R5[BLOCK_META]
+      R5 --> R6[PROCESSED]
+    end
+
+    subgraph CN["Consensus"]
+      direction LR
+      C1[CONFIRMED] --> C2[FINALIZED]
+    end
+
+    SD --> RS --> CN
+
+    S1 -.dead.-> X[DEAD]
+    S3 -.dead.-> X
+    R1 -.dead.-> X
+```
+
+Time flows left to right. **Slot download** covers shred receipt up to the slot being marked complete. **Replay stage** is where the bank executes transactions and emits the events your subscription receives (account updates, transactions, entries, block meta), ending with `PROCESSED`. **Consensus** runs after replay -- the network votes the slot to `CONFIRMED` and eventually `FINALIZED`. A slot can drop out as `DEAD` at any point during download or replay.
+
+## Related: Deshred transactions
+
+Triton runs a separate gRPC method, `SubscribeDeshred`, on the same yellowstone-grpc service. It delivers transactions reconstructed from shreds _before_ the validator executes them, so you see intent earlier than any other stream. Designed for arbitrage, market making, copy trading, liquidations, and HFT.
+
+It's a separate product with its own filter set, no execution metadata, and paid-beta access. See [Deshred transactions](/solana/streaming/deshred-transactions) for the full reference.
+
+## Excluded programs
+
+Certain programs are excluded from all Dragon's Mouth gRPC streams and are also unavailable via `getProgramAccounts`.
+
+| Program | Address |
+| --- | --- |
+| Light Protocol / ZK Compression | `compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq` |
+
+**Why is ZK Compression excluded?** It generates extremely high-volume account updates -- each update is a ~10MB blob, producing several gigabits per second of data. That volume isn't practical to include in standard stream**Why is ZK Compression excluded?** It generates extremely high-volume account updates -- each update is a ~10MB blob, producing several gigabits per second of data. That volume isn't practical to include in standard streams.
+
+Most consumers of this data want the **end result** processed by the [Photon indexer](https://github.com/helius-labs/photon), not raw account blobs. Triton offers a [hosted Photon service](https://docs.triton.one/chains/solana/photon) -- use that instead.Most consumers of this data want the **end result** processed by the [Photon indexer](https://github.com/helius-labs/photon), not raw account blobs. Triton offers a [hosted Photon service](https://docs.triton.one/chains/solana/photon) -- use that instead.
 
 ## Clients and SDKs
 
-Sample clients in multiple languages live in the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory. Match your client to the current proto version.
+## Clients and SDKs
+
+Sample clients in multiple languages live in the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory. Match your client to the current proto version.Sample clients in multiple languages live in the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory. Match your client to the current proto version.
 
 <Tabs>
   <Tab title="Rust">
@@ -1219,14 +1921,14 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
     ```typescript
     import Client from "@triton-one/yellowstone-grpc";
-
+    
     const client = new Client(
       "https://api.rpcpool.com:443",
       "<your-token>"
     );
-
+    
     await client.connect();
-
+    
     const version = await client.getVersion();
     console.log(version);
     ```
@@ -1235,15 +1937,15 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
     ```typescript
     import { SubscribeRequest } from "@triton-one/yellowstone-grpc";
-
+    
     const stream = client.subscribe();
-
+    
     stream.on("data", (data) => {
       console.log("data", data);
     });
-
+    
     const request: SubscribeRequest = { /* see Subscribe request */ };
-
+    
     await new Promise<void>((resolve, reject) => {
       stream.write(request, (err) =>
         err == null ? resolve() : reject(err)
@@ -1305,9 +2007,149 @@ Sample clients in multiple languages live in the [yellowstone-grpc/examples](htt
 
 <CardGroup cols={2}>
   <DeshredCard />
+
   <WhirligigCard />
+
   <FumaroleCard />
+
   <StreamingOverviewCard />
+</CardGroup>
+
+---
+
+<FooterLinks />
+
+<Tabs>
+  <Tab title="Rust">
+    Sample client: [yellowstone-grpc/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust).
+  </Tab>
+  <Tab title="TypeScript / NodeJS">
+    From `5.1.x` the TypeScript SDK is supercharged with a Rust NAPI backend. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
+
+    Install:
+
+    ```bash
+    npm install --save @triton-one/yellowstone-grpc
+    ```
+
+    Initialise:
+
+    ```typescript
+    import Client from "@triton-one/yellowstone-grpc";
+    
+    const client = new Client(
+      "https://api.rpcpool.com:443",
+      "<your-token>"
+    );
+    
+    await client.connect();
+    
+    const version = await client.getVersion();
+    console.log(version);
+    ```
+
+    Open a subscription stream:
+
+    ```typescript
+    import { SubscribeRequest } from "@triton-one/yellowstone-grpc";
+    
+    const stream = client.subscribe();
+    
+    stream.on("data", (data) => {
+      console.log("data", data);
+    });
+    
+    const request: SubscribeRequest = { /* see Subscribe request */ };
+    
+    await new Promise<void>((resolve, reject) => {
+      stream.write(request, (err) =>
+        err == null ? resolve() : reject(err)
+      );
+    });
+    ```
+
+    Full example: [yellowstone-grpc/examples/typescript](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript).
+  </Tab>
+  <Tab title="grpcurl">
+    Good for ad-hoc testing. Needs `geyser.proto` \+ dependencies.
+
+    ```shell
+    ./grpcurl \
+      -proto geyser.proto \
+      -d '{"slots": { "slots": {} }, "accounts": { "usdc": { "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
+      -H "x-token: <token>" \
+      api.rpcpool.com:443 \
+      geyser.Geyser/Subscribe
+    ```
+
+    Self-hosters can drop the `x-token` header.
+  </Tab>
+  <Tab title="grpcurl">
+    `grpcurl` is good for testing. You need the corresponding Protobuf `.proto` files (starting with `geyser.proto` and its dependencies) so `grpcurl` can describe the protocol.
+
+    ```shell
+    ./grpcurl \
+      -proto geyser.proto \
+      -d '{"slots": { "slots": {} }, "accounts": { "usdc": { "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
+      -H "x-token: <token>" \
+      api.rpcpool.com:443 \
+      geyser.Geyser/Subscribe
+    ```
+
+    Self-hosters can drop the `x-token` header.
+  </Tab>
+  <Tab title="Go">
+    Requires Go 1.21. Run the sample client straight from the repo:
+
+    ```shell
+    go run ./cmd/grpc-client/ \
+      -endpoint https://api.rpcpool.com:443 \
+      -x-token <your-token> \
+      -slots
+    ```
+
+    Non-SSL connections work too:
+
+    ```shell
+    go run ./cmd/grpc-client/ \
+      -endpoint http://api.rpcpool.com:80 \
+      -x-token <your-token> \
+      -blocks
+    ```
+
+    Updating proto files needs `protoc` plus the Go plugins:
+
+    ```shell
+    go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.35.1
+    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
+    ```
+
+    Run `make` to regenerate. Full source: [yellowstone-grpc/examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang).
+
+    <Note>
+      The Go example may lag the latest stable proto version. For production-ready code, the Rust client is the reference implementation.
+    </Note>
+  </Tab>
+</Tabs>
+
+## What's next?
+
+<CardGroup cols={2}>
+  <Card title="Deshred transactions" icon="zap" href="/solana/streaming/deshred-transactions">
+    Pre-execution transaction stream on the same gRPC service. Earliest signal.
+  </Card>
+
+  <Card title="Whirligig WebSockets" icon="rotate-cw" href="/solana/streaming/whirligig-websockets">
+    Browser-friendly version of the same data over WebSocket.
+  </Card>
+
+  <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
+    Add deduplication and resume-from-cursor on top of Dragon's Mouth.
+  </Card>
+
+  <Card title="Streaming overview" icon="radio" href="/solana/streaming/overview">
+    Compare Dragon's Mouth against the rest of the streaming stack.
+  </Card>
 </CardGroup>
 
 ---
