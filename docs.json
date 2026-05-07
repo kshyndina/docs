@@ -200,29 +200,22 @@
             "icon": "compass",
             "groups": [
               {
-                "group": "Getting started",
+                "group": "Set up your RPC for...",
                 "pages": [
-                  {
-                    "group": "Set up your RPC for...",
-                    "root": "solana-guides/getting-started/set-up-rpc/trading-or-market-making",
-                    "expanded": false,
-                    "pages": [
-                      "solana-guides/getting-started/set-up-rpc/trading-or-market-making",
-                      "solana-guides/getting-started/set-up-rpc/dex-or-defi-protocol",
-                      "solana-guides/getting-started/set-up-rpc/wallet-or-consumer-app",
-                      "solana-guides/getting-started/set-up-rpc/nft-or-compressed-asset-platform",
-                      "solana-guides/getting-started/set-up-rpc/indexer-or-analytics",
-                      "solana-guides/getting-started/set-up-rpc/gaming",
-                      "solana-guides/getting-started/set-up-rpc/ai-agent-or-llm-app"
-                    ]
-                  },
-                  {
-                    "group": "Account management",
-                    "pages": [
-                      "solana-guides/account/how-to-sign-up",
-                      "solana-guides/account/access-endpoint-and-token"
-                    ]
-                  }
+                  "solana-guides/getting-started/set-up-rpc/trading-or-market-making",
+                  "solana-guides/getting-started/set-up-rpc/dex-or-defi-protocol",
+                  "solana-guides/getting-started/set-up-rpc/wallet-or-consumer-app",
+                  "solana-guides/getting-started/set-up-rpc/nft-or-compressed-asset-platform",
+                  "solana-guides/getting-started/set-up-rpc/indexer-or-analytics",
+                  "solana-guides/getting-started/set-up-rpc/gaming",
+                  "solana-guides/getting-started/set-up-rpc/ai-agent-or-llm-app"
+                ]
+              },
+              {
+                "group": "Account management",
+                "pages": [
+                  "solana-guides/account/how-to-sign-up",
+                  "solana-guides/account/access-endpoint-and-token"
                 ]
               },
               {
