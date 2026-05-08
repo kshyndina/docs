@@ -76,6 +76,10 @@
   "navbar": {
     "links": [
       {
+        "label": "Blog",
+        "href": "https://blog.triton.one"
+      },
+      {
         "label": "Log in",
         "href": "https://customers.triton.one/users/sign-in"
       }
@@ -507,11 +511,6 @@
               "solana-faqs/streaming",
               "solana-faqs/transactions"
             ]
-          },
-          {
-            "tab": "Blog",
-            "icon": "arrow-up-right",
-            "href": "https://blog.triton.one"
           }
         ]
       },
