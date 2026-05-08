@@ -69,7 +69,7 @@
   "navbar": {
     "links": [
       {
-        "label": "Blog",
+        "label": "Blog ↗",
         "icon": "newspaper",
         "href": "https://blog.triton.one"
       },
