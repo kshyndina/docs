@@ -69,8 +69,7 @@
   "navbar": {
     "links": [
       {
-        "label": "Blog ↗",
-        "icon": "newspaper",
+        "label": "Blog",
         "href": "https://blog.triton.one"
       },
       {
@@ -172,7 +171,8 @@
                       "solana/validators/vote-account-setup",
                       "solana/validators/node-identity-protection"
                     ]
-                  }
+                  },
+                  "solana/validators/sol-staking-usdc-payouts"
                 ]
               },
               {
