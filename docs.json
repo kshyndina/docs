@@ -3,13 +3,6 @@
   "name": "Triton One",
   "theme": "luma",
   "favicon": "/favicon.png",
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/solana/welcome",
-      "permanent": false
-    }
-  ],
   "logo": {
     "light": "/logo/mark.svg",
     "dark": "/logo/mark.svg",
@@ -77,6 +70,7 @@
     "links": [
       {
         "label": "Blog",
+        "icon": "newspaper",
         "href": "https://blog.triton.one"
       },
       {
