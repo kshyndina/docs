@@ -3,6 +3,13 @@
   "name": "Triton One",
   "theme": "luma",
   "favicon": "/favicon.png",
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/solana/welcome",
+      "permanent": false
+    }
+  ],
   "logo": {
     "light": "/logo/mark.svg",
     "dark": "/logo/mark.svg",
