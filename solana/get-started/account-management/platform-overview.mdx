@@ -36,38 +36,71 @@ import DashAuditLogCard from '/snippets/cards/dashboard/audit-log.mdx'
   <DashAuditLogCard />
 </Columns>
 
-## Mental model: organisation -\> endpoint -\> token
+## Roles and where to do common things
 
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
-flowchart TB
-    O[Organisation<br/>billing + members] --> E1[Endpoint A<br/>mainnet]
-    O --> E2[Endpoint B<br/>devnet]
-    O --> E3[Endpoint C<br/>dedicated]
-    E1 --> T1[Token / allowlist]
-    E1 --> T2[Public origin allowlist]
-    E2 --> T3[Token]
-    E3 --> T4[Token]
-```
+Your customer dashboard has three roles: **Admin**, **Standard**, and **Operator**. New members default to **Standard**, which gives read access plus a few self-serve actions. Promote to **Operator** when someone needs to modify endpoints, rotate tokens, manage allowlists, or invite teammates. **Admin** is reserved for the organisation owner -- contact support to transfer or add one.
 
-- **Organisation** is the billing root. One payment method, one invoice. Members are scoped here.
-- **Endpoints** belong to the organisation. Each has its own URL, region, infrastructure type (shared or dedicated), and limits.
-- **Tokens / allowlists** belong to the endpoint. Multiple tokens per endpoint so you can rotate without downtime.
+The table below shows where each role goes for the common tasks. When both roles do the same thing, the column is merged. When they differ, Standard goes through support and Operator has a direct path.
 
-## Where to do common things
-
-| Task | Where | Time |
-| --- | --- | --- |
-| Provision a new endpoint | **Endpoints → New** | 30s |
-| Find a token | **Endpoints → \<endpoint\> → Auth** | 5s |
-| Add an origin to the allowlist | **Auth → Origin allowlist → Add** | 10s |
-| Add a teammate | **Members → Invite** | 30s |
-| Change payment method | **Billing → Payment methods** | 1m |
-| Top up credits | **Billing → Credits → Top up** | 1m |
-| See live usage and cost | **Usage** (top-right card on dashboard) | instant |
-| Rotate a token | **Auth → Token → Rotate** | 30s |
-| Lower / raise rate limit (where configurable) | **Endpoints → \<endpoint\> → Limits** | 30s |
-| Open a support ticket | **Help → New request** | 1m |
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Standard</th>
+      <th>Operator</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>See live usage and cost</td>
+      <td colSpan="2" align="center"><strong>v3 Billing</strong> tab on the dashboard</td>
+    </tr>
+    <tr>
+      <td>Find a token</td>
+      <td colSpan="2" align="center">Click the subscription, then the endpoint name -- token shows under <strong>Auth</strong></td>
+    </tr>
+    <tr>
+      <td>Top up credits</td>
+      <td colSpan="2" align="center"><strong>Billing</strong> &rarr; <strong>Buy credits</strong></td>
+    </tr>
+    <tr>
+      <td>Set low-balance notifications</td>
+      <td colSpan="2" align="center"><strong>Billing</strong> &rarr; toggle alerts &rarr; set threshold</td>
+    </tr>
+    <tr>
+      <td>Open a support ticket</td>
+      <td colSpan="2" align="center">Chat icon, bottom right of any dashboard page</td>
+    </tr>
+    <tr>
+      <td>Provision a new endpoint</td>
+      <td>Contact support</td>
+      <td><strong>Endpoints</strong> &rarr; <strong>New</strong></td>
+    </tr>
+    <tr>
+      <td>Rotate a token</td>
+      <td>Contact support</td>
+      <td>Endpoint &rarr; <strong>Auth</strong> &rarr; <strong>Rotate token</strong></td>
+    </tr>
+    <tr>
+      <td>Add a domain to the origin allowlist</td>
+      <td>Contact support</td>
+      <td>Endpoint &rarr; <strong>Auth</strong> &rarr; <strong>Allowed origins</strong> &rarr; <code>+</code></td>
+    </tr>
+    <tr>
+      <td>Invite a teammate</td>
+      <td>Contact support</td>
+      <td><strong>Members</strong> &rarr; <strong>Invite</strong></td>
+    </tr>
+    <tr>
+      <td>Raise a rate limit</td>
+      <td colSpan="2" align="center">Contact support</td>
+    </tr>
+    <tr>
+      <td>Stake-weighted QoS for sending transactions</td>
+      <td colSpan="2" align="center">Contact support</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Per-endpoint pages
 
@@ -82,125 +115,112 @@ Each endpoint has six tabs:
 
 ## Walkthroughs
 
-Short clips for the seven things you'll do most often in the portal. Each one is ~15 seconds.
+Short clips for the seven things you'll do most often in the portal. Click any clip to play it full-screen.
 
-### 1. Sign up
+### Sign up
 
 <Columns cols={2}>
-  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+  <video autoPlay muted loop playsInline className="w-full rounded-lg shadow">
     <source src="/images/account-management/sign-up.mp4" type="video/mp4" />
   </video>
 
   <div>
-    Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up) with your work email, verify the link in your inbox, and name your organisation. The organisation is the billing root -- every endpoint, member, and payment method belongs to it.
-
-    First-time sign-in walks you through creating your first endpoint too. Pick **Solana mainnet** and your closest region.
+    1. Go to [customers.triton.one/users/sign-up](https://customers.triton.one/users/sign-up) with your work email
+    2. Click the verification link in your inbox
+    3. Name your organisation (the billing root for everything)
+    4. Provision your first endpoint -- pick **Solana mainnet** and your closest region
   </div>
 </Columns>
 
-### 2. Add a teammate
+### Add a teammate
 
 <Columns cols={2}>
   <div>
-    From the portal sidebar, click **Members → Invite**. Enter the email, pick a [role](#roles), click **Send**.
-
-    The teammate gets an email with a one-click join link. They sign up if they don't have an account, then land directly in your organisation with the role you assigned.
+    1. Open **Members** in the sidebar
+    2. Click **Invite**
+    3. Enter the teammate's email and pick a role
+    4. Click **Send** -- they get a one-click join link
   </div>
 
-  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+  <video autoPlay muted loop playsInline className="w-full rounded-lg shadow">
     <source src="/images/account-management/add-user.mp4" type="video/mp4" />
   </video>
 </Columns>
 
-### 3. Add a domain to the origin allowlist
+### Add a domain to the origin allowlist
 
 <Columns cols={2}>
-  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+  <video autoPlay muted loop playsInline className="w-full rounded-lg shadow">
     <source src="/images/account-management/add-allow-origin.mp4" type="video/mp4" />
   </video>
 
   <div>
-    Click into the mainnet subscription, then the endpoint name. Under **Allowed origins**, hit `+` to add a domain and save. All subdomains are automatically allowed.
-
-    Origin allowlists are how browser apps authenticate without exposing a token. Backend apps use the secret token instead -- see [Auth and security](/solana/get-started/auth-and-security).
+    1. Click into the mainnet subscription
+    2. Click the endpoint name to open its settings
+    3. Under **Allowed origins**, hit `+`
+    4. Add the domain and save -- all subdomains are allowed automatically
   </div>
 </Columns>
 
-### 4. View usage
+### View usage
 
 <Columns cols={2}>
   <div>
-    Open the **v3 Billing** tab. You'll see total requests and GB used (the two dimensions you're billed on), plus a per-service breakdown below with product-level detail.
-
-    Click **Export CSV** in the top-right corner to download. Usage data refreshes every \~4 hours; gRPC bandwidth is metered when the connection closes.
+    1. Open the **v3 Billing** tab
+    2. Review total requests and GB used (the two dimensions you're billed on)
+    3. Scroll down for the per-service breakdown with product-level detail
+    4. Click **Export CSV** in the top-right to download
   </div>
 
-  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+  <video autoPlay muted loop playsInline className="w-full rounded-lg shadow">
     <source src="/images/account-management/view-usage.mp4" type="video/mp4" />
   </video>
 </Columns>
 
-### 5. Top up credits
+### Top up credits
 
 <Columns cols={2}>
-  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+  <video autoPlay muted loop playsInline className="w-full rounded-lg shadow">
     <source src="/images/account-management/top-up.mp4" type="video/mp4" />
   </video>
 
   <div>
-    Open **Billing → Buy credits**. Pay in stablecoins via Wallet Connect (any supported token) or transfer from any external wallet or exchange.
-
-    If you'd rather pay by card or wire, switch to invoiced billing -- contact support from the dashboard chat.
+    1. Open **Billing** in the sidebar
+    2. Click **Buy credits**
+    3. Pay in stablecoins via Wallet Connect, or transfer from any external wallet
+    4. Card or wire? Switch to invoiced billing -- contact support
   </div>
 </Columns>
 
-### 6. Set up low-balance notifications
+### Set up low-balance notifications
 
 <Columns cols={2}>
   <div>
-    Open **Billing**, toggle alerts on, and set a threshold (for example, $10). When your balance hits that amount, every user on the account gets a notification.
-
-    Pair this with PAYG to avoid surprise service interruptions -- the alert fires before you run out of credit.
+    1. Open **Billing** in the sidebar
+    2. Toggle alerts on
+    3. Set the threshold (for example, $10)
+    4. Save -- every user on the account gets notified when balance hits that amount
   </div>
 
-  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+  <video autoPlay muted loop playsInline className="w-full rounded-lg shadow">
     <source src="/images/account-management/add-notifications.mp4" type="video/mp4" />
   </video>
 </Columns>
 
-### 7. Contact support
+### Contact support
 
 <Columns cols={2}>
-  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+  <video autoPlay muted loop playsInline className="w-full rounded-lg shadow">
     <source src="/images/account-management/contact-support.mp4" type="video/mp4" />
   </video>
 
   <div>
-    Click the chat icon in the bottom right of any dashboard page. Your message goes straight to engineering, not a tier-1 queue.
-
-    Include your endpoint URL and the timestamp of the issue when reporting incidents -- it cuts the back-and-forth in half.
+    1. Click the chat icon in the bottom right of any dashboard page
+    2. Describe what's happening
+    3. Include your endpoint URL and the timestamp of the issue
+    4. Your message goes straight to engineering -- not a tier-1 queue
   </div>
 </Columns>
-
-## Roles
-
-| Role | Can do | Cannot do |
-| :-- | :-- | :-- |
-| **Owner** | Everything: billing, endpoints, members, dangerous actions (deleting an endpoint, transferring ownership) | -- |
-| **Admin** | Manage endpoints, tokens, allowlists, members | Change billing details, transfer ownership, delete the organisation |
-| **Viewer** | Read endpoints, view usage, view billing | Anything that mutates state |
-
-<Tip>
-  Use **Viewer** for stakeholders who only need to see usage and cost (PMs, finance). Use **Admin** for the engineers actually shipping. Limit **Owner** to a small group -- it's the only role that can transfer billing.
-</Tip>
-
-## Two-factor authentication
-
-Owners and admins must enable 2FA. From your profile (top-right avatar), open **Security → Two-factor**, scan the QR with an authenticator (1Password, Authy, Google Authenticator), and save the recovery codes somewhere offline.
-
-## Single sign-on (SSO)
-
-SSO via Google, GitHub, and SAML is available on enterprise plans. To enable, contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one) with your IdP details.
 
 ## What's next
 
