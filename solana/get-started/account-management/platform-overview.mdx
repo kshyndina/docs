@@ -80,40 +80,107 @@ Each endpoint has six tabs:
 5. **Limits** -- rate, concurrency, per-method overrides (configurable on dedicated; read-only on shared by default -- support can tune).
 6. **Logs** -- recent requests with timestamp, method, status, and latency. Useful for debugging 429s and unusual responses.
 
-## Set up your account
+## Walkthroughs
 
-Five minutes from "I just signed up" to "the team is in and we have a working endpoint". Follow the steps below.
+Short clips for the seven things you'll do most often in the portal. Each one is ~15 seconds.
 
-## Create the organisation
+### 1. Sign up
 
-<Steps>
-  <Step title="Sign up" titleSize="h3">
-    Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up) with your work email. You'll receive a verification link; click it.
-  </Step>
-  <Step title="Name the organisation" titleSize="h3">
-    On first sign-in, you'll be prompted to create an organisation. Use your company name. The organisation is the billing root -- everything (endpoints, members, payment methods) belongs to it.
-  </Step>
-  <Step title="Add a payment method" titleSize="h3">
-    **Billing → Payment methods → Add**. Card, USDC, hel.io, or wire. PAYG is enabled by default; you can move to a [committed plan](/solana/get-started/plans-and-billing) later.
-  </Step>
-  <Step title="Provision your first endpoint" titleSize="h3">
-    **Endpoints → New**. Pick `Solana mainnet`, choose your closest region, click **Create**. Copy the URL and token from the **Auth** tab.
-  </Step>
-</Steps>
+<Columns cols={2}>
+  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+    <source src="/images/account-management/sign-up.mp4" type="video/mp4" />
+  </video>
 
-## Invite teammates
+  <div>
+    Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up) with your work email, verify the link in your inbox, and name your organisation. The organisation is the billing root -- every endpoint, member, and payment method belongs to it.
 
-<Steps>
-  <Step title="Open Members" titleSize="h3">
-    From the portal sidebar, click **Members**.
-  </Step>
-  <Step title="Send the invite" titleSize="h3">
-    Click **Invite**, enter the email, pick a role (see below), click **Send**. The teammate gets an email with a one-click join link.
-  </Step>
-  <Step title="They confirm and join" titleSize="h3">
-    They click the link, sign up if they don't have an account, and land in your organisation with the role you assigned.
-  </Step>
-</Steps>
+    First-time sign-in walks you through creating your first endpoint too. Pick **Solana mainnet** and your closest region.
+  </div>
+</Columns>
+
+### 2. Add a teammate
+
+<Columns cols={2}>
+  <div>
+    From the portal sidebar, click **Members → Invite**. Enter the email, pick a [role](#roles), click **Send**.
+
+    The teammate gets an email with a one-click join link. They sign up if they don't have an account, then land directly in your organisation with the role you assigned.
+  </div>
+
+  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+    <source src="/images/account-management/add-user.mp4" type="video/mp4" />
+  </video>
+</Columns>
+
+### 3. Add a domain to the origin allowlist
+
+<Columns cols={2}>
+  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+    <source src="/images/account-management/add-allow-origin.mp4" type="video/mp4" />
+  </video>
+
+  <div>
+    Click into the mainnet subscription, then the endpoint name. Under **Allowed origins**, hit `+` to add a domain and save. All subdomains are automatically allowed.
+
+    Origin allowlists are how browser apps authenticate without exposing a token. Backend apps use the secret token instead -- see [Auth and security](/solana/get-started/auth-and-security).
+  </div>
+</Columns>
+
+### 4. View usage
+
+<Columns cols={2}>
+  <div>
+    Open the **v3 Billing** tab. You'll see total requests and GB used (the two dimensions you're billed on), plus a per-service breakdown below with product-level detail.
+
+    Click **Export CSV** in the top-right corner to download. Usage data refreshes every \~4 hours; gRPC bandwidth is metered when the connection closes.
+  </div>
+
+  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+    <source src="/images/account-management/view-usage.mp4" type="video/mp4" />
+  </video>
+</Columns>
+
+### 5. Top up credits
+
+<Columns cols={2}>
+  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+    <source src="/images/account-management/top-up.mp4" type="video/mp4" />
+  </video>
+
+  <div>
+    Open **Billing → Buy credits**. Pay in stablecoins via Wallet Connect (any supported token) or transfer from any external wallet or exchange.
+
+    If you'd rather pay by card or wire, switch to invoiced billing -- contact support from the dashboard chat.
+  </div>
+</Columns>
+
+### 6. Set up low-balance notifications
+
+<Columns cols={2}>
+  <div>
+    Open **Billing**, toggle alerts on, and set a threshold (for example, $10). When your balance hits that amount, every user on the account gets a notification.
+
+    Pair this with PAYG to avoid surprise service interruptions -- the alert fires before you run out of credit.
+  </div>
+
+  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+    <source src="/images/account-management/add-notifications.mp4" type="video/mp4" />
+  </video>
+</Columns>
+
+### 7. Contact support
+
+<Columns cols={2}>
+  <video autoPlay muted loop playsInline controls className="w-full rounded-lg shadow">
+    <source src="/images/account-management/contact-support.mp4" type="video/mp4" />
+  </video>
+
+  <div>
+    Click the chat icon in the bottom right of any dashboard page. Your message goes straight to engineering, not a tier-1 queue.
+
+    Include your endpoint URL and the timestamp of the issue when reporting incidents -- it cuts the back-and-forth in half.
+  </div>
+</Columns>
 
 ## Roles
 
