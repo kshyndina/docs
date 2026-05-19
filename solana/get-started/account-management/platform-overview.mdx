@@ -4,16 +4,15 @@ description: "Triton customer portal is where you get your endpoint and token, m
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
-import AuthAndSecurityCard from '/snippets/cards/auth-and-security.mdx'
-import PlansAndBillingCard from '/snippets/cards/plans-and-billing.mdx'
-import HowToSignUpCard from '/snippets/cards/how-to-sign-up.mdx'
-import AccountManagementApiCard from '/snippets/cards/account-management-api.mdx'
+import QuickstartCard from '/snippets/cards/quickstart.mdx'
+import StreamingOverviewCard from '/snippets/cards/streaming-overview.mdx'
+import StreamingQuickstartCard from '/snippets/cards/streaming-quickstart.mdx'
+import ReadingStateOverviewCard from '/snippets/cards/reading-state-overview.mdx'
 import DashEndpointsCard from '/snippets/cards/dashboard/endpoints.mdx'
-import DashAuthCard from '/snippets/cards/dashboard/auth.mdx'
 import DashUsageCard from '/snippets/cards/dashboard/usage.mdx'
 import DashBillingCard from '/snippets/cards/dashboard/billing.mdx'
 import DashMembersCard from '/snippets/cards/dashboard/members.mdx'
-import DashAuditLogCard from '/snippets/cards/dashboard/audit-log.mdx'
+import DashSupportCard from '/snippets/cards/dashboard/support.mdx'
 
 
 <Warning>
@@ -25,99 +24,52 @@ import DashAuditLogCard from '/snippets/cards/dashboard/audit-log.mdx'
 <Columns cols={2}>
   <DashEndpointsCard />
 
-  <DashAuthCard />
-
   <DashUsageCard />
 
   <DashBillingCard />
 
   <DashMembersCard />
 
-  <DashAuditLogCard />
+  <DashSupportCard />
 </Columns>
 
-## Roles and where to do common things
+## Roles
 
-Your customer dashboard has three roles: **Admin**, **Standard**, and **Operator**. New members default to **Standard**, which gives read access plus a few self-serve actions. Promote to **Operator** when someone needs to modify endpoints, rotate tokens, manage allowlists, or invite teammates. **Admin** is reserved for the organisation owner -- contact support to transfer or add one.
+Three roles. New members default to **Standard** -- promote to **Operator** only when someone needs to modify endpoints or rotate tokens.
 
-The table below shows where each role goes for the common tasks. When both roles do the same thing, the column is merged. When they differ, Standard goes through support and Operator has a direct path.
+<Columns cols={3}>
+  <Card title="Admin" icon="crown">
+    Organisation owner. Full access to billing, endpoints, members, and dangerous actions. Contact support to add or transfer.
+  </Card>
 
-<table>
-  <thead>
-    <tr>
-      <th>Task</th>
-      <th>Standard</th>
-      <th>Operator</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>See live usage and cost</td>
-      <td colSpan="2" align="center"><strong>v3 Billing</strong> tab on the dashboard</td>
-    </tr>
-    <tr>
-      <td>Find a token</td>
-      <td colSpan="2" align="center">Click the subscription, then the endpoint name -- token shows under <strong>Auth</strong></td>
-    </tr>
-    <tr>
-      <td>Top up credits</td>
-      <td colSpan="2" align="center"><strong>Billing</strong> &rarr; <strong>Buy credits</strong></td>
-    </tr>
-    <tr>
-      <td>Set low-balance notifications</td>
-      <td colSpan="2" align="center"><strong>Billing</strong> &rarr; toggle alerts &rarr; set threshold</td>
-    </tr>
-    <tr>
-      <td>Open a support ticket</td>
-      <td colSpan="2" align="center">Chat icon, bottom right of any dashboard page</td>
-    </tr>
-    <tr>
-      <td>Provision a new endpoint</td>
-      <td>Contact support</td>
-      <td><strong>Endpoints</strong> &rarr; <strong>New</strong></td>
-    </tr>
-    <tr>
-      <td>Rotate a token</td>
-      <td>Contact support</td>
-      <td>Endpoint &rarr; <strong>Auth</strong> &rarr; <strong>Rotate token</strong></td>
-    </tr>
-    <tr>
-      <td>Add a domain to the origin allowlist</td>
-      <td>Contact support</td>
-      <td>Endpoint &rarr; <strong>Auth</strong> &rarr; <strong>Allowed origins</strong> &rarr; <code>+</code></td>
-    </tr>
-    <tr>
-      <td>Invite a teammate</td>
-      <td>Contact support</td>
-      <td><strong>Members</strong> &rarr; <strong>Invite</strong></td>
-    </tr>
-    <tr>
-      <td>Raise a rate limit</td>
-      <td colSpan="2" align="center">Contact support</td>
-    </tr>
-    <tr>
-      <td>Stake-weighted QoS for sending transactions</td>
-      <td colSpan="2" align="center">Contact support</td>
-    </tr>
-  </tbody>
-</table>
+  <Card title="Standard" icon="user">
+    The default. Read-mostly access plus self-serve: view usage, top up, set notifications, contact support, add allowlist domains, invite teammates.
+  </Card>
 
-## Per-endpoint pages
+  <Card title="Operator" icon="user-cog">
+    Promoted role. Everything Standard does, plus provisioning new endpoints and rotating tokens.
+  </Card>
+</Columns>
 
-Each endpoint has six tabs:
+## Common tasks
 
-1. **Overview** -- region, infrastructure type, status, recent uptime.
-2. **Auth** -- tokens and allowlists.
-3. **Usage** -- per-method counts, error rate, cost.
-4. **Methods** -- which JSON-RPC and gRPC methods are enabled / cost-multiplied.
-5. **Limits** -- rate, concurrency, per-method overrides (configurable on dedicated; read-only on shared by default -- support can tune).
-6. **Logs** -- recent requests with timestamp, method, status, and latency. Useful for debugging 429s and unusual responses.
+| Task | Where |
+| --- | --- |
+| See live usage and cost | **v3 Billing** tab on the dashboard |
+| Find a token | Click the subscription, then the endpoint name -- token shows under **Auth** |
+| Top up credits | **Billing** &rarr; **Buy credits** |
+| Set low-balance notifications | **Billing** &rarr; toggle alerts &rarr; set threshold |
+| Add a domain to the origin allowlist | Endpoint &rarr; **Auth** &rarr; **Allowed origins** &rarr; `+` |
+| Invite a teammate | **Members** &rarr; **Invite** |
+| Open a support ticket | Chat icon, bottom right of any dashboard page |
+| Provision a new endpoint | **Endpoints** &rarr; **New** *(Operator only -- Standard contacts support)* |
+| Rotate a token | Endpoint &rarr; **Auth** &rarr; **Rotate token** *(Operator only -- Standard contacts support)* |
+| Raise a rate limit | 📩 Contact support |
+| Stake-weighted QoS for sending transactions | 📩 Contact support |
 
 ## Walkthroughs
 
-Short clips for the seven things you'll do most often in the portal. Click any clip to play it full-screen.
-
-### Sign up
+Short clips for the seven things you'll do most often in the portal.
 
 <Columns cols={2}>
   <video autoPlay muted loop playsInline className="w-full rounded-lg shadow">
@@ -125,6 +77,8 @@ Short clips for the seven things you'll do most often in the portal. Click any c
   </video>
 
   <div>
+    ### Sign up
+
     1. Go to [customers.triton.one/users/sign-up](https://customers.triton.one/users/sign-up) with your work email
     2. Click the verification link in your inbox
     3. Name your organisation (the billing root for everything)
@@ -132,13 +86,13 @@ Short clips for the seven things you'll do most often in the portal. Click any c
   </div>
 </Columns>
 
-### Add a teammate
-
 <Columns cols={2}>
   <div>
+    ### Add a teammate
+
     1. Open **Members** in the sidebar
     2. Click **Invite**
-    3. Enter the teammate's email and pick a role
+    3. Enter the teammate's email
     4. Click **Send** -- they get a one-click join link
   </div>
 
@@ -147,14 +101,14 @@ Short clips for the seven things you'll do most often in the portal. Click any c
   </video>
 </Columns>
 
-### Add a domain to the origin allowlist
-
 <Columns cols={2}>
   <video autoPlay muted loop playsInline className="w-full rounded-lg shadow">
     <source src="/images/account-management/add-allow-origin.mp4" type="video/mp4" />
   </video>
 
   <div>
+    ### Add a domain to the origin allowlist
+
     1. Click into the mainnet subscription
     2. Click the endpoint name to open its settings
     3. Under **Allowed origins**, hit `+`
@@ -162,13 +116,13 @@ Short clips for the seven things you'll do most often in the portal. Click any c
   </div>
 </Columns>
 
-### View usage
-
 <Columns cols={2}>
   <div>
+    ### View usage
+
     1. Open the **v3 Billing** tab
-    2. Review total requests and GB used (the two dimensions you're billed on)
-    3. Scroll down for the per-service breakdown with product-level detail
+    2. Review the per-product totals (requests and bandwidth)
+    3. Drill into per-endpoint breakdowns below
     4. Click **Export CSV** in the top-right to download
   </div>
 
@@ -177,14 +131,14 @@ Short clips for the seven things you'll do most often in the portal. Click any c
   </video>
 </Columns>
 
-### Top up credits
-
 <Columns cols={2}>
   <video autoPlay muted loop playsInline className="w-full rounded-lg shadow">
     <source src="/images/account-management/top-up.mp4" type="video/mp4" />
   </video>
 
   <div>
+    ### Top up credits
+
     1. Open **Billing** in the sidebar
     2. Click **Buy credits**
     3. Pay in stablecoins via Wallet Connect, or transfer from any external wallet
@@ -192,10 +146,10 @@ Short clips for the seven things you'll do most often in the portal. Click any c
   </div>
 </Columns>
 
-### Set up low-balance notifications
-
 <Columns cols={2}>
   <div>
+    ### Set up low-balance notifications
+
     1. Open **Billing** in the sidebar
     2. Toggle alerts on
     3. Set the threshold (for example, $10)
@@ -207,14 +161,14 @@ Short clips for the seven things you'll do most often in the portal. Click any c
   </video>
 </Columns>
 
-### Contact support
-
 <Columns cols={2}>
   <video autoPlay muted loop playsInline className="w-full rounded-lg shadow">
     <source src="/images/account-management/contact-support.mp4" type="video/mp4" />
   </video>
 
   <div>
+    ### Contact support
+
     1. Click the chat icon in the bottom right of any dashboard page
     2. Describe what's happening
     3. Include your endpoint URL and the timestamp of the issue
@@ -225,13 +179,13 @@ Short clips for the seven things you'll do most often in the portal. Click any c
 ## What's next
 
 <CardGroup cols={2}>
-  <HowToSignUpCard />
+  <QuickstartCard />
 
-  <PlansAndBillingCard />
+  <StreamingOverviewCard />
 
-  <AuthAndSecurityCard />
+  <StreamingQuickstartCard />
 
-  <AccountManagementApiCard />
+  <ReadingStateOverviewCard />
 </CardGroup>
 
 ---
