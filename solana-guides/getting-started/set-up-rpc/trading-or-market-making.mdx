@@ -37,19 +37,20 @@ By the end you'll have a working setup that covers the full path from signal to 
   <Step title="Basic familiarity with Solana">
     Accounts, transactions, compute units.
   </Step>
-  <Step title="Install dependencies">
-    ```bash
-    npm install @triton-one/yellowstone-grpc bs58 @solana/web3.js
-    npm install @triton-one/yellowstone-fumarole
-    ```
-  </Step>
 </Steps>
+
+Install the dependencies:
+
+```bash Install
+npm install @triton-one/yellowstone-grpc bs58 @solana/web3.js
+npm install @triton-one/yellowstone-fumarole
+```
 
 ## Step 1: Stream real-time DEX data with Dragon's Mouth
 
 Dragon's Mouth delivers account and transaction updates as the node processes them, at processed commitment. For a trading bot you'll subscribe to the pool accounts and transactions of the DEX programs you're trading on.
 
-```typescript
+```typescript stream-dex.ts
 import Client, {
   CommitmentLevel,
   SubscribeRequest,
@@ -130,7 +131,7 @@ streamDexData().catch(console.error);
 
 Deshred reconstructs transactions from shreds before execution, delivering them approximately 20 ms ahead of standard Dragon's Mouth gRPC at p90.
 
-```typescript
+```typescript stream-deshred.ts
 import Client, {
   SubscribeRequestFilterDeshredTransactions,
 } from "@triton-one/yellowstone-grpc";
@@ -183,7 +184,7 @@ streamDeshred().catch(console.error);
 
 ## Step 3: Estimate a competitive priority fee
 
-```typescript
+```typescript priority-fee.ts
 async function getPriorityFee(
   endpoint: string,
   token: string,
@@ -220,7 +221,7 @@ console.log("Priority fee (90th pct):", fee, "micro-lamports/CU");
 
 ## Step 4: Send your transaction via Jet
 
-```typescript
+```typescript send-jet.ts
 import {
   Connection,
   ComputeBudgetProgram,
@@ -262,7 +263,7 @@ Set `maxRetries: 0`. Jet manages retry fanout internally.
 
 ## Step 5: Stay resilient with Fumarole
 
-```typescript
+```typescript fumarole-resume.ts
 import { FumaroleClient, InitialOffsetPolicy } from "@triton-one/yellowstone-fumarole";
 import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
 
