@@ -16,14 +16,33 @@ By the end you'll have a working setup that covers the full path from signal to 
 
 ## Products used in this guide
 
-| Product | Role in this guide |
-| --- | --- |
-| **Dragon's Mouth** | Subscribe to DEX pool account updates and transactions in real time |
-| **Deshred** | Receive transactions \~20 ms before standard gRPC at p90 for earliest signal |
-| **Priority Fee API** | Get a percentile-based fee estimate before building your transaction |
-| **Jet** | Send transactions directly to the current leader with built-in SWQoS |
-| **Shield** | (Optional) Block specific validators from processing your transactions |
-| **Fumarole** | Reliable persistent stream -- resume exactly where you left off if your connection drops |
+Six Triton products work together in this stack. Each card below opens the full product docs -- useful when you want to tune defaults, see every option, or troubleshoot something specific to that product.
+
+<CardGroup cols={2}>
+  <Card title="Dragon's Mouth" icon="radio" href="/solana/streaming/dragons-mouth-g-rpc">
+    Subscribe to DEX pool account updates and transactions in real time.
+  </Card>
+
+  <Card title="Deshred" icon="flame" href="/solana/streaming/deshred-transactions">
+    Receive transactions \~20 ms before standard gRPC at p90 for earliest signal.
+  </Card>
+
+  <Card title="Priority Fee API" icon="trending-up" href="/solana/sending-transactions/priority-fees-api">
+    Get a percentile-based fee estimate before building your transaction.
+  </Card>
+
+  <Card title="Jet" icon="send" href="/solana/sending-transactions/jet-sender">
+    Send transactions directly to the current leader with built-in SWQoS.
+  </Card>
+
+  <Card title="Shield" icon="shield-check" href="/solana/sending-transactions/shield-mev-protection">
+    (Optional) Block specific validators from processing your transactions.
+  </Card>
+
+  <Card title="Fumarole" icon="layers" href="/solana/streaming/fumarole-persistent-streams">
+    Reliable persistent stream -- resume exactly where you left off if your connection drops.
+  </Card>
+</CardGroup>
 
 ## Prerequisites
 
@@ -334,15 +353,6 @@ setupFumarole().catch(console.error);
     Orca Whirlpools: `whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc`
   </Accordion>
 </AccordionGroup>
-
-## Additional resources
-
-- [Dragon's Mouth gRPC subscriptions](/solana/streaming/dragons-mouth-g-rpc)
-- [Fumarole persistent streams](/solana/streaming/fumarole-persistent-streams)
-- [Priority Fee API](/solana/sending-transactions/priority-fees-api)
-- [Yellowstone gRPC TypeScript examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript)
-- [Yellowstone Fumarole on GitHub](https://github.com/rpcpool/yellowstone-fumarole)
-- [Jet documentation](/solana/sending-transactions/jet-sender)
 
 ## What's next
 
