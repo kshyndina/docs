@@ -3219,4 +3219,33 @@ html.dark pre.shiki[language="text"] code span,
   color: rgba(255, 255, 255, 0.88) !important;
 }
 
+/* ---- Platform overview walkthrough rows -----------------------
+   Two-column grid (video | text) with vertical centring of both
+   children, so the heading and steps line up against the middle
+   of the video instead of sticking to the top. Mintlify's <Columns>
+   component doesn't expose alignment, and Tailwind's `items-center`
+   utility isn't in Mintlify's compiled CSS bundle, so we declare
+   the layout manually. Stacks to one column under 768px.
+   ---------------------------------------------------------------- */
+
+.walkthrough-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  margin: 2.5rem 0;
+}
+
+.walkthrough-row video {
+  width: 100%;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 768px) {
+  .walkthrough-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /*! purgecss end ignore */
