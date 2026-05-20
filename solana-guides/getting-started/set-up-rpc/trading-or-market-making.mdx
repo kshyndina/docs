@@ -1,13 +1,357 @@
 ---
-title: "Trading or market making"
-description: "How to set up Triton RPC for live prices and sub-slot tx landing. Stack: Dragon's Mouth, Jet, Priority Fees, Fumarole."
+title: "Trading and market making with Triton"
+description: "End-to-end stack for a market-making or trading bot on Solana: real-time DEX data, earliest signal, priority fees, reliable transaction landing."
 ---
 
 import FooterLinks from '/snippets/footer-links.mdx'
+import DeshredCard from '/snippets/cards/deshred.mdx'
+import ShieldCard from '/snippets/cards/shield-mev-protection.mdx'
+import FumaroleCard from '/snippets/cards/fumarole.mdx'
 
-<Note>
-This page is a placeholder. Recommended Triton products, endpoint setup, and code samples for **Trading or market making** workloads coming soon.
-</Note>
+## Overview
+
+This guide walks you through setting up Triton's trading infrastructure stack for a market-making or trading bot on Solana. You'll connect to real-time DEX data, get the earliest on-chain signal, estimate competitive priority fees, and land transactions reliably under congestion.
+
+By the end you'll have a working setup that covers the full path from signal to fill.
+
+## Products used in this guide
+
+| Product | Role in this guide |
+| --- | --- |
+| **Dragon's Mouth** | Subscribe to DEX pool account updates and transactions in real time |
+| **Deshred** | Receive transactions \~20 ms before standard gRPC at p90 for earliest signal |
+| **Priority Fee API** | Get a percentile-based fee estimate before building your transaction |
+| **Jet** | Send transactions directly to the current leader with built-in SWQoS |
+| **Shield** | (Optional) Block specific validators from processing your transactions |
+| **Fumarole** | Reliable persistent stream -- resume exactly where you left off if your connection drops |
+
+## Prerequisites
+
+<Steps>
+  <Step title="A Triton account with an active endpoint">
+    You'll need your **endpoint URL** and **token** from the [customer dashboard](https://customers.triton.one).
+  </Step>
+  <Step title="Node.js 18+ installed">
+    Verify with `node --version`.
+  </Step>
+  <Step title="Basic familiarity with Solana">
+    Accounts, transactions, compute units.
+  </Step>
+  <Step title="Install dependencies">
+    ```bash
+    npm install @triton-one/yellowstone-grpc bs58 @solana/web3.js
+    npm install @triton-one/yellowstone-fumarole
+    ```
+  </Step>
+</Steps>
+
+## Step 1: Stream real-time DEX data with Dragon's Mouth
+
+Dragon's Mouth delivers account and transaction updates as the node processes them, at processed commitment. For a trading bot you'll subscribe to the pool accounts and transactions of the DEX programs you're trading on.
+
+```typescript
+import Client, {
+  CommitmentLevel,
+  SubscribeRequest,
+} from "@triton-one/yellowstone-grpc";
+import bs58 from "bs58";
+
+const ENDPOINT = "https://your-endpoint.rpcpool.com";
+const TOKEN = "your-token";
+
+// Raydium AMM v4 program - replace with the DEX program you're trading
+const RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
+
+async function streamDexData() {
+  const client = new Client(ENDPOINT, TOKEN, {});
+  const stream = await client.subscribe();
+
+  const request: SubscribeRequest = {
+    accounts: {
+      pool_accounts: {
+        account: [],
+        owner: [RAYDIUM_AMM],
+        filters: [],
+      },
+    },
+    transactions: {
+      dex_transactions: {
+        vote: false,
+        failed: false,
+        accountInclude: [RAYDIUM_AMM],
+        accountExclude: [],
+        accountRequired: [],
+      },
+    },
+    slots: {},
+    transactionsStatus: {},
+    entry: {},
+    blocks: {},
+    blocksMeta: {},
+    commitment: CommitmentLevel.PROCESSED,
+    accountsDataSlice: [],
+    ping: undefined,
+  };
+
+  stream.on("data", (data) => {
+    if (data.account) {
+      const pubkey = bs58.encode(data.account.account!.pubkey);
+      console.log("Pool state updated:", pubkey);
+    }
+
+    if (data.transaction) {
+      const sig = bs58.encode(data.transaction.transaction!.signature);
+      console.log("Transaction processed:", sig);
+    }
+  });
+
+  stream.on("error", (err) => {
+    console.error("Stream error:", err);
+  });
+
+  await new Promise<void>((resolve, reject) => {
+    stream.write(request, (err: Error | null) => {
+      if (err) reject(err);
+      else resolve();
+    });
+  });
+
+  setInterval(() => {
+    stream.write({ ping: { id: 1 } } as SubscribeRequest, () => {});
+  }, 10_000);
+}
+
+streamDexData().catch(console.error);
+```
+
+**Verify it works:** you should see pool state updates and transactions printing to the console within a few seconds of starting the script. If nothing appears, check your endpoint URL and token.
+
+## Step 2: Get the earliest signal with Deshred
+
+Deshred reconstructs transactions from shreds before execution, delivering them approximately 20 ms ahead of standard Dragon's Mouth gRPC at p90.
+
+```typescript
+import Client, {
+  SubscribeRequestFilterDeshredTransactions,
+} from "@triton-one/yellowstone-grpc";
+import bs58 from "bs58";
+
+const ENDPOINT = "https://your-endpoint.rpcpool.com";
+const TOKEN = "your-token";
+const RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
+
+async function streamDeshred() {
+  const client = new Client(ENDPOINT, TOKEN, {});
+  const stream = await client.subscribeDeshred();
+
+  const request = {
+    deshredTransactions: {
+      dex: {
+        vote: false,
+        accountInclude: [RAYDIUM_AMM],
+        accountExclude: [],
+        accountRequired: [],
+      } as SubscribeRequestFilterDeshredTransactions,
+    },
+  };
+
+  stream.on("data", (data) => {
+    if (data.deshredTransaction) {
+      const sig = bs58.encode(
+        data.deshredTransaction.transaction!.signature
+      );
+      console.log("Deshred tx (pre-execution):", sig, "slot:", data.slot);
+    }
+  });
+
+  stream.on("error", (err) => {
+    console.error("Deshred stream error:", err);
+  });
+
+  await new Promise<void>((resolve, reject) => {
+    stream.write(request, (err: Error | null) => {
+      if (err) reject(err);
+      else resolve();
+    });
+  });
+}
+
+streamDeshred().catch(console.error);
+```
+
+**Verify it works:** you should see pre-execution transactions printing before they appear in your Dragon's Mouth stream.
+
+## Step 3: Estimate a competitive priority fee
+
+```typescript
+async function getPriorityFee(
+  endpoint: string,
+  token: string,
+  accounts: string[],
+  percentile: number
+): Promise<number> {
+  const response = await fetch(`${endpoint}/${token}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id: 1,
+      method: "getRecentPrioritizationFees",
+      params: [accounts, { percentile }],
+    }),
+  });
+
+  const { result } = await response.json();
+
+  const fees: { slot: number; prioritizationFee: number }[] = result;
+  const latest = fees.sort((a, b) => b.slot - a.slot)[0];
+  return latest.prioritizationFee;
+}
+
+const fee = await getPriorityFee(ENDPOINT, TOKEN, [RAYDIUM_AMM], 9000);
+console.log("Priority fee (90th pct):", fee, "micro-lamports/CU");
+```
+
+**When to use which percentile:**
+
+- **Normal conditions:** 5000-7500
+- **Congested network or time-sensitive trade:** 9000-9500
+- **Emergency / must-land:** 9900+
+
+## Step 4: Send your transaction via Jet
+
+```typescript
+import {
+  Connection,
+  ComputeBudgetProgram,
+  Transaction,
+} from "@solana/web3.js";
+
+async function sendWithJet(
+  serializedTransaction: Buffer,
+  endpoint: string,
+  token: string
+): Promise<string> {
+
+  const connection = new Connection(`${endpoint}/${token}`, "confirmed");
+
+  const signature = await connection.sendRawTransaction(
+    serializedTransaction,
+    {
+      skipPreflight: true, // simulate separately via simulateTransaction() if needed
+      maxRetries: 0,
+    }
+  );
+
+  console.log("Sent:", signature);
+  return signature;
+}
+
+function addPriorityFee(tx: Transaction, microLamportsPerCU: number): void {
+  tx.add(
+    ComputeBudgetProgram.setComputeUnitPrice({
+      microLamports: microLamportsPerCU,
+    })
+  );
+}
+```
+
+<Warning>
+Set `maxRetries: 0`. Jet manages retry fanout internally.
+</Warning>
+
+## Step 5: Stay resilient with Fumarole
+
+```typescript
+import { FumaroleClient, InitialOffsetPolicy } from "@triton-one/yellowstone-fumarole";
+import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+
+const ENDPOINT = "https://your-endpoint.rpcpool.com";
+const TOKEN = "your-token";
+const RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
+
+async function setupFumarole() {
+  const client = await FumaroleClient.connect({
+    endpoint: ENDPOINT,
+    xToken: TOKEN,
+    maxDecodingMessageSizeBytes: 100 * 1024 * 1024,
+  });
+
+  await client.createPersistentSubscriber({
+    consumerGroupName: "trading-bot-positions",
+    initialOffsetPolicy: InitialOffsetPolicy.LATEST,
+  });
+
+  const request = {
+    transactions: {
+      dex_transactions: {
+        vote: false,
+        failed: false,
+        accountInclude: [RAYDIUM_AMM],
+        accountExclude: [],
+        accountRequired: [],
+      },
+    },
+    accounts: {},
+    slots: {},
+    commitment: CommitmentLevel.CONFIRMED,
+  };
+
+  const { source } = await client.dragonsmouthSubscribe(
+    "trading-bot-positions",
+    request,
+  );
+
+  await source.forEach((update) => {
+    if (update.transaction) {
+      console.log("Transaction:", update.transaction);
+    }
+  });
+}
+
+setupFumarole().catch(console.error);
+```
+
+## FAQs
+
+<AccordionGroup>
+  <Accordion title="Do I need all five products?">
+    Dragon's Mouth and Jet cover the minimum -- real-time data in, transactions out.
+  </Accordion>
+
+  <Accordion title="How do I pick the right percentile?">
+    Start at 7500 (75th percentile) and monitor landing rate.
+  </Accordion>
+
+  <Accordion title="Why set maxRetries: 0 when sending?">
+    Jet handles retry fanout internally.
+  </Accordion>
+
+  <Accordion title="Can I use this with Orca or other DEXes?">
+    Yes -- replace the Raydium AMM program address with the program address of any DEX.
+
+    Orca Whirlpools: `whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc`
+  </Accordion>
+</AccordionGroup>
+
+## Additional resources
+
+- [Dragon's Mouth gRPC subscriptions](/solana/streaming/dragons-mouth-g-rpc)
+- [Fumarole persistent streams](/solana/streaming/fumarole-persistent-streams)
+- [Priority Fee API](/solana/sending-transactions/priority-fees-api)
+- [Yellowstone gRPC TypeScript examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript)
+- [Yellowstone Fumarole on GitHub](https://github.com/rpcpool/yellowstone-fumarole)
+- [Jet documentation](/solana/sending-transactions/jet-sender)
+
+## What's next
+
+<CardGroup cols={3}>
+  <DeshredCard />
+
+  <ShieldCard />
+
+  <FumaroleCard />
+</CardGroup>
 
 ---
 
