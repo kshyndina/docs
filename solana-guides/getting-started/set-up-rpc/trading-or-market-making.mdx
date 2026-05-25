@@ -305,7 +305,7 @@ asyncio.run(stream_dex_data())
 
 An account update prints something like:
 
-```text
+```text Account update output
 Pool state updated: 58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2
 ```
 
@@ -313,7 +313,7 @@ This is the pool's public key encoded in base58 -- the standard human-readable f
 
 A transaction update prints:
 
-```text
+```text Transaction update output
 Transaction processed: 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9KdEpRsuW3HqXjc...
 ```
 
@@ -497,7 +497,7 @@ asyncio.run(stream_deshred())
 
 **What the output looks like:**
 
-```text
+```text Deshred output
 Deshred tx (pre-execution): 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9Kd... slot: 307152834
 ```
 
@@ -622,7 +622,7 @@ async def get_priority_fee(
 
 **What the output looks like:**
 
-```text
+```text Priority fee output
 Priority fee (90th pct): 45000 micro-lamports/CU
 ```
 
@@ -630,7 +630,7 @@ The fee is in micro-lamports per compute unit. A typical Raydium swap uses rough
 
 You can layer your own strategy on top of this (for example, adding a fixed buffer during high-volatility periods), or pass it directly to `setComputeUnitPrice` in Step 4:
 
-```typescript
+```typescript Apply fee to compute budget
 ComputeBudgetProgram.setComputeUnitPrice({ microLamports: fee })
 ```
 
@@ -729,7 +729,7 @@ Set `maxRetries: 0` to disable server-side retries, then implement your own retr
 
 **What the output looks like:**
 
-```text
+```text Send output
 Sent: 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9KdEpRsuW3HqXjc...
 ```
 
