@@ -69,7 +69,7 @@ Solana's validator emits every account write to a Geyser plugin, which Triton al
 
 > CTA section. One primary card, optionally a few secondary. Always link to the per-product quickstart.
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rocket">:rocket:</i> <strong>Quickstart: your first Steamboat index</strong></td><td>Define a filter, point it at a program, and read it back in under five minutes.</td><td><a href="#">#</a></td></tr><tr><td><i class="fa-server">:server:</i> <strong>Available endpoints</strong></td><td>HTTPS REST and gRPC reads, JS / Python / Rust SDKs.</td><td><a href="#">#</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rocket">:rocket:</i> <strong>Quickstart: your first Steamboat index</strong></td><td>Define a filter, point it at a program, and read it back in under five minutes.</td><td><a href="#">#</a></td></tr><tr><td><i class="fa-server">:server:</i> <strong>Available endpoints</strong></td><td>HTTPS REST and gRPC reads, JS / Python / Rust SDKs.</td><td><a href="#">#</a></td></tr></tbody></table>
 ## Pricing
 
 > Always link to the central pricing page rather than copying numbers in. Numbers drift.
@@ -103,7 +103,7 @@ Yes. Dedicated nodes get unmetered Steamboat reads and you can pin custom indexe
 
 ## Related
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>The streaming layer Steamboat builds on. Subscribe to live account writes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc</a></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Standard RPC</strong></td><td>The simpler `getAccountInfo` / `getProgramAccounts` path for low-volume reads.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc">https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>The streaming layer Steamboat builds on. Subscribe to live account writes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc</a></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Standard RPC</strong></td><td>The simpler `getAccountInfo` / `getProgramAccounts` path for low-volume reads.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc">https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc</a></td></tr></tbody></table>
 ---
 
 <hr>

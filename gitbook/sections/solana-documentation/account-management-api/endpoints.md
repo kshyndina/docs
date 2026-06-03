@@ -128,7 +128,7 @@ curl https://api.triton.one/v1/endpoints/ep_abc123 \
 
 ## What's next
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-lock">:lock:</i> <strong>Tokens</strong></td><td>Issue, list, rotate, and revoke endpoint tokens.</td><td><a href="tokens.md">tokens.md</a></td></tr><tr><td><i class="fa-sliders">:sliders:</i> <strong>Rate tiers</strong></td><td>Read and configure per-endpoint rate limits programmatically.</td><td><a href="rate-tiers.md">rate-tiers.md</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-lock">:lock:</i> <strong>Tokens</strong></td><td>Issue, list, rotate, and revoke endpoint tokens.</td><td><a href="tokens.md">tokens.md</a></td></tr><tr><td><i class="fa-sliders">:sliders:</i> <strong>Rate tiers</strong></td><td>Read and configure per-endpoint rate limits programmatically.</td><td><a href="rate-tiers.md">rate-tiers.md</a></td></tr></tbody></table>
 ---
 
 <hr>

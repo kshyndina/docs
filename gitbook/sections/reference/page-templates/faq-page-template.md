@@ -135,7 +135,7 @@ Yes. Dedicated nodes are billed monthly per node. Switching keeps your endpoint 
 
 > Always end with a routed escape. Don't make the reader hunt.
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-message-circle">:message-circle:</i> <strong>Customer dashboard</strong></td><td>Chat icon in the bottom right of the dashboard goes straight to engineering.</td><td><a href="https://customers.triton.one">https://customers.triton.one</a></td></tr><tr><td><i class="fa-briefcase">:briefcase:</i> <strong>Sales questions</strong></td><td>Procurement, dedicated nodes, custom regions, SLAs.</td><td><a href="https://triton.one/contact">https://triton.one/contact</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-message-circle">:message-circle:</i> <strong>Customer dashboard</strong></td><td>Chat icon in the bottom right of the dashboard goes straight to engineering.</td><td><a href="https://customers.triton.one">https://customers.triton.one</a></td></tr><tr><td><i class="fa-briefcase">:briefcase:</i> <strong>Sales questions</strong></td><td>Procurement, dedicated nodes, custom regions, SLAs.</td><td><a href="https://triton.one/contact">https://triton.one/contact</a></td></tr></tbody></table>
 ---
 
 <hr>

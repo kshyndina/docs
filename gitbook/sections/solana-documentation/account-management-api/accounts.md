@@ -107,7 +107,7 @@ For members in `status: invited` whose email got lost or expired (invites expire
 
 ## What's next
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-id-card">:id-card:</i> <strong>Auth and headers</strong></td><td>Bearer tokens, organisation context, and the headers every call needs.</td><td><a href="auth-headers.md">auth-headers.md</a></td></tr><tr><td><i class="fa-link">:link:</i> <strong>Endpoints</strong></td><td>Provision, list, configure, and delete endpoints.</td><td><a href="endpoints.md">endpoints.md</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-id-card">:id-card:</i> <strong>Auth and headers</strong></td><td>Bearer tokens, organisation context, and the headers every call needs.</td><td><a href="auth-headers.md">auth-headers.md</a></td></tr><tr><td><i class="fa-link">:link:</i> <strong>Endpoints</strong></td><td>Provision, list, configure, and delete endpoints.</td><td><a href="endpoints.md">endpoints.md</a></td></tr></tbody></table>
 ---
 
 <hr>

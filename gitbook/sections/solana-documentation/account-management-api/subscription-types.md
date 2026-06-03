@@ -67,7 +67,7 @@ An organisation has exactly one `base` and zero-or-more `addon` subscriptions at
 
 ## What's next
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rss">:rss:</i> <strong>Subscriptions</strong></td><td>Attach plans, add-ons, or watch lists to the organisation.</td><td><a href="subscriptions.md">subscriptions.md</a></td></tr><tr><td><i class="fa-credit-card">:credit-card:</i> <strong>Plans and billing</strong></td><td>Pay-as-you-go vs invoiced, top-ups, and the cost calculator across shared and dedicated setups.</td><td><a href="../get-started/plans-and-billing.md">../get-started/plans-and-billing.md</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rss">:rss:</i> <strong>Subscriptions</strong></td><td>Attach plans, add-ons, or watch lists to the organisation.</td><td><a href="subscriptions.md">subscriptions.md</a></td></tr><tr><td><i class="fa-credit-card">:credit-card:</i> <strong>Plans and billing</strong></td><td>Pay-as-you-go vs invoiced, top-ups, and the cost calculator across shared and dedicated setups.</td><td><a href="../get-started/plans-and-billing.md">../get-started/plans-and-billing.md</a></td></tr></tbody></table>
 ---
 
 <hr>

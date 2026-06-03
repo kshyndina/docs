@@ -533,7 +533,9 @@ def merge_card_tables(text):
                            run.group(0))
         if not cards:
             return run.group(0)
-        head = ("<table data-view=\"cards\"><thead><tr><th></th><th></th>"
+        # balance into ~2 rows: 4 cards -> 2 cols (large), 6 -> 3 cols (medium)
+        size = "large" if len(cards) in (1, 2, 4) else "medium"
+        head = (f"<table data-card-size=\"{size}\" data-view=\"cards\"><thead><tr><th></th><th></th>"
                 "<th data-hidden data-card-target data-type=\"content-ref\"></th>"
                 "</tr></thead><tbody>")
         rows = []
