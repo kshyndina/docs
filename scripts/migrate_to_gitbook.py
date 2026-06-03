@@ -884,6 +884,7 @@ def apply_kate_edits(sections):
                 elif g["title"] == "Historical data":
                     g["children"] = [n for n in g["children"] if not _ends(n, "history/hydrant")]
                 elif g["title"] == "Account management API":
+                    g["ref"] = None  # render as a '##' heading like Dedicated nodes (no landing page)
                     for n in g["children"]:
                         if _ends(n, "rate-tiers"):
                             n["title"] = "Rate limits"
