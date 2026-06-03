@@ -1,12 +1,11 @@
 # Table of contents
 
-* [Overview](README.md)
+* [Welcome to Triton](README.md)
 
 ## Solana
 
 * [Documentation](solana/documentation/README.md)
   * [Get started](solana/documentation/get-started/README.md)
-    * [Welcome to Triton](solana/documentation/get-started/welcome-to-triton.md)
     * [Quickstart](solana/documentation/get-started/quickstart.md)
     * [Plans and billing](solana/documentation/get-started/plans-and-billing.md)
     * [Rate and connection limits](solana/documentation/get-started/rate-and-connection-limits.md)

@@ -15,12 +15,12 @@ SITE_BASE = "https://kate-6.gitbook.io/triton-one-docs"
 # spaces = markdown hard breaks, so they render tight (no huge paragraph gaps).
 FOOTER_MD = (
     "\n---\n\n"
-    "🛟 Need help? Contact support by clicking the chat icon in the bottom right of your "
+    "Need help? Contact support by clicking the chat icon in the bottom right of your "
     "[customer dashboard](https://customers.triton.one)  \n"
-    "⚙️ Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  \n"
-    "💼 Sales questions? [Contact sales](https://triton.one/contact)  \n"
-    "✨ AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  \n"
-    "📡 Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · "
+    "Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  \n"
+    "Sales questions? [Contact sales](https://triton.one/contact)  \n"
+    "AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  \n"
+    "Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · "
     "[YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · "
     "[GitHub](https://github.com/rpcpool)\n"
 )
@@ -202,12 +202,81 @@ def remove_div_block(text, class_substr):
                 depth -= 1; i = nc + 6
         text = text[:m.start()] + text[i:]
 
+def _flat(s):
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", s)).strip().replace("|", "\\|")
+
+def static_calc(text):
+    """Replace the interactive pricing calculator with a static rate table +
+    feature list (sliders/inputs can't run in GitBook)."""
+    m = re.search(r"<div\b[^>]*triton-calc\b[^>]*>", text)
+    if not m:
+        return text
+    i, depth = m.end(), 1
+    while i < len(text) and depth > 0:
+        no, nc = text.find("<div", i), text.find("</div>", i)
+        if nc == -1:
+            break
+        if no != -1 and no < nc:
+            depth += 1; i = no + 4
+        else:
+            depth -= 1; i = nc + 6
+    block = text[m.start():i]
+    rows = re.findall(r'row-title">(.*?)</div>\s*<div[^>]*row-rate">(.*?)</div>', block, re.S)
+    feats = re.findall(r"<li>(.*?)</li>", block, re.S)
+    out = []
+    seen = set()
+    if rows:
+        out += ["\n| Service | Rate |", "| --- | --- |"]
+        for t, r in rows:
+            k = (_flat(t), _flat(r))
+            if k not in seen:
+                seen.add(k); out.append(f"| {k[0]} | {k[1]} |")
+    if feats:
+        out.append("\n**Included**")
+        fseen = set()
+        for f in feats:
+            ff = _flat(f)
+            if ff and ff not in fseen:
+                fseen.add(ff); out.append(f"- {ff}")
+    out.append("\nMinimum deposit $125 (prepaid, non-refundable, valid for 12 months). "
+               "[Get started](https://customers.triton.one/onboarding)\n")
+    return text[:m.start()] + "\n".join(out) + text[i:]
+
+def html_table_to_md(m):
+    block = m.group(1)
+    heads = re.findall(r"<th\b[^>]*>(.*?)</th>", block, re.S)
+    out = []
+    if heads:
+        out.append("| " + " | ".join(_flat(h) for h in heads) + " |")
+        out.append("| " + " | ".join("---" for _ in heads) + " |")
+    for tr in re.findall(r"<tr\b[^>]*>(.*?)</tr>", block, re.S):
+        cells = re.findall(r"<td\b[^>]*>(.*?)</td>", tr, re.S)
+        if cells:
+            out.append("| " + " | ".join(_flat(c) for c in cells) + " |")
+    return "\n" + "\n".join(out) + "\n"
+
 def handle_html_blocks(text):
-    """Convert raw-HTML blocks (logos, <a> link maps, custom diagrams) and drop
-    the interactive RPC playground that can't run in GitBook."""
-    # drop the interactive playground (+ its heading/intro)
+    """Convert raw-HTML blocks (logos, <a> link maps, custom diagrams, tables)
+    and drop interactive widgets that can't run in GitBook."""
+    # drop the interactive playground + static-ify the pricing calculator
     text = remove_div_block(text, "triton-try")
     text = re.sub(r"##+ RPC playground\s*\n+[^\n<]*\n", "", text)
+    text = static_calc(text)
+    # MDX expression escapes
+    text = text.replace('{"$"}', "$")
+    text = re.sub(r"\{/\*.*?\*/\}", "", text, flags=re.S)   # {/* comments */}
+    text = re.sub(r'\{"([^"}]*)"\}', r"\1", text)            # {"literal"} -> literal
+    # raw <table> -> markdown table (header row preserved)
+    text = re.sub(r"<table\b[^>]*>(.*?)</table>", html_table_to_md, text, flags=re.S)
+    # lists + stray interactive elements
+    text = re.sub(r"</?(ul|ol)\b[^>]*>", "", text)
+    text = re.sub(r"<li\b[^>]*>(.*?)</li>",
+                  lambda m: f"\n- {_flat(m.group(1))}", text, flags=re.S)
+    text = re.sub(r"<button\b[^>]*>.*?</button>", "", text, flags=re.S)
+    text = re.sub(r"<input\b[^>]*/?>", "", text)
+    text = re.sub(r"<span\b[^>]*>(.*?)</span>", lambda m: m.group(1), text, flags=re.S)
+    text = re.sub(r"<span\b[^>]*/>", "", text)
+    text = re.sub(r"<p\b[^>]*>(.*?)</p>", lambda m: f"\n{m.group(1).strip()}\n", text, flags=re.S)
     # <a className="stack-leaf" href>txt</a> -> list item; other <a> -> link
     def conv_a(m):
         attrs, inner = m.group(1), m.group(2)

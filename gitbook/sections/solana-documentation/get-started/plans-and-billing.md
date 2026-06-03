@@ -30,100 +30,36 @@ Most dedicated customers run on monthly invoicing; PAYG dedicated is available o
 
 Pricing is simple: you pay for what you use. Per-million rates for calls, per-GB rates for bandwidth, line-itemed by service.
 
-- **Cost calculator.** Set each slider to expected monthly volume. The total estimates your spend at that rate. Minimum deposit {"$"}125.
+- **Cost calculator.** Set each slider to expected monthly volume. The total estimates your spend at that rate. Minimum deposit $125.
 - **Dedicated node.** Fixed monthly price covers gRPC streaming. Other services use the same rates as shared infrastructure.
 
-  <button type="button" className="triton-calc-mode-btn active" data-mode="custom">Custom PAYG</button>
-  <button type="button" className="triton-calc-mode-btn" data-mode="dedicated">Dedicated nodes</button>
+| Service | Rate |
+| --- | --- |
+| Bandwidth across all services | $0.08 / GB bandwidth |
+| Standard RPC, indexed accounts, ledger queries | $10 / million calls + bandwidth |
+| Streaming services, Titan Prime API | $0.08 / GB bandwidth |
+| Metaplex, Photon APIs | $50 / million calls + bandwidth |
+| Metis API | $80 / million calls + bandwidth |
+| gRPC streaming (Dragon's Mouth) | Included in the node price, no overage fees |
+| Fumarole, Whirligig, WebSockets, other streaming | $0.08 / GB bandwidth |
 
-      Minimum deposit is {"$"}125
-      {"$"}125.00
-      USD
+**Included**
+- Global bare-metal node network
+- GeoDNS routing, auto-failover
+- 1-on-1 support from senior engineers
+- Overage billed at the base rate
+- gRPC and WebSockets streaming
+- Full access to Yellowstone suite tools
+- Turnkey access to advanced APIs
+- Solana, Pythnet, Sui, and Monad
+- Unmetered gRPC streaming
+- Full access to Yellowstone suite and advanced APIs
+- Custom geolocated deployment
+- Isolated performance, dedicated to your traffic
+- Advanced controls and tuning for your workload
+- GeoDNS routing and automatic failover
 
-      Start shipping with
-
-      <ul className="triton-calc-features">
-        <li>Global bare-metal node network</li>
-        <li>GeoDNS routing, auto-failover</li>
-        <li>1-on-1 support from senior engineers</li>
-        <li>Overage billed at the base rate</li>
-        <li>gRPC and WebSockets streaming</li>
-        <li>Full access to Yellowstone suite tools</li>
-        <li>Turnkey access to advanced APIs</li>
-        <li>Solana, Pythnet, Sui, and Monad</li>
-      </ul>
-
-      <p className="triton-calc-fineprint">Deposit is prepaid, non-refundable, and valid for 12 months.
-
-        [Get started →](https://customers.triton.one/onboarding)
-        Minimum deposit is {"$"}125.00
-
-**Bandwidth across all services**
-
-              $0.08 / GB bandwidth
-
-            $0.00
-
-            <input type="range" min="0" max="10000" step="100" defaultValue="0" data-input />
-
-**Standard RPC, indexed accounts, ledger queries**
-
-              $10 / million calls + bandwidth
-
-            $0.00
-
-            <input type="range" min="0" max="10" step="0.1" defaultValue="0" data-input />
-
-**Streaming services, Titan Prime API**
-
-              $0.08 / GB bandwidth
-
-            $0.00
-
-            <input type="range" min="0" max="10000" step="100" defaultValue="0" data-input />
-
-**Metaplex, Photon APIs**
-
-              $50 / million calls + bandwidth
-
-            $0.00
-
-            <input type="range" min="0" max="10" step="0.1" defaultValue="0" data-input />
-
-**Metis API**
-
-              $80 / million calls + bandwidth
-
-            $0.00
-
-            <input type="range" min="0" max="10" step="0.1" defaultValue="0" data-input />
-
-  Solana dedicated node
-
-  {"$"}2,900+
-  USD per month
-
-  Start shipping with
-
-  <ul className="triton-calc-features" data-chain-features>
-    <li>Unmetered gRPC streaming</li>
-    <li>Full access to Yellowstone suite and advanced APIs</li>
-    <li>Custom geolocated deployment</li>
-    <li>Isolated performance, dedicated to your traffic</li>
-    <li>Advanced controls and tuning for your workload</li>
-    <li>GeoDNS routing and automatic failover</li>
-    <li>1-on-1 support from senior engineers</li>
-  </ul>
-
-**gRPC streaming (Dragon's Mouth)**
-
-  Included in the node price, no overage fees
-
-**Fumarole, Whirligig, WebSockets, other streaming**
-
-  $0.08 / GB bandwidth
-
-  [Contact sales →](https://triton.one/contact)
+Minimum deposit $125 (prepaid, non-refundable, valid for 12 months). [Get started](https://customers.triton.one/onboarding)
 
 ## How pay as you go works
 
@@ -154,8 +90,8 @@ There is no free trial, as the deposit replaces it: you get a year of testing ro
 {% endcontent-ref %}
 
 ---
-🛟 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
-⚙️ Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
-💼 Sales questions? [Contact sales](https://triton.one/contact)  
-✨ AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
-📡 Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+Sales questions? [Contact sales](https://triton.one/contact)  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

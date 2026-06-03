@@ -122,11 +122,8 @@ Possible RPC symptoms and the full list of Triton-specific RPC error codes for H
 | The requested resource doesn't exist or isn't synced on the custom node. Verify the resource ID, ensure your custom endpoint is configured to include the resource. | NOT\_FOUND | Client |
 
 ---
-
----
-
-Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
-Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
-Sales questions? [Contact sales](https://triton.one/contact).  
-AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+Sales questions? [Contact sales](https://triton.one/contact)  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
 Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
