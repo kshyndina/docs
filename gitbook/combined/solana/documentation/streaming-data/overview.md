@@ -1,0 +1,135 @@
+# Overview
+
+Triton offers multiple streaming services on Solana. This page covers what streaming is, what each service does, and how to pick the right one for your build.
+
+## What is streaming?
+
+Solana produces a new block every ~400 ms. If you poll RPC every 200 ms, your data is at best 200 ms stale by the time you see it, and you'll easily hit rate limits hammering the same endpoint.
+
+Streaming inverts the model: you open one connection, say what you need (specific accounts, programs, transaction patterns), and the node pushes you matching events the instant they happen.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
+sequenceDiagram
+    participant Client
+    participant RPC
+    Note over Client,RPC: Polling: ask repeatedly
+    Client->>RPC: getAccountInfo
+    RPC-->>Client: response (~200 ms stale)
+    Client->>RPC: getAccountInfo
+    RPC-->>Client: response (~200 ms stale)
+    Client->>RPC: getAccountInfo
+    RPC-->>Client: HTTP 429
+```
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
+sequenceDiagram
+    participant Client
+    participant RPC
+    Note over Client,RPC: Streaming: subscribe once
+    Client->>RPC: subscribe (filters)
+    RPC-->>Client: event (intra-slot)
+    RPC-->>Client: event (intra-slot)
+    RPC-->>Client: event (intra-slot)
+    RPC-->>Client: event (intra-slot)
+```
+
+You get sub-slot latency, structured Protobuf payloads, and lower costs, also significantly cheaper than the equivalent polling traffic, as it only incurs bandwidth cost.
+
+It's the right tool when you're building:
+
+- **Trading and MEV systems** where 50 ms of staleness costs money
+- **Indexers, accounting, and analytics pipelines** that need every block processed exactly once
+- **Real-time UIs** (DEXs, wallets, explorers) with live balances and transaction feeds
+- **Anything that needs to backfill chain history** at scale
+
+For teams with heavy polling codebases, Yellowstone Accounts Sync delivers streaming-grade reads through a one-line SDK swap.
+
+## Triton streaming stack
+
+Triton was first to ship gRPC streaming on Solana with **Yellowstone gRPC**, the open-source Geyser plugin that most of the ecosystem now runs on. Self-hosting is great for MVPs. At production scale, running on Triton gives you:
+
+- **Dedicated streaming clusters.** Specialised infrastructure that doesn't serve general RPC traffic, tuned for the I/O profile of pushing events to thousands of subscribers.
+- **Co-located with high-stake validators.** Streaming clusters sit next to high-stake validators in top-tier data centres and ingest shreds from our own validators, Jito, DoubleZero, and Turbine, so updates hit the edge as fast as physically possible.
+- **Globally distributed across 20\+ points of presence.** GeoDNS routes you to the nearest cluster; automatic failover handles outages.
+- **Isolated services.** All the streaming services (Whirligig, Fumarole, Faithful streams) run on modular infrastructure, so a spike in one can't degrade the others.
+
+## Pick your stream
+
+Three things matter in streaming: **latency, reliability, and replay**. Years of running Yellowstone at scale taught us that no single product leads on all of them. So we built one for each, all on the Yellowstone Geyser foundation.
+
+- [Dragon's Mouth](dragon-s-mouth-grpc.md) is the source of truth for live data, with [Deshred](deshred-transactions.md) giving you pre-execution transaction data on the same gRPC service.
+- [Whirligig](whirligig-websockets.md) translates Dragon's Mouth output into standard Solana WebSocket messages for browsers.
+- [Fumarole](fumarole-persistent-streams.md) consumes multiple Dragon's Mouth nodes, deduplicates, and persists a cursor on the server side so you can resume exactly where you left off after disconnects.
+- [Old Faithful](old-faithful-streams.md) taps the historical archive but uses the same gRPC interface, so the live and historical pipelines appear identical to your client code.
+
+| Capability | Dragon's Mouth | Deshred tx | Whirligig websocket | Fumarole | Old Faithful |
+| --- | :-: | :-: | :-: | :-: | :-: |
+| Real-time data | ✓ | ✓ | ✓ | ✓ | ✗ |
+| Pre-execution transactions | ✗ | ✓ | ✗ | ✗ | ✗ |
+| Historical replay | ✗ | ✗ | ✗ | 4 days | Entire ledger |
+| Persistent cursor | ✗ | ✗ | ✗ | ✓ | slot range |
+| Browser-compatible | ✗ | ✗ | ✓ | ✗ | ✗ |
+| Commitment | all | ✗ | all | all (confirmed latency) | finalised |
+| Protocol | gRPC | gRPC | WebSocket | gRPC | gRPC |
+
+It's normal to combine more than one product in a pipeline. Common patterns:
+
+- **Trading and MEV**: Dragon's Mouth gRPC for processed data, Deshred for pre-execution tx
+- **DEX or wallet frontend**: Whirligig WebSockets
+- **Indexer, analytics, or compliance**: Fumarole for live with confirmed Faithful streams for history
+
+{% content-ref url="dragon-s-mouth-grpc.md" %}
+[Dragon's Mouth gRPC](dragon-s-mouth-grpc.md)
+{% endcontent-ref %}
+
+{% content-ref url="deshred-transactions.md" %}
+[Deshred transactions](deshred-transactions.md)
+{% endcontent-ref %}
+
+{% content-ref url="whirligig-websockets.md" %}
+[Whirligig WebSockets](whirligig-websockets.md)
+{% endcontent-ref %}
+
+{% content-ref url="fumarole-persistent-streams.md" %}
+[Fumarole reliable streams](fumarole-persistent-streams.md)
+{% endcontent-ref %}
+
+{% content-ref url="old-faithful-streams.md" %}
+[Old Faithful streams](old-faithful-streams.md)
+{% endcontent-ref %}
+
+## Excluded programs
+
+Light Protocol program is excluded from all our streams and is also unavailable via `getProgramAccounts`. At peak load, it accounted for over 50% of all Geyser traffic, making it impractical to include in standard streams
+
+| Program | Address |
+| :-- | :-- |
+| Light Protocol / ZK Compression | `compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq` |
+
+The recommended replacement is the [Triton-hosted Photon service](../reading-state/zk-compression-photon.md), which lets you query individual compressed accounts, token balances, validity proofs, and transaction signatures directly.
+
+## Pricing
+
+All streaming services are billed at `$0.08 / GB` of bandwidth, and you only pay for the data sent. See [streaming best practices](best-practices.md) for filtering, guides, and other ways to reduce it.
+
+## What's next
+
+{% content-ref url="quickstart.md" %}
+[Streaming quickstart](quickstart.md)
+{% endcontent-ref %}
+
+{% content-ref url="../reading-state/account-sync.md" %}
+[Account Sync](../reading-state/account-sync.md)
+{% endcontent-ref %}
+
+---
+
+---
+
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
