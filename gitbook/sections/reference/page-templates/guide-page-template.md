@@ -19,7 +19,7 @@ Reference layout for an end-to-end use-case guide. The structure that works: cle
 Watch any wallet in real time, decode its swap activity, and forward the trades to your own bot. Stack: **Dragon's Mouth gRPC** for streaming, **Yellowstone Jet** for landing transactions, **Standard RPC** for state reads.
 
 {% hint style="info" %}
-**Time:** ~15 minutes. **Prerequisites:** a Triton endpoint (see [Quickstart](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/quickstart)), Node.js 20+, basic familiarity with Solana transactions.
+**Time:** ~15 minutes. **Prerequisites:** a Triton endpoint (see [Quickstart](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart)), Node.js 20+, basic familiarity with Solana transactions.
 {% endhint %}
 
 ### What you'll build
@@ -99,7 +99,7 @@ node bot.ts
 
 ## Step 2: Decode the swap instruction
 
-Triton's [Vixen parsing framework](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/steamboat-indexed-accounts) covers Jupiter, Raydium, Orca, and Meteora out of the box.
+Triton's [Vixen parsing framework](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/steamboat-indexed-accounts) covers Jupiter, Raydium, Orca, and Meteora out of the box.
 
 ```typescript
 
@@ -160,18 +160,18 @@ The whale sent a swap that, sized down to your bankroll, is too small to clear t
 <details>
 <summary>Jet returns 'leader unavailable'</summary>
 
-Slot rotation, no leader for the next few slots. The Jet client retries automatically; if you see this for >5 seconds, check the [Jet status page](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/yellowstone-jet).
+Slot rotation, no leader for the next few slots. The Jet client retries automatically; if you see this for >5 seconds, check the [Jet status page](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/yellowstone-jet).
 
 </details>
 
 ## Next steps
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/guides/end-to-end-builds/stream-a-raydium-amm-pool" %}
-[Stream a Raydium AMM pool](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/end-to-end-builds/stream-a-raydium-amm-pool)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/stream-a-raydium-amm-pool" %}
+[Stream a Raydium AMM pool](https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/stream-a-raydium-amm-pool)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/guides/end-to-end-builds/send-transactions-during-congestion" %}
-[Send transactions during congestion](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/end-to-end-builds/send-transactions-during-congestion)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/send-transactions-during-congestion" %}
+[Send transactions during congestion](https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/send-transactions-during-congestion)
 {% endcontent-ref %}
 
 ---

@@ -11,7 +11,7 @@ Triton's shared infrastructure enforces two budgets on every IP, both reset ever
 - **Total RPS** -- the budget across every method.
 - **Per-method RPS** -- a separate budget for each individual RPC method (most often hit on `getProgramAccounts`, `sendTransaction`, or `getBlock`).
 
-A 429 means at least one of those budgets was exceeded. See [Rate and connection limits](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/rate-and-connection-limits) for the exact defaults and how to read your endpoint's live limits.
+A 429 means at least one of those budgets was exceeded. See [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits) for the exact defaults and how to read your endpoint's live limits.
 
 ## Read the response headers
 
@@ -66,8 +66,8 @@ async function rpcWithBackoff(url: string, body: unknown, maxAttempts = 5) {
 
 ## What's next
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/rate-and-connection-limits" %}
-[Rate and connection limits](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/rate-and-connection-limits)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits" %}
+[Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits)
 {% endcontent-ref %}
 
 {% content-ref url="common-solana-errors.md" %}

@@ -5,7 +5,7 @@ Questions about transaction landing, staked validators, and processed-vs-confirm
 <details>
 <summary>My transactions aren't landing successfully. What should I do?</summary>
 
-Triton ensures reliable transaction delivery to the network, but for optimal transaction finalisation, we recommend configuring appropriate priority fees. See our [Priority Fees API](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/priority-fees-api) for how to set them.
+Triton ensures reliable transaction delivery to the network, but for optimal transaction finalisation, we recommend configuring appropriate priority fees. See our [Priority Fees API](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/priority-fees-api) for how to set them.
 
 </details>
 

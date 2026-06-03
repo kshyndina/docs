@@ -72,7 +72,7 @@ Every JSON-RPC response also carries `X-Ratelimit-*` headers. Watch them in your
 | `X-Ratelimit-Method-Limit` | Per-method cap for this RPC |
 | `X-Ratelimit-Method-Remaining` | How many of this method you have left |
 
-If you do hit a 429, see the [Error handling guide](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/how-to-troubleshoot) for the full debug flow.
+If you do hit a 429, see the [Error handling guide](https://kate-6.gitbook.io/triton-one-docs/guides/error-handling/how-to-troubleshoot) for the full debug flow.
 
 ## Browser concurrency
 

@@ -39,7 +39,7 @@ Includes writable and readonly addresses resolved from Address Lookup Tables.
 Before you start, make sure you have:
 
 - An active Triton subscription
-- Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) ([how to get them](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/account-management/access-your-endpoint-and-token))
+- Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) ([how to get them](https://kate-6.gitbook.io/triton-one-docs/guides/account-management/access-your-endpoint-and-token))
 - A backend environment in TypeScript, Rust, Go, or another language with a gRPC client
 - Familiarity with gRPC and Protocol Buffers
 

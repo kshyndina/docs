@@ -21,7 +21,7 @@ Stream account writes from a Triton endpoint in five minutes. By the end you'll 
 > Above is the **promise**. State it explicitly. Time + concrete success criterion. The reader decides whether to keep reading.
 
 {% hint style="info" %}
-**Time:** 5 minutes. **You'll need:** a Triton endpoint with a token (see [Get started](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/quickstart)), Node.js 20+ or Python 3.10+, a wallet pubkey to watch.
+**Time:** 5 minutes. **You'll need:** a Triton endpoint with a token (see [Get started](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart)), Node.js 20+ or Python 3.10+, a wallet pubkey to watch.
 {% endhint %}
 
 ## Steps
@@ -133,8 +133,8 @@ If you see no events at all, see the [streaming troubleshooting checklist](/sola
 [Filter by program, instruction, or accounts](#)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/guides/end-to-end-builds/copy-trade-a-wallet" %}
-[Build a copy-trade bot](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/end-to-end-builds/copy-trade-a-wallet)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/copy-trade-a-wallet" %}
+[Build a copy-trade bot](https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/copy-trade-a-wallet)
 {% endcontent-ref %}
 
 ## Footer

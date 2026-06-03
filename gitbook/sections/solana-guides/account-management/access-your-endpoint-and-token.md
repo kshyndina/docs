@@ -39,7 +39,7 @@ Anything visible in DevTools is public. For frontend code, leave the token out o
 https://<your-endpoint>.mainnet.rpcpool.com/
 ```
 
-Setup steps and the full token-leak playbook are in [Auth and security](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security).
+Setup steps and the full token-leak playbook are in [Auth and security](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security).
 
 ## Rotate or revoke
 
@@ -47,20 +47,20 @@ The dashboard's endpoint page has **Rotate token** (issues a new token, old one 
 
 ## What's next
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/quickstart" %}
-[Quickstart](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/quickstart)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart" %}
+[Quickstart](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security" %}
-[Auth and security](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security" %}
+[Auth and security](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security)
 {% endcontent-ref %}
 
 {% content-ref url="how-to-sign-up.md" %}
 [How to sign up](how-to-sign-up.md)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/plans-and-billing" %}
-[Plans and billing](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/plans-and-billing)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/plans-and-billing" %}
+[Plans and billing](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/plans-and-billing)
 {% endcontent-ref %}
 
 ---

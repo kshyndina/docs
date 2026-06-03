@@ -57,14 +57,14 @@ For dedicated nodes, there's no set limit. However, opening too many subscriptio
 <details>
 <summary>What is Steamboat, and how does it improve latency?</summary>
 
-Steamboat is Triton's account indexing engine that delivers `getProgramAccounts`, `getTokenAccountsByOwner`, and `getTokenAccountsByDelegate` up to **50x faster** by serving them from tailored PostgreSQL indexes instead of full account scans. Indexes are built automatically from your query traffic. Available on every Triton plan at standard RPC rates -- no premium for indexed reads. See [Steamboat](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/steamboat-indexed-accounts).
+Steamboat is Triton's account indexing engine that delivers `getProgramAccounts`, `getTokenAccountsByOwner`, and `getTokenAccountsByDelegate` up to **50x faster** by serving them from tailored PostgreSQL indexes instead of full account scans. Indexes are built automatically from your query traffic. Available on every Triton plan at standard RPC rates -- no premium for indexed reads. See [Steamboat](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/steamboat-indexed-accounts).
 
 </details>
 
 <details>
 <summary>What is Fumarole, and how can I get access?</summary>
 
-Fumarole is a streaming system designed for reliable, scalable streaming of account and transaction data. It aggregates data from multiple Solana nodes for high availability and persistence, with up to 4 days of retained stream history. Available on every Triton subscription, with regional endpoints (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US). See [Fumarole](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/fumarole-persistent-streams).
+Fumarole is a streaming system designed for reliable, scalable streaming of account and transaction data. It aggregates data from multiple Solana nodes for high availability and persistence, with up to 4 days of retained stream history. Available on every Triton subscription, with regional endpoints (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US). See [Fumarole](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/fumarole-persistent-streams).
 
 </details>
 
@@ -75,21 +75,21 @@ Connecting to streaming services from backend code, browsers, or via Geyser plug
 <details>
 <summary>Can I use gRPC from a web browser?</summary>
 
-No, gRPC is not supported in web browsers due to HTTP/2 and protobuf limitations. It is designed for backend applications. For frontend use, use [Whirligig WebSockets](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/whirligig-websockets) instead.
+No, gRPC is not supported in web browsers due to HTTP/2 and protobuf limitations. It is designed for backend applications. For frontend use, use [Whirligig WebSockets](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/whirligig-websockets) instead.
 
 </details>
 
 <details>
 <summary>Do endpoints support WebSocket connections?</summary>
 
-Yes, on both shared and dedicated infrastructure. Your existing WebSocket connections automatically route through [Whirligig WebSockets](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/whirligig-websockets) -- our gRPC-backed WebSocket layer that delivers intra-slot account updates at `processed`, full `blockSubscribe` and `transactionSubscribe`, and significantly higher subscription limits than native pubsub. No code changes required.
+Yes, on both shared and dedicated infrastructure. Your existing WebSocket connections automatically route through [Whirligig WebSockets](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/whirligig-websockets) -- our gRPC-backed WebSocket layer that delivers intra-slot account updates at `processed`, full `blockSubscribe` and `transactionSubscribe`, and significantly higher subscription limits than native pubsub. No code changes required.
 
 </details>
 
 <details>
 <summary>How do I connect to WebSockets?</summary>
 
-Replace `https` with `wss` in your RPC endpoint URL. For example: `wss://your-endpoint.rpcpool.com`. For backends, we recommend using gRPC instead -- see [Dragon's Mouth gRPC](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/dragon-s-mouth-grpc) for the lower-latency path.
+Replace `https` with `wss` in your RPC endpoint URL. For example: `wss://your-endpoint.rpcpool.com`. For backends, we recommend using gRPC instead -- see [Dragon's Mouth gRPC](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc) for the lower-latency path.
 
 </details>
 
@@ -105,7 +105,7 @@ Geyser plugins can be enabled on our dedicated Solana nodes. They provide powerf
 
 Run our prebuilt `client-ubuntu` test client. It's a small Linux CLI we ship for exactly this purpose -- known-good code that hits your endpoint with the same gRPC subscription patterns your app does. If it errors, the issue is on the endpoint and we should look at it. If it streams cleanly, the issue is in your application code.
 
-Full guide: [Verify your gRPC endpoint](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/verify-your-grpc-endpoint).
+Full guide: [Verify your gRPC endpoint](https://kate-6.gitbook.io/triton-one-docs/guides/error-handling/verify-your-grpc-endpoint).
 
 </details>
 

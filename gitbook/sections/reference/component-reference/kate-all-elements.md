@@ -138,20 +138,20 @@ curl https://your-endpoint.rpcpool.com \
 **Where to use:** landing pages, section hubs, "where do I go next".
 **Why it works:** visual nav with icons + descriptions; great for the front of each chain dropdown (e.g. Solana welcome page).
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/quickstart" %}
-[Quickstart](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/quickstart)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart" %}
+[Quickstart](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/api-reference/overview-and-auth/api-overview" %}
-[API reference](https://kate-6.gitbook.io/version-a-site-space-per-section/api-reference/overview-and-auth/api-overview)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/api-reference/overview-and-auth/api-overview" %}
+[API reference](https://kate-6.gitbook.io/triton-one-docs/api-reference/overview-and-auth/api-overview)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/overview" %}
-[Streaming data](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/overview)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview" %}
+[Streaming data](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/faqs/general" %}
-[FAQs](https://kate-6.gitbook.io/version-a-site-space-per-section/faqs/general)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/faqs/general" %}
+[FAQs](https://kate-6.gitbook.io/triton-one-docs/faqs/general)
 {% endcontent-ref %}
 
 ### Accordions
@@ -213,7 +213,7 @@ Mintlify's most powerful native interactive component is the **API playground** 
 2. `
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-|  |  | — | ` rows describing the parameters. Mintlify reads the frontmatter, builds a request panel on the right, lets the reader fill in their auth token + the params, and POSTs to the endpoint. The response renders below. No JS to write. To see it live, open any existing API method page, e.g. [getSlot](https://kate-6.gitbook.io/version-a-site-space-per-section/api-reference/http-rpc-methods/standard/getslot) -- the right column has the playground. The same component is used for HTTP RPC, WebSocket subscribe/unsubscribe, gRPC, and DAS API. There's also `<Prompt>` for *AI* prompts (copyable text with a "Copy to ChatGPT/Claude" button). Useful for "ask AI to migrate your code" CTAs but not relevant for normal docs flow. Other "interactive" things Mintlify ships: - **Search bar in the navbar** -- automatic, indexes every page on build - **Hosted MCP server** -- already live at `/mcp`, lets readers' AI tools query the docs as a tool - **Per-page "Open in Cursor / VS Code / ChatGPT / Claude / Perplexity" menu** -- already configured in `docs.json` `contextual.options` - **`llms.txt` + per-page `.md` exports** -- machine-readable docs for AI agents So the answer to "what about interactive playground / key input" is: **it's already in your docs**, baked into every API method page through `api` frontmatter + `<ParamField>`. You don't need to add a separate component. ## API reference building blocks These are the building blocks behind the playground above. ### `<ParamField>` and ` |
+|  |  | — | ` rows describing the parameters. Mintlify reads the frontmatter, builds a request panel on the right, lets the reader fill in their auth token + the params, and POSTs to the endpoint. The response renders below. No JS to write. To see it live, open any existing API method page, e.g. [getSlot](https://kate-6.gitbook.io/triton-one-docs/api-reference/http-rpc-methods/standard/getslot) -- the right column has the playground. The same component is used for HTTP RPC, WebSocket subscribe/unsubscribe, gRPC, and DAS API. There's also `<Prompt>` for *AI* prompts (copyable text with a "Copy to ChatGPT/Claude" button). Useful for "ask AI to migrate your code" CTAs but not relevant for normal docs flow. Other "interactive" things Mintlify ships: - **Search bar in the navbar** -- automatic, indexes every page on build - **Hosted MCP server** -- already live at `/mcp`, lets readers' AI tools query the docs as a tool - **Per-page "Open in Cursor / VS Code / ChatGPT / Claude / Perplexity" menu** -- already configured in `docs.json` `contextual.options` - **`llms.txt` + per-page `.md` exports** -- machine-readable docs for AI agents So the answer to "what about interactive playground / key input" is: **it's already in your docs**, baked into every API method page through `api` frontmatter + `<ParamField>`. You don't need to add a separate component. ## API reference building blocks These are the building blocks behind the playground above. ### `<ParamField>` and ` |
 | `commitment` | `string` | — | Commitment level. One of `processed`, `confirmed`, or `finalized`. |
 | `encoding` | `string` | — | Optional response encoding. Defaults to `base64`. |
 | `value.lamports` | `number` | — | Account balance in lamports. |
@@ -222,7 +222,7 @@ Mintlify's most powerful native interactive component is the **API playground** 
 
 These render the right-sidebar code panel on a method page (where the table-of-contents normally lives). They only render that way when the page has `api: "..."` in its frontmatter -- on a regular page like this one, they don't show.
 
-To see them in action: open [getSlot](https://kate-6.gitbook.io/version-a-site-space-per-section/api-reference/http-rpc-methods/standard/getslot) -- the right rail with the curl/JS example panel is `<RequestExample>`, the JSON below is `<ResponseExample>`.
+To see them in action: open [getSlot](https://kate-6.gitbook.io/triton-one-docs/api-reference/http-rpc-methods/standard/getslot) -- the right rail with the curl/JS example panel is `<RequestExample>`, the JSON below is `<ResponseExample>`.
 
 ### Expandable
 
@@ -325,7 +325,7 @@ Triton's Yellowstone gRPC stack delivers shred-level data with sub-second latenc
 
   SWQoS routing is now available on every Solana plan -- no separate Cascade tier required. Existing Cascade customers were migrated automatically on 2026-02-01.
 
-  The State Machine SDK is generally available. See [Steamboat indexed accounts](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/steamboat-indexed-accounts) for the new query interface.
+  The State Machine SDK is generally available. See [Steamboat indexed accounts](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/steamboat-indexed-accounts) for the new query interface.
 
 ## How to delete this page
 

@@ -28,20 +28,20 @@ The right product depends on the access pattern: one-off lookups vs scans, reads
 
 > Cards or table. Cards work better when each option has a clear use case; table works better when the comparison is dimensional. Pick one.
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/standard-rpc" %}
-[Standard RPC](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/standard-rpc)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc" %}
+[Standard RPC](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/steamboat-indexed-accounts" %}
-[Steamboat](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/steamboat-indexed-accounts)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/steamboat-indexed-accounts" %}
+[Steamboat](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/steamboat-indexed-accounts)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/metaplex-das-api" %}
-[DAS API](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/metaplex-das-api)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/metaplex-das-api" %}
+[DAS API](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/metaplex-das-api)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/account-sync" %}
-[Account Sync](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/account-sync)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/account-sync" %}
+[Account Sync](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/account-sync)
 {% endcontent-ref %}
 
 ### Decision matrix
@@ -54,7 +54,7 @@ The right product depends on the access pattern: one-off lookups vs scans, reads
 | `getProgramAccounts` over a 100k-account program | Steamboat | Native scan is O(n); Steamboat reads off a hot index. |
 | NFT and cNFT collection feeds | DAS API | Triton helped author the spec. |
 | Always-current account state for a watch list | Account Sync | Push-based, no polling, no rate-limit pressure. |
-| Real-time slot-by-slot account updates | [Dragon's Mouth gRPC](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/dragon-s-mouth-grpc) | Streaming sits in the next section, but it's often the right answer. |
+| Real-time slot-by-slot account updates | [Dragon's Mouth gRPC](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc) | Streaming sits in the next section, but it's often the right answer. |
 
 ## How these fit together
 
@@ -82,20 +82,20 @@ All four read paths share the same underlying validator. Standard RPC and DAS AP
 
 > One CTA per overview page. Send the reader to the most likely first stop.
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/quickstart" %}
-[Quickstart: get reading in 5 minutes](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/quickstart)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart" %}
+[Quickstart: get reading in 5 minutes](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart)
 {% endcontent-ref %}
 
 ## Related sections
 
 > Cross-link siblings. Helps users navigate without going back to the top-level nav.
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/overview" %}
-[Streaming data](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/overview)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview" %}
+[Streaming data](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/historical-data/hydrant-archive" %}
-[Historical data](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/historical-data/hydrant-archive)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/historical-data/hydrant-archive" %}
+[Historical data](https://kate-6.gitbook.io/triton-one-docs/documentation/historical-data/hydrant-archive)
 {% endcontent-ref %}
 
 ---

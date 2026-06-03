@@ -18,7 +18,7 @@ Click the link in the verification email. The portal will open to your dashboard
 
 Open Billing, then Buy credits. Pay in stablecoins (USDC, USDT, DAI) via Wallet Connect or any external wallet/exchange. The deposit is prepaid, non-refundable, and valid for 12 months. There is no free trial -- the deposit replaces it.
 
-For card or wire payment, switch to [invoiced billing](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/plans-and-billing) -- contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).
+For card or wire payment, switch to [invoiced billing](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/plans-and-billing) -- contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).
 {% endstep %}
 {% step %}
 #### Create your first endpoint
@@ -28,31 +28,31 @@ Click **Create endpoint**, pick **Solana mainnet** (or devnet for testing), and 
 - **Endpoint URL** -- `<your-endpoint>.mainnet.rpcpool.com`
 - **Secret token** -- a long random string
 
-Keep the token server-side. For browser apps, set up an [origin allowlist](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security) instead of using the token.
+Keep the token server-side. For browser apps, set up an [origin allowlist](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security) instead of using the token.
 {% endstep %}
 {% step %}
 #### Send your first request
 
-Follow the [Quickstart](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/quickstart) to call `getSlot` and confirm the endpoint is live. About five minutes end to end.
+Follow the [Quickstart](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart) to call `getSlot` and confirm the endpoint is live. About five minutes end to end.
 {% endstep %}
 {% endstepper %}
 
 ## What's next
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/quickstart" %}
-[Quickstart](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/quickstart)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart" %}
+[Quickstart](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/plans-and-billing" %}
-[Plans and billing](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/plans-and-billing)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/plans-and-billing" %}
+[Plans and billing](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/plans-and-billing)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security" %}
-[Auth and security](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security" %}
+[Auth and security](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/platform-overview" %}
-[Account management](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/platform-overview)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/platform-overview" %}
+[Account management](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/platform-overview)
 {% endcontent-ref %}
 
 ---

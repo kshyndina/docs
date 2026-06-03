@@ -12,24 +12,24 @@ By the end you'll have a working setup that covers the full path from signal to 
 
 Five Triton products work together in this stack. Each card below opens the full product docs -- useful when you want to tune defaults, see every option, or troubleshoot something specific to that product.
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/dragon-s-mouth-grpc" %}
-[Dragon's Mouth](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/dragon-s-mouth-grpc)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc" %}
+[Dragon's Mouth](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/deshred-transactions" %}
-[Deshred](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/deshred-transactions)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/deshred-transactions" %}
+[Deshred](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/deshred-transactions)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/priority-fees-api" %}
-[Priority Fee API](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/priority-fees-api)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/priority-fees-api" %}
+[Priority Fee API](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/priority-fees-api)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/yellowstone-jet" %}
-[Jet](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/yellowstone-jet)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/yellowstone-jet" %}
+[Jet](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/yellowstone-jet)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/shield-mev-protection" %}
-[Shield](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/shield-mev-protection)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/shield-mev-protection" %}
+[Shield](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/shield-mev-protection)
 {% endcontent-ref %}
 
 ## Prerequisites
@@ -855,12 +855,12 @@ Two paths for two types of teams:
 - **This guide** -- build your own signal and execution stack. Full control, lowest latency, more engineering work.
 - **Metis / Titan** -- plug in pre-built liquidity routing and quoting. Fastest time to market, less custom code.
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/metis-swap-api" %}
-[Metis swap API](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/metis-swap-api)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/metis-swap-api" %}
+[Metis swap API](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/metis-swap-api)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/titan-swap-api" %}
-[Titan swap API](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/titan-swap-api)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/titan-swap-api" %}
+[Titan swap API](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/titan-swap-api)
 {% endcontent-ref %}
 
 ## FAQs
@@ -897,20 +897,20 @@ Orca Whirlpools: `whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc`
 
 ## What's next
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/deshred-transactions" %}
-[Deshred transactions](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/deshred-transactions)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/deshred-transactions" %}
+[Deshred transactions](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/deshred-transactions)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/shield-mev-protection" %}
-[Shield MEV protection](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/shield-mev-protection)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/shield-mev-protection" %}
+[Shield MEV protection](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/shield-mev-protection)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/metis-swap-api" %}
-[Metis swap API](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/metis-swap-api)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/metis-swap-api" %}
+[Metis swap API](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/metis-swap-api)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/titan-swap-api" %}
-[Titan swap API](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/titan-swap-api)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/titan-swap-api" %}
+[Titan swap API](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/titan-swap-api)
 {% endcontent-ref %}
 
 ---

@@ -70,7 +70,7 @@ You can self-onboard at [customers.triton.one](https://customers.triton.one/user
 <details>
 <summary>How can I decide which service fits my traffic needs best?</summary>
 
-Our docs cover comparisons for [streaming](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/overview), [reading state](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/overview), and [sending transactions](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/overview), so you can match the service to your traffic shape. If you want more tailored guidance, [contact sales](https://triton.one/contact). If you already have an account, contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).
+Our docs cover comparisons for [streaming](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview), [reading state](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/overview), and [sending transactions](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/overview), so you can match the service to your traffic shape. If you want more tailored guidance, [contact sales](https://triton.one/contact). If you already have an account, contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).
 
 </details>
 
@@ -144,7 +144,7 @@ The most common mistake is omitting the token, `v2`, or `hermes` parts of the pa
 <details>
 <summary>Does Triton have a validator?</summary>
 
-Yes. You can stake directly with our [Private Trusted Validator](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/validator-services/white-label-validators/overview) and earn weekly USDC rewards. The minimum delegation is 2,500 SOL.
+Yes. You can stake directly with our [Private Trusted Validator](https://kate-6.gitbook.io/triton-one-docs/documentation/validator-services/white-label-validators/overview) and earn weekly USDC rewards. The minimum delegation is 2,500 SOL.
 
     This is built for people or teams with larger delegations who want steady income to cover operating expenses, with white-glove setup for custodians and stake pools.
 

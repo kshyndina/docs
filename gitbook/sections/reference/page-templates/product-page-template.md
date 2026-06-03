@@ -81,7 +81,7 @@ Solana's validator emits every account write to a Geyser plugin, which Triton al
 
 > Always link to the central pricing page rather than copying numbers in. Numbers drift.
 
-Included on all PAYG and dedicated plans. Reads are billed at `$10 / million calls + bandwidth` (same as Standard RPC). See the [pricing calculator](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/plans-and-billing).
+Included on all PAYG and dedicated plans. Reads are billed at `$10 / million calls + bandwidth` (same as Standard RPC). See the [pricing calculator](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/plans-and-billing).
 
 ## FAQ
 
@@ -110,12 +110,12 @@ Yes. Dedicated nodes get unmetered Steamboat reads and you can pin custom indexe
 
 ## Related
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/dragon-s-mouth-grpc" %}
-[Dragon's Mouth gRPC](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/dragon-s-mouth-grpc)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc" %}
+[Dragon's Mouth gRPC](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/standard-rpc" %}
-[Standard RPC](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/standard-rpc)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc" %}
+[Standard RPC](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc)
 {% endcontent-ref %}
 
 ---

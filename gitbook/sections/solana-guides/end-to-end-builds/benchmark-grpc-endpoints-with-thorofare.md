@@ -37,16 +37,16 @@ Thorofare runs on your machine. Run it from a backend close to where your real p
 
 ## What's next
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/rate-and-connection-limits" %}
-[Rate and connection limits](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/rate-and-connection-limits)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits" %}
+[Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/overview" %}
-[Streaming overview](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/overview)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview" %}
+[Streaming overview](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security" %}
-[Auth and security](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security" %}
+[Auth and security](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security)
 {% endcontent-ref %}
 
 {% content-ref url="https://blog.triton.one/how-to-benchmark-solana-rpc-endpoints/" %}

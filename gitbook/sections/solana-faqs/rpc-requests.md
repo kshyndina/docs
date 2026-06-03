@@ -48,14 +48,14 @@ If traffic exceeds your node's capacity, it may lag behind the network's latest 
 <details>
 <summary>What happens if I hit my rate limit?</summary>
 
-Your application will receive `HTTP 429` errors. When this happens, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See [Handle 429 rate-limit errors](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/handle-429-rate-limit-errors) for the pattern, or our [Rate and connection limits](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/rate-and-connection-limits) page for the budgets and headers.
+Your application will receive `HTTP 429` errors. When this happens, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See [Handle 429 rate-limit errors](https://kate-6.gitbook.io/triton-one-docs/guides/error-handling/handle-429-rate-limit-errors) for the pattern, or our [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits) page for the budgets and headers.
 
 </details>
 
 <details>
 <summary>Can I run scripts on the shared service?</summary>
 
-Yes. Shared infrastructure handles backend workloads (scripts, trading bots, indexers) and is sized to absorb traffic spikes. If you expect sustained heavy load (heavy subscriptions, full-chain streams, custom Geyser configurations), a [dedicated node](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/dedicated-nodes/overview) is usually the right choice.
+Yes. Shared infrastructure handles backend workloads (scripts, trading bots, indexers) and is sized to absorb traffic spikes. If you expect sustained heavy load (heavy subscriptions, full-chain streams, custom Geyser configurations), a [dedicated node](https://kate-6.gitbook.io/triton-one-docs/documentation/dedicated-nodes/overview) is usually the right choice.
 
 </details>
 
@@ -66,7 +66,7 @@ Tokens, endpoints, allowed origins, regions, and the capabilities Triton support
 <details>
 <summary>How do I monitor my RPC usage?</summary>
 
-Customers with [dedicated nodes](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/dedicated-nodes/overview) get a Grafana dashboard with real-time metrics: request volume, latency, error rates, and bandwidth usage.
+Customers with [dedicated nodes](https://kate-6.gitbook.io/triton-one-docs/documentation/dedicated-nodes/overview) get a Grafana dashboard with real-time metrics: request volume, latency, error rates, and bandwidth usage.
 
     For shared (pay-as-you-go) customers, open the **v3 Billing** tab in your [customer dashboard](https://customers.triton.one). You'll see total requests and GB used (the two dimensions you're billed on), plus a per-service breakdown table with product-level detail. Click **Export CSV** in the top-right corner to download.
 
@@ -129,7 +129,7 @@ Yes, dedicated node users can opt into archival nodes that store full Solana blo
 <details>
 <summary>Can I use Jito sendBundle and bundle simulation with Triton RPCs?</summary>
 
-Bundle simulation is available to everyone -- see [Jito bundles](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/jito-bundles) for the full reference.
+Bundle simulation is available to everyone -- see [Jito bundles](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/jito-bundles) for the full reference.
 
 `sendBundle` itself isn't routed through our infrastructure. Routing bundle sends through Triton would add an extra hop in front of the Jito block engine, which adds latency and works against the reason you're using bundles in the first place. The recommended pattern is to call the Jito block engine directly for sends, and use Triton for everything else (reads, streams, simulation).
 
@@ -142,7 +142,7 @@ Common issues with WebSocket connections, latency measurement, and gRPC connecti
 <details>
 <summary>I have an issue with my Web3.js socket connection. How can I fix it?</summary>
 
-If you're hitting persistent socket or connection errors with `@solana/web3.js` (`fetch failed`, `Connect Timeout Error`, `ECONNREFUSED`, `ECONNRESET`, `other side closed`), see [Web3.js socket and connection issues](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/web3js-socket-connection-issues). It covers the root causes and the standard fixes.
+If you're hitting persistent socket or connection errors with `@solana/web3.js` (`fetch failed`, `Connect Timeout Error`, `ECONNREFUSED`, `ECONNRESET`, `other side closed`), see [Web3.js socket and connection issues](https://kate-6.gitbook.io/triton-one-docs/guides/error-handling/web3js-socket-connection-issues). It covers the root causes and the standard fixes.
 
 </details>
 

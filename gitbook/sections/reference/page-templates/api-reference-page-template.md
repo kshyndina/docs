@@ -32,7 +32,7 @@ A one-sentence description of what this method does and when to use it. The user
 ### When not to use it
 
 - For NFT or SPL token balances, use [`getTokenAccountsByOwner`](#) — `getBalance` only returns native SOL.
-- For real-time updates, use [`accountSubscribe`](#) over WebSocket or [Dragon's Mouth gRPC](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/streaming-data/dragon-s-mouth-grpc).
+- For real-time updates, use [`accountSubscribe`](#) over WebSocket or [Dragon's Mouth gRPC](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc).
 
 ### Parameters
 
@@ -130,13 +130,13 @@ println!("Balance: {} SOL", lamports as f64 / 1_000_000_000.0);
 | `-32602` | Invalid params | The pubkey isn't a valid base58 string, or commitment isn't recognised. |
 | `-32602` | Account does not exist | The pubkey is valid but no account exists at that address. |
 
-For 401, 429, timeout, and gRPC-403 patterns, see the [Error handling guide](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/how-to-troubleshoot).
+For 401, 429, timeout, and gRPC-403 patterns, see the [Error handling guide](https://kate-6.gitbook.io/triton-one-docs/guides/error-handling/how-to-troubleshoot).
 
 ### Rate limits
 
 > Always link to the central rate-limits page. Note any method-specific cap.
 
-Standard tier shares the global rate limit. See [Rate and connection limits](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/rate-and-connection-limits). `getBalance` has no per-method cap above the shared limit.
+Standard tier shares the global rate limit. See [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits). `getBalance` has no per-method cap above the shared limit.
 
 ### Performance notes
 
@@ -162,8 +162,8 @@ Standard tier shares the global rate limit. See [Rate and connection limits](htt
 [accountSubscribe](#)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/how-to-troubleshoot" %}
-[Error handling](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/how-to-troubleshoot)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/error-handling/how-to-troubleshoot" %}
+[Error handling](https://kate-6.gitbook.io/triton-one-docs/guides/error-handling/how-to-troubleshoot)
 {% endcontent-ref %}
 
 ---

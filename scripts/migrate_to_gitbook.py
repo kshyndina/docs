@@ -9,7 +9,7 @@ import json, os, re, shutil, textwrap
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "gitbook", "sections")
-SITE_BASE = "https://kate-6.gitbook.io/version-a-site-space-per-section"
+SITE_BASE = "https://kate-6.gitbook.io/triton-one-docs"
 
 # Compact footer (replaces the <FooterLinks/> snippet). Lines end with two
 # spaces = markdown hard breaks, so they render tight (no huge paragraph gaps).

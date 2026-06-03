@@ -74,7 +74,7 @@ println!("{}", client.get_slot()?);
 {% endtab %}
 {% endtabs %}
 
-If you got back something like `{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }`, you're connected. If you hit a 401, 429, timeout, or gRPC 403, see the [Error handling guide](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/how-to-troubleshoot) for the full debug flow.
+If you got back something like `{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }`, you're connected. If you hit a 401, 429, timeout, or gRPC 403, see the [Error handling guide](https://kate-6.gitbook.io/triton-one-docs/guides/error-handling/how-to-troubleshoot) for the full debug flow.
 {% endstep %}
 {% endstepper %}
 
@@ -118,8 +118,8 @@ Each product is purpose-built for one job. Pick what you need.
 [Fumarole reliable streams](../streaming-data/fumarole-persistent-streams.md)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/pyth/pyth/pyth-hermes" %}
-[Hermes](https://kate-6.gitbook.io/version-a-site-space-per-section/pyth/pyth/pyth-hermes)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/pyth/pyth/pyth-hermes" %}
+[Hermes](https://kate-6.gitbook.io/triton-one-docs/pyth/pyth/pyth-hermes)
 {% endcontent-ref %}
 
 ### History
@@ -168,32 +168,32 @@ Each product is purpose-built for one job. Pick what you need.
 {% tab title="By use case (I'm not sure yet)" %}
 Pick the kind of app you're building. Each card jumps to the matching setup guide.
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/trading-and-market-making-with-triton" %}
-[Trading or market making](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/trading-and-market-making-with-triton)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/trading-and-market-making-with-triton" %}
+[Trading or market making](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/trading-and-market-making-with-triton)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/dex-or-defi-protocol" %}
-[DeFi protocols (Lending, DEXs)](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/dex-or-defi-protocol)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/dex-or-defi-protocol" %}
+[DeFi protocols (Lending, DEXs)](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/dex-or-defi-protocol)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/wallet-or-consumer-app" %}
-[Wallet or consumer app](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/wallet-or-consumer-app)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/wallet-or-consumer-app" %}
+[Wallet or consumer app](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/wallet-or-consumer-app)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/nft-or-compressed-asset-platform" %}
-[NFT marketplace](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/nft-or-compressed-asset-platform)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/nft-or-compressed-asset-platform" %}
+[NFT marketplace](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/nft-or-compressed-asset-platform)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/indexer-or-analytics" %}
-[Indexer or analytics](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/indexer-or-analytics)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/indexer-or-analytics" %}
+[Indexer or analytics](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/indexer-or-analytics)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/gaming" %}
-[Gaming](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/gaming)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/gaming" %}
+[Gaming](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/gaming)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/ai-agent-or-llm-app" %}
-[AI agent or LLM app](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/set-up-your-rpc-for/ai-agent-or-llm-app)
+{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/ai-agent-or-llm-app" %}
+[AI agent or LLM app](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/ai-agent-or-llm-app)
 {% endcontent-ref %}
 
 {% endtab %}

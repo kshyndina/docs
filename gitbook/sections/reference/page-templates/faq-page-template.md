@@ -38,14 +38,14 @@ This page covers connection setup, errors, performance, and billing. For walkthr
     - **Endpoint URL** -- `<your-endpoint>.mainnet.rpcpool.com`
     - **Secret token** -- a long random string
 
-    Full walkthrough: [Set up your account](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/platform-overview).
+    Full walkthrough: [Set up your account](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/platform-overview).
 
 </details>
 
 <details>
 <summary>Can I use the token client-side, in browser code?</summary>
 
-No. The token is a server-side secret. For browser apps, set up an **origin allowlist** in the dashboard so requests are authorised by the page origin, not the token. See [Auth and security](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security).
+No. The token is a server-side secret. For browser apps, set up an **origin allowlist** in the dashboard so requests are authorised by the page origin, not the token. See [Auth and security](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security).
 
 </details>
 
@@ -66,7 +66,7 @@ Mainnet and devnet are available out of the box. Devnet is free for development 
 Three causes, in order of likelihood:
 
 1. The token is expired or rotated. Check the dashboard.
-2. The request origin isn't on the allowlist. See [Auth and security](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security).
+2. The request origin isn't on the allowlist. See [Auth and security](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security).
 3. The token is being passed in a header that isn't `Authorization: Bearer <token>` -- check your client.
 
 Full debug flow: [Error handling -- RPC](/solana-guides/error-handling/rpc).
@@ -79,7 +79,7 @@ Full debug flow: [Error handling -- RPC](/solana-guides/error-handling/rpc).
 Standard tier shares a global rate limit. Two routes:
 
 - **Smooth the burst** -- batch with `getMultipleAccounts`, cache for a few hundred milliseconds, exponential backoff on retry.
-- **Move to dedicated** -- isolated bandwidth, no shared limit. See the [pricing calculator](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/plans-and-billing).
+- **Move to dedicated** -- isolated bandwidth, no shared limit. See the [pricing calculator](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/plans-and-billing).
 
 </details>
 
@@ -102,7 +102,7 @@ Median Triton response time, closest GeoDNS region: **~12 ms** for `getBalance` 
 <details>
 <summary>Why is `getProgramAccounts` slow at scale?</summary>
 
-The native Solana RPC scans the validator's account index linearly. For programs with >100k accounts that's tens of seconds. Use [Steamboat](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/reading-state/steamboat-indexed-accounts) for a hot index keyed exactly on the lookup pattern your app uses; reads return in milliseconds.
+The native Solana RPC scans the validator's account index linearly. For programs with >100k accounts that's tens of seconds. Use [Steamboat](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/steamboat-indexed-accounts) for a hot index keyed exactly on the lookup pattern your app uses; reads return in milliseconds.
 
 </details>
 
