@@ -79,4 +79,4 @@
   * [Subscription types](account-management-api/subscription-types.md)
   * [Endpoints](account-management-api/endpoints.md)
   * [Tokens](account-management-api/tokens.md)
-  * [Rate tiers](account-management-api/rate-tiers.md)
+  * [Rate limits](account-management-api/rate-limits.md)

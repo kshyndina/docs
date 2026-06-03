@@ -33,6 +33,12 @@
 * [Triton RPC error codes](error-handling/triton-rpc-error-codes.md)
 * [Web3JS socket/connection issues](error-handling/web3js-socket-connection-issues.md)
 * [Verify your gRPC endpoint](error-handling/verify-your-grpc-endpoint.md)
+* [Streams disconnecting](error-handling/streams-disconnecting.md)
+
+## Streaming
+
+* [Fumarole cluster failover](streaming/fumarole-cluster-failover.md)
+* [How to use Vixen + gRPC](streaming/how-to-use-vixen-grpc.md)
 
 ## Common workflows
 
@@ -47,3 +53,4 @@
 * [Build with the Jupiter Swap API](common-workflows/build-with-the-jupiter-swap-api.md)
 * [Send transactions during congestion](common-workflows/send-transactions-during-congestion.md)
 * [Benchmark gRPC endpoints with Thorofare](common-workflows/benchmark-grpc-endpoints-with-thorofare.md)
+* [Query token program](common-workflows/query-token-program.md)

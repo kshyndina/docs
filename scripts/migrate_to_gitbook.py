@@ -822,6 +822,10 @@ def fix_guides(sections):
         {"kind": "leaf", "title": "NFT marketplace", "ref": None, "children": [], "body": "Coming soon."},
         {"kind": "leaf", "title": "Solana game", "ref": None, "children": [], "body": "Coming soon."},
     ]}
+    def ph(t):
+        return {"kind": "leaf", "title": t, "ref": None, "children": [], "body": "Coming soon."}
+    streaming = {"kind": "group", "title": "Streaming", "ref": None,
+                 "children": [ph("Fumarole cluster failover"), ph("How to use Vixen + gRPC")]}
     for s in sections:
         if s["key"] != "solana-guides":
             continue
@@ -830,7 +834,15 @@ def fix_guides(sections):
                 n["title"] = "Quickstart on Triton"
             elif n["title"] == "End-to-end builds":
                 n["title"] = "Common workflows"
+        for n in s["children"]:
+            if n["title"] == "Error handling":
+                n["children"].append(ph("Streams disconnecting"))
+            elif n["title"] == "Common workflows":
+                n["children"].append(ph("Query token program"))
         s["children"].insert(1, howto)
+        ei = next((i for i, n in enumerate(s["children"]) if n["title"] == "Error handling"),
+                  len(s["children"]) - 1)
+        s["children"].insert(ei + 1, streaming)
 
 def _ends(n, *suffixes):
     return (n.get("ref") or "").endswith(suffixes)
@@ -871,6 +883,10 @@ def apply_kate_edits(sections):
                                      if not _ends(n, "standard-rpc", "zk-compression-photon")]
                 elif g["title"] == "Historical data":
                     g["children"] = [n for n in g["children"] if not _ends(n, "history/hydrant")]
+                elif g["title"] == "Account management API":
+                    for n in g["children"]:
+                        if _ends(n, "rate-tiers"):
+                            n["title"] = "Rate limits"
                 elif g["title"] == "Sending transactions":
                     move = [n for n in g["children"]
                             if _ends(n, "metis-swap-api", "titan-swap-api", "jito-bundles")]
