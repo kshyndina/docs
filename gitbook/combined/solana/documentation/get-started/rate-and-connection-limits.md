@@ -9,15 +9,7 @@ Two budgets apply at the same time, both reset every 10 seconds, both keyed to t
 - **Total RPS** is the budget across every method. If your IP sends 1,000 `getBalance` and 1,000 `getSlot` in 10 seconds, that counts as 2,000 against this budget.
 - **Per-method RPS** is a separate budget for each individual RPC method. Even if your total is under the cap, you can hit the per-method cap on a single hot method (most often `getProgramAccounts`, `sendTransaction`, or `getBlock`).
 
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'},'flowchart':{'nodeSpacing':18,'rankSpacing':32,'padding':6,'curve':'linear'}}}%%
-flowchart LR
-    Req("Request from your IP") --> Total("Total RPS<br/>< 2,000 per 10s?")
-    Total -->|No| Block("HTTP 429")
-    Total -->|Yes| Method("Per-method RPS<br/>under cap?")
-    Method -->|No| Block
-    Method -->|Yes| OK("Request processed")
-```
+![Diagram](../../../diagrams/20b9dd1bc6f4.svg)
 
 If either check fails, the response is `HTTP 429 Too Many Requests`. In practice, most 429s come from the per-method limit, not the total.
 

@@ -19,17 +19,7 @@ Everything you can do in the portal -- create endpoints, rotate tokens, manage o
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-id-card">:id-card:</i> <strong>Auth and headers</strong></td><td>Bearer tokens, organisation context, and the headers every call needs.</td><td><a href="auth-headers.md">auth-headers.md</a></td></tr><tr><td><i class="fa-user">:user:</i> <strong>Accounts</strong></td><td>List, create, rotate, and revoke organisation members.</td><td><a href="accounts.md">accounts.md</a></td></tr><tr><td><i class="fa-link">:link:</i> <strong>Endpoints</strong></td><td>Provision, list, configure, and delete endpoints.</td><td><a href="endpoints.md">endpoints.md</a></td></tr><tr><td><i class="fa-lock">:lock:</i> <strong>Tokens</strong></td><td>Issue, list, rotate, and revoke endpoint tokens.</td><td><a href="tokens.md">tokens.md</a></td></tr></tbody></table>
 ## Resource model
 
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
-flowchart TB
-    O[Organisation] --> M[Members]
-    O --> E[Endpoints]
-    E --> T[Tokens]
-    E --> R[Rate tiers]
-    E --> S[Subscriptions]
-    S --> ST[Subscription types]
-    E --> AWL[Address watch lists]
-```
+![Diagram](../diagrams/8404a87a9d6e.svg)
 
 - **Members** belong to the organisation.
 - **Endpoints** belong to the organisation; everything below belongs to an endpoint.

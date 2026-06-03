@@ -5,7 +5,7 @@ Reads docs.json + the .mdx tree, converts every Mintlify component to GitBook
 markdown, resolves snippet imports, rewrites internal links, and writes a
 GitBook-shaped project per section under gitbook/sections/<key>/ with SUMMARY.md.
 """
-import json, os, re, shutil, textwrap
+import json, os, re, shutil, textwrap, hashlib, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "gitbook", "sections")
@@ -546,6 +546,30 @@ def merge_card_tables(text):
         return "\n" + head + "".join(rows) + "</tbody></table>\n"
     return CARD_RUN.sub(build, text)
 
+def render_mermaid(text, ctx):
+    """Pre-render mermaid diagrams to static SVG files (committed to the repo)
+    so they're plain images - no GitBook pan/zoom on two-finger scroll."""
+    def repl(m):
+        src = m.group(1).strip()
+        h = hashlib.md5(src.encode("utf-8")).hexdigest()[:12]
+        rel = f"diagrams/{h}.svg"
+        dst = os.path.join(OUT, ctx["section"], rel)
+        if not os.path.exists(dst):
+            try:
+                req = urllib.request.Request("https://kroki.io/mermaid/svg",
+                    data=src.encode("utf-8"),
+                    headers={"Content-Type": "text/plain", "User-Agent": "curl/8.0"})
+                svg = urllib.request.urlopen(req, timeout=30).read()
+                os.makedirs(os.path.dirname(dst), exist_ok=True)
+                with open(dst, "wb") as f:
+                    f.write(svg)
+            except Exception as e:
+                print("  mermaid render failed:", e)
+                return m.group(0)
+        link = os.path.relpath(rel, os.path.dirname(ctx["file"]))
+        return f"\n![Diagram]({link})\n"
+    return re.sub(r"```mermaid\n(.*?)```", repl, text, flags=re.S)
+
 def normalize_blocks(text):
     """Strip leading indentation before block-level markers, but never inside
     fenced code (so indented JSX-derived headings/cards/tables land at col 0)."""
@@ -597,6 +621,7 @@ def render_page(ref, ctx, fallback_title):
     body = merge_param_tables(body)
     body = merge_card_tables(body)
     body = dedent_fences(body)
+    body = render_mermaid(body, ctx)
     body = normalize_blocks(body)
     body = rewrite_images(body, ctx)
     body = rewrite_links(body, ctx)

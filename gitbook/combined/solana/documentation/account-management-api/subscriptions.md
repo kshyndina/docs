@@ -10,14 +10,7 @@ Resource path: `/v1/subscriptions`
 
 A subscription couples your organisation to a [subscription type](subscription-types.md). One organisation typically has one base plan (PAYG / committed) plus zero or more add-ons (DAS, Hydrant, Steamboat).
 
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
-flowchart LR
-    O[Organisation] --> SB[Base subscription<br/>e.g. Committed Solana]
-    O --> SA[Add-on: DAS API]
-    O --> SH[Add-on: Hydrant]
-    O --> SS[Add-on: Steamboat]
-```
+![Diagram](../../../diagrams/51c569c29cc3.svg)
 
 ## List active subscriptions
 

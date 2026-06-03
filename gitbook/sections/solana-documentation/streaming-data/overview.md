@@ -8,32 +8,9 @@ Solana produces a new block every ~400 ms. If you poll RPC every 200 ms, your da
 
 Streaming inverts the model: you open one connection, say what you need (specific accounts, programs, transaction patterns), and the node pushes you matching events the instant they happen.
 
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
-sequenceDiagram
-    participant Client
-    participant RPC
-    Note over Client,RPC: Polling: ask repeatedly
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: response (~200 ms stale)
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: response (~200 ms stale)
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: HTTP 429
-```
+![Diagram](../diagrams/e5d046a6f38f.svg)
 
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
-sequenceDiagram
-    participant Client
-    participant RPC
-    Note over Client,RPC: Streaming: subscribe once
-    Client->>RPC: subscribe (filters)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
-```
+![Diagram](../diagrams/683519950cd8.svg)
 
 You get sub-slot latency, structured Protobuf payloads, and lower costs, also significantly cheaper than the equivalent polling traffic, as it only incurs bandwidth cost.
 
