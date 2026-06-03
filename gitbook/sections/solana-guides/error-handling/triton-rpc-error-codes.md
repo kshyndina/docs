@@ -120,7 +120,3 @@ Possible RPC symptoms and the full list of Triton-specific RPC error codes for H
 | Reduce message size. | RESOURCE\_EXHAUSTED | Both |
 | Verify your API key and IP whitelist. Ensure credentials match channel settings. | UNAUTHENTICATED | Both |
 | The requested resource doesn't exist or isn't synced on the custom node. Verify the resource ID, ensure your custom endpoint is configured to include the resource. | NOT\_FOUND | Client |
-
-<hr>
-
-<i class="fa-life-ring">:life-ring:</i> Need help? Click the chat icon in the bottom right of your [dashboard](https://customers.triton.one)<br><i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)<br><i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)<br><i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)<br><i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

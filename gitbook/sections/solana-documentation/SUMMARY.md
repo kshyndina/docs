@@ -35,7 +35,6 @@
 
 * [Overview](historical-data/overview.md)
 * [Quickstart](historical-data/quickstart.md)
-* [Hydrant archive](historical-data/hydrant-archive.md)
 * [Best practices](historical-data/best-practices.md)
 
 ## Sending transactions

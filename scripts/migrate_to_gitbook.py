@@ -39,7 +39,7 @@ def fa_icon(name):
     return f'<i class="fa-{fa}">:{fa}:</i>'
 
 # pages removed from nav -> drop any card/link that targets them (avoid broken links)
-REMOVED_REFS = ("standard-rpc", "zk-compression-photon", "old-faithful-streams")
+REMOVED_REFS = ("standard-rpc", "zk-compression-photon", "old-faithful-streams", "history/hydrant")
 # page-title overrides
 TITLE_OVERRIDE = {
     "solana-guides/getting-started/set-up-rpc/trading-or-market-making": "Trading and market making",
@@ -47,23 +47,10 @@ TITLE_OVERRIDE = {
     "solana/sending-transactions/jet-sender": "Jet sender",
 }
 
-# Footer: pure HTML so inline icons AND links both render (mixing inline <i>
-# with markdown links makes GitBook treat the block as HTML and leave the
-# markdown link syntax literal, so everything must be HTML here).
-FOOTER_MD = (
-    "\n<hr>\n\n<p>"
-    + fa_icon("life-buoy") + ' Need help? Click the chat icon in the bottom right of your '
-    '<a href="https://customers.triton.one">dashboard</a><br>'
-    + fa_icon("gear") + ' Manage endpoints, billing, team: '
-    '<a href="https://customers.triton.one">Customer portal</a><br>'
-    + fa_icon("briefcase") + ' Sales questions? <a href="https://triton.one/contact">Contact sales</a><br>'
-    + fa_icon("sparkles") + ' AI agent? <a href="https://docs.triton.one/llms.txt">Read llms.txt</a><br>'
-    + fa_icon("rss") + ' Follow updates: <a href="https://blog.triton.one">Blog</a> · '
-    '<a href="https://x.com/triton_one">X</a> · '
-    '<a href="https://www.youtube.com/@triton_one_ltd">YouTube</a> · '
-    '<a href="https://t.me/tritonone">Telegram</a> · '
-    '<a href="https://github.com/rpcpool">GitHub</a></p>\n'
-)
+# The footer now lives in GitBook's site-footer customization (link groups), so
+# external links render WITHOUT the ↗ arrow (the same reason header links don't).
+# The inline content footer is therefore removed.
+FOOTER_MD = "\n"
 
 # Customer logo marquee is removed entirely (Kate's request).
 LOGO_ROW = "\n"
@@ -353,13 +340,17 @@ def stack_to_tabs(text, ctx):
     for b in branches:
         tm = re.search(r"stack-branch-title[^>]*>([^<]+)</div>", b)
         title = tm.group(1).strip() if tm else "Other services"
-        out.append(f'{{% tab title="{title}" %}}')
+        cards = []
         for lm in re.finditer(r'<a\b[^>]*href="([^"]+)"[^>]*>([^<]+)</a>', b):
             href, txt = lm.group(1), lm.group(2).strip()
             if any(href.split("#")[0].rstrip("/").endswith(r) for r in REMOVED_REFS):
                 continue
             icon = PAGE_ICON.get(href.strip("/").split("#")[0], "")
-            out.append(f"\x02CARD\x02{txt}\x02\x02{resolve_link(href, ctx)}\x02{icon}\x02\n")
+            cards.append(f"\x02CARD\x02{txt}\x02\x02{resolve_link(href, ctx)}\x02{icon}\x02\n")
+        if not cards:
+            continue                      # skip a category with no remaining cards
+        out.append(f'{{% tab title="{title}" %}}')
+        out.extend(cards)
         out.append("{% endtab %}")
     out.append("{% endtabs %}\n")
     return text[:s] + "\n".join(out) + text[e:]
@@ -704,6 +695,7 @@ def render_page(ref, ctx, fallback_title):
     body = re.sub(r"(?m)^---\s*\n(\s*\n)*---\s*$", "---", body)
     # drop a markdown --- right before the footer's <hr> (avoids a literal "---")
     body = re.sub(r"(?m)^-{3,}\s*\n+(?=<hr>)", "", body)
+    body = re.sub(r"\n+-{3,}\s*$", "", body)   # no dangling divider at page end
     body = re.sub(r"\n{3,}", "\n\n", body).strip()
     title = TITLE_OVERRIDE.get((ref or "").strip("/")) or meta.get("title") or fallback_title
     desc = meta.get("description", "")
@@ -863,6 +855,8 @@ def apply_kate_edits(sections):
                 elif g["title"] == "Reading state":
                     g["children"] = [n for n in g["children"]
                                      if not _ends(n, "standard-rpc", "zk-compression-photon")]
+                elif g["title"] == "Historical data":
+                    g["children"] = [n for n in g["children"] if not _ends(n, "history/hydrant")]
                 elif g["title"] == "Sending transactions":
                     move = [n for n in g["children"]
                             if _ends(n, "metis-swap-api", "titan-swap-api", "jito-bundles")]
