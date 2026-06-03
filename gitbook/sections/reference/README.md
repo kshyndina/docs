@@ -73,8 +73,6 @@ All four read paths share the same underlying validator. Standard RPC and DAS AP
 > Cross-link siblings. Helps users navigate without going back to the top-level nav.
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Streaming data</strong></td><td>Sub-slot subscriptions, gRPC streams, WebSockets.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview</a></td></tr><tr><td><strong>Historical data</strong></td><td>Millisecond ledger queries from genesis to now.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/historical-data/hydrant-archive">https://kate-6.gitbook.io/triton-one-docs/documentation/historical-data/hydrant-archive</a></td></tr></tbody></table>
----
-
 <hr>
 
 <i class="fa-life-ring">:life-ring:</i> Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)<br><i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)<br><i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)<br><i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)<br><i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

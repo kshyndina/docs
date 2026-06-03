@@ -604,6 +604,8 @@ def render_page(ref, ctx, fallback_title):
     body = re.sub(r"\n{3,}", "\n\n", body).strip()
     # never two horizontal rules in a row
     body = re.sub(r"(?m)^---\s*\n(\s*\n)*---\s*$", "---", body)
+    # drop a markdown --- right before the footer's <hr> (avoids a literal "---")
+    body = re.sub(r"(?m)^-{3,}\s*\n+(?=<hr>)", "", body)
     body = re.sub(r"\n{3,}", "\n\n", body).strip()
     title = meta.get("title") or fallback_title
     desc = meta.get("description", "")
