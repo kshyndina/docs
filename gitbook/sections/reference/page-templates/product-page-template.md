@@ -69,14 +69,7 @@ Solana's validator emits every account write to a Geyser plugin, which Triton al
 
 > CTA section. One primary card, optionally a few secondary. Always link to the per-product quickstart.
 
-{% content-ref url="#" %}
-[Quickstart: your first Steamboat index](#)
-{% endcontent-ref %}
-
-{% content-ref url="#" %}
-[Available endpoints](#)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Quickstart: your first Steamboat index</strong></td><td>Define a filter, point it at a program, and read it back in under five minutes.</td><td><a href="#">#</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/rocket.svg">rocket</a></td></tr><tr><td><strong>Available endpoints</strong></td><td>HTTPS REST and gRPC reads, JS / Python / Rust SDKs.</td><td><a href="#">#</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/server.svg">server</a></td></tr></tbody></table>
 ## Pricing
 
 > Always link to the central pricing page rather than copying numbers in. Numbers drift.
@@ -110,10 +103,7 @@ Yes. Dedicated nodes get unmetered Steamboat reads and you can pin custom indexe
 
 ## Related
 
-[Dragon's Mouth gRPC](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc)
-
-[Standard RPC](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc)
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>The streaming layer Steamboat builds on. Subscribe to live account writes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/radio.svg">radio</a></td></tr><tr><td><strong>Standard RPC</strong></td><td>The simpler `getAccountInfo` / `getProgramAccounts` path for low-volume reads.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc">https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/zap.svg">zap</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

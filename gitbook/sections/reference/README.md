@@ -28,14 +28,7 @@ The right product depends on the access pattern: one-off lookups vs scans, reads
 
 > Cards or table. Cards work better when each option has a clear use case; table works better when the comparison is dimensional. Pick one.
 
-[Standard RPC](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc)
-
-[Steamboat](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/steamboat-indexed-accounts)
-
-[DAS API](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/metaplex-das-api)
-
-[Account Sync](https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/account-sync)
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Standard RPC</strong></td><td>JSON-RPC over HTTPS. Every standard Solana method. **Use when:** one-off account lookups, low-frequency dashboards.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc">https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/zap.svg">zap</a></td></tr><tr><td><strong>Steamboat</strong></td><td>Custom indexes from your gRPC stream. **Use when:** `getProgramAccounts` is slow or expensive at your scale.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/steamboat-indexed-accounts">https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/steamboat-indexed-accounts</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/database.svg">database</a></td></tr><tr><td><strong>DAS API</strong></td><td>Unified read for NFTs, cNFTs, SPL, Token-2022. **Use when:** anything NFT or compressed-NFT.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/metaplex-das-api">https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/metaplex-das-api</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/image.svg">image</a></td></tr><tr><td><strong>Account Sync</strong></td><td>Live account state mirror, no polling. **Use when:** you need fresh state across many accounts continuously.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/account-sync">https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/account-sync</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/refresh-cw.svg">refresh-cw</a></td></tr></tbody></table>
 ### Decision matrix
 
 > Optional but high-impact. A small comparison table so the reader can pick at a glance.
@@ -74,16 +67,12 @@ All four read paths share the same underlying validator. Standard RPC and DAS AP
 
 > One CTA per overview page. Send the reader to the most likely first stop.
 
-[Quickstart: get reading in 5 minutes](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart)
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Quickstart: get reading in 5 minutes</strong></td><td>Sign up, set up an endpoint, and call `getSlot`. Then route into the product that matches your use case.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart">https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/rocket.svg">rocket</a></td></tr></tbody></table>
 ## Related sections
 
 > Cross-link siblings. Helps users navigate without going back to the top-level nav.
 
-[Streaming data](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview)
-
-[Historical data](https://kate-6.gitbook.io/triton-one-docs/documentation/historical-data/hydrant-archive)
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Streaming data</strong></td><td>Sub-slot subscriptions, gRPC streams, WebSockets.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview</a></td></tr><tr><td><strong>Historical data</strong></td><td>Millisecond ledger queries from genesis to now.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/historical-data/hydrant-archive">https://kate-6.gitbook.io/triton-one-docs/documentation/historical-data/hydrant-archive</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

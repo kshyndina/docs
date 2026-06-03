@@ -17,22 +17,7 @@ For browser clients that can't communicate with gRPC, use [Whirligig WebSockets]
 
 ## Features and benefits
 
-**Sub-slot latency**
-
-Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.
-
-**Server-side filtering**
-
-Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state, all server-side.
-
-**Bi-directional streams**
-
-Modify subscriptions on the fly without reconnecting. Send a new request, server swaps your filter set.
-
-**Compact Protobuf payloads**
-
-Binary serialisation cuts bandwidth and CPU. Cheaper to stream, faster to parse.
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Sub-slot latency</strong></td><td>Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/timer.svg">timer</a></td></tr><tr><td><strong>Server-side filtering</strong></td><td>Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state, all server-side.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/sliders-horizontal.svg">sliders-horizontal</a></td></tr><tr><td><strong>Bi-directional streams</strong></td><td>Modify subscriptions on the fly without reconnecting. Send a new request, server swaps your filter set.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/repeat-2.svg">repeat-2</a></td></tr><tr><td><strong>Compact Protobuf payloads</strong></td><td>Binary serialisation cuts bandwidth and CPU. Cheaper to stream, faster to parse.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/feather.svg">feather</a></td></tr></tbody></table>
 ## Stream types and unary operations
 
 Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions and one-shot unary calls you can use for occasional queries.
@@ -1314,22 +1299,7 @@ The Go example may lag the latest stable proto version. For production-ready cod
 
 ## What's next?
 
-{% content-ref url="deshred-transactions.md" %}
-[Deshred transactions](deshred-transactions.md)
-{% endcontent-ref %}
-
-{% content-ref url="whirligig-websockets.md" %}
-[Whirligig WebSockets](whirligig-websockets.md)
-{% endcontent-ref %}
-
-{% content-ref url="fumarole-persistent-streams.md" %}
-[Fumarole reliable streams](fumarole-persistent-streams.md)
-{% endcontent-ref %}
-
-{% content-ref url="overview.md" %}
-[Streaming overview](overview.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="deshred-transactions.md">deshred-transactions.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/flame.svg">flame</a></td></tr><tr><td><strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="whirligig-websockets.md">whirligig-websockets.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/rotate-cw.svg">rotate-cw</a></td></tr><tr><td><strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="fumarole-persistent-streams.md">fumarole-persistent-streams.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/layers.svg">layers</a></td></tr><tr><td><strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td><a href="overview.md">overview.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/compass.svg">compass</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

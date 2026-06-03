@@ -8,30 +8,7 @@ Triton customer portal is where you get your endpoint and token, monitor usage, 
 
 ## What's in the portal
 
-**Endpoints and tokens**
-
-Monitor and configure every endpoint. Manage tokens, origin allowlists, and IP allowlists per endpoint.
-
-**Usage**
-
-Live RPS, bandwidth, and method latency. Daily billing by product and endpoint.
-
-**Billing and top-ups**
-
-Deposits, balance, payment methods, and how usage builds your bill.
-
-**Members**
-
-Invite teammates and colleagues to your organisation.
-
-**Security and profile**
-
-Your name, email, password, and account preferences.
-
-**Support**
-
-Your main channel for direct chat with Triton engineering.
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Endpoints and tokens</strong></td><td>Monitor and configure every endpoint. Manage tokens, origin allowlists, and IP allowlists per endpoint.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/server.svg">server</a></td></tr><tr><td><strong>Usage</strong></td><td>Live RPS, bandwidth, and method latency. Daily billing by product and endpoint.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/activity.svg">activity</a></td></tr><tr><td><strong>Billing and top-ups</strong></td><td>Deposits, balance, payment methods, and how usage builds your bill.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/wallet.svg">wallet</a></td></tr><tr><td><strong>Members</strong></td><td>Invite teammates and colleagues to your organisation.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/users.svg">users</a></td></tr><tr><td><strong>Security and profile</strong></td><td>Your name, email, password, and account preferences.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/shield.svg">shield</a></td></tr><tr><td><strong>Support</strong></td><td>Your main channel for direct chat with Triton engineering.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/life-buoy.svg">life-buoy</a></td></tr></tbody></table>
 ## Common tasks
 
 Here's where to go in the dashboard for the things you'll do most often. What you can do depends on your role -- new members default to **Standard**, which covers almost everything. Expand a role below to see what it includes.
@@ -156,22 +133,7 @@ Short clips to walk you through the most common tasks, from sign-up onward.
 
 ## What's next
 
-{% content-ref url="quickstart.md" %}
-[Quickstart](quickstart.md)
-{% endcontent-ref %}
-
-{% content-ref url="../streaming-data/overview.md" %}
-[Streaming overview](../streaming-data/overview.md)
-{% endcontent-ref %}
-
-{% content-ref url="../streaming-data/quickstart.md" %}
-[Streaming quickstart](../streaming-data/quickstart.md)
-{% endcontent-ref %}
-
-{% content-ref url="../reading-state/overview.md" %}
-[Reading state overview](../reading-state/overview.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Quickstart</strong></td><td>Sign up, deposit, get an endpoint, send your first request.</td><td><a href="quickstart.md">quickstart.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/rocket.svg">rocket</a></td></tr><tr><td><strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td><a href="../streaming-data/overview.md">../streaming-data/overview.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/compass.svg">compass</a></td></tr><tr><td><strong>Streaming quickstart</strong></td><td>Test every Triton streaming service in under five minutes.</td><td><a href="../streaming-data/quickstart.md">../streaming-data/quickstart.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/play.svg">play</a></td></tr><tr><td><strong>Reading state overview</strong></td><td>Compare Standard RPC, Steamboat, DAS, Account Sync, and ZK Compression side by side.</td><td><a href="../reading-state/overview.md">../reading-state/overview.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/compass.svg">compass</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

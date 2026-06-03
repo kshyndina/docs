@@ -88,114 +88,24 @@ Each product is purpose-built for one job. Pick what you need.
 
 ### Reading state
 
-{% content-ref url="../reading-state/standard-rpc.md" %}
-[Standard RPC](../reading-state/standard-rpc.md)
-{% endcontent-ref %}
-
-{% content-ref url="../reading-state/steamboat-indexed-accounts.md" %}
-[Steamboat](../reading-state/steamboat-indexed-accounts.md)
-{% endcontent-ref %}
-
-{% content-ref url="../reading-state/metaplex-das-api.md" %}
-[DAS API](../reading-state/metaplex-das-api.md)
-{% endcontent-ref %}
-
-{% content-ref url="../reading-state/account-sync.md" %}
-[Account Sync](../reading-state/account-sync.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Standard RPC</strong></td><td>Solana JSON-RPC over HTTPS. Every standard method, served from the regional fleet.</td><td><a href="../reading-state/standard-rpc.md">../reading-state/standard-rpc.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/zap.svg">zap</a></td></tr><tr><td><strong>Steamboat</strong></td><td>Custom indexes for `getProgramAccounts` and token-account hot paths. Up to 50x faster, no premium.</td><td><a href="../reading-state/steamboat-indexed-accounts.md">../reading-state/steamboat-indexed-accounts.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/database.svg">database</a></td></tr><tr><td><strong>DAS API</strong></td><td>Fastest read for NFT and cNFT ownership, proofs, and metadata.</td><td><a href="../reading-state/metaplex-das-api.md">../reading-state/metaplex-das-api.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/image.svg">image</a></td></tr><tr><td><strong>Account Sync</strong></td><td>Streaming-backed local cache for account reads. No polling, no code changes.</td><td><a href="../reading-state/account-sync.md">../reading-state/account-sync.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/refresh-cw.svg">refresh-cw</a></td></tr></tbody></table>
 ### Streaming
 
-{% content-ref url="../streaming-data/dragon-s-mouth-grpc.md" %}
-[Dragon's Mouth gRPC](../streaming-data/dragon-s-mouth-grpc.md)
-{% endcontent-ref %}
-
-{% content-ref url="../streaming-data/whirligig-websockets.md" %}
-[Whirligig WebSockets](../streaming-data/whirligig-websockets.md)
-{% endcontent-ref %}
-
-{% content-ref url="../streaming-data/fumarole-persistent-streams.md" %}
-[Fumarole reliable streams](../streaming-data/fumarole-persistent-streams.md)
-{% endcontent-ref %}
-
-{% content-ref url="../../../pythnet/pyth/pyth-hermes.md" %}
-[Hermes](../../../pythnet/pyth/pyth-hermes.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="../streaming-data/dragon-s-mouth-grpc.md">../streaming-data/dragon-s-mouth-grpc.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/radio.svg">radio</a></td></tr><tr><td><strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="../streaming-data/whirligig-websockets.md">../streaming-data/whirligig-websockets.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/rotate-cw.svg">rotate-cw</a></td></tr><tr><td><strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="../streaming-data/fumarole-persistent-streams.md">../streaming-data/fumarole-persistent-streams.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/layers.svg">layers</a></td></tr><tr><td><strong>Hermes</strong></td><td>Pyth Hermes API. Real-time price feeds across hundreds of markets over REST and WebSocket.</td><td><a href="../../../pythnet/pyth/pyth-hermes.md">../../../pythnet/pyth/pyth-hermes.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/activity.svg">activity</a></td></tr></tbody></table>
 ### History
 
-{% content-ref url="../historical-data/hydrant-archive.md" %}
-[Hydrant](../historical-data/hydrant-archive.md)
-{% endcontent-ref %}
-
-{% content-ref url="../streaming-data/old-faithful-streams.md" %}
-[Old Faithful streams](../streaming-data/old-faithful-streams.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Hydrant</strong></td><td>History with developer-shaped indexes. Millisecond reads from genesis across the full ledger.</td><td><a href="../historical-data/hydrant-archive.md">../historical-data/hydrant-archive.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/history.svg">history</a></td></tr><tr><td><strong>Old Faithful streams</strong></td><td>Replay every block from genesis through the same gRPC interface as live streams.</td><td><a href="../streaming-data/old-faithful-streams.md">../streaming-data/old-faithful-streams.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/archive.svg">archive</a></td></tr></tbody></table>
 ### Sending transactions
 
-{% content-ref url="../sending-transactions/yellowstone-jet.md" %}
-[Yellowstone Jet](../sending-transactions/yellowstone-jet.md)
-{% endcontent-ref %}
-
-{% content-ref url="../sending-transactions/priority-fees-api.md" %}
-[Priority Fees API](../sending-transactions/priority-fees-api.md)
-{% endcontent-ref %}
-
-{% content-ref url="../sending-transactions/metis-swap-api.md" %}
-[Metis swap API](../sending-transactions/metis-swap-api.md)
-{% endcontent-ref %}
-
-{% content-ref url="../sending-transactions/titan-swap-api.md" %}
-[Titan swap API](../sending-transactions/titan-swap-api.md)
-{% endcontent-ref %}
-
-{% content-ref url="../sending-transactions/jito-bundles.md" %}
-[Jito bundles](../sending-transactions/jito-bundles.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Yellowstone Jet</strong></td><td>Direct-to-leader forwarding over QUIC with leader scheduling, connection pooling, and retries built in.</td><td><a href="../sending-transactions/yellowstone-jet.md">../sending-transactions/yellowstone-jet.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/send.svg">send</a></td></tr><tr><td><strong>Priority Fees API</strong></td><td>Smart fee estimation with tail-aware percentiles. Reliable landing without overpaying.</td><td><a href="../sending-transactions/priority-fees-api.md">../sending-transactions/priority-fees-api.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/trending-up.svg">trending-up</a></td></tr><tr><td><strong>Metis swap API</strong></td><td>Swap routing across 20+ DEXes with exact-out and platform-fee support built in.</td><td><a href="../sending-transactions/metis-swap-api.md">../sending-transactions/metis-swap-api.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/git-branch.svg">git-branch</a></td></tr><tr><td><strong>Titan swap API</strong></td><td>Streaming quotes and routes via DART live re-optimisation or the Prime API for high-volume desks.</td><td><a href="../sending-transactions/titan-swap-api.md">../sending-transactions/titan-swap-api.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/route.svg">route</a></td></tr><tr><td><strong>Jito bundles</strong></td><td>Jito bundle simulation through Triton endpoints. Test bundle ordering before submitting.</td><td><a href="../sending-transactions/jito-bundles.md">../sending-transactions/jito-bundles.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/package.svg">package</a></td></tr></tbody></table>
 ### Dedicated and validator services
 
-{% content-ref url="../dedicated-nodes/overview.md" %}
-[Dedicated gRPC node](../dedicated-nodes/overview.md)
-{% endcontent-ref %}
-
-{% content-ref url="../validator-services/white-label-validators/overview.md" %}
-[White-label validator](../validator-services/white-label-validators/overview.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Dedicated gRPC node</strong></td><td>Private node with isolated CPU and unlimited concurrent gRPC connections. For latency-sensitive or heavy streaming workloads.</td><td><a href="../dedicated-nodes/overview.md">../dedicated-nodes/overview.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/server.svg">server</a></td></tr><tr><td><strong>White-label validator</strong></td><td>Branded validator with full key separation, zero ops overhead, and high availability.</td><td><a href="../validator-services/white-label-validators/overview.md">../validator-services/white-label-validators/overview.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/landmark.svg">landmark</a></td></tr></tbody></table>
 {% endtab %}
 {% tab title="By use case (I'm not sure yet)" %}
 Pick the kind of app you're building. Each card jumps to the matching setup guide.
 
-{% content-ref url="../../guides/set-up-your-rpc-for/trading-and-market-making-with-triton.md" %}
-[Trading or market making](../../guides/set-up-your-rpc-for/trading-and-market-making-with-triton.md)
-{% endcontent-ref %}
-
-{% content-ref url="../../guides/set-up-your-rpc-for/dex-or-defi-protocol.md" %}
-[DeFi protocols (Lending, DEXs)](../../guides/set-up-your-rpc-for/dex-or-defi-protocol.md)
-{% endcontent-ref %}
-
-{% content-ref url="../../guides/set-up-your-rpc-for/wallet-or-consumer-app.md" %}
-[Wallet or consumer app](../../guides/set-up-your-rpc-for/wallet-or-consumer-app.md)
-{% endcontent-ref %}
-
-{% content-ref url="../../guides/set-up-your-rpc-for/nft-or-compressed-asset-platform.md" %}
-[NFT marketplace](../../guides/set-up-your-rpc-for/nft-or-compressed-asset-platform.md)
-{% endcontent-ref %}
-
-{% content-ref url="../../guides/set-up-your-rpc-for/indexer-or-analytics.md" %}
-[Indexer or analytics](../../guides/set-up-your-rpc-for/indexer-or-analytics.md)
-{% endcontent-ref %}
-
-{% content-ref url="../../guides/set-up-your-rpc-for/gaming.md" %}
-[Gaming](../../guides/set-up-your-rpc-for/gaming.md)
-{% endcontent-ref %}
-
-{% content-ref url="../../guides/set-up-your-rpc-for/ai-agent-or-llm-app.md" %}
-[AI agent or LLM app](../../guides/set-up-your-rpc-for/ai-agent-or-llm-app.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Trading or market making</strong></td><td>Live prices, sub-slot tx landing, anti-MEV. Stack: Dragon's Mouth, Jet, Priority Fees, Shield.</td><td><a href="../../guides/set-up-your-rpc-for/trading-and-market-making-with-triton.md">../../guides/set-up-your-rpc-for/trading-and-market-making-with-triton.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/coins.svg">coins</a></td></tr><tr><td><strong>DeFi protocols (Lending, DEXs)</strong></td><td>Pool state, swap activity, tx landing, historical fills. Stack: Dragon's Mouth, Jet, Hydrant, Titan.</td><td><a href="../../guides/set-up-your-rpc-for/dex-or-defi-protocol.md">../../guides/set-up-your-rpc-for/dex-or-defi-protocol.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/git-merge.svg">git-merge</a></td></tr><tr><td><strong>Wallet or consumer app</strong></td><td>Balances, history, NFT portfolio, live updates. Stack: Standard RPC, DAS API, Whirligig.</td><td><a href="../../guides/set-up-your-rpc-for/wallet-or-consumer-app.md">../../guides/set-up-your-rpc-for/wallet-or-consumer-app.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/smartphone.svg">smartphone</a></td></tr><tr><td><strong>NFT marketplace</strong></td><td>Mints, metadata, collection feeds, sale events. Stack: DAS API, ZK Compression, Whirligig.</td><td><a href="../../guides/set-up-your-rpc-for/nft-or-compressed-asset-platform.md">../../guides/set-up-your-rpc-for/nft-or-compressed-asset-platform.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/palette.svg">palette</a></td></tr><tr><td><strong>Indexer or analytics</strong></td><td>Custom indexes, historical backfill, parsed transactions. Stack: Steamboat, Hydrant, Old Faithful, Fumarole.</td><td><a href="../../guides/set-up-your-rpc-for/indexer-or-analytics.md">../../guides/set-up-your-rpc-for/indexer-or-analytics.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/bar-chart-3.svg">bar-chart-3</a></td></tr><tr><td><strong>Gaming</strong></td><td>On-chain item state, real-time updates, fast reads. Stack: Standard RPC, DAS API, Dragon's Mouth, Whirligig.</td><td><a href="../../guides/set-up-your-rpc-for/gaming.md">../../guides/set-up-your-rpc-for/gaming.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/gamepad-2.svg">gamepad-2</a></td></tr><tr><td><strong>AI agent or LLM app</strong></td><td>MCP access, llms.txt context, autonomous setup. Stack: MCP, llms.txt, Standard RPC, DAS API.</td><td><a href="../../guides/set-up-your-rpc-for/ai-agent-or-llm-app.md">../../guides/set-up-your-rpc-for/ai-agent-or-llm-app.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/bot.svg">bot</a></td></tr></tbody></table>
 {% endtab %}
 {% endtabs %}
 

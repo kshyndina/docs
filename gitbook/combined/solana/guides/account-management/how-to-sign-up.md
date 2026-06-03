@@ -39,22 +39,7 @@ Follow the [Quickstart](../../documentation/get-started/quickstart.md) to call `
 
 ## What's next
 
-{% content-ref url="../../documentation/get-started/quickstart.md" %}
-[Quickstart](../../documentation/get-started/quickstart.md)
-{% endcontent-ref %}
-
-{% content-ref url="../../documentation/get-started/plans-and-billing.md" %}
-[Plans and billing](../../documentation/get-started/plans-and-billing.md)
-{% endcontent-ref %}
-
-{% content-ref url="../../documentation/get-started/auth-and-security.md" %}
-[Auth and security](../../documentation/get-started/auth-and-security.md)
-{% endcontent-ref %}
-
-{% content-ref url="../../documentation/get-started/platform-overview.md" %}
-[Account management](../../documentation/get-started/platform-overview.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Quickstart</strong></td><td>Sign up, deposit, get an endpoint, send your first request.</td><td><a href="../../documentation/get-started/quickstart.md">../../documentation/get-started/quickstart.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/rocket.svg">rocket</a></td></tr><tr><td><strong>Plans and billing</strong></td><td>Pay-as-you-go vs invoiced, top-ups, and the cost calculator across shared and dedicated setups.</td><td><a href="../../documentation/get-started/plans-and-billing.md">../../documentation/get-started/plans-and-billing.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/credit-card.svg">credit-card</a></td></tr><tr><td><strong>Auth and security</strong></td><td>Endpoint, token, and spend security. What Triton handles and what you configure.</td><td><a href="../../documentation/get-started/auth-and-security.md">../../documentation/get-started/auth-and-security.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/shield.svg">shield</a></td></tr><tr><td><strong>Account management</strong></td><td>Customer dashboard tour: endpoints, billing, team, and support.</td><td><a href="../../documentation/get-started/platform-overview.md">../../documentation/get-started/platform-overview.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/user-cog.svg">user-cog</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

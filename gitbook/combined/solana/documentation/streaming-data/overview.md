@@ -80,26 +80,7 @@ It's normal to combine more than one product in a pipeline. Common patterns:
 - **DEX or wallet frontend**: Whirligig WebSockets
 - **Indexer, analytics, or compliance**: Fumarole for live with confirmed Faithful streams for history
 
-{% content-ref url="dragon-s-mouth-grpc.md" %}
-[Dragon's Mouth gRPC](dragon-s-mouth-grpc.md)
-{% endcontent-ref %}
-
-{% content-ref url="deshred-transactions.md" %}
-[Deshred transactions](deshred-transactions.md)
-{% endcontent-ref %}
-
-{% content-ref url="whirligig-websockets.md" %}
-[Whirligig WebSockets](whirligig-websockets.md)
-{% endcontent-ref %}
-
-{% content-ref url="fumarole-persistent-streams.md" %}
-[Fumarole reliable streams](fumarole-persistent-streams.md)
-{% endcontent-ref %}
-
-{% content-ref url="old-faithful-streams.md" %}
-[Old Faithful streams](old-faithful-streams.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="dragon-s-mouth-grpc.md">dragon-s-mouth-grpc.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/radio.svg">radio</a></td></tr><tr><td><strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="deshred-transactions.md">deshred-transactions.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/flame.svg">flame</a></td></tr><tr><td><strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="whirligig-websockets.md">whirligig-websockets.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/rotate-cw.svg">rotate-cw</a></td></tr><tr><td><strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="fumarole-persistent-streams.md">fumarole-persistent-streams.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/layers.svg">layers</a></td></tr><tr><td><strong>Old Faithful streams</strong></td><td>Replay every block from genesis through the same gRPC interface as live streams.</td><td><a href="old-faithful-streams.md">old-faithful-streams.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/archive.svg">archive</a></td></tr></tbody></table>
 ## Excluded programs
 
 Light Protocol program is excluded from all our streams and is also unavailable via `getProgramAccounts`. At peak load, it accounted for over 50% of all Geyser traffic, making it impractical to include in standard streams
@@ -116,14 +97,7 @@ All streaming services are billed at `$0.08 / GB` of bandwidth, and you only pay
 
 ## What's next
 
-{% content-ref url="quickstart.md" %}
-[Streaming quickstart](quickstart.md)
-{% endcontent-ref %}
-
-{% content-ref url="../reading-state/account-sync.md" %}
-[Account Sync](../reading-state/account-sync.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Streaming quickstart</strong></td><td>Test every Triton streaming service in under five minutes.</td><td><a href="quickstart.md">quickstart.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/play.svg">play</a></td></tr><tr><td><strong>Account Sync</strong></td><td>Streaming-backed local cache for account reads. No polling, no code changes.</td><td><a href="../reading-state/account-sync.md">../reading-state/account-sync.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/refresh-cw.svg">refresh-cw</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

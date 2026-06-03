@@ -94,14 +94,7 @@ A single gRPC connection can multiplex many subscriptions. The right pattern is 
 
 ## What's next
 
-{% content-ref url="plans-and-billing.md" %}
-[Plans and billing](plans-and-billing.md)
-{% endcontent-ref %}
-
-{% content-ref url="../dedicated-nodes/overview.md" %}
-[Dedicated gRPC node](../dedicated-nodes/overview.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Plans and billing</strong></td><td>Pay-as-you-go vs invoiced, top-ups, and the cost calculator across shared and dedicated setups.</td><td><a href="plans-and-billing.md">plans-and-billing.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/credit-card.svg">credit-card</a></td></tr><tr><td><strong>Dedicated gRPC node</strong></td><td>Private node with isolated CPU and unlimited concurrent gRPC connections. For latency-sensitive or heavy streaming workloads.</td><td><a href="../dedicated-nodes/overview.md">../dedicated-nodes/overview.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/server.svg">server</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

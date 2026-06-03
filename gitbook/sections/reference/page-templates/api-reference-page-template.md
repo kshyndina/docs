@@ -150,20 +150,7 @@ Standard tier shares the global rate limit. See [Rate and connection limits](htt
 
 > Always cross-link to siblings. Helps users land on the right method when they search broadly.
 
-{% content-ref url="#" %}
-[getMultipleAccounts](#)
-{% endcontent-ref %}
-
-{% content-ref url="#" %}
-[getTokenAccountsByOwner](#)
-{% endcontent-ref %}
-
-{% content-ref url="#" %}
-[accountSubscribe](#)
-{% endcontent-ref %}
-
-[Error handling](https://kate-6.gitbook.io/triton-one-docs/guides/error-handling/how-to-troubleshoot)
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>getMultipleAccounts</strong></td><td>Batch balance + data for up to 100 accounts in one call.</td><td><a href="#">#</a></td></tr><tr><td><strong>getTokenAccountsByOwner</strong></td><td>SPL token balances (this method only returns native SOL).</td><td><a href="#">#</a></td></tr><tr><td><strong>accountSubscribe</strong></td><td>WebSocket subscription for live balance updates.</td><td><a href="#">#</a></td></tr><tr><td><strong>Error handling</strong></td><td>Standard transport-level error responses and the recommended retry shape.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/guides/error-handling/how-to-troubleshoot">https://kate-6.gitbook.io/triton-one-docs/guides/error-handling/how-to-troubleshoot</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

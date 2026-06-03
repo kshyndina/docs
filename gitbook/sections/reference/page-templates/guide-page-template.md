@@ -166,10 +166,7 @@ Slot rotation, no leader for the next few slots. The Jet client retries automati
 
 ## Next steps
 
-[Stream a Raydium AMM pool](https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/stream-a-raydium-amm-pool)
-
-[Send transactions during congestion](https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/send-transactions-during-congestion)
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Stream a Raydium AMM pool</strong></td><td>Pool-state streaming you can layer on top of this.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/stream-a-raydium-amm-pool">https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/stream-a-raydium-amm-pool</a></td></tr><tr><td><strong>Send transactions during congestion</strong></td><td>Priority-fee tuning + Jet retry logic for high-traffic windows.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/send-transactions-during-congestion">https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/send-transactions-during-congestion</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

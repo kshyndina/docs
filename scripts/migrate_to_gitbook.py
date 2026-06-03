@@ -362,21 +362,18 @@ def convert_blocks(text, ctx):
     text = re.sub(r"<Accordion\b([^>]*)>(.*?)</Accordion>", accordion, text, flags=re.S)
 
     # cards -> content-ref (if href) or bold block
-    def card_out(title, href, body=""):
-        if not href:
-            return f"\n**{title}**\n\n{body}\n"
-        url = resolve_link(href, ctx)
-        # same-space relative links render as rich content-ref cards; cross-space
-        # absolute URLs render as a titled link (GitBook can't make them cards)
-        if url.startswith("http"):
-            return f"\n[{title}]({url})\n"
-        return f"\n{{% content-ref url=\"{url}\" %}}\n[{title}]({url})\n{{% endcontent-ref %}}\n"
+    # cards -> card-row tokens (merged into a GitBook card grid later). Works for
+    # any target (same- or cross-space) and carries an icon cover.
+    def card_token(tag, body=""):
+        title = _flat(attr(tag, "title") or "Card")
+        href = attr(tag, "href") or ""
+        icon = attr(tag, "icon") or ""
+        if href:
+            href = resolve_link(href, ctx)
+        return f"\x02CARD\x02{title}\x02{_flat(body)}\x02{href}\x02{icon}\x02\n"
     text = re.sub(r"<Card\b([^>]*)>(.*?)</Card>",
-                  lambda m: card_out(attr(m.group(1), "title") or "Card",
-                                     attr(m.group(1), "href"), m.group(2).strip()), text, flags=re.S)
-    text = re.sub(r"<Card\b([^>]*)/>",
-                  lambda m: card_out(attr(m.group(1), "title") or "Card",
-                                     attr(m.group(1), "href")), text)
+                  lambda m: card_token(m.group(1), m.group(2)), text, flags=re.S)
+    text = re.sub(r"<Card\b([^>]*)/>", lambda m: card_token(m.group(1)), text)
 
     # param / response fields -> table-row tokens (merged into a table later)
     def cell(s):
@@ -478,6 +475,31 @@ def merge_param_tables(text):
         return "\n".join(out) + "\n"
     return PF_RUN.sub(build, text)
 
+CARD_RUN = re.compile(r"(?:[ \t]*\x02CARD\x02[^\n]*\x02\n)(?:[ \t]*\n)*"
+                      r"(?:(?:[ \t]*\x02CARD\x02[^\n]*\x02\n)(?:[ \t]*\n)*)*")
+LUCIDE = "https://unpkg.com/lucide-static@latest/icons"
+
+def merge_card_tables(text):
+    def build(run):
+        cards = re.findall(r"\x02CARD\x02([^\x02]*)\x02([^\x02]*)\x02([^\x02]*)\x02([^\x02]*)\x02",
+                           run.group(0))
+        if not cards:
+            return run.group(0)
+        has_icon = any(c[3] for c in cards)
+        head = ("<table data-view=\"cards\"><thead><tr><th></th><th></th>"
+                "<th data-hidden data-card-target data-type=\"content-ref\"></th>"
+                + ("<th data-hidden data-card-cover data-type=\"files\"></th>" if has_icon else "")
+                + "</tr></thead><tbody>")
+        rows = []
+        for title, desc, href, icon in cards:
+            tgt = f'<td><a href="{href}">{href}</a></td>' if href else "<td></td>"
+            cov = ""
+            if has_icon:
+                cov = (f'<td><a href="{LUCIDE}/{icon}.svg">{icon}</a></td>' if icon else "<td></td>")
+            rows.append(f"<tr><td><strong>{title}</strong></td><td>{desc}</td>{tgt}{cov}</tr>")
+        return "\n" + head + "".join(rows) + "</tbody></table>\n"
+    return CARD_RUN.sub(build, text)
+
 def normalize_blocks(text):
     """Strip leading indentation before block-level markers, but never inside
     fenced code (so indented JSX-derived headings/cards/tables land at col 0)."""
@@ -527,6 +549,7 @@ def render_page(ref, ctx, fallback_title):
     body = handle_html_blocks(body)
     body = convert_blocks(body, ctx)
     body = merge_param_tables(body)
+    body = merge_card_tables(body)
     body = dedent_fences(body)
     body = normalize_blocks(body)
     body = rewrite_images(body, ctx)

@@ -116,14 +116,7 @@ console.log(await res.json());
 
 ## What's next
 
-{% content-ref url="endpoints.md" %}
-[Endpoints](endpoints.md)
-{% endcontent-ref %}
-
-{% content-ref url="tokens.md" %}
-[Tokens](tokens.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Endpoints</strong></td><td>Provision, list, configure, and delete endpoints.</td><td><a href="endpoints.md">endpoints.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/link.svg">link</a></td></tr><tr><td><strong>Tokens</strong></td><td>Issue, list, rotate, and revoke endpoint tokens.</td><td><a href="tokens.md">tokens.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/lock.svg">lock</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

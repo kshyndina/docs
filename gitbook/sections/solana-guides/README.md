@@ -12,16 +12,7 @@ By the end you'll have a working setup that covers the full path from signal to 
 
 Five Triton products work together in this stack. Each card below opens the full product docs -- useful when you want to tune defaults, see every option, or troubleshoot something specific to that product.
 
-[Dragon's Mouth](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc)
-
-[Deshred](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/deshred-transactions)
-
-[Priority Fee API](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/priority-fees-api)
-
-[Jet](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/yellowstone-jet)
-
-[Shield](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/shield-mev-protection)
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Dragon's Mouth</strong></td><td>Subscribe to DEX pool account updates and transactions in real time.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/radio.svg">radio</a></td></tr><tr><td><strong>Deshred</strong></td><td>Receive transactions \~20 ms before standard gRPC at p90 for earliest signal.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/deshred-transactions">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/deshred-transactions</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/flame.svg">flame</a></td></tr><tr><td><strong>Priority Fee API</strong></td><td>Get a percentile-based fee estimate before building your transaction.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/priority-fees-api">https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/priority-fees-api</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/trending-up.svg">trending-up</a></td></tr><tr><td><strong>Jet</strong></td><td>Send transactions directly to the current leader with built-in SWQoS.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/yellowstone-jet">https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/yellowstone-jet</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/send.svg">send</a></td></tr><tr><td><strong>Shield</strong></td><td>(Optional) Block specific validators from processing your transactions.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/shield-mev-protection">https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/shield-mev-protection</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/shield-check.svg">shield-check</a></td></tr></tbody></table>
 ## Prerequisites
 
 {% stepper %}
@@ -845,10 +836,7 @@ Two paths for two types of teams:
 - **This guide** -- build your own signal and execution stack. Full control, lowest latency, more engineering work.
 - **Metis / Titan** -- plug in pre-built liquidity routing and quoting. Fastest time to market, less custom code.
 
-[Metis swap API](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/metis-swap-api)
-
-[Titan swap API](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/titan-swap-api)
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Metis swap API</strong></td><td>Swap routing across 20+ DEXes with exact-out and platform-fee support built in.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/metis-swap-api">https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/metis-swap-api</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/git-branch.svg">git-branch</a></td></tr><tr><td><strong>Titan swap API</strong></td><td>Streaming quotes and routes via DART live re-optimisation or the Prime API for high-volume desks.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/titan-swap-api">https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/titan-swap-api</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/route.svg">route</a></td></tr></tbody></table>
 ## FAQs
 
 <details>
@@ -883,14 +871,7 @@ Orca Whirlpools: `whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc`
 
 ## What's next
 
-[Deshred transactions](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/deshred-transactions)
-
-[Shield MEV protection](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/shield-mev-protection)
-
-[Metis swap API](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/metis-swap-api)
-
-[Titan swap API](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/titan-swap-api)
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/deshred-transactions">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/deshred-transactions</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/flame.svg">flame</a></td></tr><tr><td><strong>Shield MEV protection</strong></td><td>On-chain allowlists or blocklists with local enforcement. No added latency on the send path.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/shield-mev-protection">https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/shield-mev-protection</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/shield-check.svg">shield-check</a></td></tr><tr><td><strong>Metis swap API</strong></td><td>Swap routing across 20+ DEXes with exact-out and platform-fee support built in.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/metis-swap-api">https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/metis-swap-api</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/git-branch.svg">git-branch</a></td></tr><tr><td><strong>Titan swap API</strong></td><td>Streaming quotes and routes via DART live re-optimisation or the Prime API for high-volume desks.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/titan-swap-api">https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/titan-swap-api</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/route.svg">route</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

@@ -66,20 +66,7 @@ async function rpcWithBackoff(url: string, body: unknown, maxAttempts = 5) {
 
 ## What's next
 
-[Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits)
-
-{% content-ref url="common-solana-errors.md" %}
-[Common Solana errors](common-solana-errors.md)
-{% endcontent-ref %}
-
-{% content-ref url="triton-rpc-error-codes.md" %}
-[Triton RPC error codes](triton-rpc-error-codes.md)
-{% endcontent-ref %}
-
-{% content-ref url="how-to-troubleshoot.md" %}
-[How to troubleshoot](how-to-troubleshoot.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Rate and connection limits</strong></td><td>Per-endpoint and method rate limits, plus streaming connection caps.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits">https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/gauge.svg">gauge</a></td></tr><tr><td><strong>Common Solana errors</strong></td><td>Solana JSON-RPC error codes and how to handle each one.</td><td><a href="common-solana-errors.md">common-solana-errors.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/circle-help.svg">circle-help</a></td></tr><tr><td><strong>Triton RPC error codes</strong></td><td>Triton-specific error codes you might see and what they mean.</td><td><a href="triton-rpc-error-codes.md">triton-rpc-error-codes.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/alert-triangle.svg">alert-triangle</a></td></tr><tr><td><strong>How to troubleshoot</strong></td><td>The full debug flow when something's not working as expected.</td><td><a href="how-to-troubleshoot.md">how-to-troubleshoot.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/wrench.svg">wrench</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

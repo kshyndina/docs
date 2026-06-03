@@ -121,14 +121,7 @@ Higher limits available on dedicated. Talk to support if you have legitimate per
 
 ## What's next
 
-{% content-ref url="../get-started/auth-and-security.md" %}
-[Auth and security](../get-started/auth-and-security.md)
-{% endcontent-ref %}
-
-{% content-ref url="endpoints.md" %}
-[Endpoints](endpoints.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Auth and security</strong></td><td>Endpoint, token, and spend security. What Triton handles and what you configure.</td><td><a href="../get-started/auth-and-security.md">../get-started/auth-and-security.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/shield.svg">shield</a></td></tr><tr><td><strong>Endpoints</strong></td><td>Provision, list, configure, and delete endpoints.</td><td><a href="endpoints.md">endpoints.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/link.svg">link</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

@@ -253,20 +253,7 @@ If you're running your own RPC and want to support Shield:
 
 ## What's next
 
-{% content-ref url="yellowstone-jet.md" %}
-[Yellowstone Jet](yellowstone-jet.md)
-{% endcontent-ref %}
-
-{% content-ref url="priority-fees-api.md" %}
-[Priority Fees API](priority-fees-api.md)
-{% endcontent-ref %}
-
-{% content-ref url="jito-bundles.md" %}
-[Jito bundles](jito-bundles.md)
-{% endcontent-ref %}
-
-[Yellowstone Shield blog post](https://blog.triton.one/introducing-yellowstone-shield)
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Yellowstone Jet</strong></td><td>Direct-to-leader forwarding over QUIC with leader scheduling, connection pooling, and retries built in.</td><td><a href="yellowstone-jet.md">yellowstone-jet.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/send.svg">send</a></td></tr><tr><td><strong>Priority Fees API</strong></td><td>Smart fee estimation with tail-aware percentiles. Reliable landing without overpaying.</td><td><a href="priority-fees-api.md">priority-fees-api.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/trending-up.svg">trending-up</a></td></tr><tr><td><strong>Jito bundles</strong></td><td>Jito bundle simulation through Triton endpoints. Test bundle ordering before submitting.</td><td><a href="jito-bundles.md">jito-bundles.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/package.svg">package</a></td></tr><tr><td><strong>Yellowstone Shield blog post</strong></td><td>The full architecture and design rationale behind Shield's allow/blocklist model.</td><td><a href="https://blog.triton.one/introducing-yellowstone-shield">https://blog.triton.one/introducing-yellowstone-shield</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/book-open.svg">book-open</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

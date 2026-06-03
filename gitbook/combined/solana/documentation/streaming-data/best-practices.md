@@ -150,22 +150,7 @@ Contact support by clicking the chat icon in the bottom right of your [customer 
 
 ## See also
 
-{% content-ref url="overview.md" %}
-[Streaming overview](overview.md)
-{% endcontent-ref %}
-
-{% content-ref url="quickstart.md" %}
-[Streaming quickstart](quickstart.md)
-{% endcontent-ref %}
-
-{% content-ref url="dragon-s-mouth-grpc.md" %}
-[Dragon's Mouth gRPC](dragon-s-mouth-grpc.md)
-{% endcontent-ref %}
-
-{% content-ref url="fumarole-persistent-streams.md" %}
-[Fumarole reliable streams](fumarole-persistent-streams.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td><a href="overview.md">overview.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/compass.svg">compass</a></td></tr><tr><td><strong>Streaming quickstart</strong></td><td>Test every Triton streaming service in under five minutes.</td><td><a href="quickstart.md">quickstart.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/play.svg">play</a></td></tr><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="dragon-s-mouth-grpc.md">dragon-s-mouth-grpc.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/radio.svg">radio</a></td></tr><tr><td><strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="fumarole-persistent-streams.md">fumarole-persistent-streams.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/layers.svg">layers</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

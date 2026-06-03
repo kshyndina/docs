@@ -138,14 +138,7 @@ curl https://your-endpoint.rpcpool.com \
 **Where to use:** landing pages, section hubs, "where do I go next".
 **Why it works:** visual nav with icons + descriptions; great for the front of each chain dropdown (e.g. Solana welcome page).
 
-[Quickstart](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart)
-
-[API reference](https://kate-6.gitbook.io/triton-one-docs/api-reference/overview-and-auth/api-overview)
-
-[Streaming data](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview)
-
-[FAQs](https://kate-6.gitbook.io/triton-one-docs/faqs/general)
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Quickstart</strong></td><td>Get from zero to a working endpoint in about five minutes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart">https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/rocket.svg">rocket</a></td></tr><tr><td><strong>API reference</strong></td><td>Every JSON-RPC, WebSocket, and gRPC method we expose, with examples.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/api-reference/overview-and-auth/api-overview">https://kate-6.gitbook.io/triton-one-docs/api-reference/overview-and-auth/api-overview</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/code.svg">code</a></td></tr><tr><td><strong>Streaming data</strong></td><td>Yellowstone gRPC, Whirligig, Fumarole -- pick the right tool for the job.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/radio.svg">radio</a></td></tr><tr><td><strong>FAQs</strong></td><td>Answers to the questions every team asks in the first week.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/faqs/general">https://kate-6.gitbook.io/triton-one-docs/faqs/general</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/messages-square.svg">messages-square</a></td></tr></tbody></table>
 ### Accordions
 
 **Where to use:** FAQs, optional sections, advanced settings.

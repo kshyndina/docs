@@ -16,22 +16,7 @@ For a backend that can speak gRPC, [Dragon's Mouth gRPC](dragon-s-mouth-grpc.md)
 
 ## Features and benefits
 
-**Solana WebSocket compatible**
-
-Drop-in replacement for the standard Solana WebSocket API. All native methods plus Triton-only extensions.
-
-**transactionSubscribe extension**
-
-Triton-only subscription for filtered transaction notifications over WebSocket.
-
-**All commitment levels**
-
-Subscribe at processed, confirmed, or finalized. Pick the trade-off that fits the workload.
-
-**Reliability and limits at scale**
-
-Higher reliability and connection limits at scale, backed by Yellowstone gRPC.
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Solana WebSocket compatible</strong></td><td>Drop-in replacement for the standard Solana WebSocket API. All native methods plus Triton-only extensions.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/plug.svg">plug</a></td></tr><tr><td><strong>transactionSubscribe extension</strong></td><td>Triton-only subscription for filtered transaction notifications over WebSocket.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/bell.svg">bell</a></td></tr><tr><td><strong>All commitment levels</strong></td><td>Subscribe at processed, confirmed, or finalized. Pick the trade-off that fits the workload.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/signal-high.svg">signal-high</a></td></tr><tr><td><strong>Reliability and limits at scale</strong></td><td>Higher reliability and connection limits at scale, backed by Yellowstone gRPC.</td><td></td><td><a href="https://unpkg.com/lucide-static@latest/icons/network.svg">network</a></td></tr></tbody></table>
 ## Endpoint and connection
 
 The default endpoint is:
@@ -630,22 +615,7 @@ The Whirligig CLI client lives on GitHub: [yellowstone-whirligig-client](https:/
 
 ## Related
 
-{% content-ref url="quickstart.md" %}
-[Streaming quickstart](quickstart.md)
-{% endcontent-ref %}
-
-{% content-ref url="dragon-s-mouth-grpc.md" %}
-[Dragon's Mouth gRPC](dragon-s-mouth-grpc.md)
-{% endcontent-ref %}
-
-{% content-ref url="fumarole-persistent-streams.md" %}
-[Fumarole reliable streams](fumarole-persistent-streams.md)
-{% endcontent-ref %}
-
-{% content-ref url="overview.md" %}
-[Streaming overview](overview.md)
-{% endcontent-ref %}
-
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Streaming quickstart</strong></td><td>Test every Triton streaming service in under five minutes.</td><td><a href="quickstart.md">quickstart.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/play.svg">play</a></td></tr><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="dragon-s-mouth-grpc.md">dragon-s-mouth-grpc.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/radio.svg">radio</a></td></tr><tr><td><strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="fumarole-persistent-streams.md">fumarole-persistent-streams.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/layers.svg">layers</a></td></tr><tr><td><strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td><a href="overview.md">overview.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/compass.svg">compass</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
