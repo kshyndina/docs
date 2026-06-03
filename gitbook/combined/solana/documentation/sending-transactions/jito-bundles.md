@@ -1,3 +1,7 @@
+---
+icon: package
+---
+
 # Jito bundles
 
 Tip-based bundle ordering. Skip the standard queue with atomic transaction packs.

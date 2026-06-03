@@ -1,3 +1,7 @@
+---
+icon: image
+---
+
 # Metaplex DAS API
 
 Unified read for NFTs, cNFTs, SPL, and Token-2022. One endpoint, parsed asset metadata.

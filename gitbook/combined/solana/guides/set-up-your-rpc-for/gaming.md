@@ -1,3 +1,7 @@
+---
+icon: gamepad-2
+---
+
 # Gaming
 
 How to set up Triton RPC for Solana games: on-chain item state, real-time updates, fast reads. Stack: Standard RPC, DAS API, Dragon's Mouth, Whirligig.

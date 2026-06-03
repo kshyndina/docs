@@ -1,3 +1,7 @@
+---
+icon: droplet
+---
+
 # Stream a Raydium AMM pool
 
 Subscribe to pool state and trade events sub-slot.

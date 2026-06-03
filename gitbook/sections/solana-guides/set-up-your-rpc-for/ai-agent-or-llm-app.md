@@ -1,3 +1,7 @@
+---
+icon: bot
+---
+
 # AI agent or LLM app
 
 How to set up Triton RPC for AI agents and LLM apps: MCP access, llms.txt context, autonomous setup. Stack: MCP, llms.txt, Standard RPC, DAS API.

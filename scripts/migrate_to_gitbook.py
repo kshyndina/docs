@@ -49,6 +49,22 @@ def read(path):
 def slugify(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
+PAGE_ICON = {}
+def scan_icons():
+    """Pre-scan all <Card icon= href=> in source so each target page gets that
+    icon in frontmatter (GitBook then shows it on cards AND in the sidebar)."""
+    import glob
+    for fp in glob.glob(os.path.join(ROOT, "**", "*.mdx"), recursive=True):
+        try:
+            txt = read(fp)
+        except Exception:
+            continue
+        for tag in re.findall(r"<Card\b([^>]*)>", txt):
+            ic = attr(tag, "icon")
+            hr = attr(tag, "href")
+            if ic and hr and hr.startswith("/"):
+                PAGE_ICON.setdefault(hr.strip("/").split("#")[0], ic)
+
 def src_path(ref):
     for ext in (".mdx", ".md"):
         p = os.path.join(ROOT, ref + ext)
@@ -485,18 +501,13 @@ def merge_card_tables(text):
                            run.group(0))
         if not cards:
             return run.group(0)
-        has_icon = any(c[3] for c in cards)
         head = ("<table data-view=\"cards\"><thead><tr><th></th><th></th>"
                 "<th data-hidden data-card-target data-type=\"content-ref\"></th>"
-                + ("<th data-hidden data-card-cover data-type=\"files\"></th>" if has_icon else "")
-                + "</tr></thead><tbody>")
+                "</tr></thead><tbody>")
         rows = []
-        for title, desc, href, icon in cards:
+        for title, desc, href, _icon in cards:
             tgt = f'<td><a href="{href}">{href}</a></td>' if href else "<td></td>"
-            cov = ""
-            if has_icon:
-                cov = (f'<td><a href="{LUCIDE}/{icon}.svg">{icon}</a></td>' if icon else "<td></td>")
-            rows.append(f"<tr><td><strong>{title}</strong></td><td>{desc}</td>{tgt}{cov}</tr>")
+            rows.append(f"<tr><td><strong>{title}</strong></td><td>{desc}</td>{tgt}</tr>")
         return "\n" + head + "".join(rows) + "</tbody></table>\n"
     return CARD_RUN.sub(build, text)
 
@@ -561,7 +572,9 @@ def render_page(ref, ctx, fallback_title):
     body = re.sub(r"\n{3,}", "\n\n", body).strip()
     title = meta.get("title") or fallback_title
     desc = meta.get("description", "")
-    head = f"# {title}\n"
+    icon = PAGE_ICON.get((ref or "").strip("/")) if ref else None
+    fm = f"---\nicon: {icon}\n---\n\n" if icon else ""
+    head = fm + f"# {title}\n"
     if desc:
         head += f"\n{desc}\n"
     return head + "\n" + body + "\n"
@@ -647,6 +660,7 @@ def inject_pyth_into_streaming(sections):
 def main():
     global LINKMAP
     docs = json.load(open(os.path.join(ROOT, "docs.json")))
+    scan_icons()
     sections = build_sections(docs)
     inject_pyth_into_streaming(sections)
     for s in sections:

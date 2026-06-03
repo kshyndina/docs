@@ -1,3 +1,7 @@
+---
+icon: shield
+---
+
 # Auth and security
 
 We are committed to a defence-in-depth security model to protect our global infrastructure and our customers' services.
@@ -164,7 +168,7 @@ Additional filters return 403 errors to requests that appear to originate from a
 
 ## Related
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Rate and connection limits</strong></td><td>Per-endpoint and method rate limits, plus streaming connection caps.</td><td><a href="rate-and-connection-limits.md">rate-and-connection-limits.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/gauge.svg">gauge</a></td></tr><tr><td><strong>Account management</strong></td><td>Customer dashboard tour: endpoints, billing, team, and support.</td><td><a href="platform-overview.md">platform-overview.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/user-cog.svg">user-cog</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Rate and connection limits</strong></td><td>Per-endpoint and method rate limits, plus streaming connection caps.</td><td><a href="rate-and-connection-limits.md">rate-and-connection-limits.md</a></td></tr><tr><td><strong>Account management</strong></td><td>Customer dashboard tour: endpoints, billing, team, and support.</td><td><a href="platform-overview.md">platform-overview.md</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

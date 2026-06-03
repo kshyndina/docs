@@ -1,3 +1,7 @@
+---
+icon: landmark
+---
+
 # Overview
 
 Triton operates Solana validators and offers white-label and private trusted validator services for institutional staking.

@@ -135,7 +135,7 @@ Yes. Dedicated nodes are billed monthly per node. Switching keeps your endpoint 
 
 > Always end with a routed escape. Don't make the reader hunt.
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Customer dashboard</strong></td><td>Chat icon in the bottom right of the dashboard goes straight to engineering.</td><td><a href="https://customers.triton.one">https://customers.triton.one</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/message-circle.svg">message-circle</a></td></tr><tr><td><strong>Sales questions</strong></td><td>Procurement, dedicated nodes, custom regions, SLAs.</td><td><a href="https://triton.one/contact">https://triton.one/contact</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/briefcase.svg">briefcase</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Customer dashboard</strong></td><td>Chat icon in the bottom right of the dashboard goes straight to engineering.</td><td><a href="https://customers.triton.one">https://customers.triton.one</a></td></tr><tr><td><strong>Sales questions</strong></td><td>Procurement, dedicated nodes, custom regions, SLAs.</td><td><a href="https://triton.one/contact">https://triton.one/contact</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

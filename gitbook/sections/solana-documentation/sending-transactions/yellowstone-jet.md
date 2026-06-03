@@ -1,3 +1,7 @@
+---
+icon: send
+---
+
 # Yellowstone Jet
 
 Yellowstone Jet TPU client. SWQoS, direct-to-leader routing over QUIC.

@@ -1,3 +1,7 @@
+---
+icon: antenna
+---
+
 # Stream Solana with gRPC
 
 Subscribe to accounts, transactions, and blocks via Dragon's Mouth.

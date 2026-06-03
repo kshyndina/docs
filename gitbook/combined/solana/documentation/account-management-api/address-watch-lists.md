@@ -1,3 +1,7 @@
+---
+icon: bookmark
+---
+
 # Address watch lists
 
 Manage account watch lists used by gRPC and WebSocket subscriptions via the Account Management API.
@@ -112,7 +116,7 @@ Higher limits available on dedicated -- talk to support.
 
 ## What's next
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Subscriptions</strong></td><td>Attach plans, add-ons, or watch lists to the organisation.</td><td><a href="subscriptions.md">subscriptions.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/rss.svg">rss</a></td></tr><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="../streaming-data/dragon-s-mouth-grpc.md">../streaming-data/dragon-s-mouth-grpc.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/radio.svg">radio</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Subscriptions</strong></td><td>Attach plans, add-ons, or watch lists to the organisation.</td><td><a href="subscriptions.md">subscriptions.md</a></td></tr><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="../streaming-data/dragon-s-mouth-grpc.md">../streaming-data/dragon-s-mouth-grpc.md</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

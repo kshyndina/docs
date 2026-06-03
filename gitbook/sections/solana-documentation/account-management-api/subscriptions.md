@@ -1,3 +1,7 @@
+---
+icon: rss
+---
+
 # Subscriptions
 
 Manage subscriptions, attach subscription types, and read billing configuration via the Account Management API.
@@ -93,7 +97,7 @@ Base plan changes (PAYG -> committed, sizing up / down) go through the portal or
 
 ## What's next
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Subscription types</strong></td><td>The catalogue of plans and add-ons available to attach.</td><td><a href="subscription-types.md">subscription-types.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/list.svg">list</a></td></tr><tr><td><strong>Plans and billing</strong></td><td>Pay-as-you-go vs invoiced, top-ups, and the cost calculator across shared and dedicated setups.</td><td><a href="../get-started/plans-and-billing.md">../get-started/plans-and-billing.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/credit-card.svg">credit-card</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Subscription types</strong></td><td>The catalogue of plans and add-ons available to attach.</td><td><a href="subscription-types.md">subscription-types.md</a></td></tr><tr><td><strong>Plans and billing</strong></td><td>Pay-as-you-go vs invoiced, top-ups, and the cost calculator across shared and dedicated setups.</td><td><a href="../get-started/plans-and-billing.md">../get-started/plans-and-billing.md</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

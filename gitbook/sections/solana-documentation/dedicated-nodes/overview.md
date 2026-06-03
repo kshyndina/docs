@@ -1,3 +1,7 @@
+---
+icon: server
+---
+
 # Overview
 
 Private Solana endpoint with isolated capacity, custom limits, and dedicated regions. Yellowstone gRPC included.

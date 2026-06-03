@@ -1,3 +1,7 @@
+---
+icon: route
+---
+
 # Integrate Titan Prime
 
 Get streaming swap quotes that re-optimise live as the market moves.

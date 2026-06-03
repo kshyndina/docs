@@ -1,3 +1,7 @@
+---
+icon: git-branch
+---
+
 # Metis swap API
 
 Jupiter-routed swaps with 20+ DEXes scanned. Quote, price, and swap-instruction endpoints.

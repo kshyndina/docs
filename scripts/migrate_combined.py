@@ -31,6 +31,7 @@ def chain_nodes():
     return tops
 
 def main():
+    M.scan_icons()
     top = chain_nodes()
     M.assign_paths(top, "", True)
     # link map: every ref resolves within the single "combined" space (relative)

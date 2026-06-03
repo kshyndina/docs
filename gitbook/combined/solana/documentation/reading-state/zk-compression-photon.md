@@ -1,3 +1,7 @@
+---
+icon: binary
+---
+
 # ZK compression (Photon)
 
 Triton-hosted Photon service for ZK Compression. Query compressed accounts, token balances, validity proofs, and transaction signatures.

@@ -1,3 +1,7 @@
+---
+icon: link
+---
+
 # Endpoints
 
 Provision, list, configure, and delete endpoints via the Account Management API.
@@ -128,7 +132,7 @@ curl https://api.triton.one/v1/endpoints/ep_abc123 \
 
 ## What's next
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Tokens</strong></td><td>Issue, list, rotate, and revoke endpoint tokens.</td><td><a href="tokens.md">tokens.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/lock.svg">lock</a></td></tr><tr><td><strong>Rate tiers</strong></td><td>Read and configure per-endpoint rate limits programmatically.</td><td><a href="rate-tiers.md">rate-tiers.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/sliders-vertical.svg">sliders-vertical</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Tokens</strong></td><td>Issue, list, rotate, and revoke endpoint tokens.</td><td><a href="tokens.md">tokens.md</a></td></tr><tr><td><strong>Rate tiers</strong></td><td>Read and configure per-endpoint rate limits programmatically.</td><td><a href="rate-tiers.md">rate-tiers.md</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

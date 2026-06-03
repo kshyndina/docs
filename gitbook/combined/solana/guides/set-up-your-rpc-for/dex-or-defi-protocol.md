@@ -1,3 +1,7 @@
+---
+icon: git-merge
+---
+
 # DEX or DeFi protocol
 
 How to set up Triton RPC for DEX or DeFi protocols: pool state, swap activity, tx landing, historical fills. Stack: Dragon's Mouth, Jet, Hydrant, Priority Fees.

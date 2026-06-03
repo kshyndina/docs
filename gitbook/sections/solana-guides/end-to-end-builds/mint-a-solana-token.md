@@ -1,3 +1,7 @@
+---
+icon: sparkles
+---
+
 # Mint a Solana token
 
 Create an SPL or Token-2022 mint, set metadata, and airdrop to test wallets.

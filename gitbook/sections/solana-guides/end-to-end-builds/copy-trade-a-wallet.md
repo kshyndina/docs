@@ -1,3 +1,7 @@
+---
+icon: copy
+---
+
 # Copy trade a wallet
 
 Watch any wallet in real time and mirror its trades.

@@ -1,3 +1,7 @@
+---
+icon: calculator
+---
+
 # Calculate Solana fees end to end
 
 Base transaction fees, priority fees, and account rent in one walkthrough.

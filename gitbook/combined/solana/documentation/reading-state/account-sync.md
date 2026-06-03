@@ -1,3 +1,7 @@
+---
+icon: refresh-cw
+---
+
 # Account-sync
 
 Live account-state mirror that replaces polling. One-line SDK swap delivers streaming-grade reads.

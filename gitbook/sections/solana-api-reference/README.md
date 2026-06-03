@@ -1,3 +1,7 @@
+---
+icon: code
+---
+
 # API overview
 
 Triton's Solana API surface: HTTP JSON-RPC, WebSocket subscriptions, gRPC streams, and DAS endpoints with live API playgrounds.

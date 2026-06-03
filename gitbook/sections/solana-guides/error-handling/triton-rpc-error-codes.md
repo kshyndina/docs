@@ -1,3 +1,7 @@
+---
+icon: alert-triangle
+---
+
 # Triton RPC error codes
 
 Possible RPC symptoms and the full list of Triton-specific RPC error codes for HTTP, WebSocket, and gRPC services.

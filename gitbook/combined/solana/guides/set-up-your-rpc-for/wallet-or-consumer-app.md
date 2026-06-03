@@ -1,3 +1,7 @@
+---
+icon: smartphone
+---
+
 # Wallet or consumer app
 
 How to set up Triton RPC for wallets and consumer apps: balances, history, NFT portfolio, live updates. Stack: Standard RPC, DAS API, Whirligig.

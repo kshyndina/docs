@@ -1,3 +1,7 @@
+---
+icon: activity
+---
+
 # Pyth Hermes
 
 Triton-hosted Pyth Hermes. REST and WebSocket access to Pyth price feeds, used by the Pyth JS SDK.

@@ -1,3 +1,7 @@
+---
+icon: circle-help
+---
+
 # Common Solana errors
 
 Standard list of common JSON-RPC error codes you may experience, plus uncommon Web3JS errors we have previously helped customers resolve.

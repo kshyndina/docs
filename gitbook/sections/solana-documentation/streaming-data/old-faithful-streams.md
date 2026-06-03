@@ -1,3 +1,7 @@
+---
+icon: archive
+---
+
 # Old Faithful streams
 
 Replay every block from genesis over the same gRPC dialect as live streams. Built for history indexers and researchers.

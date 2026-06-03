@@ -1,3 +1,7 @@
+---
+icon: route
+---
+
 # Titan swap API
 
 Streaming swap quotes with DART live re-optimisation as the market moves.

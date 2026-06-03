@@ -1,3 +1,7 @@
+---
+icon: user
+---
+
 # Accounts
 
 List, create, rotate, and revoke organisation members via the Account Management API.
@@ -107,7 +111,7 @@ For members in `status: invited` whose email got lost or expired (invites expire
 
 ## What's next
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><strong>Auth and headers</strong></td><td>Bearer tokens, organisation context, and the headers every call needs.</td><td><a href="auth-headers.md">auth-headers.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/id-card.svg">id-card</a></td></tr><tr><td><strong>Endpoints</strong></td><td>Provision, list, configure, and delete endpoints.</td><td><a href="endpoints.md">endpoints.md</a></td><td><a href="https://unpkg.com/lucide-static@latest/icons/link.svg">link</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Auth and headers</strong></td><td>Bearer tokens, organisation context, and the headers every call needs.</td><td><a href="auth-headers.md">auth-headers.md</a></td></tr><tr><td><strong>Endpoints</strong></td><td>Provision, list, configure, and delete endpoints.</td><td><a href="endpoints.md">endpoints.md</a></td></tr></tbody></table>
 ---
 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
 Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  

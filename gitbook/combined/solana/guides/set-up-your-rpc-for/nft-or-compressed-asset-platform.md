@@ -1,3 +1,7 @@
+---
+icon: palette
+---
+
 # NFT or compressed-asset platform
 
 How to set up Triton RPC for NFT and compressed-asset platforms: mints, metadata, collection feeds, sale events. Stack: DAS API, ZK Compression, Whirligig.

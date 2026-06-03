@@ -1,3 +1,7 @@
+---
+icon: zap
+---
+
 # Standard RPC
 
 JSON-RPC over HTTPS for every standard Solana method. Authentication, request shape, and the methods we expose.

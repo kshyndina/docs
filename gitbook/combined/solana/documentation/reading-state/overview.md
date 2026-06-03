@@ -1,3 +1,7 @@
+---
+icon: compass
+---
+
 # Overview
 
 Read Solana state via Triton: standard JSON-RPC, custom indexes, DAS for digital assets, ZK compression, and live account mirrors.

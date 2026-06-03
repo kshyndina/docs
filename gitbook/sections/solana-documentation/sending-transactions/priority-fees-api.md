@@ -1,3 +1,7 @@
+---
+icon: trending-up
+---
+
 # Priority fees API
 
 Smart per-program priority-fee estimation. Tail-aware percentiles for landing under congestion.

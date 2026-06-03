@@ -1,3 +1,7 @@
+---
+icon: layers
+---
+
 # Fumarole persistent streams
 
 Persistent gRPC streams with built-in completeness, a 4-day rolling buffer, and seamless resume on disconnect.

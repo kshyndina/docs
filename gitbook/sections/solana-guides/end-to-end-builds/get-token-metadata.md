@@ -1,3 +1,7 @@
+---
+icon: image
+---
+
 # Get token metadata
 
 One DAS API call returns fungible, NFT, cNFT, and Token-2022 metadata.

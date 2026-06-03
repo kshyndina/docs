@@ -1,3 +1,7 @@
+---
+icon: bar-chart-3
+---
+
 # Indexer or analytics
 
 How to set up Triton RPC for indexers and analytics platforms: custom indexes, historical backfill, parsed tx. Stack: Steamboat, Hydrant, Old Faithful, Vixen.

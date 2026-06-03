@@ -1,3 +1,7 @@
+---
+icon: messages-square
+---
+
 # General
 
 Common questions about Triton, our products, plans, payments, and how to start using our services.
