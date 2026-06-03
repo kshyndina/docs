@@ -1,4 +1,4 @@
-# Trading and market making with Triton
+# Trading and market making
 
 End-to-end stack for a market-making or trading bot on Solana: real-time DEX data, earliest signal, priority fees, reliable transaction landing.
 

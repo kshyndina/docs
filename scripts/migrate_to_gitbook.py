@@ -38,6 +38,13 @@ def fa_icon(name):
     fa = FA_MAP.get(name, name)
     return f'<i class="fa-{fa}">:{fa}:</i>'
 
+# pages removed from nav -> drop any card/link that targets them (avoid broken links)
+REMOVED_REFS = ("standard-rpc", "zk-compression-photon")
+# page-title overrides
+TITLE_OVERRIDE = {
+    "solana-guides/getting-started/set-up-rpc/trading-or-market-making": "Trading and market making",
+}
+
 # Footer: pure HTML so inline icons AND links both render (mixing inline <i>
 # with markdown links makes GitBook treat the block as HTML and leave the
 # markdown link syntax literal, so everything must be HTML here).
@@ -297,9 +304,62 @@ def html_table_to_md(m):
             out.append("| " + " | ".join(_flat(c) for c in cells) + " |")
     return "\n" + "\n".join(out) + "\n"
 
-def handle_html_blocks(text):
+def _balanced_div(text, start_re):
+    m = re.search(start_re, text)
+    if not m:
+        return None
+    i, depth = m.end(), 1
+    while i < len(text) and depth > 0:
+        no, nc = text.find("<div", i), text.find("</div>", i)
+        if nc == -1:
+            break
+        if no != -1 and no < nc:
+            depth += 1; i = no + 4
+        else:
+            depth -= 1; i = nc + 6
+    return m.start(), i, text[m.start():i]
+
+def stack_to_tabs(text, ctx):
+    """Turn the welcome 'Triton stack overview' diagram into tabs (one per
+    category), each holding a card grid. Drops links to removed pages."""
+    found = _balanced_div(text, r'<div\b[^>]*class[Nn]ame="[^"]*stack-map[^"]*"[^>]*>')
+    if not found:
+        return text
+    s, e, block = found
+    branches, pos = [], 0
+    while True:
+        bm = re.search(r'<div\b[^>]*class[Nn]ame="stack-branch"[^>]*>', block[pos:])
+        if not bm:
+            break
+        j, d = pos + bm.end(), 1
+        while j < len(block) and d > 0:
+            no, nc = block.find("<div", j), block.find("</div>", j)
+            if nc == -1:
+                break
+            if no != -1 and no < nc:
+                d += 1; j = no + 4
+            else:
+                d -= 1; j = nc + 6
+        branches.append(block[pos + bm.end(): j])
+        pos = j
+    out = ["\n{% tabs %}"]
+    for b in branches:
+        tm = re.search(r"stack-branch-title[^>]*>([^<]+)</div>", b)
+        title = tm.group(1).strip() if tm else "Other services"
+        out.append(f'{{% tab title="{title}" %}}')
+        for lm in re.finditer(r'<a\b[^>]*href="([^"]+)"[^>]*>([^<]+)</a>', b):
+            href, txt = lm.group(1), lm.group(2).strip()
+            if any(href.split("#")[0].rstrip("/").endswith(r) for r in REMOVED_REFS):
+                continue
+            out.append(f"\x02CARD\x02{txt}\x02\x02{resolve_link(href, ctx)}\x02\x02\n")
+        out.append("{% endtab %}")
+    out.append("{% endtabs %}\n")
+    return text[:s] + "\n".join(out) + text[e:]
+
+def handle_html_blocks(text, ctx):
     """Convert raw-HTML blocks (logos, <a> link maps, custom diagrams, tables)
     and drop interactive widgets that can't run in GitBook."""
+    text = stack_to_tabs(text, ctx)
     # drop the interactive playground + static-ify the pricing calculator
     text = remove_div_block(text, "triton-try")
     text = re.sub(r"##+ RPC playground\s*\n+[^\n<]*\n", "", text)
@@ -417,6 +477,8 @@ def convert_blocks(text, ctx):
         title = _flat(attr(tag, "title") or "Card")
         href = attr(tag, "href") or ""
         icon = attr(tag, "icon") or ""
+        if href and any(href.split("#")[0].rstrip("/").endswith(r) for r in REMOVED_REFS):
+            return ""  # drop cards that point at removed pages
         if href:
             href = resolve_link(href, ctx)
         return f"\x02CARD\x02{title}\x02{_flat(body)}\x02{href}\x02{icon}\x02\n"
@@ -620,7 +682,7 @@ def render_page(ref, ctx, fallback_title):
         return f"# {fallback_title}\n"
     meta, body = frontmatter(read(p))
     body = inline_snippets(body)
-    body = handle_html_blocks(body)
+    body = handle_html_blocks(body, ctx)
     body = convert_blocks(body, ctx)
     body = merge_param_tables(body)
     body = merge_card_tables(body)
@@ -635,7 +697,7 @@ def render_page(ref, ctx, fallback_title):
     # drop a markdown --- right before the footer's <hr> (avoids a literal "---")
     body = re.sub(r"(?m)^-{3,}\s*\n+(?=<hr>)", "", body)
     body = re.sub(r"\n{3,}", "\n\n", body).strip()
-    title = meta.get("title") or fallback_title
+    title = TITLE_OVERRIDE.get((ref or "").strip("/")) or meta.get("title") or fallback_title
     desc = meta.get("description", "")
     head = f"# {title}\n"
     if desc:
