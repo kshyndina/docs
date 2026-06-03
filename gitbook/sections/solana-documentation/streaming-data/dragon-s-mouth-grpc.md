@@ -40,23 +40,23 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 {% tabs %}
 {% tab title="Streaming subscriptions" %}
 | Stream | What you receive |
-    | :-- | :-- |
-    | Account writes | Updates whenever a matching account's data, lamports, or owner changes |
-    | Transactions | Every transaction matching your filter, with full `meta` (logs, status, balance deltas) |
-    | Deshred transactions | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](deshred-transactions.md). |
-    | Entries | Solana ledger entries (low-level, rare use case) |
-    | Block notifications | Full blocks as they're produced, optionally with their transactions and accounts |
-    | Block metadata | Block headers only, without the transaction payload |
-    | Slot notifications | Slot-status events (processed/confirmed/finalized plus intra-slot lifecycle) |
+| :-- | :-- |
+| Account writes | Updates whenever a matching account's data, lamports, or owner changes |
+| Transactions | Every transaction matching your filter, with full `meta` (logs, status, balance deltas) |
+| Deshred transactions | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](deshred-transactions.md). |
+| Entries | Solana ledger entries (low-level, rare use case) |
+| Block notifications | Full blocks as they're produced, optionally with their transactions and accounts |
+| Block metadata | Block headers only, without the transaction payload |
+| Slot notifications | Slot-status events (processed/confirmed/finalized plus intra-slot lifecycle) |
 {% endtab %}
 {% tab title="Unary operations" %}
 | Method | Returns |
-    | :-- | :-- |
-    | `getLatestBlockhash` | The latest blockhash \+ last valid block height at a commitment level |
-    | `getBlockHeight` | The current block height at a commitment level |
-    | `getSlot` | The current slot at a commitment level |
-    | `isValidBlockhash` | Whether a given blockhash is still valid |
-    | `subscribeReplayInfo` | Earliest slot still available for stream replay |
+| :-- | :-- |
+| `getLatestBlockhash` | The latest blockhash \+ last valid block height at a commitment level |
+| `getBlockHeight` | The current block height at a commitment level |
+| `getSlot` | The current slot at a commitment level |
+| `isValidBlockhash` | Whether a given blockhash is still valid |
+| `subscribeReplayInfo` | Earliest slot still available for stream replay |
 {% endtab %}
 {% endtabs %}
 
@@ -70,33 +70,33 @@ You send it once when you open the stream; then you can send it again at any tim
 {% tab title="commitment" %}
 Commitment level for buffering. Optional. Defaults to `processed`.
 
-    | Value | Meaning |
-    | --- | --- |
-    | `PROCESSED` (0) | Highest slot seen, possibly on a fork. Lowest latency. |
-    | `CONFIRMED` (1) | Voted on by supermajority. Some buffering. |
-    | `FINALIZED` (2) | Max vote lockout. Most buffering. |
+| Value | Meaning |
+| --- | --- |
+| `PROCESSED` (0) | Highest slot seen, possibly on a fork. Lowest latency. |
+| `CONFIRMED` (1) | Voted on by supermajority. Some buffering. |
+| `FINALIZED` (2) | Max vote lockout. Most buffering. |
 
-    For maximum performance, work at `processed` and manage commitment client-side by subscribing to [slot notifications](#slots) alongside your data. The pattern:
+For maximum performance, work at `processed` and manage commitment client-side by subscribing to [slot notifications](#slots) alongside your data. The pattern:
 
-    1. Subscribe to slot notifications alongside your data stream.
-    2. Buffer incoming events by slot.
-    3. When you see a slot status change to `confirmed` or `finalized`, release the matching buffer.
-    4. You'll always receive the slot's events _before_ its commitment notification.
+1. Subscribe to slot notifications alongside your data stream.
+2. Buffer incoming events by slot.
+3. When you see a slot status change to `confirmed` or `finalized`, release the matching buffer.
+4. You'll always receive the slot's events _before_ its commitment notification.
 {% endtab %}
 {% tab title="ping" %}
 Sends a periodic keepalive to prevent idle-stream drops by upstream cloud providers (e.g. Cloudflare). Server replies with `pong`. Optional but recommended for long-running streams.
 
-    See [pings](#pings).
+See [pings](#pings).
 {% endtab %}
 {% tab title="accountsDataSlice" %}
 Truncates account data payloads to a byte range, reducing bandwidth. Optional. Empty array means full payload.
 
-    Example: `[{ "offset": 32, "length": 40 }]` returns 40 bytes starting at byte 32.
+Example: `[{ "offset": 32, "length": 40 }]` returns 40 bytes starting at byte 32.
 {% endtab %}
 {% tab title="fromSlot" %}
 Replay buffered updates starting from this slot, then continue live on the same stream. Optional. Used for reconnection after short disconnections.
 
-    See [replay from a slot](#replay-from-a-slot).
+See [replay from a slot](#replay-from-a-slot).
 {% endtab %}
 {% endtabs %}
 
@@ -113,49 +113,43 @@ Each `SubscribeRequest` has a map per stream type. The key is a label you choose
 <details>
 <summary>Account filters</summary>
 
-- **`account`** `string[]` — List of pubkeys to subscribe to directly. Each must be a base58-encoded address.
-
-  - **`owner`** `string[]` — List of program owners. Subscribes to every account owned by these programs.
-
-  - **`filters`** `AccountsFilter[]` — Content-based filters on the account data. Each filter is one of: `memcmp`, `datasize`, `tokenAccountState`, or `lamports`. Combined as logical AND.
-
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `account` | `string[]` | — | List of pubkeys to subscribe to directly. Each must be a base58-encoded address. |
+| `owner` | `string[]` | — | List of program owners. Subscribes to every account owned by these programs. |
+| `filters` | `AccountsFilter[]` | — | Content-based filters on the account data. Each filter is one of: `memcmp`, `datasize`, `tokenAccountState`, or `lamports`. Combined as logical AND. |
 </details>
 
 <details>
 <summary>Transaction filters</summary>
 
-- **`vote`** `bool` — Include or exclude vote transactions. `false` excludes votes.
-
-  - **`failed`** `bool` — Include or exclude failed transactions. `false` excludes failures.
-
-  - **`signature`** `string` — Subscribe to a specific signature's status updates.
-
-  - **`account_include`** `string[]` — Accounts mentioned anywhere in the transaction.
-
-  - **`account_exclude`** `string[]` — Exclude transactions mentioning these accounts.
-
-  - **`account_required`** `string[]` _(required)_ — Accounts that MUST all be mentioned (every one of them).
-
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `vote` | `bool` | — | Include or exclude vote transactions. `false` excludes votes. |
+| `failed` | `bool` | — | Include or exclude failed transactions. `false` excludes failures. |
+| `signature` | `string` | — | Subscribe to a specific signature's status updates. |
+| `account_include` | `string[]` | — | Accounts mentioned anywhere in the transaction. |
+| `account_exclude` | `string[]` | — | Exclude transactions mentioning these accounts. |
+| `account_required` | `string[]` | Yes | Accounts that MUST all be mentioned (every one of them). |
 </details>
 
 <details>
 <summary>Block filters</summary>
 
-- **`account_include`** `string[]` — Only deliver transactions and accounts in the block that mention these.
-
-  - **`include_transactions`** `bool` — Include the block's transactions.
-
-  - **`include_accounts`** `bool` — Include accounts updated during the block.
-
-  - **`include_entries`** `bool` — Include the block's entries.
-
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `account_include` | `string[]` | — | Only deliver transactions and accounts in the block that mention these. |
+| `include_transactions` | `bool` | — | Include the block's transactions. |
+| `include_accounts` | `bool` | — | Include accounts updated during the block. |
+| `include_entries` | `bool` | — | Include the block's entries. |
 </details>
 
 <details>
 <summary>Slot filters</summary>
 
-- **`filter_by_commitment`** `bool` — If `true`, only receive updates matching the request's `commitment`. If `false`, receive every status change.
-
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `filter_by_commitment` | `bool` | — | If `true`, only receive updates matching the request's `commitment`. If `false`, receive every status change. |
 </details>
 
 ### Filter logic
@@ -195,70 +189,70 @@ Subscribe to one or more specific accounts. The label `wsol/usdc` is yours -- it
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "slots": { "slots": {} },
-      "accounts": {
-        "wsol/usdc": {
-          "account": ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"]
-        }
-      },
-      "transactions": {},
-      "blocks": {},
-      "blocks_meta": {},
-      "accounts_data_slice": [],
-      "commitment": 1
+{
+  "slots": { "slots": {} },
+  "accounts": {
+    "wsol/usdc": {
+      "account": ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"]
     }
+  },
+  "transactions": {},
+  "blocks": {},
+  "blocks_meta": {},
+  "accounts_data_slice": [],
+  "commitment": 1
+}
 ```
 {% endtab %}
 {% tab title="TypeScript" %}
 ```typescript
-    import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
 
-    const request = {
-      slots: { slots: {} },
-      accounts: {
-        "wsol/usdc": {
-          account: ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"],
-        },
-      },
-      transactions: {},
-      blocks: {},
-      blocksMeta: {},
-      accountsDataSlice: [],
-      commitment: CommitmentLevel.CONFIRMED,
-    };
+const request = {
+  slots: { slots: {} },
+  accounts: {
+    "wsol/usdc": {
+      account: ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"],
+    },
+  },
+  transactions: {},
+  blocks: {},
+  blocksMeta: {},
+  accountsDataSlice: [],
+  commitment: CommitmentLevel.CONFIRMED,
+};
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```rust
-    use {
-        std::collections::HashMap,
-        yellowstone_grpc_proto::prelude::{
-            CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
-            SubscribeRequestFilterSlots,
-        },
-    };
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{
+        CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
+        SubscribeRequestFilterSlots,
+    },
+};
 
-    let mut accounts = HashMap::new();
-    accounts.insert(
-        "wsol/usdc".to_string(),
-        SubscribeRequestFilterAccounts {
-            account: vec!["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6".to_string()],
-            owner: vec![],
-            filters: vec![],
-            ..Default::default()
-        },
-    );
-
-    let mut slots = HashMap::new();
-    slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
-
-    let request = SubscribeRequest {
-        accounts,
-        slots,
-        commitment: Some(CommitmentLevel::Confirmed.into()),
+let mut accounts = HashMap::new();
+accounts.insert(
+    "wsol/usdc".to_string(),
+    SubscribeRequestFilterAccounts {
+        account: vec!["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6".to_string()],
+        owner: vec![],
+        filters: vec![],
         ..Default::default()
-    };
+    },
+);
+
+let mut slots = HashMap::new();
+slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
+
+let request = SubscribeRequest {
+    accounts,
+    slots,
+    commitment: Some(CommitmentLevel::Confirmed.into()),
+    ..Default::default()
+};
 ```
 {% endtab %}
 {% endtabs %}
@@ -270,70 +264,70 @@ Subscribe to every account owned by a program. The example tracks all Solend acc
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "slots": { "slots": {} },
-      "accounts": {
-        "solend": {
-          "owner": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"]
-        }
-      },
-      "transactions": {},
-      "blocks": {},
-      "blocks_meta": {},
-      "accounts_data_slice": [],
-      "commitment": 0
+{
+  "slots": { "slots": {} },
+  "accounts": {
+    "solend": {
+      "owner": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"]
     }
+  },
+  "transactions": {},
+  "blocks": {},
+  "blocks_meta": {},
+  "accounts_data_slice": [],
+  "commitment": 0
+}
 ```
 {% endtab %}
 {% tab title="TypeScript" %}
 ```typescript
-    import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
 
-    const request = {
-      slots: { slots: {} },
-      accounts: {
-        solend: {
-          owner: ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"],
-        },
-      },
-      transactions: {},
-      blocks: {},
-      blocksMeta: {},
-      accountsDataSlice: [],
-      commitment: CommitmentLevel.PROCESSED,
-    };
+const request = {
+  slots: { slots: {} },
+  accounts: {
+    solend: {
+      owner: ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"],
+    },
+  },
+  transactions: {},
+  blocks: {},
+  blocksMeta: {},
+  accountsDataSlice: [],
+  commitment: CommitmentLevel.PROCESSED,
+};
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```rust
-    use {
-        std::collections::HashMap,
-        yellowstone_grpc_proto::prelude::{
-            CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
-            SubscribeRequestFilterSlots,
-        },
-    };
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{
+        CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
+        SubscribeRequestFilterSlots,
+    },
+};
 
-    let mut accounts = HashMap::new();
-    accounts.insert(
-        "solend".to_string(),
-        SubscribeRequestFilterAccounts {
-            account: vec![],
-            owner: vec!["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo".to_string()],
-            filters: vec![],
-            ..Default::default()
-        },
-    );
-
-    let mut slots = HashMap::new();
-    slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
-
-    let request = SubscribeRequest {
-        accounts,
-        slots,
-        commitment: Some(CommitmentLevel::Processed.into()),
+let mut accounts = HashMap::new();
+accounts.insert(
+    "solend".to_string(),
+    SubscribeRequestFilterAccounts {
+        account: vec![],
+        owner: vec!["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo".to_string()],
+        filters: vec![],
         ..Default::default()
-    };
+    },
+);
+
+let mut slots = HashMap::new();
+slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
+
+let request = SubscribeRequest {
+    accounts,
+    slots,
+    commitment: Some(CommitmentLevel::Processed.into()),
+    ..Default::default()
+};
 ```
 {% endtab %}
 {% endtabs %}
@@ -342,46 +336,46 @@ Subscribe to every account owned by a program. The example tracks all Solend acc
 {% tab title="Multiple programs" %}
 Combine multiple programs in one filter, or use separate filters for different routing tags.
 
-    Both programs in one filter:
+Both programs in one filter:
 
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "slots": { "slots": {} },
-      "accounts": {
-        "programs": {
-          "owner": [
-            "So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo",
-            "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"
-          ]
-        }
-      },
-      "transactions": {},
-      "blocks": {},
-      "blocks_meta": {},
-      "accounts_data_slice": []
+{
+  "slots": { "slots": {} },
+  "accounts": {
+    "programs": {
+      "owner": [
+        "So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo",
+        "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"
+      ]
     }
+  },
+  "transactions": {},
+  "blocks": {},
+  "blocks_meta": {},
+  "accounts_data_slice": []
+}
 ```
 {% endtab %}
 {% endtabs %}
 
-    Separate filters with different tags:
+Separate filters with different tags:
 
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "slots": { "slots": {} },
-      "accounts": {
-        "solend": { "owner": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"] },
-        "serum":  { "owner": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"] }
-      },
-      "transactions": {},
-      "blocks": {},
-      "blocks_meta": {},
-      "accounts_data_slice": []
-    }
+{
+  "slots": { "slots": {} },
+  "accounts": {
+    "solend": { "owner": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"] },
+    "serum":  { "owner": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"] }
+  },
+  "transactions": {},
+  "blocks": {},
+  "blocks_meta": {},
+  "accounts_data_slice": []
+}
 ```
 {% endtab %}
 {% endtabs %}
@@ -393,99 +387,99 @@ Filter by content (memcmp, token account state) and trim the returned payload to
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "accounts": {
-        "usdc": {
-          "owner": ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
-          "filters": [
-            { "token_account_state": true },
-            {
-              "memcmp": {
-                "offset": 0,
-                "data": { "base58": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" }
-              }
-            }
-          ]
+{
+  "accounts": {
+    "usdc": {
+      "owner": ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
+      "filters": [
+        { "token_account_state": true },
+        {
+          "memcmp": {
+            "offset": 0,
+            "data": { "base58": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" }
+          }
         }
-      },
-      "accounts_data_slice": [{ "offset": 32, "length": 40 }]
+      ]
     }
+  },
+  "accounts_data_slice": [{ "offset": 32, "length": 40 }]
+}
 ```
 {% endtab %}
 {% tab title="TypeScript" %}
 ```typescript
-    import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
 
-    const request = {
-      slots: {},
-      accounts: {
-        usdc: {
-          owner: ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
-          filters: [
-            { tokenAccountState: true },
-            {
-              memcmp: {
-                offset: 0,
-                data: { base58: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" },
-              },
-            },
-          ],
+const request = {
+  slots: {},
+  accounts: {
+    usdc: {
+      owner: ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
+      filters: [
+        { tokenAccountState: true },
+        {
+          memcmp: {
+            offset: 0,
+            data: { base58: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" },
+          },
         },
-      },
-      transactions: {},
-      blocks: {},
-      blocksMeta: {},
-      entry: {},
-      commitment: CommitmentLevel.CONFIRMED,
-      accountsDataSlice: [{ offset: 32, length: 40 }],
-    };
+      ],
+    },
+  },
+  transactions: {},
+  blocks: {},
+  blocksMeta: {},
+  entry: {},
+  commitment: CommitmentLevel.CONFIRMED,
+  accountsDataSlice: [{ offset: 32, length: 40 }],
+};
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```rust
-    use {
-        std::collections::HashMap,
-        yellowstone_grpc_proto::prelude::{
-            subscribe_request_filter_accounts_filter::Filter,
-            subscribe_request_filter_accounts_filter_memcmp::Data,
-            CommitmentLevel, SubscribeRequest, SubscribeRequestAccountsDataSlice,
-            SubscribeRequestFilterAccounts, SubscribeRequestFilterAccountsFilter,
-            SubscribeRequestFilterAccountsFilterMemcmp,
-        },
-    };
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{
+        subscribe_request_filter_accounts_filter::Filter,
+        subscribe_request_filter_accounts_filter_memcmp::Data,
+        CommitmentLevel, SubscribeRequest, SubscribeRequestAccountsDataSlice,
+        SubscribeRequestFilterAccounts, SubscribeRequestFilterAccountsFilter,
+        SubscribeRequestFilterAccountsFilterMemcmp,
+    },
+};
 
-    let mut accounts = HashMap::new();
-    accounts.insert(
-        "usdc".to_string(),
-        SubscribeRequestFilterAccounts {
-            account: vec![],
-            owner: vec!["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA".to_string()],
-            filters: vec![
-                SubscribeRequestFilterAccountsFilter {
-                    filter: Some(Filter::TokenAccountState(true)),
-                },
-                SubscribeRequestFilterAccountsFilter {
-                    filter: Some(Filter::Memcmp(SubscribeRequestFilterAccountsFilterMemcmp {
-                        offset: 0,
-                        data: Some(Data::Base58(
-                            "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v".to_string(),
-                        )),
-                    })),
-                },
-            ],
-            ..Default::default()
-        },
-    );
-
-    let request = SubscribeRequest {
-        accounts,
-        accounts_data_slice: vec![SubscribeRequestAccountsDataSlice {
-            offset: 32,
-            length: 40,
-        }],
-        commitment: Some(CommitmentLevel::Confirmed.into()),
+let mut accounts = HashMap::new();
+accounts.insert(
+    "usdc".to_string(),
+    SubscribeRequestFilterAccounts {
+        account: vec![],
+        owner: vec!["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA".to_string()],
+        filters: vec![
+            SubscribeRequestFilterAccountsFilter {
+                filter: Some(Filter::TokenAccountState(true)),
+            },
+            SubscribeRequestFilterAccountsFilter {
+                filter: Some(Filter::Memcmp(SubscribeRequestFilterAccountsFilterMemcmp {
+                    offset: 0,
+                    data: Some(Data::Base58(
+                        "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v".to_string(),
+                    )),
+                })),
+            },
+        ],
         ..Default::default()
-    };
+    },
+);
+
+let request = SubscribeRequest {
+    accounts,
+    accounts_data_slice: vec![SubscribeRequestAccountsDataSlice {
+        offset: 32,
+        length: 40,
+    }],
+    commitment: Some(CommitmentLevel::Confirmed.into()),
+    ..Default::default()
+};
 ```
 {% endtab %}
 {% endtabs %}
@@ -494,23 +488,23 @@ Filter by content (memcmp, token account state) and trim the returned payload to
 {% tab title="Compressed filters (large account sets)" %}
 For subscriptions tracking thousands of accounts, the explicit pubkey list dominates the payload (1M pubkeys = ~44 MB per resend). Compressed account filters carry your tracked set as a [Cuckoo filter](https://en.wikipedia.org/wiki/Cuckoo_filter), a probabilistic data structure storing small fingerprints instead of full 32-byte pubkeys, cutting payload size ~10x.
 
-    | Tracked accounts | Compressed filter | Explicit pubkey list |
-    | ---------------: | ----------------: | -------------------: |
-    |            1,000 |            ~4 KiB |              ~44 KB |
-    |           10,000 |           ~32 KiB |             ~440 KB |
-    |          100,000 |          ~256 KiB |             ~4.4 MB |
-    |        1,000,000 |            ~4 MiB |              ~44 MB |
-    |        2,000,000 |            ~8 MiB |              ~84 MB |
+| Tracked accounts | Compressed filter | Explicit pubkey list |
+| ---------------: | ----------------: | -------------------: |
+|            1,000 |            ~4 KiB |              ~44 KB |
+|           10,000 |           ~32 KiB |             ~440 KB |
+|          100,000 |          ~256 KiB |             ~4.4 MB |
+|        1,000,000 |            ~4 MiB |              ~44 MB |
+|        2,000,000 |            ~8 MiB |              ~84 MB |
 
-    Inserts and removes on the filter are O(1), so account-set mutations skip a full filter rebuild.
+Inserts and removes on the filter are O(1), so account-set mutations skip a full filter rebuild.
 
-    **Tradeoffs:**
+**Tradeoffs:**
 
-    - **False positives** stay under 1%. Your client should keep an exact tracked set and drop incoming updates whose pubkey isn't in it. A `HashSet` check is the standard pattern; the probabilistic part lives only on the wire.
-    - **One-time build cost.** A 2M-account filter takes ~390 ms on a release build. Every subsequent insert, remove, and resend is cheap.
-    - **Cross-language compatibility.** SipHash-2-4 produces identical filter bytes across languages and Rust compiler versions, so a TypeScript client and a Rust client emit the same filter for the same pubkey set.
+- **False positives** stay under 1%. Your client should keep an exact tracked set and drop incoming updates whose pubkey isn't in it. A `HashSet` check is the standard pattern; the probabilistic part lives only on the wire.
+- **One-time build cost.** A 2M-account filter takes ~390 ms on a release build. Every subsequent insert, remove, and resend is cheap.
+- **Cross-language compatibility.** SipHash-2-4 produces identical filter bytes across languages and Rust compiler versions, so a TypeScript client and a Rust client emit the same filter for the same pubkey set.
 
-    Rust API today; TypeScript is coming. Build a `CompressedAccountFilterSet` and attach it to your `SubscribeRequest`:
+Rust API today; TypeScript is coming. Build a `CompressedAccountFilterSet` and attach it to your `SubscribeRequest`:
 
 ```rust Rust
 use yellowstone_grpc_proto::cuckoo::CompressedAccountFilterSet;
@@ -524,7 +518,7 @@ let mut req = SubscribeRequest::default();
 accounts.insert_into_subscribe_request(&mut req, "tracked");
 ```
 
-    Mutate and resend when the set changes:
+Mutate and resend when the set changes:
 
 ```rust Rust
 accounts.insert(new_pubkey)?;
@@ -532,7 +526,7 @@ accounts.remove(old_pubkey)?;
 accounts.insert_into_subscribe_request(&mut req, "tracked");
 ```
 
-    Drop false positives against your local exact set:
+Drop false positives against your local exact set:
 
 ```rust Rust
 if accounts.contains(&incoming_pubkey) {
@@ -540,7 +534,7 @@ if accounts.contains(&incoming_pubkey) {
 }
 ```
 
-    Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.one/compressed-filters-yellowstone-grpc).
+Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.one/compressed-filters-yellowstone-grpc).
 {% endtab %}
 {% endtabs %}
 
@@ -555,60 +549,60 @@ Subscribe to every successful, non-vote transaction at finalized commitment.
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "slots": { "slots": {} },
-      "accounts": {},
-      "transactions": {
-        "alltxs": { "vote": false, "failed": false }
-      },
-      "blocks": {},
-      "blocks_meta": {},
-      "accounts_data_slice": [],
-      "commitment": 2
-    }
+{
+  "slots": { "slots": {} },
+  "accounts": {},
+  "transactions": {
+    "alltxs": { "vote": false, "failed": false }
+  },
+  "blocks": {},
+  "blocks_meta": {},
+  "accounts_data_slice": [],
+  "commitment": 2
+}
 ```
 {% endtab %}
 {% tab title="TypeScript" %}
 ```typescript
-    import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
 
-    const request = {
-      slots: { slots: {} },
-      accounts: {},
-      transactions: {
-        alltxs: { vote: false, failed: false },
-      },
-      blocks: {},
-      blocksMeta: {},
-      accountsDataSlice: [],
-      commitment: CommitmentLevel.FINALIZED,
-    };
+const request = {
+  slots: { slots: {} },
+  accounts: {},
+  transactions: {
+    alltxs: { vote: false, failed: false },
+  },
+  blocks: {},
+  blocksMeta: {},
+  accountsDataSlice: [],
+  commitment: CommitmentLevel.FINALIZED,
+};
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```rust
-    use {
-        std::collections::HashMap,
-        yellowstone_grpc_proto::prelude::{
-            CommitmentLevel, SubscribeRequest, SubscribeRequestFilterTransactions,
-        },
-    };
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{
+        CommitmentLevel, SubscribeRequest, SubscribeRequestFilterTransactions,
+    },
+};
 
-    let mut transactions = HashMap::new();
-    transactions.insert(
-        "alltxs".to_string(),
-        SubscribeRequestFilterTransactions {
-            vote: Some(false),
-            failed: Some(false),
-            ..Default::default()
-        },
-    );
-
-    let request = SubscribeRequest {
-        transactions,
-        commitment: Some(CommitmentLevel::Finalized.into()),
+let mut transactions = HashMap::new();
+transactions.insert(
+    "alltxs".to_string(),
+    SubscribeRequestFilterTransactions {
+        vote: Some(false),
+        failed: Some(false),
         ..Default::default()
-    };
+    },
+);
+
+let request = SubscribeRequest {
+    transactions,
+    commitment: Some(CommitmentLevel::Finalized.into()),
+    ..Default::default()
+};
 ```
 {% endtab %}
 {% endtabs %}
@@ -620,14 +614,14 @@ Subscribe to non-vote transactions that mention a specific account anywhere.
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "transactions": {
-        "serum": {
-          "vote": false,
-          "account_include": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"]
-        }
-      }
+{
+  "transactions": {
+    "serum": {
+      "vote": false,
+      "account_include": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"]
     }
+  }
+}
 ```
 {% endtab %}
 {% endtabs %}
@@ -639,16 +633,16 @@ Drop transactions that mention any of the listed accounts.
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "transactions": {
-        "serum": {
-          "account_exclude": [
-            "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin",
-            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-          ]
-        }
-      }
+{
+  "transactions": {
+    "serum": {
+      "account_exclude": [
+        "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin",
+        "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+      ]
     }
+  }
+}
 ```
 {% endtab %}
 {% endtabs %}
@@ -660,14 +654,14 @@ Combine include \+ exclude in one filter. The example matches transactions menti
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "transactions": {
-        "serum": {
-          "account_include": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"],
-          "account_exclude": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"]
-        }
-      }
+{
+  "transactions": {
+    "serum": {
+      "account_include": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"],
+      "account_exclude": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"]
     }
+  }
+}
 ```
 {% endtab %}
 {% endtabs %}
@@ -679,13 +673,13 @@ Track a specific transaction's lifecycle from confirmed to finalized.
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "transactions": {
-        "sign": {
-          "signature": "5rp2hL9b6kexex11Mugfs3vfU9GhieKruj4CkFFSnu52WLxiGn4VcLLwsB62XURhMmT1j4CZiXT6FFtYbXsLq2Zs"
-        }
-      }
+{
+  "transactions": {
+    "sign": {
+      "signature": "5rp2hL9b6kexex11Mugfs3vfU9GhieKruj4CkFFSnu52WLxiGn4VcLLwsB62XURhMmT1j4CZiXT6FFtYbXsLq2Zs"
     }
+  }
+}
 ```
 {% endtab %}
 {% endtabs %}
@@ -744,33 +738,33 @@ Receive every block as it's produced, with full transaction payload.
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "slots": {},
-      "accounts": {},
-      "transactions": {},
-      "blocks": { "blocks": {} },
-      "blocks_meta": {},
-      "accounts_data_slice": []
-    }
+{
+  "slots": {},
+  "accounts": {},
+  "transactions": {},
+  "blocks": { "blocks": {} },
+  "blocks_meta": {},
+  "accounts_data_slice": []
+}
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```rust
-    use {
-        std::collections::HashMap,
-        yellowstone_grpc_proto::prelude::{SubscribeRequest, SubscribeRequestFilterBlocks},
-    };
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{SubscribeRequest, SubscribeRequestFilterBlocks},
+};
 
-    let mut blocks = HashMap::new();
-    blocks.insert(
-        "blocks".to_string(),
-        SubscribeRequestFilterBlocks::default(),
-    );
+let mut blocks = HashMap::new();
+blocks.insert(
+    "blocks".to_string(),
+    SubscribeRequestFilterBlocks::default(),
+);
 
-    let request = SubscribeRequest {
-        blocks,
-        ..Default::default()
-    };
+let request = SubscribeRequest {
+    blocks,
+    ..Default::default()
+};
 ```
 {% endtab %}
 {% endtabs %}
@@ -782,14 +776,14 @@ Trim the block payload by toggling `include_transactions` / `include_accounts`.
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "blocks": {
-        "blocks": {
-          "include_transactions": false,
-          "include_accounts": true
-        }
-      }
+{
+  "blocks": {
+    "blocks": {
+      "include_transactions": false,
+      "include_accounts": true
     }
+  }
+}
 ```
 {% endtab %}
 {% endtabs %}
@@ -801,13 +795,13 @@ Restrict the block's transactions and accounts to those mentioning specific addr
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "blocks": {
-        "blocks": {
-          "account_include": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"]
-        }
-      }
+{
+  "blocks": {
+    "blocks": {
+      "account_include": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"]
     }
+  }
+}
 ```
 {% endtab %}
 {% endtabs %}
@@ -819,10 +813,10 @@ Get block headers without the transaction payload (much smaller messages).
 {% tabs %}
 {% tab title="gRPC" %}
 ```json
-    {
-      "blocks": {},
-      "blocks_meta": { "blockmetadata": {} }
-    }
+{
+  "blocks": {},
+  "blocks_meta": { "blockmetadata": {} }
+}
 ```
 {% endtab %}
 {% endtabs %}
@@ -1226,13 +1220,13 @@ cargo run --bin client -- \
 {% tab title="TypeScript / NodeJS" %}
 From `5.1.x` the TypeScript SDK is supercharged with a Rust NAPI backend. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
 
-    Install:
+Install:
 
 ```bash
 npm install --save @triton-one/yellowstone-grpc
 ```
 
-    Initialise:
+Initialise:
 
 ```typescript
 import Client from "@triton-one/yellowstone-grpc";
@@ -1248,7 +1242,7 @@ const version = await client.getVersion();
 console.log(version);
 ```
 
-    Open a subscription stream:
+Open a subscription stream:
 
 ```typescript
 import { SubscribeRequest } from "@triton-one/yellowstone-grpc";
@@ -1268,7 +1262,7 @@ await new Promise<void>((resolve, reject) => {
 });
 ```
 
-    Full example: [yellowstone-grpc/examples/typescript](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript).
+Full example: [yellowstone-grpc/examples/typescript](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript).
 {% endtab %}
 {% tab title="grpcurl" %}
 `grpcurl` is good for testing. You need the corresponding Protobuf `.proto` files (starting with `geyser.proto` and its dependencies) so `grpcurl` can describe the protocol.
@@ -1282,7 +1276,7 @@ await new Promise<void>((resolve, reject) => {
   geyser.Geyser/Subscribe
 ```
 
-    Self-hosters can drop the `x-token` header.
+Self-hosters can drop the `x-token` header.
 {% endtab %}
 {% tab title="Go" %}
 Requires Go 1.21. Run the sample client straight from the repo:
@@ -1338,12 +1332,10 @@ The Go example may lag the latest stable proto version. For production-ready cod
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

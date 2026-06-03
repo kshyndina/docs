@@ -43,10 +43,10 @@ Returns metadata about each token -- not the secret value (that's only shown at 
 POST /v1/endpoints/{endpoint_id}/tokens
 ```
 
-- **`label`** `string` _(required)_ — Human-readable name. Visible in usage logs to attribute traffic.
-
-- **`expires_at`** `string` — ISO 8601 timestamp. If set, token auto-revokes at this time. Use for time-boxed CI pipelines or contractor access.
-
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | Yes | Human-readable name. Visible in usage logs to attribute traffic. |
+| `expires_at` | `string` | — | ISO 8601 timestamp. If set, token auto-revokes at this time. Use for time-boxed CI pipelines or contractor access. |
 ```bash
 curl https://api.triton.one/v1/endpoints/ep_abc123/tokens \
   -H "Authorization: Bearer $TRITON_API_TOKEN" \
@@ -77,8 +77,9 @@ The recommended pattern: issue a fresh token, deploy services with the new value
 POST /v1/endpoints/{endpoint_id}/tokens/{id}/rotate
 ```
 
-- **`grace_period_hours`** `number` — How long the old token stays valid after rotation. Default 24 hours. Set to 0 for instant cutover (only do this if you can deploy synchronously).
-
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `grace_period_hours` | `number` | — | How long the old token stays valid after rotation. Default 24 hours. Set to 0 for instant cutover (only do this if you can deploy synchronously). |
 ```bash
 curl https://api.triton.one/v1/endpoints/ep_abc123/tokens/tok_abc/rotate \
   -H "Authorization: Bearer $TRITON_API_TOKEN" \
@@ -130,12 +131,10 @@ Higher limits available on dedicated. Talk to support if you have legitimate per
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

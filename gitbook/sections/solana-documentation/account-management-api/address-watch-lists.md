@@ -37,13 +37,11 @@ curl https://api.triton.one/v1/endpoints/ep_abc123/address-watch-lists \
 POST /v1/endpoints/{endpoint_id}/address-watch-lists
 ```
 
-- **`name`** `string` _(required)_ — Identifier referenced in subscriptions. Lowercase, dashes, alphanumeric. Must be unique within the endpoint.
-
-- **`addresses`** — " required>
-  Solana addresses (base-58). Up to 50,000 per list.
-
-- **`description`** `string` — Free-text label for humans.
-
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | Yes | Identifier referenced in subscriptions. Lowercase, dashes, alphanumeric. Must be unique within the endpoint. |
+| `addresses` |  | — | " required> Solana addresses (base-58). Up to 50,000 per list. |
+| `description` | `string` | — | Free-text label for humans. |
 ```bash
 curl https://api.triton.one/v1/endpoints/ep_abc123/address-watch-lists \
   -H "Authorization: Bearer $TRITON_API_TOKEN" \
@@ -124,12 +122,10 @@ Higher limits available on dedicated -- talk to support.
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

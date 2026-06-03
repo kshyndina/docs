@@ -43,33 +43,33 @@ Set up a fresh project for the service you want to try.
 {% tabs %}
 {% tab title="TypeScript" %}
 ```bash
-    mkdir solana-grpc-stream && cd solana-grpc-stream
-    npm init -y
-    npm install @triton-one/yellowstone-grpc
-    npm install --save-dev typescript ts-node @types/node
-    npx tsc --init
+mkdir solana-grpc-stream && cd solana-grpc-stream
+npm init -y
+npm install @triton-one/yellowstone-grpc
+npm install --save-dev typescript ts-node @types/node
+npx tsc --init
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```toml
-    [dependencies]
-    yellowstone-grpc-client = "1.13"
-    yellowstone-grpc-proto = "1.13"
-    tokio = { version = "1", features = ["full"] }
-    futures = "0.3"
-    tonic = { version = "0.12", features = ["tls"] }
+[dependencies]
+yellowstone-grpc-client = "1.13"
+yellowstone-grpc-proto = "1.13"
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+tonic = { version = "0.12", features = ["tls"] }
 ```
 {% endtab %}
 {% tab title="Go" %}
 ```bash
-    mkdir solana-grpc-stream && cd solana-grpc-stream
-    go mod init example.com/solana-grpc-stream
-    go get github.com/rpcpool/yellowstone-grpc/examples/golang@latest
+mkdir solana-grpc-stream && cd solana-grpc-stream
+go mod init example.com/solana-grpc-stream
+go get github.com/rpcpool/yellowstone-grpc/examples/golang@latest
 ```
 {% endtab %}
 {% endtabs %}
 
-    Other languages, see the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory.
+Other languages, see the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory.
 {% endtab %}
 {% tab title="Whirligig" %}
 Whirligig speaks the standard Solana WebSocket protocol. TypeScript uses the `ws` package; Rust uses Solana's `PubsubClient` from `solana-client`.
@@ -77,23 +77,23 @@ Whirligig speaks the standard Solana WebSocket protocol. TypeScript uses the `ws
 {% tabs %}
 {% tab title="TypeScript" %}
 ```bash
-    mkdir whirligig-stream && cd whirligig-stream
-    npm init -y
-    npm install ws
-    npm install --save-dev typescript ts-node @types/node @types/ws
-    npx tsc --init
+mkdir whirligig-stream && cd whirligig-stream
+npm init -y
+npm install ws
+npm install --save-dev typescript ts-node @types/node @types/ws
+npx tsc --init
 ```
 {% endtab %}
 {% tab title="Rust (Cargo.toml)" %}
 ```toml
-    [dependencies]
-    solana-client = "2"
-    solana-pubkey = "2"
-    solana-account-decoder-client-types = "2"
-    solana-rpc-client-api = "2"
-    solana-sdk = "2"
-    tokio = { version = "1", features = ["full"] }
-    futures = "0.3"
+[dependencies]
+solana-client = "2"
+solana-pubkey = "2"
+solana-account-decoder-client-types = "2"
+solana-rpc-client-api = "2"
+solana-sdk = "2"
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
 ```
 {% endtab %}
 {% endtabs %}
@@ -105,20 +105,20 @@ Fumarole adds a persistent-subscriber layer on top of Dragon's Mouth.
 {% tabs %}
 {% tab title="TypeScript" %}
 ```bash
-    mkdir fumarole-stream && cd fumarole-stream
-    npm init -y
-    npm install @triton-one/yellowstone-fumarole
-    npm install --save-dev typescript ts-node @types/node
-    npx tsc --init
+mkdir fumarole-stream && cd fumarole-stream
+npm init -y
+npm install @triton-one/yellowstone-fumarole
+npm install --save-dev typescript ts-node @types/node
+npx tsc --init
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```toml
-    [dependencies]
-    yellowstone-fumarole-client = "0.5"
-    yellowstone-grpc-proto = "1.13"
-    tokio = { version = "1", features = ["full"] }
-    futures = "0.3"
+[dependencies]
+yellowstone-fumarole-client = "0.5"
+yellowstone-grpc-proto = "1.13"
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
 ```
 {% endtab %}
 {% endtabs %}
@@ -130,16 +130,16 @@ Old Faithful uses the same `yellowstone-grpc` client as Dragon's Mouth. Install 
 {% tabs %}
 {% tab title="TypeScript" %}
 ```bash
-    mkdir old-faithful-stream && cd old-faithful-stream
-    npm init -y
-    npm install @triton-one/yellowstone-grpc
-    npm install --save-dev typescript ts-node @types/node
-    npx tsc --init
+mkdir old-faithful-stream && cd old-faithful-stream
+npm init -y
+npm install @triton-one/yellowstone-grpc
+npm install --save-dev typescript ts-node @types/node
+npx tsc --init
 ```
 {% endtab %}
 {% endtabs %}
 
-    See the [yellowstone-faithful repo](https://github.com/rpcpool/yellowstone-faithful) for the gRPC method definitions and example clients.
+See the [yellowstone-faithful repo](https://github.com/rpcpool/yellowstone-faithful) for the gRPC method definitions and example clients.
 {% endtab %}
 {% tab title="Deshred" %}
 Deshred is a separate gRPC method on the same `yellowstone-grpc` service. Same install as Dragon's Mouth.
@@ -147,23 +147,23 @@ Deshred is a separate gRPC method on the same `yellowstone-grpc` service. Same i
 {% tabs %}
 {% tab title="TypeScript" %}
 ```bash
-    mkdir deshred-stream && cd deshred-stream
-    npm init -y
-    npm install @triton-one/yellowstone-grpc
-    npm install --save-dev typescript ts-node @types/node
-    npx tsc --init
+mkdir deshred-stream && cd deshred-stream
+npm init -y
+npm install @triton-one/yellowstone-grpc
+npm install --save-dev typescript ts-node @types/node
+npx tsc --init
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```toml
-    [dependencies]
-    yellowstone-grpc-client = "1.13"
-    yellowstone-grpc-proto = "1.13"
-    solana-signature = "2"
-    tokio = { version = "1", features = ["full"] }
-    futures = "0.3"
-    tonic = { version = "0.12", features = ["tls"] }
-    anyhow = "1"
+[dependencies]
+yellowstone-grpc-client = "1.13"
+yellowstone-grpc-proto = "1.13"
+solana-signature = "2"
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+tonic = { version = "0.12", features = ["tls"] }
+anyhow = "1"
 ```
 {% endtab %}
 {% endtabs %}
@@ -177,150 +177,150 @@ Deshred is a separate gRPC method on the same `yellowstone-grpc` service. Same i
 {% tab title="Dragon's Mouth" %}
 **What we're doing:** subscribe to all writes on a specific account (the wSOL/USDC OpenBook market) and log each Protobuf-decoded update.
 
-    First, initialise the client and connect:
+First, initialise the client and connect:
 
 {% tabs %}
 {% tab title="TypeScript" %}
 ```typescript
-    import Client from "@triton-one/yellowstone-grpc";
+import Client from "@triton-one/yellowstone-grpc";
 
-    const client = new Client(
-      "https://<your-endpoint>.mainnet.rpcpool.com",
-      "<your-token>",
-      undefined
-    );
+const client = new Client(
+  "https://<your-endpoint>.mainnet.rpcpool.com",
+  "<your-token>",
+  undefined
+);
 
-    await client.connect();
+await client.connect();
 
-    const version = await client.getVersion();
-    console.log(version);
+const version = await client.getVersion();
+console.log(version);
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```rust
-    use {
-        tonic::transport::channel::ClientTlsConfig,
-        yellowstone_grpc_client::GeyserGrpcClient,
-    };
+use {
+    tonic::transport::channel::ClientTlsConfig,
+    yellowstone_grpc_client::GeyserGrpcClient,
+};
 
-    #[tokio::main]
-    async fn main() -> anyhow::Result<()> {
-        let endpoint = "https://<your-endpoint>.mainnet.rpcpool.com:443";
-        let x_token = "<your-token>";
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let endpoint = "https://<your-endpoint>.mainnet.rpcpool.com:443";
+    let x_token = "<your-token>";
 
-        let mut client = GeyserGrpcClient::build_from_shared(endpoint)?
-            .x_token(Some(x_token))?
-            .tls_config(ClientTlsConfig::new().with_native_roots())?
-            .connect()
-            .await?;
+    let mut client = GeyserGrpcClient::build_from_shared(endpoint)?
+        .x_token(Some(x_token))?
+        .tls_config(ClientTlsConfig::new().with_native_roots())?
+        .connect()
+        .await?;
 
-        let version = client.get_version().await?;
-        println!("{:?}", version);
+    let version = client.get_version().await?;
+    println!("{:?}", version);
 
-        Ok(())
-    }
+    Ok(())
+}
 ```
 {% endtab %}
 {% endtabs %}
 
-    Then open a subscription stream, attach a data handler, and send the subscribe request:
+Then open a subscription stream, attach a data handler, and send the subscribe request:
 
 {% tabs %}
 {% tab title="TypeScript" %}
 ```typescript
-    import { CommitmentLevel, SubscribeRequest } from "@triton-one/yellowstone-grpc";
+import { CommitmentLevel, SubscribeRequest } from "@triton-one/yellowstone-grpc";
 
-    const stream = await client.subscribe();
+const stream = await client.subscribe();
 
-    stream.on("data", (data) => {
-      console.log("data", data);
-    });
+stream.on("data", (data) => {
+  console.log("data", data);
+});
 
-    const request: SubscribeRequest = {
-      slots: { slots: {} },
-      accounts: {
-        "wsol/usdc": {
-          account: ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"],
-          owner: [],
-          filters: [],
-        },
-      },
-      transactions: {},
-      transactionsStatus: {},
-      entry: {},
-      blocks: {},
-      blocksMeta: {},
-      accountsDataSlice: [],
-      commitment: CommitmentLevel.CONFIRMED,
-      ping: undefined,
-    };
+const request: SubscribeRequest = {
+  slots: { slots: {} },
+  accounts: {
+    "wsol/usdc": {
+      account: ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"],
+      owner: [],
+      filters: [],
+    },
+  },
+  transactions: {},
+  transactionsStatus: {},
+  entry: {},
+  blocks: {},
+  blocksMeta: {},
+  accountsDataSlice: [],
+  commitment: CommitmentLevel.CONFIRMED,
+  ping: undefined,
+};
 
-    await new Promise<void>((resolve, reject) => {
-      stream.write(request, (err) => {
-        if (err === null || err === undefined) {
-          resolve();
-        } else {
-          reject(err);
-        }
-      });
-    }).catch((reason) => {
-      console.error(reason);
-      throw reason;
-    });
+await new Promise<void>((resolve, reject) => {
+  stream.write(request, (err) => {
+    if (err === null || err === undefined) {
+      resolve();
+    } else {
+      reject(err);
+    }
+  });
+}).catch((reason) => {
+  console.error(reason);
+  throw reason;
+});
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```rust
-    use {
-        futures::stream::StreamExt,
-        std::collections::HashMap,
-        yellowstone_grpc_proto::prelude::{
-            CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
-            SubscribeRequestFilterSlots,
-        },
-    };
+use {
+    futures::stream::StreamExt,
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{
+        CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
+        SubscribeRequestFilterSlots,
+    },
+};
 
-    let mut accounts = HashMap::new();
-    accounts.insert(
-        "wsol/usdc".to_string(),
-        SubscribeRequestFilterAccounts {
-            account: vec!["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6".to_string()],
-            owner: vec![],
-            filters: vec![],
-            ..Default::default()
-        },
-    );
-
-    let mut slots = HashMap::new();
-    slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
-
-    let request = SubscribeRequest {
-        accounts,
-        slots,
-        commitment: Some(CommitmentLevel::Confirmed.into()),
+let mut accounts = HashMap::new();
+accounts.insert(
+    "wsol/usdc".to_string(),
+    SubscribeRequestFilterAccounts {
+        account: vec!["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6".to_string()],
+        owner: vec![],
+        filters: vec![],
         ..Default::default()
-    };
+    },
+);
 
-    let (_sink, mut stream) = client.subscribe_with_request(Some(request)).await?;
+let mut slots = HashMap::new();
+slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
 
-    while let Some(message) = stream.next().await {
-        println!("data: {:?}", message?);
-    }
+let request = SubscribeRequest {
+    accounts,
+    slots,
+    commitment: Some(CommitmentLevel::Confirmed.into()),
+    ..Default::default()
+};
+
+let (_sink, mut stream) = client.subscribe_with_request(Some(request)).await?;
+
+while let Some(message) = stream.next().await {
+    println!("data: {:?}", message?);
+}
 ```
 {% endtab %}
 {% tab title="grpcurl" %}
 ```shell
-    ./grpcurl \
-      -proto geyser.proto \
-      -d '{"slots": { "slots": {} }, "accounts": { "wsol/usdc": { "account": ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
-      -H "x-token: <token>" \
-      api.rpcpool.com:443 \
-      geyser.Geyser/Subscribe
+./grpcurl \
+  -proto geyser.proto \
+  -d '{"slots": { "slots": {} }, "accounts": { "wsol/usdc": { "account": ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
+  -H "x-token: <token>" \
+  api.rpcpool.com:443 \
+  geyser.Geyser/Subscribe
 ```
 {% endtab %}
 {% endtabs %}
 
-    For Go and other languages: [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples).
+For Go and other languages: [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples).
 {% endtab %}
 {% tab title="Whirligig" %}
 **What we're doing:** open a Solana-standard WebSocket connection to Whirligig and subscribe to changes on the system clock sysvar.
@@ -328,201 +328,201 @@ Deshred is a separate gRPC method on the same `yellowstone-grpc` service. Same i
 {% tabs %}
 {% tab title="TypeScript" %}
 ```typescript
-    import WebSocket from "ws";
+import WebSocket from "ws";
 
-    const ws = new WebSocket(
-      "wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/whirligig"
-    );
+const ws = new WebSocket(
+  "wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/whirligig"
+);
 
-    ws.on("open", () => {
-      ws.send(
-        JSON.stringify({
-          jsonrpc: "2.0",
-          id: 1,
-          method: "accountSubscribe",
-          params: [
-            "SysvarC1ock11111111111111111111111111111111",
-            { commitment: "processed", encoding: "base58" },
-          ],
-        })
-      );
-    });
+ws.on("open", () => {
+  ws.send(
+    JSON.stringify({
+      jsonrpc: "2.0",
+      id: 1,
+      method: "accountSubscribe",
+      params: [
+        "SysvarC1ock11111111111111111111111111111111",
+        { commitment: "processed", encoding: "base58" },
+      ],
+    })
+  );
+});
 
-    ws.on("message", (data) => {
-      console.log("Update:", JSON.parse(data.toString()));
-    });
+ws.on("message", (data) => {
+  console.log("Update:", JSON.parse(data.toString()));
+});
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```rust
-    use {
-        futures::StreamExt,
-        solana_account_decoder_client_types::UiAccountEncoding,
-        solana_client::nonblocking::pubsub_client::PubsubClient,
-        solana_pubkey::Pubkey,
-        solana_rpc_client_api::config::RpcAccountInfoConfig,
-        solana_sdk::commitment_config::CommitmentConfig,
-        std::str::FromStr,
+use {
+    futures::StreamExt,
+    solana_account_decoder_client_types::UiAccountEncoding,
+    solana_client::nonblocking::pubsub_client::PubsubClient,
+    solana_pubkey::Pubkey,
+    solana_rpc_client_api::config::RpcAccountInfoConfig,
+    solana_sdk::commitment_config::CommitmentConfig,
+    std::str::FromStr,
+};
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let endpoint =
+        "wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/whirligig";
+
+    let client = PubsubClient::new(endpoint).await?;
+
+    let pubkey = Pubkey::from_str("SysvarC1ock11111111111111111111111111111111")?;
+    let config = RpcAccountInfoConfig {
+        encoding: Some(UiAccountEncoding::Base58),
+        commitment: Some(CommitmentConfig::processed()),
+        ..Default::default()
     };
 
-    #[tokio::main]
-    async fn main() -> anyhow::Result<()> {
-        let endpoint =
-            "wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/whirligig";
+    let (mut stream, _unsubscribe) =
+        client.account_subscribe(&pubkey, Some(config)).await?;
 
-        let client = PubsubClient::new(endpoint).await?;
-
-        let pubkey = Pubkey::from_str("SysvarC1ock11111111111111111111111111111111")?;
-        let config = RpcAccountInfoConfig {
-            encoding: Some(UiAccountEncoding::Base58),
-            commitment: Some(CommitmentConfig::processed()),
-            ..Default::default()
-        };
-
-        let (mut stream, _unsubscribe) =
-            client.account_subscribe(&pubkey, Some(config)).await?;
-
-        while let Some(account) = stream.next().await {
-            println!("Update: {:?}", account);
-        }
-
-        Ok(())
+    while let Some(account) = stream.next().await {
+        println!("Update: {:?}", account);
     }
+
+    Ok(())
+}
 ```
 {% endtab %}
 {% endtabs %}
 
-    Whirligig speaks the [standard Solana WebSocket API](https://docs.solana.com/api/websocket) plus an extended `transactionSubscribe` method. Full method reference: [Whirligig WebSocket API](whirligig-websockets.md).
+Whirligig speaks the [standard Solana WebSocket API](https://docs.solana.com/api/websocket) plus an extended `transactionSubscribe` method. Full method reference: [Whirligig WebSocket API](whirligig-websockets.md).
 {% endtab %}
 {% tab title="Fumarole" %}
 **What we're doing:** connect to a regional Fumarole endpoint, create a persistent subscriber, and stream all account writes for the SPL Token program. Reconnecting with the same subscriber name resumes from where the cursor left off.
 
-    Connect to a regional endpoint (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US):
+Connect to a regional endpoint (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US):
 
 {% tabs %}
 {% tab title="TypeScript" %}
 ```typescript
-    import {
-      FumaroleClient,
-      InitialOffsetPolicy,
-    } from "@triton-one/yellowstone-fumarole";
-    import { CommitmentLevel, SubscribeRequest } from "@triton-one/yellowstone-grpc";
+import {
+  FumaroleClient,
+  InitialOffsetPolicy,
+} from "@triton-one/yellowstone-fumarole";
+import { CommitmentLevel, SubscribeRequest } from "@triton-one/yellowstone-grpc";
 
-    const TOKEN_ADDRESS = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
-    const subscriberName = "helloworld";
+const TOKEN_ADDRESS = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+const subscriberName = "helloworld";
 
-    const client = await FumaroleClient.connect({
-      endpoint: process.env.FUMAROLE_ENDPOINT!, // e.g. https://ams.rpcpool.com
-      xToken: process.env.FUMAROLE_X_TOKEN!,
-      maxDecodingMessageSizeBytes: 100 * 1024 * 1024,
-    });
+const client = await FumaroleClient.connect({
+  endpoint: process.env.FUMAROLE_ENDPOINT!, // e.g. https://ams.rpcpool.com
+  xToken: process.env.FUMAROLE_X_TOKEN!,
+  maxDecodingMessageSizeBytes: 100 * 1024 * 1024,
+});
 ```
 {% endtab %}
 {% endtabs %}
 
-    Build the subscribe request:
+Build the subscribe request:
 
 {% tabs %}
 {% tab title="TypeScript" %}
 ```typescript
-    const request: SubscribeRequest = {
-      commitment: CommitmentLevel.PROCESSED,
-      accounts: {
-        token: {
-          account: [],
-          owner: [TOKEN_ADDRESS],
-          filters: [],
-        },
-      },
-      transactions: {
-        token: {
-          accountInclude: [TOKEN_ADDRESS],
-          accountExclude: [],
-          accountRequired: [],
-        },
-      },
-      slots: { test: { filterByCommitment: true } },
-      transactionsStatus: {},
-      blocks: {},
-      blocksMeta: {},
-      entry: {},
-      ping: { id: Date.now() },
-      accountsDataSlice: [],
-      fromSlot: undefined,
-    };
+const request: SubscribeRequest = {
+  commitment: CommitmentLevel.PROCESSED,
+  accounts: {
+    token: {
+      account: [],
+      owner: [TOKEN_ADDRESS],
+      filters: [],
+    },
+  },
+  transactions: {
+    token: {
+      accountInclude: [TOKEN_ADDRESS],
+      accountExclude: [],
+      accountRequired: [],
+    },
+  },
+  slots: { test: { filterByCommitment: true } },
+  transactionsStatus: {},
+  blocks: {},
+  blocksMeta: {},
+  entry: {},
+  ping: { id: Date.now() },
+  accountsDataSlice: [],
+  fromSlot: undefined,
+};
 ```
 {% endtab %}
 {% endtabs %}
 
-    Create the persistent subscriber and consume:
+Create the persistent subscriber and consume:
 
 {% tabs %}
 {% tab title="TypeScript" %}
 ```typescript
-    await client.createPersistentSubscriber({
-      consumerGroupName: subscriberName,
-      initialOffsetPolicy: InitialOffsetPolicy.LATEST,
-    });
+await client.createPersistentSubscriber({
+  consumerGroupName: subscriberName,
+  initialOffsetPolicy: InitialOffsetPolicy.LATEST,
+});
 
-    const { sink: _sink, source } = await client.dragonsmouthSubscribe(
-      subscriberName,
-      request
-    );
+const { sink: _sink, source } = await client.dragonsmouthSubscribe(
+  subscriberName,
+  request
+);
 
-    await source.forEach((update) => {
-      console.log("Update:", update);
-    });
+await source.forEach((update) => {
+  console.log("Update:", update);
+});
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```rust
-    use {
-        futures::StreamExt,
-        yellowstone_fumarole_client::{config::FumaroleConfig, FumaroleClient},
-        yellowstone_grpc_proto::geyser::{
-            CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
-            subscribe_update::UpdateOneof,
+use {
+    futures::StreamExt,
+    yellowstone_fumarole_client::{config::FumaroleConfig, FumaroleClient},
+    yellowstone_grpc_proto::geyser::{
+        CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
+        subscribe_update::UpdateOneof,
+    },
+};
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let config = FumaroleConfig {
+        endpoint: std::env::var("FUMAROLE_ENDPOINT")?,
+        x_token: Some(std::env::var("FUMAROLE_X_TOKEN")?),
+        ..Default::default()
+    };
+    let mut client = FumaroleClient::connect(config).await?;
+
+    let mut accounts = std::collections::HashMap::new();
+    accounts.insert(
+        "token".to_string(),
+        SubscribeRequestFilterAccounts {
+            account: vec![],
+            owner: vec!["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA".into()],
+            filters: vec![],
+            ..Default::default()
         },
+    );
+
+    let request = SubscribeRequest {
+        accounts,
+        commitment: Some(CommitmentLevel::Processed.into()),
+        ..Default::default()
     };
 
-    #[tokio::main]
-    async fn main() -> anyhow::Result<()> {
-        let config = FumaroleConfig {
-            endpoint: std::env::var("FUMAROLE_ENDPOINT")?,
-            x_token: Some(std::env::var("FUMAROLE_X_TOKEN")?),
-            ..Default::default()
-        };
-        let mut client = FumaroleClient::connect(config).await?;
+    let (_sink, mut source) = client
+        .dragonsmouth_subscribe("helloworld", request)
+        .await?;
 
-        let mut accounts = std::collections::HashMap::new();
-        accounts.insert(
-            "token".to_string(),
-            SubscribeRequestFilterAccounts {
-                account: vec![],
-                owner: vec!["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA".into()],
-                filters: vec![],
-                ..Default::default()
-            },
-        );
-
-        let request = SubscribeRequest {
-            accounts,
-            commitment: Some(CommitmentLevel::Processed.into()),
-            ..Default::default()
-        };
-
-        let (_sink, mut source) = client
-            .dragonsmouth_subscribe("helloworld", request)
-            .await?;
-
-        while let Some(update) = source.next().await {
-            if let Some(UpdateOneof::Account(acc)) = update?.update_oneof {
-                println!("Account update at slot {}", acc.slot);
-            }
+    while let Some(update) = source.next().await {
+        if let Some(UpdateOneof::Account(acc)) = update?.update_oneof {
+            println!("Account update at slot {}", acc.slot);
         }
-
-        Ok(())
     }
+
+    Ok(())
+}
 ```
 {% endtab %}
 {% endtabs %}
@@ -531,205 +531,205 @@ Deshred is a separate gRPC method on the same `yellowstone-grpc` service. Same i
 {% tab title="Old Faithful streams" %}
 **What we're doing:** stream a range of historical blocks (slots 307,152,000 to 307,152,010) from Old Faithful. The two streaming methods are `OldFaithful.OldFaithful/StreamBlocks` and `OldFaithful.OldFaithful/StreamTransactions`. Both accept `start_slot` \+ `end_slot` and optional filters.
 
-    `StreamBlocks` filters: `account_include` (base58 pubkey array).
+`StreamBlocks` filters: `account_include` (base58 pubkey array).
 
-    `StreamTransactions` filters: `vote`, `failed`, `account_include`, `account_exclude`, `account_required`.
+`StreamTransactions` filters: `vote`, `failed`, `account_include`, `account_exclude`, `account_required`.
 
 {% tabs %}
 {% tab title="grpcurl (StreamBlocks)" %}
 ```shell
-    grpcurl \
-      -proto old-faithful.proto \
-      -H 'x-token: <your-token>' \
-      -d '{"start_slot": 307152000, "end_slot": 307152010}' \
-      <your-endpoint>.mainnet.rpcpool.com:443 \
-      OldFaithful.OldFaithful/StreamBlocks
+grpcurl \
+  -proto old-faithful.proto \
+  -H 'x-token: <your-token>' \
+  -d '{"start_slot": 307152000, "end_slot": 307152010}' \
+  <your-endpoint>.mainnet.rpcpool.com:443 \
+  OldFaithful.OldFaithful/StreamBlocks
 ```
 {% endtab %}
 {% tab title="grpcurl (StreamBlocks filtered)" %}
 ```shell
-    grpcurl \
-      -proto old-faithful.proto \
-      -H 'x-token: <your-token>' \
-      -d '{"start_slot": 307152000, "end_slot": 307152010, "filter": {"account_include": ["Vote111111111111111111111111111111111111111"]}}' \
-      <your-endpoint>.mainnet.rpcpool.com:443 \
-      OldFaithful.OldFaithful/StreamBlocks
+grpcurl \
+  -proto old-faithful.proto \
+  -H 'x-token: <your-token>' \
+  -d '{"start_slot": 307152000, "end_slot": 307152010, "filter": {"account_include": ["Vote111111111111111111111111111111111111111"]}}' \
+  <your-endpoint>.mainnet.rpcpool.com:443 \
+  OldFaithful.OldFaithful/StreamBlocks
 ```
 {% endtab %}
 {% tab title="grpcurl (StreamTransactions)" %}
 ```shell
-    grpcurl \
-      -proto old-faithful.proto \
-      -H 'x-token: <your-token>' \
-      -d '{"start_slot": 307152000, "end_slot": 307152010}' \
-      <your-endpoint>.mainnet.rpcpool.com:443 \
-      OldFaithful.OldFaithful/StreamTransactions
+grpcurl \
+  -proto old-faithful.proto \
+  -H 'x-token: <your-token>' \
+  -d '{"start_slot": 307152000, "end_slot": 307152010}' \
+  <your-endpoint>.mainnet.rpcpool.com:443 \
+  OldFaithful.OldFaithful/StreamTransactions
 ```
 {% endtab %}
 {% tab title="grpcurl (StreamTransactions filtered)" %}
 ```shell
-    grpcurl \
-      -proto old-faithful.proto \
-      -H 'x-token: <your-token>' \
-      -d '{"start_slot": 307152000, "end_slot": 307152010, "filter": {"vote": false, "failed": true}}' \
-      <your-endpoint>.mainnet.rpcpool.com:443 \
-      OldFaithful.OldFaithful/StreamTransactions
+grpcurl \
+  -proto old-faithful.proto \
+  -H 'x-token: <your-token>' \
+  -d '{"start_slot": 307152000, "end_slot": 307152010, "filter": {"vote": false, "failed": true}}' \
+  <your-endpoint>.mainnet.rpcpool.com:443 \
+  OldFaithful.OldFaithful/StreamTransactions
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```rust
-    use {
-        futures::StreamExt,
-        yellowstone_faithful_client::{connect_with_config, GrpcConfig},
-    };
+use {
+    futures::StreamExt,
+    yellowstone_faithful_client::{connect_with_config, GrpcConfig},
+};
 
-    #[tokio::main]
-    async fn main() -> anyhow::Result<()> {
-        let mut config = GrpcConfig::new(
-            "https://<your-old-faithful-endpoint>".to_string(),
-        );
-        config = config.with_token("<your-token>".to_string());
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let mut config = GrpcConfig::new(
+        "https://<your-old-faithful-endpoint>".to_string(),
+    );
+    config = config.with_token("<your-token>".to_string());
 
-        let mut client = connect_with_config(config).await?;
+    let mut client = connect_with_config(config).await?;
 
-        let mut stream = client
-            .stream_blocks(100_000_000, Some(100_000_100), None)
-            .await?;
+    let mut stream = client
+        .stream_blocks(100_000_000, Some(100_000_100), None)
+        .await?;
 
-        let mut count = 0;
-        while let Some(result) = stream.next().await {
-            match result {
-                Ok(block) => {
-                    count += 1;
-                    println!(
-                        "Block #{}: slot={}, txs={}, hash={}",
-                        count,
-                        block.slot,
-                        block.transaction_count(),
-                        block.blockhash
-                    );
-                }
-                Err(e) => eprintln!("Error: {}", e),
+    let mut count = 0;
+    while let Some(result) = stream.next().await {
+        match result {
+            Ok(block) => {
+                count += 1;
+                println!(
+                    "Block #{}: slot={}, txs={}, hash={}",
+                    count,
+                    block.slot,
+                    block.transaction_count(),
+                    block.blockhash
+                );
             }
+            Err(e) => eprintln!("Error: {}", e),
         }
-
-        Ok(())
     }
+
+    Ok(())
+}
 ```
 {% endtab %}
 {% endtabs %}
 
-    Verbatim source: [yellowstone-faithful-client/examples/stream\_blocks.rs](https://github.com/rpcpool/yellowstone-faithful/blob/main/yellowstone-faithful-client/examples/stream_blocks.rs). The repo also has `stream_transactions.rs` for transaction-level streaming. There's no published TypeScript SDK for Old Faithful streaming today.
+Verbatim source: [yellowstone-faithful-client/examples/stream\_blocks.rs](https://github.com/rpcpool/yellowstone-faithful/blob/main/yellowstone-faithful-client/examples/stream_blocks.rs). The repo also has `stream_transactions.rs` for transaction-level streaming. There's no published TypeScript SDK for Old Faithful streaming today.
 {% endtab %}
 {% tab title="Deshred" %}
 **What we're doing:** subscribe to the `SubscribeDeshred` gRPC stream, filter out vote transactions, and log every transaction signature with its slot.
 
-    Deshred delivers transactions reconstructed from shreds **_before_** the validator executes them, so you see intent earlier than with any other stream.
+Deshred delivers transactions reconstructed from shreds **_before_** the validator executes them, so you see intent earlier than with any other stream.
 
 {% tabs %}
 {% tab title="TypeScript" %}
 ```typescript
-    import Client, {
-      SubscribeDeshredRequest,
-    } from "@triton-one/yellowstone-grpc";
+import Client, {
+  SubscribeDeshredRequest,
+} from "@triton-one/yellowstone-grpc";
 
-    const client = new Client(
-      "https://<your-endpoint>.mainnet.rpcpool.com",
-      "<your-token>",
-      undefined
-    );
+const client = new Client(
+  "https://<your-endpoint>.mainnet.rpcpool.com",
+  "<your-token>",
+  undefined
+);
 
-    const stream = await client.subscribeDeshred();
+const stream = await client.subscribeDeshred();
 
-    stream.on("data", (data) => {
-      console.log("data", data);
-    });
+stream.on("data", (data) => {
+  console.log("data", data);
+});
 
-    const request: SubscribeDeshredRequest = {
-      deshredTransactions: {
-        client: {
-          vote: false,
-          accountInclude: [],
-          accountExclude: [],
-          accountRequired: [],
-        },
-      },
-      ping: undefined,
-    };
+const request: SubscribeDeshredRequest = {
+  deshredTransactions: {
+    client: {
+      vote: false,
+      accountInclude: [],
+      accountExclude: [],
+      accountRequired: [],
+    },
+  },
+  ping: undefined,
+};
 
-    await new Promise<void>((resolve, reject) => {
-      stream.write(request, (err) =>
-        err ? reject(err) : resolve()
-      );
-    });
+await new Promise<void>((resolve, reject) => {
+  stream.write(request, (err) =>
+    err ? reject(err) : resolve()
+  );
+});
 ```
 {% endtab %}
 {% tab title="Rust" %}
 ```rust
-    use {
-        futures::{sink::SinkExt, stream::StreamExt},
-        solana_signature::Signature,
-        std::collections::HashMap,
-        tonic::transport::channel::ClientTlsConfig,
-        yellowstone_grpc_client::GeyserGrpcClient,
-        yellowstone_grpc_proto::prelude::{
-            subscribe_update_deshred::UpdateOneof, SubscribeDeshredRequest,
-            SubscribeRequestFilterDeshredTransactions, SubscribeRequestPing,
-        },
+use {
+    futures::{sink::SinkExt, stream::StreamExt},
+    solana_signature::Signature,
+    std::collections::HashMap,
+    tonic::transport::channel::ClientTlsConfig,
+    yellowstone_grpc_client::GeyserGrpcClient,
+    yellowstone_grpc_proto::prelude::{
+        subscribe_update_deshred::UpdateOneof, SubscribeDeshredRequest,
+        SubscribeRequestFilterDeshredTransactions, SubscribeRequestPing,
+    },
+};
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let endpoint = std::env::var("ENDPOINT")
+        .unwrap_or("https://<endpoint>".into());
+    let x_token = std::env::var("X_TOKEN").ok();
+
+    let mut client = GeyserGrpcClient::build_from_shared(endpoint)?
+        .x_token(x_token)?
+        .tls_config(ClientTlsConfig::new().with_native_roots())?
+        .http2_adaptive_window(true)
+        .initial_connection_window_size(8 * 1024 * 1024)
+        .initial_stream_window_size(4 * 1024 * 1024)
+        .connect()
+        .await?;
+
+    let request = SubscribeDeshredRequest {
+        deshred_transactions: HashMap::from([(
+            "deshred".into(),
+            SubscribeRequestFilterDeshredTransactions {
+                vote: Some(false),
+                account_include: vec![],
+                account_exclude: vec![],
+                account_required: vec![],
+            },
+        )]),
+        ping: None,
     };
 
-    #[tokio::main]
-    async fn main() -> anyhow::Result<()> {
-        let endpoint = std::env::var("ENDPOINT")
-            .unwrap_or("https://<endpoint>".into());
-        let x_token = std::env::var("X_TOKEN").ok();
+    let (mut tx, mut stream) =
+        client.subscribe_deshred_with_request(Some(request)).await?;
 
-        let mut client = GeyserGrpcClient::build_from_shared(endpoint)?
-            .x_token(x_token)?
-            .tls_config(ClientTlsConfig::new().with_native_roots())?
-            .http2_adaptive_window(true)
-            .initial_connection_window_size(8 * 1024 * 1024)
-            .initial_stream_window_size(4 * 1024 * 1024)
-            .connect()
-            .await?;
-
-        let request = SubscribeDeshredRequest {
-            deshred_transactions: HashMap::from([(
-                "deshred".into(),
-                SubscribeRequestFilterDeshredTransactions {
-                    vote: Some(false),
-                    account_include: vec![],
-                    account_exclude: vec![],
-                    account_required: vec![],
-                },
-            )]),
-            ping: None,
-        };
-
-        let (mut tx, mut stream) =
-            client.subscribe_deshred_with_request(Some(request)).await?;
-
-        while let Some(msg) = stream.next().await {
-            match msg?.update_oneof {
-                Some(UpdateOneof::DeshredTransaction(update)) => {
-                    let info = update.transaction.as_ref().unwrap();
-                    let sig = Signature::try_from(info.signature.as_slice())?;
-                    println!("slot={} sig={sig} vote={}", update.slot, info.is_vote);
-                }
-                Some(UpdateOneof::Ping(_)) => {
-                    tx.send(SubscribeDeshredRequest {
-                        ping: Some(SubscribeRequestPing { id: 1 }),
-                        ..Default::default()
-                    })
-                    .await?;
-                }
-                Some(UpdateOneof::Pong(_)) => {}
-                None => break,
+    while let Some(msg) = stream.next().await {
+        match msg?.update_oneof {
+            Some(UpdateOneof::DeshredTransaction(update)) => {
+                let info = update.transaction.as_ref().unwrap();
+                let sig = Signature::try_from(info.signature.as_slice())?;
+                println!("slot={} sig={sig} vote={}", update.slot, info.is_vote);
             }
+            Some(UpdateOneof::Ping(_)) => {
+                tx.send(SubscribeDeshredRequest {
+                    ping: Some(SubscribeRequestPing { id: 1 }),
+                    ..Default::default()
+                })
+                .await?;
+            }
+            Some(UpdateOneof::Pong(_)) => {}
+            None => break,
         }
-
-        Ok(())
     }
+
+    Ok(())
+}
 ```
 {% endtab %}
 {% endtabs %}
@@ -798,7 +798,7 @@ First, a subscription-ID confirmation:
 { "jsonrpc": "2.0", "result": 42, "id": 1 }
 ```
 
-    Then JSON-RPC notifications matching the standard Solana WebSocket API. Account-notification example:
+Then JSON-RPC notifications matching the standard Solana WebSocket API. Account-notification example:
 
 ```json
 {
@@ -923,12 +923,10 @@ Sometimes. Some cloud providers (e.g. Cloudflare) close idle streams. If you see
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

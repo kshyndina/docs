@@ -58,10 +58,10 @@ curl https://api.triton.one/v1/subscriptions \
 POST /v1/subscriptions
 ```
 
-- **`type_id`** `string` _(required)_ — Subscription type ID. List available types via `GET /v1/subscription-types`.
-
-- **`metadata`** `object` — Optional key-value notes (cost-centre, project name).
-
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `type_id` | `string` | Yes | Subscription type ID. List available types via `GET /v1/subscription-types`. |
+| `metadata` | `object` | — | Optional key-value notes (cost-centre, project name). |
 ```bash
 curl https://api.triton.one/v1/subscriptions \
   -H "Authorization: Bearer $TRITON_API_TOKEN" \
@@ -103,12 +103,10 @@ Base plan changes (PAYG -> committed, sizing up / down) go through the portal or
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

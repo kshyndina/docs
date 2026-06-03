@@ -81,21 +81,21 @@ Rule of thumb: **CodeGroup for code-only, Tabs for everything else.**
 {% tabs %}
 {% tab title="macOS" %}
 ```bash
-    brew install solana
-    solana --version
-    ```
+brew install solana
+solana --version
+```
 {% endtab %}
 {% tab title="Linux" %}
 ```bash
-    sh -c "$(curl -sSfL https://release.solana.com/v1.18.0/install)"
-    solana --version
-    ```
+sh -c "$(curl -sSfL https://release.solana.com/v1.18.0/install)"
+solana --version
+```
 {% endtab %}
 {% tab title="Windows (WSL)" %}
 ```bash
-    wsl --install
-    sh -c "$(curl -sSfL https://release.solana.com/v1.18.0/install)"
-    ```
+wsl --install
+sh -c "$(curl -sSfL https://release.solana.com/v1.18.0/install)"
+```
 {% endtab %}
 {% endtabs %}
 
@@ -186,7 +186,16 @@ For dedicated nodes, yes. PAYG and shared endpoints route to the closest availab
 **Why it works:** beats nested bullet lists for any "here's what's in this folder".
 
 ```
-
+my-solana-app/
+  src/
+    index.ts
+    client.ts
+    streaming/
+      grpc.ts
+      websocket.ts
+  package.json
+  .env.example
+  README.md
 ```
 
 ### Frames
@@ -201,49 +210,14 @@ For dedicated nodes, yes. PAYG and shared endpoints route to the closest availab
 Mintlify's most powerful native interactive component is the **API playground** -- the live "Send" button readers see on every method page in `/solana-api/`. There's no separate `<Playground>` component to drop in -- the playground is auto-generated when a page has both:
 
 1. An `api: "POST /endpoint"` line in its frontmatter, AND
-2. `- **``** — ` rows describing the parameters.
-
-Mintlify reads the frontmatter, builds a request panel on the right, lets the reader fill in their auth token + the params, and POSTs to the endpoint. The response renders below. No JS to write.
-
-To see it live, open any existing API method page, e.g. [getSlot](https://kate-6.gitbook.io/version-a-site-space-per-section/api-reference/http-rpc-methods/standard/getslot) -- the right column has the playground. The same component is used for HTTP RPC, WebSocket subscribe/unsubscribe, gRPC, and DAS API.
-
-There's also `<Prompt>` for *AI* prompts (copyable text with a "Copy to ChatGPT/Claude" button). Useful for "ask AI to migrate your code" CTAs but not relevant for normal docs flow.
-
-Other "interactive" things Mintlify ships:
-
-- **Search bar in the navbar** -- automatic, indexes every page on build
-- **Hosted MCP server** -- already live at `/mcp`, lets readers' AI tools query the docs as a tool
-- **Per-page "Open in Cursor / VS Code / ChatGPT / Claude / Perplexity" menu** -- already configured in `docs.json` `contextual.options`
-- **`llms.txt` + per-page `.md` exports** -- machine-readable docs for AI agents
-
-So the answer to "what about interactive playground / key input" is: **it's already in your docs**, baked into every API method page through `api` frontmatter + `<ParamField>`. You don't need to add a separate component.
-
-## API reference building blocks
-
-These are the building blocks behind the playground above.
-
-### `<ParamField>` and `- **``** — ` -- and why parameter names look different from inline `code`
-
-The parameter name on the left of each row below (`address`, `commitment`, `encoding`) renders **bigger and brand-coloured**, while inline mentions of `processed`, `confirmed`, `finalized` inside the description render as **plain monospace pills**. That's because they're rendered by *different elements*:
-
-- **ParamField row** = a structured field component. Mintlify pulls the name out and styles it as a heading-like identifier (large, brand colour, monospace) because it's the row's primary identity.
-- **Inline backticks** in prose = generic `code` formatting. Small mono pill, used for any code-like token in a sentence (variable names, enum values, paths, keys).
-
-Both use monospace font but one is a row label, the other is an inline mention. The visual hierarchy is intentional -- the row's parameter name is the thing the user actually scans for.
-
-<ParamField path="address" type="string" required>
-  Solana account public key, base-58 encoded.
-
-- **`commitment`** `string` — Commitment level. One of `processed`, `confirmed`, or `finalized`.
-
-- **`encoding`** `string` — Optional response encoding. Defaults to `base64`.
-
-  The account data and metadata.
-
-- **`value.lamports`** `number` — Account balance in lamports.
-
-- **`value.owner`** `string` — Program that owns the account.
-
+2. `
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+|  |  | — | ` rows describing the parameters. Mintlify reads the frontmatter, builds a request panel on the right, lets the reader fill in their auth token + the params, and POSTs to the endpoint. The response renders below. No JS to write. To see it live, open any existing API method page, e.g. [getSlot](https://kate-6.gitbook.io/version-a-site-space-per-section/api-reference/http-rpc-methods/standard/getslot) -- the right column has the playground. The same component is used for HTTP RPC, WebSocket subscribe/unsubscribe, gRPC, and DAS API. There's also `<Prompt>` for *AI* prompts (copyable text with a "Copy to ChatGPT/Claude" button). Useful for "ask AI to migrate your code" CTAs but not relevant for normal docs flow. Other "interactive" things Mintlify ships: - **Search bar in the navbar** -- automatic, indexes every page on build - **Hosted MCP server** -- already live at `/mcp`, lets readers' AI tools query the docs as a tool - **Per-page "Open in Cursor / VS Code / ChatGPT / Claude / Perplexity" menu** -- already configured in `docs.json` `contextual.options` - **`llms.txt` + per-page `.md` exports** -- machine-readable docs for AI agents So the answer to "what about interactive playground / key input" is: **it's already in your docs**, baked into every API method page through `api` frontmatter + `<ParamField>`. You don't need to add a separate component. ## API reference building blocks These are the building blocks behind the playground above. ### `<ParamField>` and ` |
+| `commitment` | `string` | — | Commitment level. One of `processed`, `confirmed`, or `finalized`. |
+| `encoding` | `string` | — | Optional response encoding. Defaults to `base64`. |
+| `value.lamports` | `number` | — | Account balance in lamports. |
+| `value.owner` | `string` | — | Program that owns the account. |
 ### `<RequestExample>` and `<ResponseExample>` -- only on API pages
 
 These render the right-sidebar code panel on a method page (where the table-of-contents normally lives). They only render that way when the page has `api: "..."` in its frontmatter -- on a regular page like this one, they don't show.
@@ -255,20 +229,15 @@ To see them in action: open [getSlot](https://kate-6.gitbook.io/version-a-site-s
 **Where to use:** nested response objects -- click to expand inside ParamField.
 **Why it works:** keeps the top level scannable while the deep object stays one click away.
 
-- **`result`** `object` — Top-level response.
-  <Expandable title="result properties">
-
-      Slot context.
-      <Expandable title="context properties">
-
-          Slot number when the response was generated.
-
-        - **`apiVersion`** `string` — The Solana API version that served this request.
-
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `result` | `object` | — | Top-level response. <Expandable title="result properties">  Slot context. <Expandable title="context properties">  Slot number when the response was generated. |
+| `apiVersion` | `string` | — | The Solana API version that served this request. |
       </Expandable>
 
-    - **`value`** `object` — The actual account data.
-
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `value` | `object` | — | The actual account data. |
   </Expandable>
 
 ## Less common but worth knowing
@@ -346,7 +315,7 @@ Triton's Yellowstone gRPC stack delivers shred-level data with sub-second latenc
 **Where to use:** changelog entries -- a "What's new" page where multiple Updates stack vertically.
 **Why it works:** Update is **not** a table. Each entry is a full rich-content block with a date label, optional version description, and freeform body (lists, code, links). Mintlify stacks them with consistent date markers down the left margin.
 
-  ## Yellowstone gRPC NAPI bindings: 4x throughput
+## Yellowstone gRPC NAPI bindings: 4x throughput
 
   Reworked the NAPI bridge to remove a mutex bottleneck. Existing client code continues to work; rebuild against the new package to opt in.
 
@@ -366,12 +335,10 @@ Triton's Yellowstone gRPC stack delivers shred-level data with sub-second latenc
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

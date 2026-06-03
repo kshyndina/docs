@@ -65,11 +65,11 @@ Mainnet and devnet are available out of the box. Devnet is free for development 
 
 Three causes, in order of likelihood:
 
-    1. The token is expired or rotated. Check the dashboard.
-    2. The request origin isn't on the allowlist. See [Auth and security](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security).
-    3. The token is being passed in a header that isn't `Authorization: Bearer <token>` -- check your client.
+1. The token is expired or rotated. Check the dashboard.
+2. The request origin isn't on the allowlist. See [Auth and security](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/auth-and-security).
+3. The token is being passed in a header that isn't `Authorization: Bearer <token>` -- check your client.
 
-    Full debug flow: [Error handling -- RPC](/solana-guides/error-handling/rpc).
+Full debug flow: [Error handling -- RPC](/solana-guides/error-handling/rpc).
 
 </details>
 
@@ -78,8 +78,8 @@ Three causes, in order of likelihood:
 
 Standard tier shares a global rate limit. Two routes:
 
-    - **Smooth the burst** -- batch with `getMultipleAccounts`, cache for a few hundred milliseconds, exponential backoff on retry.
-    - **Move to dedicated** -- isolated bandwidth, no shared limit. See the [pricing calculator](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/plans-and-billing).
+- **Smooth the burst** -- batch with `getMultipleAccounts`, cache for a few hundred milliseconds, exponential backoff on retry.
+- **Move to dedicated** -- isolated bandwidth, no shared limit. See the [pricing calculator](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/get-started/plans-and-billing).
 
 </details>
 
@@ -145,12 +145,10 @@ Yes. Dedicated nodes are billed monthly per node. Switching keeps your endpoint 
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

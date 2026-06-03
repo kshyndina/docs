@@ -11,9 +11,9 @@ What Triton is, what we build, and how Project Yellowstone fits into the stack.
 
 Triton is a high-performance infrastructure provider running RPC nodes, private validators, and data streaming systems across Solana, Sui, Monad, and other networks.
 
-    It delivers reliable, fast, and feature-rich blockchain infrastructure trusted by developers, validators, and traders that can't afford downtime.
+It delivers reliable, fast, and feature-rich blockchain infrastructure trusted by developers, validators, and traders that can't afford downtime.
 
-    Triton powers everything from real-time trading and market-making to large-scale data indexing and validator operations.
+Triton powers everything from real-time trading and market-making to large-scale data indexing and validator operations.
 
 </details>
 
@@ -22,19 +22,19 @@ Triton is a high-performance infrastructure provider running RPC nodes, private 
 
 Project Yellowstone is Triton's suite of high-performance tools and open-source frameworks designed to enhance RPC and data infrastructure for the Solana ecosystem.
 
-  It addresses critical infrastructure challenges: real-time data streaming, historical ledger access, ultra-low latency queries, and custom indexing.
+It addresses critical infrastructure challenges: real-time data streaming, historical ledger access, ultra-low latency queries, and custom indexing.
 
-  Key components:
+Key components:
 
-  | Tool | Description |
-  | --- | --- |
-  | Dragon's Mouth | Core gRPC streaming engine for Solana. Delivers raw real-time data directly from the validator with ultra-low latency using Protobuf. |
-  | Whirligig | WebSocket counterpart to Dragon's Mouth -- built for front-end or browser-based apps needing live account and transaction feeds. |
-  | Fumarole | Persistent streaming layer with automatic redundancy and 4-day caching. Ensures no data loss even if the connection drops. |
-  | Steamboat | Custom indexing engine that accelerates heavy gPA queries by up to 99%, cutting latency for large programs. |
-  | Old Faithful | Full-ledger archival service providing access to Solana's complete historical transaction data -- ideal for analytics, re-indexing, and backtesting. |
-  | Jet | A transaction submission software that lets you add Stake Weight to your transactions to route them through a priority lane during network congestion. |
-  | Shield | Anti-MEV protection layer integrated with Jet. Allows configurable allow- and block-lists to prevent sandwiching and other frontrunning behaviours. |
+| Tool | Description |
+| --- | --- |
+| Dragon's Mouth | Core gRPC streaming engine for Solana. Delivers raw real-time data directly from the validator with ultra-low latency using Protobuf. |
+| Whirligig | WebSocket counterpart to Dragon's Mouth -- built for front-end or browser-based apps needing live account and transaction feeds. |
+| Fumarole | Persistent streaming layer with automatic redundancy and 4-day caching. Ensures no data loss even if the connection drops. |
+| Steamboat | Custom indexing engine that accelerates heavy gPA queries by up to 99%, cutting latency for large programs. |
+| Old Faithful | Full-ledger archival service providing access to Solana's complete historical transaction data -- ideal for analytics, re-indexing, and backtesting. |
+| Jet | A transaction submission software that lets you add Stake Weight to your transactions to route them through a priority lane during network congestion. |
+| Shield | Anti-MEV protection layer integrated with Jet. Allows configurable allow- and block-lists to prevent sandwiching and other frontrunning behaviours. |
 
 </details>
 
@@ -43,16 +43,16 @@ Project Yellowstone is Triton's suite of high-performance tools and open-source 
 
 Beyond the famous Project Yellowstone, Triton operates additional infrastructure and integrations across multiple networks:
 
-    | Service | Description |
-    | --- | --- |
-    | Sui & Monad | RPC infrastructure for Mainnet and Testnet. |
-    | Eclipse & PythNet | RPC infrastructure for Mainnet. |
-    | Photon | Indexer for ZK compression. |
-    | Metaplex DAS API | Optimised API for fast access to fungible and non-fungible asset data on Solana. |
-    | Pyth Hermes | Real-time price feed for financial market data. |
-    | Jito | Dedicated Jito deployments for bundle simulation and MEV-related infrastructure. |
-    | Titan Swap API | Swap API for various trading and protocol needs. |
-    | Cascade Marketplace | A bandwidth marketplace where trusted validators sell SWQoS bandwidth to consumers. |
+| Service | Description |
+| --- | --- |
+| Sui & Monad | RPC infrastructure for Mainnet and Testnet. |
+| Eclipse & PythNet | RPC infrastructure for Mainnet. |
+| Photon | Indexer for ZK compression. |
+| Metaplex DAS API | Optimised API for fast access to fungible and non-fungible asset data on Solana. |
+| Pyth Hermes | Real-time price feed for financial market data. |
+| Jito | Dedicated Jito deployments for bundle simulation and MEV-related infrastructure. |
+| Titan Swap API | Swap API for various trading and protocol needs. |
+| Cascade Marketplace | A bandwidth marketplace where trusted validators sell SWQoS bandwidth to consumers. |
 
 </details>
 
@@ -124,7 +124,7 @@ Questions about Triton's services beyond Solana RPC.
 
 We provide infrastructure for PythNet RPC and Hermes for streaming price updates. We don't offer benchmarks. For publishers, we offer dedicated RPC to publish onto PythNet and Validators to bolster the Pyth Network.
 
-  We work closely with Douro Labs (Pyth Team) to ensure a smooth onboarding and service experience.
+We work closely with Douro Labs (Pyth Team) to ensure a smooth onboarding and service experience.
 
 </details>
 
@@ -137,7 +137,7 @@ To access Hermes, you need to point your endpoint to access Hermes and Pythnet. 
 https://<endpoint>.mainnet.pythnet.rpcpool.com/<secret token>/hermes/v2/<rest of the call>
 ```
 
-  The most common mistake is omitting the token, `v2`, or `hermes` parts of the path.
+The most common mistake is omitting the token, `v2`, or `hermes` parts of the path.
 
 </details>
 
@@ -152,12 +152,10 @@ Yes. You can stake directly with our [Private Trusted Validator](https://kate-6.
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

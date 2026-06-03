@@ -11,7 +11,7 @@ How fast and reliable Triton's RPC service is, and what happens during congestio
 
 Our infrastructure delivers 99.9% uptime, backed by multiple servers per region and automated health checks. This ensures that nodes stay synced and serve accurate, up-to-date ledger data. If any node falls behind, requests are routed to a shared backup pool while the issue is resolved. Our infrastructure is monitored 24/7, and we're known for fast and responsive support.
 
-    As Stephen Hess, founder of Metaplex, put it: "We use Triton RPCs every day at Metaplex. They're fast, reliable, and built by one of the most competent teams I've worked with in Solana or across tech."
+As Stephen Hess, founder of Metaplex, put it: "We use Triton RPCs every day at Metaplex. They're fast, reliable, and built by one of the most competent teams I've worked with in Solana or across tech."
 
 </details>
 
@@ -20,9 +20,9 @@ Our infrastructure delivers 99.9% uptime, backed by multiple servers per region 
 
 It's a big topic, but at a high level, we do it through:
 
-    - **GeoDNS:** Routes traffic to the nearest server in shared pools.
-    - **Geyser integration:** Streams intra-slot updates via Dragon's Mouth, unlike end-of-slot updates in traditional RPC.
-    - **Custom indexes:** Steamboat optimises `getProgramAccounts` (gPA) calls to improve query performance.
+- **GeoDNS:** Routes traffic to the nearest server in shared pools.
+- **Geyser integration:** Streams intra-slot updates via Dragon's Mouth, unlike end-of-slot updates in traditional RPC.
+- **Custom indexes:** Steamboat optimises `getProgramAccounts` (gPA) calls to improve query performance.
 
 </details>
 
@@ -31,10 +31,10 @@ It's a big topic, but at a high level, we do it through:
 
 We mitigate congestion with:
 
-    - **Staked nodes:** Prioritise transaction delivery to the block producer.
-    - **Load balancing:** Distribute traffic across our 100\+ nodes.
-    - **Rate limiting:** Prevent abuse and ensure fair access.
-    - **Redundancy:** Automatic failover systems to maintain uptime during outages.
+- **Staked nodes:** Prioritise transaction delivery to the block producer.
+- **Load balancing:** Distribute traffic across our 100\+ nodes.
+- **Rate limiting:** Prevent abuse and ensure fair access.
+- **Redundancy:** Automatic failover systems to maintain uptime during outages.
 
 </details>
 
@@ -84,7 +84,7 @@ Accounts with standard permissions can't create tokens or endpoints directly. Co
 
 `__blocked.rpcpool.com` is a system origin that Triton automatically adds to every endpoint. It signals that the endpoint only accepts requests authenticated by a valid token, blocking anonymous traffic.
 
-    Don't remove it. If you do and leave the allowed origins list empty, the endpoint becomes fully open: anyone can query it without a token, and the resulting traffic will be billed to your account.
+Don't remove it. If you do and leave the allowed origins list empty, the endpoint becomes fully open: anyone can query it without a token, and the resulting traffic will be billed to your account.
 
 </details>
 
@@ -93,8 +93,8 @@ Accounts with standard permissions can't create tokens or endpoints directly. Co
 
 Dedicated node endpoints use:
 
-    - **API keys:** unique per client, revocable from the [customer dashboard](https://customers.triton.one).
-    - **Rate monitoring:** alerts for unusual spikes to detect misuse.
+- **API keys:** unique per client, revocable from the [customer dashboard](https://customers.triton.one).
+- **Rate monitoring:** alerts for unusual spikes to detect misuse.
 
 </details>
 
@@ -131,7 +131,7 @@ Yes, dedicated node users can opt into archival nodes that store full Solana blo
 
 Bundle simulation is available to everyone -- see [Jito bundles](https://kate-6.gitbook.io/version-a-site-space-per-section/documentation/sending-transactions/jito-bundles) for the full reference.
 
-    `sendBundle` itself isn't routed through our infrastructure. Routing bundle sends through Triton would add an extra hop in front of the Jito block engine, which adds latency and works against the reason you're using bundles in the first place. The recommended pattern is to call the Jito block engine directly for sends, and use Triton for everything else (reads, streams, simulation).
+`sendBundle` itself isn't routed through our infrastructure. Routing bundle sends through Triton would add an extra hop in front of the Jito block engine, which adds latency and works against the reason you're using bundles in the first place. The recommended pattern is to call the Jito block engine directly for sends, and use Triton for everything else (reads, streams, simulation).
 
 </details>
 
@@ -151,7 +151,7 @@ If you're hitting persistent socket or connection errors with `@solana/web3.js` 
 
 To measure latency effectively, avoid relying on blockchain or explorer timestamps, as these may not reflect the actual performance of your RPC provider due to drift in the timestamping. The on-chain time and clock time drift apart, leading to misleading metrics.
 
-    Instead, record a timestamp immediately after receiving a transaction response from each provider in your application. This method captures the actual time it took for the request to complete, providing a reliable metric for assessing latency.
+Instead, record a timestamp immediately after receiving a transaction response from each provider in your application. This method captures the actual time it took for the request to complete, providing a reliable metric for assessing latency.
 
 </details>
 
@@ -160,18 +160,16 @@ To measure latency effectively, avoid relying on blockchain or explorer timestam
 
 To detect delays, examine the `slot` field included in all gRPC messages. The most precise method is to compare this slot value with a secondary source, such as another subscription or a `getSlot` call in your production environment. For additional validation, you may also cross-reference with an alternative RPC provider. Dedicated users can select the "Tracking Tip" folder in their Grafana Dashboard. The slot latency reflected here shows how much your node's slot latency differs from the rest of the network. As the node processes data from the network downstream, it sends this information through Geyser.
 
-    If you suspect your Geyser stream is experiencing a drastically different latency, check whether your receiving server is not providing back pressure to the RPC node due to bandwidth constraints.
+If you suspect your Geyser stream is experiencing a drastically different latency, check whether your receiving server is not providing back pressure to the RPC node due to bandwidth constraints.
 
 </details>
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

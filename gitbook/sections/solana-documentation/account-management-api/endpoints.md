@@ -47,18 +47,14 @@ Filter via `?chain=solana&network=mainnet&status=active`.
 POST /v1/endpoints
 ```
 
-- **`name`** `string` _(required)_ — Human-readable name. Lowercase, dashes, alphanumeric. Must be unique within the organisation.
-
-- **`chain`** `string` _(required)_ — `solana`, `pyth`, `sui`, or `monad`.
-
-- **`network`** `string` _(required)_ — `mainnet` or `devnet`.
-
-- **`region`** `string` _(required)_ — Region code: `fra`, `ams`, `nyc`, `lax`, `sgp`, `tyo`. List supported regions via `GET /v1/regions`.
-
-- **`plan`** `string` _(required)_ — `payg`, `committed`, or `dedicated`. Dedicated requires a pre-arranged contract -- API will return `403` otherwise.
-
-- **`metadata`** `object` — Optional key-value annotations (cost-centre, owning team, environment).
-
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | Yes | Human-readable name. Lowercase, dashes, alphanumeric. Must be unique within the organisation. |
+| `chain` | `string` | Yes | `solana`, `pyth`, `sui`, or `monad`. |
+| `network` | `string` | Yes | `mainnet` or `devnet`. |
+| `region` | `string` | Yes | Region code: `fra`, `ams`, `nyc`, `lax`, `sgp`, `tyo`. List supported regions via `GET /v1/regions`. |
+| `plan` | `string` | Yes | `payg`, `committed`, or `dedicated`. Dedicated requires a pre-arranged contract -- API will return `403` otherwise. |
+| `metadata` | `object` | — | Optional key-value annotations (cost-centre, owning team, environment). |
 ```bash
 curl https://api.triton.one/v1/endpoints \
   -H "Authorization: Bearer $TRITON_API_TOKEN" \
@@ -142,12 +138,10 @@ curl https://api.triton.one/v1/endpoints/ep_abc123 \
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

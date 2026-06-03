@@ -48,7 +48,7 @@ Read-mostly access plus self-serve actions: view usage and cost, top up credits,
 
 Everything Standard does, plus provisioning new endpoints and rotating tokens.
 
-    Need Operator? Ask in the dashboard chat -- support can upgrade you.
+Need Operator? Ask in the dashboard chat -- support can upgrade you.
 
 </details>
 
@@ -81,14 +81,14 @@ Short clips to walk you through the most common tasks, from sign-up onward.
     <source src="../images/sign-up.mp4" type="video/mp4" />
   </video>
 
-    ### Sign up
+### Sign up
 
     1. Go to [customers.triton.one/users/sign-up](https://customers.triton.one/users/sign-up) with your work email
     2. Click the verification link in your inbox
     3. Name your organisation (the billing root for everything)
     4. Provision your first endpoint -- pick **Solana mainnet** and your closest region
 
-    ### Add a teammate
+### Add a teammate
 
     1. Open **Members** in the sidebar
     2. Click **Invite**
@@ -103,14 +103,14 @@ Short clips to walk you through the most common tasks, from sign-up onward.
     <source src="../images/add-allow-origin.mp4" type="video/mp4" />
   </video>
 
-    ### Add a domain to the origin allowlist
+### Add a domain to the origin allowlist
 
     1. Click into the mainnet subscription
     2. Click the endpoint name to open its settings
     3. Under **Allowed origins**, hit `+`
     4. Add the domain and save -- all subdomains are allowed automatically
 
-    ### View usage
+### View usage
 
     1. Open the **v3 Billing** tab
     2. Review the per-product totals (requests and bandwidth)
@@ -125,14 +125,14 @@ Short clips to walk you through the most common tasks, from sign-up onward.
     <source src="../images/top-up.mp4" type="video/mp4" />
   </video>
 
-    ### Top up credits
+### Top up credits
 
     1. Open **Billing** in the sidebar
     2. Click **Buy credits**
     3. Pay in stablecoins via Wallet Connect, or transfer from any external wallet
     4. Card or wire? Switch to invoiced billing -- contact support
 
-    ### Set up low-balance notifications
+### Set up low-balance notifications
 
     1. Open **Billing** in the sidebar
     2. Toggle alerts on
@@ -147,7 +147,7 @@ Short clips to walk you through the most common tasks, from sign-up onward.
     <source src="../images/contact-support.mp4" type="video/mp4" />
   </video>
 
-    ### Contact support
+### Contact support
 
     1. Click the chat icon in the bottom right of any dashboard page
     2. Describe what's happening
@@ -174,12 +174,10 @@ Short clips to walk you through the most common tasks, from sign-up onward.
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

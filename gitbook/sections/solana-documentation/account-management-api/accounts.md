@@ -49,12 +49,11 @@ curl https://api.triton.one/v1/members \
 POST /v1/members
 ```
 
-- **`email`** `string` _(required)_ — Email address. The invite link is sent here.
-
-- **`role`** `string` _(required)_ — One of `owner`, `admin`, `viewer`. See [Set up your account](../get-started/platform-overview.md) for capabilities.
-
-- **`message`** `string` — Optional custom note included in the invite email (e.g. "joining the trading team").
-
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `email` | `string` | Yes | Email address. The invite link is sent here. |
+| `role` | `string` | Yes | One of `owner`, `admin`, `viewer`. See [Set up your account](../get-started/platform-overview.md) for capabilities. |
+| `message` | `string` | — | Optional custom note included in the invite email (e.g. "joining the trading team"). |
 ```bash
 curl https://api.triton.one/v1/members \
   -H "Authorization: Bearer $TRITON_API_TOKEN" \
@@ -70,8 +69,9 @@ The member is created in `status: invited`. They click the email link to activat
 PATCH /v1/members/{id}
 ```
 
-- **`role`** `string` — New role. Demotion takes effect immediately; promotion to `owner` requires the caller to already be `owner`.
-
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `role` | `string` | — | New role. Demotion takes effect immediately; promotion to `owner` requires the caller to already be `owner`. |
 ```bash
 curl https://api.triton.one/v1/members/mem_def456 \
   -H "Authorization: Bearer $TRITON_API_TOKEN" \
@@ -117,12 +117,10 @@ For members in `status: invited` whose email got lost or expired (invites expire
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

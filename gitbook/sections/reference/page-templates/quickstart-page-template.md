@@ -37,12 +37,12 @@ The official Vixen Streams SDK ships in TypeScript and Python.
 {% tabs %}
 {% tab title="npm" %}
 ```bash
-    npm install @triton-one/vixen-stream
+npm install @triton-one/vixen-stream
 ```
 {% endtab %}
 {% tab title="pip" %}
 ```bash
-    pip install triton-vixen-stream
+pip install triton-vixen-stream
 ```
 {% endtab %}
 {% endtabs %}
@@ -56,37 +56,37 @@ Connect to your endpoint and subscribe to a single account. Replace `<endpoint>`
 {% tabs %}
 {% tab title="TypeScript" %}
 ```typescript
-    import {
-      ProgramStreamsServiceClient,
-      credentials,
-      createCallCredentials,
-    } from "@triton-one/vixen-stream";
+import {
+  ProgramStreamsServiceClient,
+  credentials,
+  createCallCredentials,
+} from "@triton-one/vixen-stream";
 
-    const client = new ProgramStreamsServiceClient(
-      "<endpoint>.mainnet.rpcpool.com:443",
-      credentials.combineChannelCredentials(
-        credentials.createSsl(),
-        createCallCredentials("<token>"),
-      ),
-    );
+const client = new ProgramStreamsServiceClient(
+  "<endpoint>.mainnet.rpcpool.com:443",
+  credentials.combineChannelCredentials(
+    credentials.createSsl(),
+    createCallCredentials("<token>"),
+  ),
+);
 
-    const stream = client.subscribe();
-    stream.write({
-      transactions: {
-        watch: { accountInclude: ["<pubkey>"], failed: false },
-      },
-    });
+const stream = client.subscribe();
+stream.write({
+  transactions: {
+    watch: { accountInclude: ["<pubkey>"], failed: false },
+  },
+});
 
-    stream.on("data", (msg) => console.log(JSON.stringify(msg, null, 2)));
+stream.on("data", (msg) => console.log(JSON.stringify(msg, null, 2)));
 ```
 {% endtab %}
 {% tab title="Python" %}
 ```python
-    from vixen_stream import StreamsServiceClient
+from vixen_stream import StreamsServiceClient
 
-    client = StreamsServiceClient("<endpoint>.mainnet.rpcpool.com:443", token="<token>")
-    for msg in client.subscribe(transactions={"watch": {"account_include": ["<pubkey>"]}}):
-        print(msg)
+client = StreamsServiceClient("<endpoint>.mainnet.rpcpool.com:443", token="<token>")
+for msg in client.subscribe(transactions={"watch": {"account_include": ["<pubkey>"]}}):
+    print(msg)
 ```
 {% endtab %}
 {% endtabs %}
@@ -102,7 +102,7 @@ node stream.ts
 # or:  python stream.py
 ```
 
-    Expected output (truncated):
+Expected output (truncated):
 
 ```json
 {
@@ -147,12 +147,10 @@ If you see no events at all, see the [streaming troubleshooting checklist](/sola
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

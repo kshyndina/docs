@@ -13,10 +13,10 @@ Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up), v
 
 Open the dashboard, click **Create endpoint**, and pick **Solana mainnet** (or devnet for testing). The portal returns two things you'll use everywhere:
 
-    - **Endpoint URL**: `<your-endpoint>.mainnet.rpcpool.com`
-    - **Secret token**: a long random string
+- **Endpoint URL**: `<your-endpoint>.mainnet.rpcpool.com`
+- **Secret token**: a long random string
 
-    Keep the token server-side only. Frontend code uses an origin allowlist instead. See [Auth and security](auth-and-security.md). Full walkthrough: [Set up your account](platform-overview.md).
+Keep the token server-side only. Frontend code uses an origin allowlist instead. See [Auth and security](auth-and-security.md). Full walkthrough: [Set up your account](platform-overview.md).
 {% endstep %}
 {% step %}
 #### Send your first request
@@ -26,55 +26,55 @@ Call `getSlot` to confirm the endpoint is live. Pick your stack:
 {% tabs %}
 {% tab title="curl" %}
 ```bash
-    curl https://<endpoint>.mainnet.rpcpool.com/<token> \
-      -H "Content-Type: application/json" \
-      -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}'
+curl https://<endpoint>.mainnet.rpcpool.com/<token> \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}'
 ```
 {% endtab %}
 {% tab title="Solana Kit" %}
 ```javascript
-    import { createSolanaRpc } from "@solana/kit";
+import { createSolanaRpc } from "@solana/kit";
 
-    const rpc = createSolanaRpc("https://<endpoint>.mainnet.rpcpool.com/<token>");
-    const slot = await rpc.getSlot().send();
-    console.log(slot);
+const rpc = createSolanaRpc("https://<endpoint>.mainnet.rpcpool.com/<token>");
+const slot = await rpc.getSlot().send();
+console.log(slot);
 ```
 {% endtab %}
 {% tab title="web3.js" %}
 ```javascript
-    import { Connection } from '@solana/web3.js';
+import { Connection } from '@solana/web3.js';
 
-    const conn = new Connection(
-      'https://<endpoint>.mainnet.rpcpool.com/<token>',
-      'confirmed'
-    );
-    console.log(await conn.getSlot());
+const conn = new Connection(
+  'https://<endpoint>.mainnet.rpcpool.com/<token>',
+  'confirmed'
+);
+console.log(await conn.getSlot());
 ```
 {% endtab %}
 {% tab title="python" %}
 ```python
-    import requests
+import requests
 
-    r = requests.post(
-        'https://<endpoint>.mainnet.rpcpool.com/<token>',
-        json={'jsonrpc': '2.0', 'id': 1, 'method': 'getSlot'},
-    )
-    print(r.json()['result'])
+r = requests.post(
+    'https://<endpoint>.mainnet.rpcpool.com/<token>',
+    json={'jsonrpc': '2.0', 'id': 1, 'method': 'getSlot'},
+)
+print(r.json()['result'])
 ```
 {% endtab %}
 {% tab title="rust" %}
 ```rust
-    use solana_client::rpc_client::RpcClient;
+use solana_client::rpc_client::RpcClient;
 
-    let client = RpcClient::new(
-        "https://<endpoint>.mainnet.rpcpool.com/<token>".to_string(),
-    );
-    println!("{}", client.get_slot()?);
+let client = RpcClient::new(
+    "https://<endpoint>.mainnet.rpcpool.com/<token>".to_string(),
+);
+println!("{}", client.get_slot()?);
 ```
 {% endtab %}
 {% endtabs %}
 
-    If you got back something like `{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }`, you're connected. If you hit a 401, 429, timeout, or gRPC 403, see the [Error handling guide](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/how-to-troubleshoot) for the full debug flow.
+If you got back something like `{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }`, you're connected. If you hit a 401, 429, timeout, or gRPC 403, see the [Error handling guide](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/how-to-troubleshoot) for the full debug flow.
 {% endstep %}
 {% endstepper %}
 
@@ -86,7 +86,7 @@ Two ways in. Pick the tab that fits.
 {% tab title="By product (I know what I want)" %}
 Each product is purpose-built for one job. Pick what you need.
 
-    ### Reading state
+### Reading state
 
 {% content-ref url="../reading-state/standard-rpc.md" %}
 [Standard RPC](../reading-state/standard-rpc.md)
@@ -104,7 +104,7 @@ Each product is purpose-built for one job. Pick what you need.
 [Account Sync](../reading-state/account-sync.md)
 {% endcontent-ref %}
 
-    ### Streaming
+### Streaming
 
 {% content-ref url="../streaming-data/dragon-s-mouth-grpc.md" %}
 [Dragon's Mouth gRPC](../streaming-data/dragon-s-mouth-grpc.md)
@@ -122,7 +122,7 @@ Each product is purpose-built for one job. Pick what you need.
 [Hermes](https://kate-6.gitbook.io/version-a-site-space-per-section/pyth/pyth/pyth-hermes)
 {% endcontent-ref %}
 
-    ### History
+### History
 
 {% content-ref url="../historical-data/hydrant-archive.md" %}
 [Hydrant](../historical-data/hydrant-archive.md)
@@ -132,7 +132,7 @@ Each product is purpose-built for one job. Pick what you need.
 [Old Faithful streams](../streaming-data/old-faithful-streams.md)
 {% endcontent-ref %}
 
-    ### Sending transactions
+### Sending transactions
 
 {% content-ref url="../sending-transactions/yellowstone-jet.md" %}
 [Yellowstone Jet](../sending-transactions/yellowstone-jet.md)
@@ -154,7 +154,7 @@ Each product is purpose-built for one job. Pick what you need.
 [Jito bundles](../sending-transactions/jito-bundles.md)
 {% endcontent-ref %}
 
-    ### Dedicated and validator services
+### Dedicated and validator services
 
 {% content-ref url="../dedicated-nodes/overview.md" %}
 [Dedicated gRPC node](../dedicated-nodes/overview.md)
@@ -201,12 +201,10 @@ Pick the kind of app you're building. Each card jumps to the matching setup guid
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

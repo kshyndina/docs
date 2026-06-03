@@ -54,10 +54,10 @@ Topping up, low-balance alerts, reading usage, and gRPC drawdown timing.
 
 Open your customer dashboard, go to **Billing**, and click **Buy credits**. You can pay in stablecoins via:
 
-    - **Wallet Connect.** Connect your wallet and pay with any supported token.
-    - **Transfer from anywhere.** Send stablecoins from any external wallet or exchange.
+- **Wallet Connect.** Connect your wallet and pay with any supported token.
+- **Transfer from anywhere.** Send stablecoins from any external wallet or exchange.
 
-    If you'd rather pay by card or wire, switch to invoiced billing.
+If you'd rather pay by card or wire, switch to invoiced billing.
 
 </details>
 
@@ -80,7 +80,7 @@ In your customer dashboard, open the **v3 Billing** tab. You'll see total reques
 
 gRPC streaming is metered when the connection closes. If you hold a stream open for several hours or a day, the full bandwidth charge is applied to your account once it disconnects.
 
-    Also, usage data refreshes every \~4 hours, so you can expect a lag between actual traffic and what's reflected in the dashboard.
+Also, usage data refreshes every \~4 hours, so you can expect a lag between actual traffic and what's reflected in the dashboard.
 
 </details>
 
@@ -93,12 +93,12 @@ Invoice cycles, accepted payment methods, and how to cancel.
 
 If you're on a pay-as-you-go plan, you can top up your account in the [customer dashboard](https://customers.triton.one) any time.
 
-    If you receive invoices, we send two kinds:
+If you receive invoices, we send two kinds:
 
-    - **Invoices for dedicated nodes and expected monthly use of shared RPC** are sent on the first day of each month as prepayment for the upcoming month's services.
-    - **Any overages** are invoiced early in the following month, covering the previous month's usage.
+- **Invoices for dedicated nodes and expected monthly use of shared RPC** are sent on the first day of each month as prepayment for the upcoming month's services.
+- **Any overages** are invoiced early in the following month, covering the previous month's usage.
 
-    We're working on getting both of these onto a single monthly invoice, but for right now, you could receive two.
+We're working on getting both of these onto a single monthly invoice, but for right now, you could receive two.
 
 </details>
 
@@ -134,12 +134,10 @@ For pay-as-you-go customers, you can just stop using the service. Your prepaid b
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

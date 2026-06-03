@@ -11,19 +11,19 @@ What is Yellowstone and which subscriptions include streaming access?
 
 Project Yellowstone is Triton's suite of high-performance tools and open-source frameworks designed to enhance RPC and data infrastructure for the Solana ecosystem.
 
-  It addresses critical infrastructure challenges: real-time data streaming, historical ledger access, ultra-low latency queries, and custom indexing.
+It addresses critical infrastructure challenges: real-time data streaming, historical ledger access, ultra-low latency queries, and custom indexing.
 
-  Key components:
+Key components:
 
-  | Tool | Description |
-  | --- | --- |
-  | Dragon's Mouth | Core gRPC streaming engine for Solana. Delivers raw real-time data directly from the validator with ultra-low latency using Protobuf. |
-  | Whirligig | WebSocket counterpart to Dragon's Mouth -- built for front-end or browser-based apps needing live account and transaction feeds. |
-  | Fumarole | Persistent streaming layer with automatic redundancy and 4-day caching. Ensures no data loss even if the connection drops. |
-  | Steamboat | Custom indexing engine that accelerates heavy gPA queries by up to 99%, cutting latency for large programs. |
-  | Old Faithful | Full-ledger archival service providing access to Solana's complete historical transaction data -- ideal for analytics, re-indexing, and backtesting. |
-  | Jet | A transaction submission software that lets you add Stake Weight to your transactions to route them through a priority lane during network congestion. |
-  | Shield | Anti-MEV protection layer integrated with Jet. Allows configurable allow- and block-lists to prevent sandwiching and other frontrunning behaviours. |
+| Tool | Description |
+| --- | --- |
+| Dragon's Mouth | Core gRPC streaming engine for Solana. Delivers raw real-time data directly from the validator with ultra-low latency using Protobuf. |
+| Whirligig | WebSocket counterpart to Dragon's Mouth -- built for front-end or browser-based apps needing live account and transaction feeds. |
+| Fumarole | Persistent streaming layer with automatic redundancy and 4-day caching. Ensures no data loss even if the connection drops. |
+| Steamboat | Custom indexing engine that accelerates heavy gPA queries by up to 99%, cutting latency for large programs. |
+| Old Faithful | Full-ledger archival service providing access to Solana's complete historical transaction data -- ideal for analytics, re-indexing, and backtesting. |
+| Jet | A transaction submission software that lets you add Stake Weight to your transactions to route them through a priority lane during network congestion. |
+| Shield | Anti-MEV protection layer integrated with Jet. Allows configurable allow- and block-lists to prevent sandwiching and other frontrunning behaviours. |
 
 </details>
 
@@ -50,7 +50,7 @@ The questions about streaming products built on Yellowstone.
 
 For shared plans, the current limit is ~150,000 account subscriptions per HTTP connection.
 
-    For dedicated nodes, there's no set limit. However, opening too many subscriptions for your servers to ingest can cause backpressure from your backend, leading to poor streaming performance. Please check that your server can handle the amount of data you are subscribing to.
+For dedicated nodes, there's no set limit. However, opening too many subscriptions for your servers to ingest can cause backpressure from your backend, leading to poor streaming performance. Please check that your server can handle the amount of data you are subscribing to.
 
 </details>
 
@@ -105,7 +105,7 @@ Geyser plugins can be enabled on our dedicated Solana nodes. They provide powerf
 
 Run our prebuilt `client-ubuntu` test client. It's a small Linux CLI we ship for exactly this purpose -- known-good code that hits your endpoint with the same gRPC subscription patterns your app does. If it errors, the issue is on the endpoint and we should look at it. If it streams cleanly, the issue is in your application code.
 
-    Full guide: [Verify your gRPC endpoint](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/verify-your-grpc-endpoint).
+Full guide: [Verify your gRPC endpoint](https://kate-6.gitbook.io/version-a-site-space-per-section/guides/error-handling/verify-your-grpc-endpoint).
 
 </details>
 
@@ -157,12 +157,10 @@ Sometimes. Some cloud providers (e.g. Cloudflare) close idle streams. If you see
 
 ---
 
- Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+---
 
- Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
-
- Sales questions? [Contact sales](https://triton.one/contact)
-
- AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)
-
- Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
+Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
+Sales questions? [Contact sales](https://triton.one/contact).  
+AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
+Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
