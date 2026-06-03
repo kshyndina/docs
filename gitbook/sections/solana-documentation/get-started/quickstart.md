@@ -96,7 +96,7 @@ Each product is purpose-built for one job. Pick what you need.
 
 ### History
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-clock-rotate-left">:clock-rotate-left:</i> <strong>Hydrant</strong></td><td>History with developer-shaped indexes. Millisecond reads from genesis across the full ledger.</td><td><a href="../historical-data/hydrant-archive.md">../historical-data/hydrant-archive.md</a></td></tr><tr><td><i class="fa-box-archive">:box-archive:</i> <strong>Old Faithful streams</strong></td><td>Replay every block from genesis through the same gRPC interface as live streams.</td><td><a href="../streaming-data/old-faithful-streams.md">../streaming-data/old-faithful-streams.md</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-clock-rotate-left">:clock-rotate-left:</i> <strong>Hydrant</strong></td><td>History with developer-shaped indexes. Millisecond reads from genesis across the full ledger.</td><td><a href="../historical-data/hydrant-archive.md">../historical-data/hydrant-archive.md</a></td></tr></tbody></table>
 
 ### Sending transactions
 

@@ -1,3 +1,0 @@
-# Available endpoints
-
-Coming soon.

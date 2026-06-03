@@ -1,4 +1,4 @@
-# Overview
+# Pythnet and Hermes
 
 What Triton's Pyth offering covers: Hermes price feeds, publisher infra, and Pythnet access.
 

@@ -7,7 +7,7 @@
 * [Quickstart](get-started/quickstart.md)
 * [Plans and billing](get-started/plans-and-billing.md)
 * [Rate and connection limits](get-started/rate-and-connection-limits.md)
-* [Available endpoints](get-started/available-endpoints.md)
+* [Endpoints and regions](get-started/endpoints-and-regions.md)
 * [Auth and security](get-started/auth-and-security.md)
 * [Platform overview](get-started/platform-overview.md)
 
@@ -19,10 +19,8 @@
 * [Deshred transactions](streaming-data/deshred-transactions.md)
 * [Whirligig WebSockets](streaming-data/whirligig-websockets.md)
 * [Fumarole persistent streams](streaming-data/fumarole-persistent-streams.md)
-* [Old Faithful streams](streaming-data/old-faithful-streams.md)
 * [Best practices](streaming-data/best-practices.md)
-* [Pythnet](streaming-data/pythnet.md)
-* [Hermes (price feeds)](streaming-data/hermes-price-feeds.md)
+* [Pythnet and Hermes](streaming-data/pythnet-and-hermes.md)
 
 ## Reading state
 
@@ -45,12 +43,12 @@
 * [Overview](sending-transactions/overview.md)
 * [Quickstart](sending-transactions/quickstart.md)
 * [Yellowstone Jet](sending-transactions/yellowstone-jet.md)
+* [Shield MEV protection](sending-transactions/shield-mev-protection.md)
 * [Priority fees API](sending-transactions/priority-fees-api.md)
 * [3rd party APIs](sending-transactions/3rd-party-apis/README.md)
   * [Metis swap API](sending-transactions/3rd-party-apis/metis-swap-api.md)
   * [Titan swap API](sending-transactions/3rd-party-apis/titan-swap-api.md)
   * [Jito bundles](sending-transactions/3rd-party-apis/jito-bundles.md)
-* [Shield MEV protection](sending-transactions/shield-mev-protection.md)
 * [Best practices](sending-transactions/best-practices.md)
 
 ## Agents / MCP

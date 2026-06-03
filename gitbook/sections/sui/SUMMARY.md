@@ -2,11 +2,6 @@
 
 * [Overview](README.md)
 
-## SUI
-
-* [Quickstart](sui/quickstart.md)
-* [Walrus](sui/walrus.md)
-* [Seal](sui/seal.md)
-* [API reference](sui/api-reference/README.md)
-  * [Method placeholder](sui/api-reference/method-placeholder.md)
-* [FAQs](sui/faqs.md)
+* [Walrus](walrus.md)
+* [Seal](seal.md)
+* [FAQs](faqs.md)

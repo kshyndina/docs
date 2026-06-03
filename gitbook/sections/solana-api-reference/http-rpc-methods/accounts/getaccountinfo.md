@@ -1,8 +1,10 @@
-# Quickstart
+# getAccountInfo
 
-Connect to Triton's Monad RPC and send your first request.
+Solana JSON-RPC method `getAccountInfo` for account state. Parameters, response, and live playground.
 
-Wireframe placeholder. Content will be added in a later pass.
+{% hint style="info" %}
+**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
+{% endhint %}
 
 <hr>
 

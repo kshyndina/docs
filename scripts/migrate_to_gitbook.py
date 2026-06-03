@@ -39,10 +39,11 @@ def fa_icon(name):
     return f'<i class="fa-{fa}">:{fa}:</i>'
 
 # pages removed from nav -> drop any card/link that targets them (avoid broken links)
-REMOVED_REFS = ("standard-rpc", "zk-compression-photon")
+REMOVED_REFS = ("standard-rpc", "zk-compression-photon", "old-faithful-streams")
 # page-title overrides
 TITLE_OVERRIDE = {
     "solana-guides/getting-started/set-up-rpc/trading-or-market-making": "Trading and market making",
+    "pyth/overview": "Pythnet and Hermes",
 }
 
 # Footer: pure HTML so inline icons AND links both render (mixing inline <i>
@@ -351,7 +352,8 @@ def stack_to_tabs(text, ctx):
             href, txt = lm.group(1), lm.group(2).strip()
             if any(href.split("#")[0].rstrip("/").endswith(r) for r in REMOVED_REFS):
                 continue
-            out.append(f"\x02CARD\x02{txt}\x02\x02{resolve_link(href, ctx)}\x02\x02\n")
+            icon = PAGE_ICON.get(href.strip("/").split("#")[0], "")
+            out.append(f"\x02CARD\x02{txt}\x02\x02{resolve_link(href, ctx)}\x02{icon}\x02\n")
         out.append("{% endtab %}")
     out.append("{% endtabs %}\n")
     return text[:s] + "\n".join(out) + text[e:]
@@ -729,7 +731,7 @@ def emit_section(sec):
     find_first(sec["children"])
     fnode = first[0]
     # Guides keeps its first page in-group; use a generated landing instead
-    if key == "solana-guides":
+    if key in ("solana-guides", "solana-api-reference"):
         fnode = None
     if fnode:
         landing_title = fnode["title"]
@@ -738,6 +740,11 @@ def emit_section(sec):
     elif key == "solana-guides":
         landing_title = "Solana guides"
         landing = "# Solana guides\n\nGuides and tutorials for building on Triton.\n"
+        skip = None
+    elif key == "solana-api-reference":
+        landing_title = "API overview"
+        landing = ("# API overview\n\nReference for Triton's Solana HTTP RPC, "
+                   "Whirligig WebSocket, Yellowstone gRPC, and DAS API methods.\n")
         skip = None
     else:
         landing_title = sec["title"]
@@ -767,6 +774,9 @@ def emit_section(sec):
             else:
                 if n.get("ref"):
                     content = render_page(n["ref"], ctx, n["title"])
+                    for cref in n.get("combine", []):
+                        extra = render_page(cref, ctx, "").replace("# ", "## ", 1)
+                        content += "\n\n" + extra
                 else:
                     content = f"# {n['title']}\n\n{n.get('body', '')}\n"
                 write_file(base, n["file"], content)
@@ -786,15 +796,17 @@ def copy_images():
             shutil.copy2(srcp, os.path.join(dstdir, fn))
 
 def inject_pyth_into_streaming(sections):
-    """Per Kate: drop Pyth as a chain; surface Pythnet + Hermes inside Solana's
-    Streaming data group instead."""
-    add = [{"kind": "leaf", "title": "Pythnet", "ref": "pyth/overview", "children": []},
-           {"kind": "leaf", "title": "Hermes (price feeds)", "ref": "pyth/pyth-hermes", "children": []}]
+    """Per Kate: drop Pyth as a chain; surface Pythnet + Hermes as ONE page
+    inside Solana's Streaming data group."""
+    page = {"kind": "leaf", "title": "Pythnet and Hermes", "ref": "pyth/overview",
+            "combine": ["pyth/pyth-hermes"], "children": []}
     for s in sections:
         if s["key"] == "solana-documentation":
             for n in s["children"]:
                 if n["title"] == "Streaming data":
-                    n["children"].extend(add)
+                    n["children"] = [c for c in n["children"]
+                                     if not _ends(c, "old-faithful-streams")]
+                    n["children"].append(page)
 
 def fix_guides(sections):
     """Kate's Guides changes: rename groups, add a 'How to build a...' group."""
@@ -818,6 +830,21 @@ def fix_guides(sections):
 def _ends(n, *suffixes):
     return (n.get("ref") or "").endswith(suffixes)
 
+def _flatten_chain(s):
+    """Sui/Monad: keep overview first, drop quickstart + API reference, flatten."""
+    flat = []
+    for n in s["children"]:
+        kids = n["children"] if n["kind"] == "group" else [n]
+        for k in kids:
+            if k.get("title") == "API reference" or _ends(k, "quickstart"):
+                continue
+            if k["kind"] == "group" and k["title"] == "API reference":
+                continue
+            flat.append(k)
+    # overview first
+    flat.sort(key=lambda k: 0 if _ends(k, "overview") else 1)
+    s["children"] = flat
+
 def apply_kate_edits(sections):
     for s in sections:
         if s["key"] == "solana-documentation":
@@ -825,7 +852,7 @@ def apply_kate_edits(sections):
                 if g["title"] == "Get started":
                     kids = g["children"]
                     idx = next((i for i, n in enumerate(kids) if _ends(n, "auth-and-security")), len(kids))
-                    kids.insert(idx, {"kind": "leaf", "title": "Available endpoints",
+                    kids.insert(idx, {"kind": "leaf", "title": "Endpoints and regions",
                                       "ref": None, "children": [], "body": "Coming soon."})
                 elif g["title"] == "Reading state":
                     g["children"] = [n for n in g["children"]
@@ -834,16 +861,26 @@ def apply_kate_edits(sections):
                     move = [n for n in g["children"]
                             if _ends(n, "metis-swap-api", "titan-swap-api", "jito-bundles")]
                     g["children"] = [n for n in g["children"] if n not in move]
+                    # move Shield MEV protection right after Yellowstone Jet
+                    shield = next((n for n in g["children"] if _ends(n, "shield-mev-protection")), None)
+                    if shield:
+                        g["children"].remove(shield)
+                        ji = next((i for i, n in enumerate(g["children"]) if _ends(n, "jet-sender")),
+                                  len(g["children"]) - 1)
+                        g["children"].insert(ji + 1, shield)
                     sub = {"kind": "group", "title": "3rd party APIs", "ref": None, "children": move}
                     idx = next((i for i, n in enumerate(g["children"]) if _ends(n, "priority-fees-api")),
                                len(g["children"]) - 1)
                     g["children"].insert(idx + 1, sub)
         elif s["key"] == "solana-api-reference":
             s["children"] = [g for g in s["children"] if g["title"] != "Overview and auth"]
+        elif s["key"] in ("sui", "monad"):
+            _flatten_chain(s)
 
 def main():
     global LINKMAP
     docs = json.load(open(os.path.join(ROOT, "docs.json")))
+    scan_icons()
     sections = build_sections(docs)
     inject_pyth_into_streaming(sections)
     fix_guides(sections)

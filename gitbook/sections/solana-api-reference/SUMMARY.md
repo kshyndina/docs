@@ -1,10 +1,11 @@
 # Table of contents
 
-* [getAccountInfo](README.md)
+* [API overview](README.md)
 
 ## HTTP RPC methods
 
 * [Accounts](http-rpc-methods/accounts/README.md)
+  * [getAccountInfo](http-rpc-methods/accounts/getaccountinfo.md)
   * [getBalance](http-rpc-methods/accounts/getbalance.md)
   * [getMultipleAccounts](http-rpc-methods/accounts/getmultipleaccounts.md)
   * [getProgramAccounts](http-rpc-methods/accounts/getprogramaccounts.md)
