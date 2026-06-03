@@ -20,6 +20,8 @@
 * [Fumarole persistent streams](streaming-data/fumarole-persistent-streams.md)
 * [Old Faithful streams](streaming-data/old-faithful-streams.md)
 * [Best practices](streaming-data/best-practices.md)
+* [Pythnet](streaming-data/pythnet.md)
+* [Hermes (price feeds)](streaming-data/hermes-price-feeds.md)
 
 ## Reading state
 

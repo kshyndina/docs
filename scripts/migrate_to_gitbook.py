@@ -610,10 +610,22 @@ def copy_images():
         if os.path.exists(srcp):
             shutil.copy2(srcp, os.path.join(dstdir, fn))
 
+def inject_pyth_into_streaming(sections):
+    """Per Kate: drop Pyth as a chain; surface Pythnet + Hermes inside Solana's
+    Streaming data group instead."""
+    add = [{"kind": "leaf", "title": "Pythnet", "ref": "pyth/overview", "children": []},
+           {"kind": "leaf", "title": "Hermes (price feeds)", "ref": "pyth/pyth-hermes", "children": []}]
+    for s in sections:
+        if s["key"] == "solana-documentation":
+            for n in s["children"]:
+                if n["title"] == "Streaming data":
+                    n["children"].extend(add)
+
 def main():
     global LINKMAP
     docs = json.load(open(os.path.join(ROOT, "docs.json")))
     sections = build_sections(docs)
+    inject_pyth_into_streaming(sections)
     for s in sections:
         assign_paths(s["children"], "", True)
     LINKMAP = build_linkmap(sections)
