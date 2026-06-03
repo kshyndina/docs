@@ -1,0 +1,7 @@
+# Best practices
+
+Sizing, region selection, monitoring, and tuning patterns for production traffic on a Triton dedicated node.
+
+{% hint style="info" %}
+**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
+{% endhint %}
