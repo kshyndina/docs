@@ -37,7 +37,7 @@
   * [Sending transactions](solana/documentation/sending-transactions/README.md)
     * [Overview](solana/documentation/sending-transactions/overview.md)
     * [Quickstart](solana/documentation/sending-transactions/quickstart.md)
-    * [Yellowstone Jet](solana/documentation/sending-transactions/yellowstone-jet.md)
+    * [Jet sender](solana/documentation/sending-transactions/jet-sender.md)
     * [Priority fees API](solana/documentation/sending-transactions/priority-fees-api.md)
     * [Metis swap API](solana/documentation/sending-transactions/metis-swap-api.md)
     * [Titan swap API](solana/documentation/sending-transactions/titan-swap-api.md)
@@ -69,7 +69,7 @@
     * [Rate tiers](solana/documentation/account-management-api/rate-tiers.md)
 * [Guides](solana/guides/README.md)
   * [Set up your RPC for...](solana/guides/set-up-your-rpc-for/README.md)
-    * [Trading and market making with Triton](solana/guides/set-up-your-rpc-for/trading-and-market-making-with-triton.md)
+    * [Trading and market making](solana/guides/set-up-your-rpc-for/trading-and-market-making.md)
     * [DEX or DeFi protocol](solana/guides/set-up-your-rpc-for/dex-or-defi-protocol.md)
     * [Wallet or consumer app](solana/guides/set-up-your-rpc-for/wallet-or-consumer-app.md)
     * [NFT or compressed-asset platform](solana/guides/set-up-your-rpc-for/nft-or-compressed-asset-platform.md)
@@ -217,7 +217,7 @@
 ## Pythnet
 
 * [Pyth](pythnet/pyth/README.md)
-  * [Overview](pythnet/pyth/overview.md)
+  * [Pythnet and Hermes](pythnet/pyth/pythnet-and-hermes.md)
   * [Quickstart](pythnet/pyth/quickstart.md)
   * [Pyth Hermes](pythnet/pyth/pyth-hermes.md)
   * [Publisher setup (NGINX proxy)](pythnet/pyth/publisher-setup-nginx-proxy.md)

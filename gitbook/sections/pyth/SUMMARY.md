@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Overview](README.md)
+* [Pythnet and Hermes](README.md)
 
 ## Pyth
 

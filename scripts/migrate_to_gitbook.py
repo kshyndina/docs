@@ -44,6 +44,7 @@ REMOVED_REFS = ("standard-rpc", "zk-compression-photon", "old-faithful-streams")
 TITLE_OVERRIDE = {
     "solana-guides/getting-started/set-up-rpc/trading-or-market-making": "Trading and market making",
     "pyth/overview": "Pythnet and Hermes",
+    "solana/sending-transactions/jet-sender": "Jet sender",
 }
 
 # Footer: pure HTML so inline icons AND links both render (mixing inline <i>
@@ -121,6 +122,9 @@ def frontmatter(text):
 # nav model: build sections with assigned md paths + global link map
 # ---------------------------------------------------------------------------
 def title_of(ref):
+    o = TITLE_OVERRIDE.get((ref or "").strip("/"))
+    if o:
+        return o
     p = src_path(ref)
     if p:
         meta, _ = frontmatter(read(p))
@@ -154,6 +158,8 @@ def build_sections(docs):
     secs = []
     for dd in docs["navigation"]["dropdowns"]:
         name = dd.get("dropdown")
+        if name == "Reference":
+            continue                      # internal page templates - not published
         if dd.get("tabs"):
             for t in dd["tabs"]:
                 secs.append({"key": slugify(f"{name}-{t.get('tab')}"),

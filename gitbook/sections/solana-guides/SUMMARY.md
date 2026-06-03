@@ -4,7 +4,7 @@
 
 ## Quickstart on Triton
 
-* [Trading and market making with Triton](quickstart-on-triton/trading-and-market-making-with-triton.md)
+* [Trading and market making](quickstart-on-triton/trading-and-market-making.md)
 * [DEX or DeFi protocol](quickstart-on-triton/dex-or-defi-protocol.md)
 * [Wallet or consumer app](quickstart-on-triton/wallet-or-consumer-app.md)
 * [NFT or compressed-asset platform](quickstart-on-triton/nft-or-compressed-asset-platform.md)

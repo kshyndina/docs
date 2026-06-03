@@ -42,7 +42,7 @@
 
 * [Overview](sending-transactions/overview.md)
 * [Quickstart](sending-transactions/quickstart.md)
-* [Yellowstone Jet](sending-transactions/yellowstone-jet.md)
+* [Jet sender](sending-transactions/jet-sender.md)
 * [Shield MEV protection](sending-transactions/shield-mev-protection.md)
 * [Priority fees API](sending-transactions/priority-fees-api.md)
 * [3rd party APIs](sending-transactions/3rd-party-apis/README.md)
