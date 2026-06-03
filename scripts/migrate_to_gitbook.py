@@ -38,18 +38,22 @@ def fa_icon(name):
     fa = FA_MAP.get(name, name)
     return f'<i class="fa-{fa}">:{fa}:</i>'
 
-# Footer with monochrome GitBook (Font Awesome) icons. Hard breaks keep it tight.
+# Footer: pure HTML so inline icons AND links both render (mixing inline <i>
+# with markdown links makes GitBook treat the block as HTML and leave the
+# markdown link syntax literal, so everything must be HTML here).
 FOOTER_MD = (
-    "\n---\n\n"
-    + fa_icon("life-buoy") + " Need help? Contact support by clicking the chat icon in the "
-    "bottom right of your [customer dashboard](https://customers.triton.one)  \n"
-    + fa_icon("gear") + " Manage endpoints, billing, team: "
-    "[Customer portal](https://customers.triton.one)  \n"
-    + fa_icon("briefcase") + " Sales questions? [Contact sales](https://triton.one/contact)  \n"
-    + fa_icon("sparkles") + " AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  \n"
-    + fa_icon("rss") + " Follow updates: [Blog](https://blog.triton.one) · "
-    "[X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · "
-    "[Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)\n"
+    "\n<hr>\n\n<p>"
+    + fa_icon("life-buoy") + ' Need help? Contact support by clicking the chat icon in the '
+    'bottom right of your <a href="https://customers.triton.one">customer dashboard</a><br>'
+    + fa_icon("gear") + ' Manage endpoints, billing, team: '
+    '<a href="https://customers.triton.one">Customer portal</a><br>'
+    + fa_icon("briefcase") + ' Sales questions? <a href="https://triton.one/contact">Contact sales</a><br>'
+    + fa_icon("sparkles") + ' AI agent? <a href="https://docs.triton.one/llms.txt">Read llms.txt</a><br>'
+    + fa_icon("rss") + ' Follow updates: <a href="https://blog.triton.one">Blog</a> · '
+    '<a href="https://x.com/triton_one">X</a> · '
+    '<a href="https://www.youtube.com/@triton_one_ltd">YouTube</a> · '
+    '<a href="https://t.me/tritonone">Telegram</a> · '
+    '<a href="https://github.com/rpcpool">GitHub</a></p>\n'
 )
 
 # Customer logo marquee is removed entirely (Kate's request).
