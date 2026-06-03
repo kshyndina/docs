@@ -37,7 +37,19 @@ By the end of this guide you'll have a Node.js script that:
 
 > Optional but high-impact for guides that touch 2+ products. A simple mermaid sequence or flowchart frames the rest of the page. Use the Triton mermaid theme directive (see kate-all-elements > Mermaid).
 
-![Diagram](../diagrams/e7eeac6be86f.svg)
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7'}}}%%
+sequenceDiagram
+    participant Bot
+    participant Dragon as Dragon's Mouth
+    participant Jet as Yellowstone Jet
+    participant Net as Solana network
+    Net->>Dragon: target wallet's tx
+    Dragon-->>Bot: instruction stream
+    Bot->>Jet: forward copy tx (SWQoS)
+    Jet->>Net: leader-direct via QUIC
+    Net-->>Bot: signature + status
+```
 
 ## Step 1: Subscribe to the target wallet
 

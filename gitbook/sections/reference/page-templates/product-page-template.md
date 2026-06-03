@@ -53,7 +53,15 @@ Under the hood: Steamboat ingests the same Geyser-backed gRPC stream that powers
 
 > Mermaid diagram + 1 paragraph. Show the data flow at a level a senior dev can absorb in 10 seconds. Use the Triton mermaid theme (see kate-all-elements > Mermaid).
 
-![Diagram](../diagrams/e98662e42569.svg)
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','tertiaryColor':'#D7C9E3'}}}%%
+flowchart LR
+    A[Validator Geyser] --> B[gRPC stream]
+    B --> C[Steamboat indexer]
+    C --> D[(Secondary indexes)]
+    D --> E[REST + gRPC reads]
+    E --> F[Your app]
+```
 
 Solana's validator emits every account write to a Geyser plugin, which Triton already ingests for Dragon's Mouth. Steamboat consumes that same stream, applies the filters you registered (program, discriminator, owner-index, custom byte slice), and writes the resulting key/value pairs into a per-tenant LSM-tree. Reads come straight off the index — the latest snapshot is always one disk seek away.
 

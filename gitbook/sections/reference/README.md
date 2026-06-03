@@ -45,7 +45,19 @@ The right product depends on the access pattern: one-off lookups vs scans, reads
 
 > Optional architecture diagram. Use when it actually clarifies — skip if it's just a label-shuffle.
 
-![Diagram](diagrams/b1aa0ff7e84f.svg)
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','tertiaryColor':'#D7C9E3'}}}%%
+flowchart LR
+    Validator[Validator Geyser] --> Stream[gRPC stream]
+    Stream --> Steamboat
+    Stream --> Sync[Account Sync]
+    Validator --> Std[Standard RPC]
+    Validator --> DAS[DAS API]
+    YourApp[Your app] --> Std
+    YourApp --> Steamboat
+    YourApp --> DAS
+    YourApp --> Sync
+```
 
 > One paragraph explaining what the diagram shows. The diagram is the visual; the paragraph is the read.
 

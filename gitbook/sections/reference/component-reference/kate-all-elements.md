@@ -234,9 +234,31 @@ To see them in action: open [getSlot](https://kate-6.gitbook.io/triton-one-docs/
 
 Mintlify's default Mermaid theme uses generic blues/greys. To match Triton brand purple, prefix every mermaid block with the `init` directive shown below. The colours pull from the Triton palette (purple-50 / purple-200 / purple-600 / purple-800).
 
-![Diagram](../diagrams/0a850c3cbc2f.svg)
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7'}}}%%
+sequenceDiagram
+    participant Client
+    participant Edge as Edge router
+    participant Jet as Jet sender
+    participant Validator
+    Client->>Edge: sendTransaction
+    Edge->>Jet: route via SWQoS
+    Jet->>Validator: forward to leader
+    Validator-->>Jet: confirmation
+    Jet-->>Edge: result
+    Edge-->>Client: signature + status
+```
 
-![Diagram](../diagrams/29a22007bbd5.svg)
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'}}}%%
+flowchart LR
+    A[Client app] --> B{Triton edge}
+    B -->|HTTP RPC| C[Solana RPC pool]
+    B -->|WebSocket| D[Whirligig]
+    B -->|gRPC| E[Yellowstone]
+    E --> F[Geyser stream]
+    D --> F
+```
 
 ### Badge
 

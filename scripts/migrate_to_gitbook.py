@@ -621,7 +621,6 @@ def render_page(ref, ctx, fallback_title):
     body = merge_param_tables(body)
     body = merge_card_tables(body)
     body = dedent_fences(body)
-    body = render_mermaid(body, ctx)
     body = normalize_blocks(body)
     body = rewrite_images(body, ctx)
     body = rewrite_links(body, ctx)
