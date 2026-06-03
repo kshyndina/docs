@@ -194,22 +194,3 @@ If you see this error, please double check that you have included the parameters
 For a higher level API with better filtering functions, you can also use the Digital Assets API. This API supports both traditional tokens as well as compressed NFTs within the same interface, allowing you to query the full set of tokens owned by a user.
 
 [Read more about the Digital Assets API](/digital-assets-api/introduction.md).
-
-
----
-
-# Agent Instructions: Querying This Documentation
-
-If you need additional information that is not directly available in this page, you can query the documentation dynamically by asking a question.
-
-Perform an HTTP GET request on the current page URL with the `ask` query parameter:
-
-```
-GET https://docs.triton.one/chains/solana/token-program.md?ask=<question>
-```
-
-The question should be specific, self-contained, and written in natural language.
-The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
-
-Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.
-

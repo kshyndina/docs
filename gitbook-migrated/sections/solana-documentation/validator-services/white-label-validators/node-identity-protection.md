@@ -13,22 +13,3 @@ One of our node operators will then authenticate with our secured, encrypted sec
 This ensures that the node identity is never stored in an unencrypted form anywhere. It is also never transferred anywhere between the validator node and our encrypted storage. This transit of the node key happens over an entirely authenticated and encrypted stream.
 
 Without access to the validator memory space, you would be unable to retrieve the node identity, and there is no durable storage of the identity on the node itself.
-
-
----
-
-# Agent Instructions: Querying This Documentation
-
-If you need additional information that is not directly available in this page, you can query the documentation dynamically by asking a question.
-
-Perform an HTTP GET request on the current page URL with the `ask` query parameter:
-
-```
-GET https://docs.triton.one/validators/node-identity-protection.md?ask=<question>
-```
-
-The question should be specific, self-contained, and written in natural language.
-The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
-
-Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.
-

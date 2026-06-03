@@ -133,6 +133,10 @@ for (key, fp), old_path in mapped.items():
         continue
     title = next((t for t, k, f, _ in new_pages if k == key and f == fp), None)
     md = re.sub(r"^---\n.*?\n---\n", "", md, count=1, flags=re.S)  # strip YAML frontmatter
+    # strip docs.triton.one's trailing "Agent Instructions" llms appendix
+    md = re.split(r"\n-{3,}\s*\n#+\s+Agent Instructions", md)[0]
+    md = re.split(r"\n#+\s+Agent Instructions: Querying This Documentation", md)[0]
+    md = md.rstrip().rstrip("-").rstrip()  # drop dangling --- separator
     body = re.sub(r"^#\s+.*\n", "", md, count=1).lstrip()    # drop old H1
     out = f"# {title}\n\n{body}\n" if title else md
     with open(os.path.join(OUT, key, fp), "w", encoding="utf-8") as f:

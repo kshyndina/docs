@@ -36,22 +36,3 @@ $ solana create-vote-account ~/vote-account-keypair.json <pubkey for node identi
 For more documentation about vote account management, we strongly encourage you to read through the documents on Solana's website here:
 
 {% embed url="<https://docs.solana.com/running-validator/vote-accounts>" %}
-
-
----
-
-# Agent Instructions: Querying This Documentation
-
-If you need additional information that is not directly available in this page, you can query the documentation dynamically by asking a question.
-
-Perform an HTTP GET request on the current page URL with the `ask` query parameter:
-
-```
-GET https://docs.triton.one/validators/vote-account-setup.md?ask=<question>
-```
-
-The question should be specific, self-contained, and written in natural language.
-The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
-
-Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.
-

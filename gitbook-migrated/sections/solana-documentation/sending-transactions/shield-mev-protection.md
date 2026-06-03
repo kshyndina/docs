@@ -263,22 +263,3 @@ const signature = result.result;
 * **Policy Explorer**: [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield?locale=en\&network=mainnet)
 * **Blog Post**: [Introducing Yellowstone Shield](https://blog.triton.one/introducing-yellowstone-shield)
 * **Rust Crate**: [yellowstone-shield-store](https://crates.io/crates/yellowstone-shield-store)
-
-
----
-
-# Agent Instructions: Querying This Documentation
-
-If you need additional information that is not directly available in this page, you can query the documentation dynamically by asking a question.
-
-Perform an HTTP GET request on the current page URL with the `ask` query parameter:
-
-```
-GET https://docs.triton.one/project-yellowstone/shield-transaction-policies.md?ask=<question>
-```
-
-The question should be specific, self-contained, and written in natural language.
-The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
-
-Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.
-
