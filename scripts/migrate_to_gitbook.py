@@ -47,6 +47,9 @@ TITLE_OVERRIDE = {
     "solana/sending-transactions/jet-sender": "Jet sender",
 }
 
+# global text renames applied to every page (catches card titles, prose, etc.)
+RENAMES = {"Yellowstone Jet": "Jet sender"}
+
 # The footer now lives in GitBook's site-footer customization (link groups), so
 # external links render WITHOUT the ↗ arrow (the same reason header links don't).
 # The inline content footer is therefore removed.
@@ -702,7 +705,10 @@ def render_page(ref, ctx, fallback_title):
     head = f"# {title}\n"
     if desc:
         head += f"\n{desc}\n"
-    return head + "\n" + body + "\n"
+    out = head + "\n" + body + "\n"
+    for old, new in RENAMES.items():
+        out = out.replace(old, new)
+    return out
 
 # ---------------------------------------------------------------------------
 # emit section

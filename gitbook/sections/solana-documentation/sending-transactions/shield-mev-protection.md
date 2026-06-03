@@ -32,7 +32,7 @@ Shield helps you avoid these validators by simply not sending your transactions 
 {% endhint %}
 
 {% hint style="info" %}
-Shield only works with Shield-enabled RPCs (like those using [Yellowstone Jet](jet-sender.md)). Standard Solana RPCs ignore the policy parameter.
+Shield only works with Shield-enabled RPCs (like those using [Jet sender](jet-sender.md)). Standard Solana RPCs ignore the policy parameter.
 {% endhint %}
 
 ## Quickstart
@@ -240,7 +240,7 @@ yellowstone-shield-cli policy show --mint <mint_address>
 
 If you're running your own RPC and want to support Shield:
 
-- **Using Yellowstone Jet** -- Shield support is built in.
+- **Using Jet sender** -- Shield support is built in.
 - **Custom integration** -- use the [yellowstone-shield-store](https://crates.io/crates/yellowstone-shield-store) crate to cache policies locally, check validators against policies, and integrate with your transaction forwarding logic.
 
 ## Key points
@@ -249,8 +249,8 @@ If you're running your own RPC and want to support Shield:
 2. **It's a filter, not a guarantee.** Shield prevents transactions from going to certain validators -- it doesn't guarantee protection from sandwich attacks or transaction failures.
 3. **Token = control.** When you create a policy, you get an SPL token. Anyone with this token can manage the policy. You can mint more tokens to share control.
 4. **Anyone can use your policy.** Once created, anyone who knows the policy address can use it in their transactions.
-5. **Shield-enabled RPC required.** Only Shield-enabled RPCs (like those using Yellowstone Jet) honour the `forwardingPolicies` parameter.
+5. **Shield-enabled RPC required.** Only Shield-enabled RPCs (like those using Jet sender) honour the `forwardingPolicies` parameter.
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Yellowstone Jet</strong></td><td>Direct-to-leader forwarding over QUIC with leader scheduling, connection pooling, and retries built in.</td><td><a href="jet-sender.md">jet-sender.md</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority Fees API</strong></td><td>Smart fee estimation with tail-aware percentiles. Reliable landing without overpaying.</td><td><a href="priority-fees-api.md">priority-fees-api.md</a></td></tr><tr><td><i class="fa-box">:box:</i> <strong>Jito bundles</strong></td><td>Jito bundle simulation through Triton endpoints. Test bundle ordering before submitting.</td><td><a href="3rd-party-apis/jito-bundles.md">3rd-party-apis/jito-bundles.md</a></td></tr><tr><td><i class="fa-book-open">:book-open:</i> <strong>Yellowstone Shield blog post</strong></td><td>The full architecture and design rationale behind Shield's allow/blocklist model.</td><td><a href="https://blog.triton.one/introducing-yellowstone-shield">https://blog.triton.one/introducing-yellowstone-shield</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet sender</strong></td><td>Direct-to-leader forwarding over QUIC with leader scheduling, connection pooling, and retries built in.</td><td><a href="jet-sender.md">jet-sender.md</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority Fees API</strong></td><td>Smart fee estimation with tail-aware percentiles. Reliable landing without overpaying.</td><td><a href="priority-fees-api.md">priority-fees-api.md</a></td></tr><tr><td><i class="fa-box">:box:</i> <strong>Jito bundles</strong></td><td>Jito bundle simulation through Triton endpoints. Test bundle ordering before submitting.</td><td><a href="3rd-party-apis/jito-bundles.md">3rd-party-apis/jito-bundles.md</a></td></tr><tr><td><i class="fa-book-open">:book-open:</i> <strong>Yellowstone Shield blog post</strong></td><td>The full architecture and design rationale behind Shield's allow/blocklist model.</td><td><a href="https://blog.triton.one/introducing-yellowstone-shield">https://blog.triton.one/introducing-yellowstone-shield</a></td></tr></tbody></table>
