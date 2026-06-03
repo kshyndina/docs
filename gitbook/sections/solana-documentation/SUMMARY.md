@@ -8,7 +8,8 @@
 * [Plans and billing](get-started/plans-and-billing.md)
 * [Rate and connection limits](get-started/rate-and-connection-limits.md)
 * [Endpoints and regions](get-started/endpoints-and-regions.md)
-* [Auth and security](get-started/auth-and-security.md)
+* [Authentication](get-started/authentication.md)
+* [Privacy and security](get-started/privacy-and-security.md)
 * [Platform overview](get-started/platform-overview.md)
 
 ## Streaming data

@@ -49,6 +49,7 @@ TITLE_OVERRIDE = {
 
 # global text renames applied to every page (catches card titles, prose, etc.)
 RENAMES = {"Yellowstone Jet": "Jet sender"}
+TITLE_OVERRIDE["solana/get-started/auth-and-security"] = "Authentication"
 
 # The footer now lives in GitBook's site-footer customization (link groups), so
 # external links render WITHOUT the ↗ arrow (the same reason header links don't).
@@ -858,6 +859,13 @@ def apply_kate_edits(sections):
                     idx = next((i for i, n in enumerate(kids) if _ends(n, "auth-and-security")), len(kids))
                     kids.insert(idx, {"kind": "leaf", "title": "Endpoints and regions",
                                       "ref": None, "children": [], "body": "Coming soon."})
+                    # split Auth and security -> Authentication + Privacy and security
+                    auth = next((n for n in kids if _ends(n, "auth-and-security")), None)
+                    if auth:
+                        auth["title"] = "Authentication"
+                        ai = kids.index(auth)
+                        kids.insert(ai + 1, {"kind": "leaf", "title": "Privacy and security",
+                                             "ref": None, "children": [], "body": "Coming soon."})
                 elif g["title"] == "Reading state":
                     g["children"] = [n for n in g["children"]
                                      if not _ends(n, "standard-rpc", "zk-compression-photon")]

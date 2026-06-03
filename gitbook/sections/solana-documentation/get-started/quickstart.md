@@ -16,7 +16,7 @@ Open the dashboard, click **Create endpoint**, and pick **Solana mainnet** (or d
 - **Endpoint URL**: `<your-endpoint>.mainnet.rpcpool.com`
 - **Secret token**: a long random string
 
-Keep the token server-side only. Frontend code uses an origin allowlist instead. See [Auth and security](auth-and-security.md). Full walkthrough: [Set up your account](platform-overview.md).
+Keep the token server-side only. Frontend code uses an origin allowlist instead. See [Auth and security](authentication.md). Full walkthrough: [Set up your account](platform-overview.md).
 {% endstep %}
 {% step %}
 #### Send your first request

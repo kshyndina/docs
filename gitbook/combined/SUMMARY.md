@@ -9,7 +9,7 @@
     * [Quickstart](solana/documentation/get-started/quickstart.md)
     * [Plans and billing](solana/documentation/get-started/plans-and-billing.md)
     * [Rate and connection limits](solana/documentation/get-started/rate-and-connection-limits.md)
-    * [Auth and security](solana/documentation/get-started/auth-and-security.md)
+    * [Authentication](solana/documentation/get-started/authentication.md)
     * [Platform overview](solana/documentation/get-started/platform-overview.md)
   * [Streaming data](solana/documentation/streaming-data/README.md)
     * [Overview](solana/documentation/streaming-data/overview.md)

@@ -1,4 +1,4 @@
-# Auth and security
+# Authentication
 
 We are committed to a defence-in-depth security model to protect our global infrastructure and our customers' services.
 
