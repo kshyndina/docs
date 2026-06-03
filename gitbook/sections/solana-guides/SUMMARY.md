@@ -1,10 +1,9 @@
 # Table of contents
 
-* [Overview](README.md)
+* [Trading and market making with Triton](README.md)
 
 ## Set up your RPC for...
 
-* [Trading and market making with Triton](set-up-your-rpc-for/trading-and-market-making-with-triton.md)
 * [DEX or DeFi protocol](set-up-your-rpc-for/dex-or-defi-protocol.md)
 * [Wallet or consumer app](set-up-your-rpc-for/wallet-or-consumer-app.md)
 * [NFT or compressed-asset platform](set-up-your-rpc-for/nft-or-compressed-asset-platform.md)

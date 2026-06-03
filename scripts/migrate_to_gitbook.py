@@ -15,15 +15,23 @@ SITE_BASE = "https://kate-6.gitbook.io/triton-one-docs"
 # spaces = markdown hard breaks, so they render tight (no huge paragraph gaps).
 FOOTER_MD = (
     "\n---\n\n"
-    "Need help? Contact support by clicking the chat icon in the bottom right of your "
-    "[customer dashboard](https://customers.triton.one).  \n"
-    "Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  \n"
-    "Sales questions? [Contact sales](https://triton.one/contact).  \n"
-    "AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  \n"
-    "Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · "
+    "🛟 Need help? Contact support by clicking the chat icon in the bottom right of your "
+    "[customer dashboard](https://customers.triton.one)  \n"
+    "⚙️ Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  \n"
+    "💼 Sales questions? [Contact sales](https://triton.one/contact)  \n"
+    "✨ AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  \n"
+    "📡 Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · "
     "[YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · "
     "[GitHub](https://github.com/rpcpool)\n"
 )
+
+# Customer logos -> a compact row of CDN images (the scrolling marquee can't
+# render in GitBook, so show a static "trusted by" strip instead).
+_LOGOS = ["solana", "jupiter", "phantom", "orca", "solflare", "squads", "arcium",
+          "jito-labs", "marinade", "binance", "raydium", "meteora", "bonk",
+          "bitfinex", "birdeye"]
+CDN = "https://cdn.jsdelivr.net/gh/kshyndina/docs@gitbook-schematic"
+LOGO_ROW = "\n" + " ".join(f"![]({CDN}/logos/{n}.svg)" for n in _LOGOS) + "\n"
 
 # section key -> (display title, site section path)
 SECTION_PATH = {
@@ -177,6 +185,51 @@ def dedent_fences(text):
             out.append(ln)
     return "\n".join(out)
 
+def remove_div_block(text, class_substr):
+    """Remove a balanced <div className=...class_substr...>...</div> block."""
+    while True:
+        m = re.search(r'<div\b[^>]*class[Nn]ame="[^"]*' + class_substr + r'[^"]*"[^>]*>', text)
+        if not m:
+            return text
+        i, depth = m.end(), 1
+        while i < len(text) and depth > 0:
+            no, nc = text.find("<div", i), text.find("</div>", i)
+            if nc == -1:
+                break
+            if no != -1 and no < nc:
+                depth += 1; i = no + 4
+            else:
+                depth -= 1; i = nc + 6
+        text = text[:m.start()] + text[i:]
+
+def handle_html_blocks(text):
+    """Convert raw-HTML blocks (logos, <a> link maps, custom diagrams) and drop
+    the interactive RPC playground that can't run in GitBook."""
+    # drop the interactive playground (+ its heading/intro)
+    text = remove_div_block(text, "triton-try")
+    text = re.sub(r"##+ RPC playground\s*\n+[^\n<]*\n", "", text)
+    # <a className="stack-leaf" href>txt</a> -> list item; other <a> -> link
+    def conv_a(m):
+        attrs, inner = m.group(1), m.group(2)
+        hm = re.search(r'href="([^"]+)"', attrs)
+        if not hm:
+            return re.sub(r"<[^>]+>", "", inner).strip()
+        txt = re.sub(r"<[^>]+>", "", inner).strip()
+        return (f"\n- [{txt}]({hm.group(1)})" if "stack-leaf" in attrs
+                else f"[{txt}]({hm.group(1)})")
+    text = re.sub(r"<a\b([^>]*)>(.*?)</a>", conv_a, text, flags=re.S)
+    # title divs -> bold lines
+    text = re.sub(r'<div\b[^>]*class[Nn]ame="[^"]*-title[^"]*"[^>]*>(.*?)</div>',
+                  lambda m: f"\n\n**{re.sub(r'<[^>]+>','',m.group(1)).strip()}**\n", text, flags=re.S)
+    # <img src> -> markdown image (logos via CDN; /images handled later)
+    def conv_img(m):
+        src = m.group(1)
+        if src.startswith("/logos/"):
+            src = CDN + src
+        return f"![]({src})"
+    text = re.sub(r'<img\b[^>]*\bsrc="([^"]+)"[^>]*/?>', conv_img, text)
+    return text
+
 def convert_blocks(text, ctx):
     """Convert paired components. ctx used for link resolution of cards."""
     # hints
@@ -240,25 +293,21 @@ def convert_blocks(text, ctx):
     text = re.sub(r"<Accordion\b([^>]*)>(.*?)</Accordion>", accordion, text, flags=re.S)
 
     # cards -> content-ref (if href) or bold block
-    def card(m):
-        tag, body = m.group(1), m.group(2).strip()
-        title = attr(tag, "title") or "Card"
-        href = attr(tag, "href")
-        if href:
-            url = resolve_link(href, ctx)
-            return f"\n{{% content-ref url=\"{url}\" %}}\n[{title}]({url})\n{{% endcontent-ref %}}\n"
-        return f"\n**{title}**\n\n{body}\n"
-    text = re.sub(r"<Card\b([^>]*)>(.*?)</Card>", card, text, flags=re.S)
-    # self-closing card
-    def card_sc(m):
-        tag = m.group(1)
-        title = attr(tag, "title") or "Card"
-        href = attr(tag, "href")
-        if href:
-            url = resolve_link(href, ctx)
-            return f"\n{{% content-ref url=\"{url}\" %}}\n[{title}]({url})\n{{% endcontent-ref %}}\n"
-        return f"\n**{title}**\n"
-    text = re.sub(r"<Card\b([^>]*)/>", card_sc, text)
+    def card_out(title, href, body=""):
+        if not href:
+            return f"\n**{title}**\n\n{body}\n"
+        url = resolve_link(href, ctx)
+        # same-space relative links render as rich content-ref cards; cross-space
+        # absolute URLs render as a titled link (GitBook can't make them cards)
+        if url.startswith("http"):
+            return f"\n[{title}]({url})\n"
+        return f"\n{{% content-ref url=\"{url}\" %}}\n[{title}]({url})\n{{% endcontent-ref %}}\n"
+    text = re.sub(r"<Card\b([^>]*)>(.*?)</Card>",
+                  lambda m: card_out(attr(m.group(1), "title") or "Card",
+                                     attr(m.group(1), "href"), m.group(2).strip()), text, flags=re.S)
+    text = re.sub(r"<Card\b([^>]*)/>",
+                  lambda m: card_out(attr(m.group(1), "title") or "Card",
+                                     attr(m.group(1), "href")), text)
 
     # param / response fields -> table-row tokens (merged into a table later)
     def cell(s):
@@ -384,6 +433,8 @@ def inline_snippets(text):
     for var, path in imports.items():
         if path.rstrip().endswith("footer-links.mdx"):
             snippet = FOOTER_MD
+        elif path.rstrip().endswith("customer-logo-marquee.mdx"):
+            snippet = LOGO_ROW
         else:
             sp = os.path.join(ROOT, path.lstrip("/"))
             if not os.path.exists(sp):
@@ -404,6 +455,7 @@ def render_page(ref, ctx, fallback_title):
         return f"# {fallback_title}\n"
     meta, body = frontmatter(read(p))
     body = inline_snippets(body)
+    body = handle_html_blocks(body)
     body = convert_blocks(body, ctx)
     body = merge_param_tables(body)
     body = dedent_fences(body)
@@ -411,6 +463,9 @@ def render_page(ref, ctx, fallback_title):
     body = rewrite_images(body, ctx)
     body = rewrite_links(body, ctx)
     body = re.sub(r"(?m)^[ \t]+$", "", body)       # blank whitespace-only lines
+    body = re.sub(r"\n{3,}", "\n\n", body).strip()
+    # never two horizontal rules in a row
+    body = re.sub(r"(?m)^---\s*\n(\s*\n)*---\s*$", "---", body)
     body = re.sub(r"\n{3,}", "\n\n", body).strip()
     title = meta.get("title") or fallback_title
     desc = meta.get("description", "")
@@ -431,11 +486,29 @@ def write_file(section_dir, relfile, content):
 def emit_section(sec):
     key = sec["key"]
     base = os.path.join(OUT, key)
-    summary = ["# Table of contents", "", "* [Overview](README.md)", ""]
-    write_file(base, "README.md", f"# {sec['title']}\n\n_Documentation section._\n")
+    # use the first real page as the section landing (README) - no "Overview" item
+    first = [None]
+    def find_first(nodes):
+        for n in nodes:
+            if first[0]:
+                return
+            if not n["children"] and n.get("ref"):
+                first[0] = n
+            elif n["children"]:
+                find_first(n["children"])
+    find_first(sec["children"])
+    fnode = first[0]
+    landing_title = fnode["title"] if fnode else sec["title"]
+    landing = (render_page(fnode["ref"], {"section": key, "file": "README.md"}, landing_title)
+               if fnode else f"# {sec['title']}\n")
+    write_file(base, "README.md", landing)
+    summary = ["# Table of contents", "", f"* [{landing_title}](README.md)", ""]
+    skip = fnode["file"] if fnode else None
 
     def emit_nodes(nodes, depth):
         for n in nodes:
+            if n.get("file") and n["file"] == skip:
+                continue                       # already the README landing
             indent = "  " * depth
             ctxfile = n["file"] or "README.md"
             ctx = {"section": key, "file": ctxfile}

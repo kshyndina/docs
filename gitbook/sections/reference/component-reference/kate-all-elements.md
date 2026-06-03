@@ -138,21 +138,13 @@ curl https://your-endpoint.rpcpool.com \
 **Where to use:** landing pages, section hubs, "where do I go next".
 **Why it works:** visual nav with icons + descriptions; great for the front of each chain dropdown (e.g. Solana welcome page).
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart" %}
 [Quickstart](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart)
-{% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/api-reference/overview-and-auth/api-overview" %}
 [API reference](https://kate-6.gitbook.io/triton-one-docs/api-reference/overview-and-auth/api-overview)
-{% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview" %}
 [Streaming data](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview)
-{% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/faqs/general" %}
 [FAQs](https://kate-6.gitbook.io/triton-one-docs/faqs/general)
-{% endcontent-ref %}
 
 ### Accordions
 
@@ -203,7 +195,7 @@ my-solana-app/
 **Where to use:** screenshots and diagrams.
 **Why it works:** adds caption + drop shadow + rounded border. Stops images looking glued to the page.
 
-  <img src="/logo/mark.svg" alt="Triton One mark" />
+  ![](/logo/mark.svg)
 
 ## Interactive components
 
@@ -334,11 +326,8 @@ Triton's Yellowstone gRPC stack delivers shred-level data with sub-second latenc
 3. Commit and push.
 
 ---
-
----
-
-Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
-Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
-Sales questions? [Contact sales](https://triton.one/contact).  
-AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
-Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+🛟 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+⚙️ Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+💼 Sales questions? [Contact sales](https://triton.one/contact)  
+✨ AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
+📡 Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

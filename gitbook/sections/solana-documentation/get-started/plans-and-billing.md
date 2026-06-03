@@ -55,38 +55,43 @@ Pricing is simple: you pay for what you use. Per-million rates for calls, per-GB
 
       <p className="triton-calc-fineprint">Deposit is prepaid, non-refundable, and valid for 12 months.
 
-        <a className="triton-calc-cta" href="https://customers.triton.one/onboarding" data-cta>Get started →</a>
+        [Get started →](https://customers.triton.one/onboarding)
         Minimum deposit is {"$"}125.00
 
-              Bandwidth across all services
+**Bandwidth across all services**
+
               $0.08 / GB bandwidth
 
             $0.00
 
             <input type="range" min="0" max="10000" step="100" defaultValue="0" data-input />
 
-              Standard RPC, indexed accounts, ledger queries
+**Standard RPC, indexed accounts, ledger queries**
+
               $10 / million calls + bandwidth
 
             $0.00
 
             <input type="range" min="0" max="10" step="0.1" defaultValue="0" data-input />
 
-              Streaming services, Titan Prime API
+**Streaming services, Titan Prime API**
+
               $0.08 / GB bandwidth
 
             $0.00
 
             <input type="range" min="0" max="10000" step="100" defaultValue="0" data-input />
 
-              Metaplex, Photon APIs
+**Metaplex, Photon APIs**
+
               $50 / million calls + bandwidth
 
             $0.00
 
             <input type="range" min="0" max="10" step="0.1" defaultValue="0" data-input />
 
-              Metis API
+**Metis API**
+
               $80 / million calls + bandwidth
 
             $0.00
@@ -110,13 +115,15 @@ Pricing is simple: you pay for what you use. Per-million rates for calls, per-GB
     <li>1-on-1 support from senior engineers</li>
   </ul>
 
-  gRPC streaming (Dragon's Mouth)
+**gRPC streaming (Dragon's Mouth)**
+
   Included in the node price, no overage fees
 
-  Fumarole, Whirligig, WebSockets, other streaming
+**Fumarole, Whirligig, WebSockets, other streaming**
+
   $0.08 / GB bandwidth
 
-  <a className="triton-calc-cta" href="https://triton.one/contact" data-cta>Contact sales →</a>
+  [Contact sales →](https://triton.one/contact)
 
 ## How pay as you go works
 
@@ -147,11 +154,8 @@ There is no free trial, as the deposit replaces it: you get a year of testing ro
 {% endcontent-ref %}
 
 ---
-
----
-
-Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
-Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
-Sales questions? [Contact sales](https://triton.one/contact).  
-AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
-Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+🛟 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+⚙️ Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+💼 Sales questions? [Contact sales](https://triton.one/contact)  
+✨ AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
+📡 Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

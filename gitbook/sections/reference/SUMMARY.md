@@ -1,10 +1,9 @@
 # Table of contents
 
-* [Overview](README.md)
+* [Section overview template](README.md)
 
 ## Page templates
 
-* [Section overview template](page-templates/section-overview-template.md)
 * [Product page template](page-templates/product-page-template.md)
 * [Quickstart page template](page-templates/quickstart-page-template.md)
 * [API reference page template](page-templates/api-reference-page-template.md)

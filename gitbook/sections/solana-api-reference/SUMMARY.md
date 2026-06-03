@@ -1,10 +1,9 @@
 # Table of contents
 
-* [Overview](README.md)
+* [API overview](README.md)
 
 ## Overview and auth
 
-* [API overview](overview-and-auth/api-overview.md)
 * [Authentication](overview-and-auth/authentication.md)
 * [Endpoints](overview-and-auth/endpoints.md)
 

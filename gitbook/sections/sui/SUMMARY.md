@@ -4,7 +4,6 @@
 
 ## SUI
 
-* [Overview](sui/overview.md)
 * [Quickstart](sui/quickstart.md)
 * [Walrus](sui/walrus.md)
 * [Seal](sui/seal.md)

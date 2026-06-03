@@ -118,9 +118,7 @@ Each product is purpose-built for one job. Pick what you need.
 [Fumarole reliable streams](../streaming-data/fumarole-persistent-streams.md)
 {% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/pyth/pyth/pyth-hermes" %}
 [Hermes](https://kate-6.gitbook.io/triton-one-docs/pyth/pyth/pyth-hermes)
-{% endcontent-ref %}
 
 ### History
 
@@ -168,43 +166,26 @@ Each product is purpose-built for one job. Pick what you need.
 {% tab title="By use case (I'm not sure yet)" %}
 Pick the kind of app you're building. Each card jumps to the matching setup guide.
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/trading-and-market-making-with-triton" %}
 [Trading or market making](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/trading-and-market-making-with-triton)
-{% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/dex-or-defi-protocol" %}
 [DeFi protocols (Lending, DEXs)](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/dex-or-defi-protocol)
-{% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/wallet-or-consumer-app" %}
 [Wallet or consumer app](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/wallet-or-consumer-app)
-{% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/nft-or-compressed-asset-platform" %}
 [NFT marketplace](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/nft-or-compressed-asset-platform)
-{% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/indexer-or-analytics" %}
 [Indexer or analytics](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/indexer-or-analytics)
-{% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/gaming" %}
 [Gaming](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/gaming)
-{% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/ai-agent-or-llm-app" %}
 [AI agent or LLM app](https://kate-6.gitbook.io/triton-one-docs/guides/set-up-your-rpc-for/ai-agent-or-llm-app)
-{% endcontent-ref %}
 
 {% endtab %}
 {% endtabs %}
 
 ---
-
----
-
-Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
-Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
-Sales questions? [Contact sales](https://triton.one/contact).  
-AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
-Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+🛟 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+⚙️ Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+💼 Sales questions? [Contact sales](https://triton.one/contact)  
+✨ AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
+📡 Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

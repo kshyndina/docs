@@ -1,10 +1,9 @@
 # Table of contents
 
-* [Overview](README.md)
+* [Welcome to Triton](README.md)
 
 ## Get started
 
-* [Welcome to Triton](get-started/welcome-to-triton.md)
 * [Quickstart](get-started/quickstart.md)
 * [Plans and billing](get-started/plans-and-billing.md)
 * [Rate and connection limits](get-started/rate-and-connection-limits.md)

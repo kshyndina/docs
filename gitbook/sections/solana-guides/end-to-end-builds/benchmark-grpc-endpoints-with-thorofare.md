@@ -37,28 +37,17 @@ Thorofare runs on your machine. Run it from a backend close to where your real p
 
 ## What's next
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits" %}
 [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/rate-and-connection-limits)
-{% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview" %}
 [Streaming overview](https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview)
-{% endcontent-ref %}
 
-{% content-ref url="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security" %}
 [Auth and security](https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/auth-and-security)
-{% endcontent-ref %}
 
-{% content-ref url="https://blog.triton.one/how-to-benchmark-solana-rpc-endpoints/" %}
 [Thorofare blog post](https://blog.triton.one/how-to-benchmark-solana-rpc-endpoints/)
-{% endcontent-ref %}
 
 ---
-
----
-
-Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).  
-Manage endpoints, billing, team: [Customer portal](https://customers.triton.one).  
-Sales questions? [Contact sales](https://triton.one/contact).  
-AI agent? [Read llms.txt](https://docs.triton.one/llms.txt).  
-Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+🛟 Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+⚙️ Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+💼 Sales questions? [Contact sales](https://triton.one/contact)  
+✨ AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
+📡 Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

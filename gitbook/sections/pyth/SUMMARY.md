@@ -4,7 +4,6 @@
 
 ## Pyth
 
-* [Overview](pyth/overview.md)
 * [Quickstart](pyth/quickstart.md)
 * [Pyth Hermes](pyth/pyth-hermes.md)
 * [Publisher setup (NGINX proxy)](pyth/publisher-setup-nginx-proxy.md)
