@@ -1,198 +1,182 @@
 # Dragon's Mouth gRPC
 
-Dragon's Mouth is our Geyser-fed gRPC interface that supports streaming:
+Triton's Geyser-fed gRPC streaming interface for Solana. Sub-slot account, transaction, slot, and block subscriptions. The fastest live data path available for processed events.
 
-* Account Writes
-* Transactions
-* Deshred transactions (pre-execution, beta)
-* Entries
-* Block notifications
-* Slot notifications
+## What is Dragon's Mouth
 
-It also supports unary operations:
+Dragon's Mouth is Triton's Geyser-fed gRPC interface for streaming Solana data. It taps the validator's Geyser plugin directly, so you get account, transaction, slot, and block updates as the validator processes them, giving you up to a 400 ms head start over a polling client.
 
-* getLatestBlockhash
-* getBlockHeight
-* getSlot
-* isValidBlockhash
-* subscribeReplayInfo
+It's the fastest live data path available for `processed` events and the recommended choice for any backend service where latency matters.
 
-The gRPC streams and RPC calls are supported through Solana's [Geyser](/chains/solana/geyser.md) interface. This is the fastest way to receive updates on on-chain events. This interface is more stable and faster than the traditional WebSocket interface. We recommend using gRPC for all future development of backend clients.
+- **Trading and MEV.** Lowest-latency reads of pool state, oracles, AMM accounts, and price-impacting transactions
+- **Real-time UIs (backend).** Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers
+- **Application middle layer.** Stream directly to your app's middle layer on a cloud provider and update your backend database with the lowest possible latency
+- **Compliance and analytics.** Watch specific addresses or programs, route updates downstream
 
-Dragon's Mouth also streams transactions as they are processed in real-time. You will receive multiple account updates within the current slot. This contrasts with regular RPC, where you receive only one update at the end of the slot. For DeFi traders, Dragon's Mouth can give you up to a 400ms advantage over other traders!
+For browser clients that can't communicate with gRPC, use [Whirligig WebSockets](whirligig-websockets.md) instead.
 
-Use Dragon's Mouth to stream data directly to your application middle-layer hosted on a cloud service provider. Update your backend database with the lowest possible latency.
+## Features and benefits
 
-gRPC is unsupported by web browsers, so Dragon's Mouth is entirely targeted at backend software. Another Yellowstone project, [Whirligig](/project-yellowstone/whirligig-websockets.md), provides a WebSocket interface to replace the current Solana WebSocket implementation.
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-timer">:timer:</i> <strong>Sub-slot latency</strong></td><td>Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.</td><td></td></tr><tr><td><i class="fa-sliders-horizontal">:sliders-horizontal:</i> <strong>Server-side filtering</strong></td><td>Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state, all server-side.</td><td></td></tr><tr><td><i class="fa-repeat-2">:repeat-2:</i> <strong>Bi-directional streams</strong></td><td>Modify subscriptions on the fly without reconnecting. Send a new request, server swaps your filter set.</td><td></td></tr><tr><td><i class="fa-feather">:feather:</i> <strong>Compact Protobuf payloads</strong></td><td>Binary serialisation cuts bandwidth and CPU. Cheaper to stream, faster to parse.</td><td></td></tr></tbody></table>
 
-### Protocol files
+## Stream types and unary operations
 
-You can find the latest version of protobuf files in the repository <https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto> or use Rust crate <https://crates.io/crates/yellowstone-grpc-proto>.
+Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions and one-shot unary calls you can use for occasional queries.
 
-## Clients/SDKs
+{% tabs %}
+{% tab title="Streaming subscriptions" %}
+| Stream | What you receive |
+| :-- | :-- |
+| Account writes | Updates whenever a matching account's data, lamports, or owner changes |
+| Transactions | Every transaction matching your filter, with full `meta` (logs, status, balance deltas) |
+| Deshred transactions | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](deshred-transactions.md). |
+| Entries | Solana ledger entries (low-level, rare use case) |
+| Block notifications | Full blocks as they're produced, optionally with their transactions and accounts |
+| Block metadata | Block headers only, without the transaction payload |
+| Slot notifications | Slot-status events (processed/confirmed/finalized plus intra-slot lifecycle) |
+{% endtab %}
+{% tab title="Unary operations" %}
+| Method | Returns |
+| :-- | :-- |
+| `getLatestBlockhash` | The latest blockhash \+ last valid block height at a commitment level |
+| `getBlockHeight` | The current block height at a commitment level |
+| `getSlot` | The current slot at a commitment level |
+| `isValidBlockhash` | Whether a given blockhash is still valid |
+| `subscribeReplayInfo` | Earliest slot still available for stream replay |
+{% endtab %}
+{% endtabs %}
 
-We offer sample clients in multiple languages, and you can also use the generic grpcurl client to test the interface. As the underlying gRPC proto can change, it is essential to test with clients matching the current version of the Solana/gRPC interface.
+## Subscribe request
 
-### grpcurl
+Every stream subscription is a single `SubscribeRequest` message. It has fields that apply across all stream types and a per-stream filter map.
 
-`grpcurl` is a good client for testing. You will also need the following two Protobuf proto files to describe the protocol:
+You send it once when you open the stream; then you can send it again at any time to modify it (the new request fully replaces the old one).
 
-Example subscription:
+{% tabs %}
+{% tab title="commitment" %}
+Commitment level for buffering. Optional. Defaults to `processed`.
 
-```shell
-./grpcurl \
-  -proto geyser.proto \
-  -d '{"slots": { "slots": { } }, "accounts": { "usdc": { "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
-  -H "x-token: <token>" \
-  api.rpcpool.com:443 \
-  geyser.Geyser/Subscribe
+| Value | Meaning |
+| --- | --- |
+| `PROCESSED` (0) | Highest slot seen, possibly on a fork. Lowest latency. |
+| `CONFIRMED` (1) | Voted on by supermajority. Some buffering. |
+| `FINALIZED` (2) | Max vote lockout. Most buffering. |
+
+For maximum performance, work at `processed` and manage commitment client-side by subscribing to [slot notifications](#slots) alongside your data. The pattern:
+
+1. Subscribe to slot notifications alongside your data stream.
+2. Buffer incoming events by slot.
+3. When you see a slot status change to `confirmed` or `finalized`, release the matching buffer.
+4. You'll always receive the slot's events _before_ its commitment notification.
+{% endtab %}
+{% tab title="ping" %}
+Sends a periodic keepalive to prevent idle-stream drops by upstream cloud providers (e.g. Cloudflare). Server replies with `pong`. Optional but recommended for long-running streams.
+
+See [pings](#pings).
+{% endtab %}
+{% tab title="accountsDataSlice" %}
+Truncates account data payloads to a byte range, reducing bandwidth. Optional. Empty array means full payload.
+
+Example: `[{ "offset": 32, "length": 40 }]` returns 40 bytes starting at byte 32.
+{% endtab %}
+{% tab title="fromSlot" %}
+Replay buffered updates starting from this slot, then continue live on the same stream. Optional. Used for reconnection after short disconnections.
+
+See [replay from a slot](#replay-from-a-slot).
+{% endtab %}
+{% endtabs %}
+
+### Multiplexing in one connection
+
+A single gRPC connection can carry many subscriptions. Add multiple named entries to any of the filter maps (`accounts`, `transactions`, `slots`, `blocks`, `blocksMeta`, `entry`) and they all stream over the same connection. Each match is tagged with the filter name(s) that produced it, so you can route updates downstream without splitting connections.
+
+The canonical multiplex example is the [Multiple programs Accounts subscription](#accounts) -- two named owner filters under `accounts`, one connection. The same pattern works across stream types: subscribe to accounts AND transactions AND slots in one request.
+
+### Filter configuration
+
+Each `SubscribeRequest` has a map per stream type. The key is a label you choose (returned with each match so you can route it); the value is the filter spec.
+
+<details>
+<summary>Account filters</summary>
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `account` | `string[]` | — | List of pubkeys to subscribe to directly. Each must be a base58-encoded address. |
+| `owner` | `string[]` | — | List of program owners. Subscribes to every account owned by these programs. |
+| `filters` | `AccountsFilter[]` | — | Content-based filters on the account data. Each filter is one of: `memcmp`, `datasize`, `tokenAccountState`, or `lamports`. Combined as logical AND. |
+</details>
+
+<details>
+<summary>Transaction filters</summary>
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `vote` | `bool` | — | Include or exclude vote transactions. `false` excludes votes. |
+| `failed` | `bool` | — | Include or exclude failed transactions. `false` excludes failures. |
+| `signature` | `string` | — | Subscribe to a specific signature's status updates. |
+| `account_include` | `string[]` | — | Accounts mentioned anywhere in the transaction. |
+| `account_exclude` | `string[]` | — | Exclude transactions mentioning these accounts. |
+| `account_required` | `string[]` | Yes | Accounts that MUST all be mentioned (every one of them). |
+</details>
+
+<details>
+<summary>Block filters</summary>
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `account_include` | `string[]` | — | Only deliver transactions and accounts in the block that mention these. |
+| `include_transactions` | `bool` | — | Include the block's transactions. |
+| `include_accounts` | `bool` | — | Include accounts updated during the block. |
+| `include_entries` | `bool` | — | Include the block's entries. |
+</details>
+
+<details>
+<summary>Slot filters</summary>
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `filter_by_commitment` | `bool` | — | If `true`, only receive updates matching the request's `commitment`. If `false`, receive every status change. |
+</details>
+
+### Filter logic
+
+Within a single filter category (e.g. one transaction filter), values are combined as follows:
+
+- **Within an array, OR.** `account_include: [A, B]` matches transactions mentioning A _or_ B.
+- **Across fields, AND.** `vote: false, account_include: [A]` matches non-vote transactions mentioning A.
+
+For transactions specifically:
+
+```text
+match = (accountInclude OR empty) AND (accountRequired AND all) AND NOT accountExclude
 ```
 
-Customers should specify their endpoint + token in the example above, developers looking to run their own RPC nodes can test it against their own Solana instances, just remove the x-token header as it's probably not relevant to you.
+Across multiple named filters in the same category (e.g. two transaction filters), you receive matches from any of them. Each match comes tagged with the filter name(s) that produced it, so you can route updates downstream.
 
-### client-ubuntu
+## Subscribing to each stream type
 
-The yellowstone-grpc project provides a `client-ubuntu` binary for testing gRPC endpoints. Prebuilt binaries are available for Ubuntu 22.04 and 24.04. Download
+Before you start, make sure you have:
 
-You can download the latest release from the [Releases](https://github.com/rpcpool/yellowstone-grpc/releases) page.
+- An active Triton subscription
+- Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) ([how to get them](https://kate-6.gitbook.io/triton-one-docs/guides/account-management/access-your-endpoint-and-token))
+- A backend environment in TypeScript, Rust, Go, or another language with a gRPC client
+- Familiarity with gRPC and Protocol Buffers
 
-**Usage Examples**
+The latest protobuf files live in the [yellowstone-grpc repo](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto). For Rust, use the [yellowstone-grpc-proto crate](https://crates.io/crates/yellowstone-grpc-proto).
 
-**Subscribe to all accounts:**
+The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](#clients-and-sdks)).
 
-```shell
-./client-ubuntu-22.04 --endpoint https://<endpoint> --x-token <token> subscribe --accounts --slots
-```
+### Accounts
 
-**Subscribe to a specific program** (e.g Raydium)
-
-```shell
-./client-ubuntu-22.04 --endpoint https://<endpoint> --x-token <token> subscribe --accounts --slots --accounts-owner 675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8
-```
-
-Note: You may also add the `--stats` flag to see useful stats about the subscription, like total amount of accounts / slots streamed + bandwidth
-
-### Rust
-
-A sample Rust client is available at <https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust>.
-
-### Golang
-
-A sample Golang client is available at <https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang>.
-
-### NodeJS/TypeScript
-
-From version `5.1.x` we supercharged the TypeScript SDK performance with Rust using the NAPI framework. You can read more about it [here](https://blog.triton.one/grpc-js-alternative-napi-rust/).
-
-You can include NodeJS Yellowstone gRPC client as a dependency by running the following command:
-
-```
-npm install --save @triton-one/yellowstone-grpc
-
-# or, for yarn:
-
-yarn add @triton-one/yellowstone-grpc
-```
-
-A sample Typescript/Nodejs client is available at <https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript>. You can also switch the language of code samples to TypeScript in the following documentation.
-
-#### Initializing the client
-
-Once you have installed the client dependency, you can initialize it as follows:
-
-```javascript
-import Client from "@triton-one/yellowstone-grpc";
-
-const client = new Client("https://api.rpcpool.com:443", "<insert your token here>");
-
-// connect to the client
-await client.connect();
-
-// now you can call the client methods, e.g.:
-
-const version = await client.getVersion(); // gets the version information
-console.log(version);
-```
-
-Please note that the client is asynchronous, so it is expected that all calls are executed inside an async block or async function.
-
-#### Subscription streams
-
-You can get updates and send requests through the *subscription stream*. You can create it by calling the `client.subscribe()` method:
-
-```typescript
-import { SubscribeRequest } from "@triton-one/yellowstone-grpc";
-
-// Create a subscription stream.
-const stream = client.subscribe();
-
-// Collecting all incoming events.
-stream.on("data", (data) => {
-  console.log("data", data);
-});
-
-// Create a subscription request.
-const request: SubscribeRequest = {
-  // you can use the standard JSON request format here.
-  // the following documentation describes available requests and filters.
-  ...
-};
-
-// Sending a subscription request.
-await new Promise<void>((resolve, reject) => {
-  stream.write(request, (err) => {
-    if (err === null || err === undefined) {
-      resolve();
-    } else {
-      reject(err);
-    }
-  });
-}).catch((reason) => {
-  console.error(reason);
-  throw reason;
-});
-```
-
-## Excluded Programs
-
-Certain programs are excluded from all Dragon's Mouth gRPC streams and are also unavailable via `getProgramAccounts`.
-
-| Program                         | Address                                       |
-| ------------------------------- | --------------------------------------------- |
-| Light Protocol / ZK Compression | `compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq` |
-
-**Why is Light Protocol /** **ZK Compression excluded?**
-
-The ZK Compression program generates extremely high-volume account updates. Each update produces a \~10MB blob, resulting in several gigabits per second of data. This volume makes it impractical to include in standard gRPC streams.
-
-From a practical standpoint, most users consuming this data are interested in the **end result** processed by the [Photon indexer](https://github.com/helius-labs/photon), not the raw account blobs. If you need ZK Compression data, that is the recommended way to consume it.
-
-## Example Subscribe Requests
-
-Here are examples of subscribe requests you can make to the gRPC interface.
-
-### Subscribe to an account
+{% tabs %}
+{% tab title="By pubkey" %}
+Subscribe to one or more specific accounts. The label `wsol/usdc` is yours -- it comes back on each match for routing.
 
 {% tabs %}
 {% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
 ```json
-{"slots": { "slots": {} }, "accounts": { "wsol/usdc": { "account": ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}, "accounts_data_slice": [], "commitment": 1}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-
-const request = {
-  "slots": {
-    "slots": {}
-  },
+{
+  "slots": { "slots": {} },
   "accounts": {
     "wsol/usdc": {
       "account": ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"]
@@ -200,105 +184,74 @@ const request = {
   },
   "transactions": {},
   "blocks": {},
-  "blocksMeta": {},
-  "accountsDataSlice": [],
-  "commitment": CommitmentLevel.CONFIRMED
-};
-```
-
-{% endtab %}
-{% endtabs %}
-
-This sample subscribes to the SOL-USDC OpenBook account on `confirmed` commitment level. In the example above, "wsol/usdc" is a client-assigned label. You can specify different JSON files to subscribe to different items. You can combine any of these variables below into a JSON to receive a combination of program, account, block, and slot updates.
-
-### Subscribe to an account with \`account\_data\_slice\`
-
-{% tabs %}
-{% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
-```json
-{
-    "accounts": {
-        "usdc": {
-            "owner": ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
-            "filters": [{
-                "token_account_state": true
-            }, {
-                "memcmp": {
-                    "offset": 0,
-                    "data": {
-                        "base58": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
-                    }
-                }
-            }]
-        }
-    },
-    "accounts_data_slice": [{ "offset": 32, "length": 40 }]
+  "blocks_meta": {},
+  "accounts_data_slice": [],
+  "commitment": 1
 }
 ```
-
-{% endcode %}
 {% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
+{% tab title="TypeScript" %}
+```typescript
 import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
 
 const request = {
-  "slots": {},
-  "accounts": {
-    "usdc": {
-      "owner": ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
-      "filters": [{
-          "tokenAccountState": true
-      }, {
-          "memcmp": {
-              "offset": 0,
-              "data": {
-                  "base58": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
-              }
-          }
-      }]
-    }
+  slots: { slots: {} },
+  accounts: {
+    "wsol/usdc": {
+      account: ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"],
+    },
   },
-  "transactions": {},
-  "blocks": {},
-  "blocksMeta": {},
-  "entry": {},
-  "commitment": CommitmentLevel.CONFIRMED
-  "accountsDataSlice": [{ "offset": 32, "length": 40 }],
+  transactions: {},
+  blocks: {},
+  blocksMeta: {},
+  accountsDataSlice: [],
+  commitment: CommitmentLevel.CONFIRMED,
 };
 ```
+{% endtab %}
+{% tab title="Rust" %}
+```rust
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{
+        CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
+        SubscribeRequestFilterSlots,
+    },
+};
 
+let mut accounts = HashMap::new();
+accounts.insert(
+    "wsol/usdc".to_string(),
+    SubscribeRequestFilterAccounts {
+        account: vec!["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6".to_string()],
+        owner: vec![],
+        filters: vec![],
+        ..Default::default()
+    },
+);
+
+let mut slots = HashMap::new();
+slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
+
+let request = SubscribeRequest {
+    accounts,
+    slots,
+    commitment: Some(CommitmentLevel::Confirmed.into()),
+    ..Default::default()
+};
+```
 {% endtab %}
 {% endtabs %}
 
-This sample subscribes to the USDC Tokenkeg accounts. With `account_data_slice` instead of receiving all 165 bytes we receive only 40 bytes from account data (`offset` field with 32 gives us `owner` and `lamports`).
-
-### Subscribe to a program
+{% endtab %}
+{% tab title="By owner" %}
+Subscribe to every account owned by a program. The example tracks all Solend accounts.
 
 {% tabs %}
 {% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
 ```json
-{"slots": { "slots": {} }, "accounts": { "solend": {  "owner": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}, "accounts_data_slice": [], "commitment": 0}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-
-const request = {
-  "slots": {
-    "slots": {}
-  },
+{
+  "slots": { "slots": {} },
   "accounts": {
     "solend": {
       "owner": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"]
@@ -306,37 +259,76 @@ const request = {
   },
   "transactions": {},
   "blocks": {},
-  "blocksMeta": {},
-  "accountsDataSlice": [],
-  "commitment": CommitmentLevel.PROCESSED
+  "blocks_meta": {},
+  "accounts_data_slice": [],
+  "commitment": 0
 }
 ```
-
 {% endtab %}
-{% endtabs %}
-
-### Subscribe to multiple programs
-
-{% tabs %}
-{% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
-```json
-{"slots": { "slots": {} }, "accounts": { "programs": {  "owner": [ "So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo", "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}, "accounts_data_slice": []}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
+{% tab title="TypeScript" %}
+```typescript
 import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
 
 const request = {
-  "slots": {
-    "slots": {}
+  slots: { slots: {} },
+  accounts: {
+    solend: {
+      owner: ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"],
+    },
   },
+  transactions: {},
+  blocks: {},
+  blocksMeta: {},
+  accountsDataSlice: [],
+  commitment: CommitmentLevel.PROCESSED,
+};
+```
+{% endtab %}
+{% tab title="Rust" %}
+```rust
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{
+        CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
+        SubscribeRequestFilterSlots,
+    },
+};
+
+let mut accounts = HashMap::new();
+accounts.insert(
+    "solend".to_string(),
+    SubscribeRequestFilterAccounts {
+        account: vec![],
+        owner: vec!["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo".to_string()],
+        filters: vec![],
+        ..Default::default()
+    },
+);
+
+let mut slots = HashMap::new();
+slots.insert("client".to_string(), SubscribeRequestFilterSlots::default());
+
+let request = SubscribeRequest {
+    accounts,
+    slots,
+    commitment: Some(CommitmentLevel::Processed.into()),
+    ..Default::default()
+};
+```
+{% endtab %}
+{% endtabs %}
+
+{% endtab %}
+{% tab title="Multiple programs" %}
+Combine multiple programs in one filter, or use separate filters for different routing tags.
+
+Both programs in one filter:
+
+{% tabs %}
+{% tab title="gRPC" %}
+```json
+{
+  "slots": { "slots": {} },
   "accounts": {
     "programs": {
       "owner": [
@@ -347,501 +339,726 @@ const request = {
   },
   "transactions": {},
   "blocks": {},
-  "blocksMeta": {},
-  "accountsDataSlice": []
-};
+  "blocks_meta": {},
+  "accounts_data_slice": []
+}
 ```
-
 {% endtab %}
 {% endtabs %}
 
-OR, if you want different tags for different program updates:
+Separate filters with different tags:
 
 {% tabs %}
 {% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
 ```json
-{"slots": { "slots": {} }, "accounts": { "solend": {  "owner":  ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"] }, "serum": { "owner": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}, "accounts_data_slice": []}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-const request = {
-  "slots": {
-    "slots": {}
-  },
+{
+  "slots": { "slots": {} },
   "accounts": {
-    "solend": {
-      "owner": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"]
-    },
-    "serum": {
-      "owner": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"]
-    }
+    "solend": { "owner": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"] },
+    "serum":  { "owner": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"] }
   },
   "transactions": {},
   "blocks": {},
-  "blocksMeta": {},
-  "accountsDataSlice": []
+  "blocks_meta": {},
+  "accounts_data_slice": []
 }
 ```
-
 {% endtab %}
 {% endtabs %}
 
-### Subscribe to all finalized non-vote and non-failed transactions
+{% endtab %}
+{% tab title="Advanced filters + data slice" %}
+Filter by content (memcmp, token account state) and trim the returned payload to save bandwidth. The example tracks USDC token accounts and returns only 40 bytes starting at offset 32 (owner \+ lamports).
 
 {% tabs %}
 {% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
 ```json
-{"slots": { "slots": {} }, "accounts": {}, "transactions": { "alltxs": { "vote": false, "failed": false }}, "blocks": {}, "blocks_meta": {}, "accounts_data_slice": [], "commitment": 2}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
-
-const request = {
-  "slots": {
-    "slots": {}
-  },
-  "accounts": {},
-  "transactions": {
-    "alltxs": {
-      "vote": false,
-      "failed": false
-    }
-  },
-  "blocks": {},
-  "blocksMeta": {},
-  "accountsDataSlice": [],
-  "commitment": CommitmentLevel.FINALIZED
-};
-```
-
-{% endtab %}
-{% endtabs %}
-
-For transactions, if all fields are empty, then all transactions are broadcasted. Otherwise, fields work as logical `AND`, and values in arrays as logical `OR`. You can include/exclude vote transactions and include/exclude failed transactions.
-
-### Subscribe to non-vote transactions mentioning an account
-
-{% tabs %}
-{% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
-```json
-{"slots": { "slots": {} }, "accounts": {}, "transactions": { "serum": { "vote": false, "account_include": [ "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin" ]}}, "blocks": {}, "blocks_meta": {}, "accounts_data_slice": []}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-const request = {
-  "slots": {
-    "slots": {}
-  },
-  "accounts": {},
-  "transactions": {
-    "serum": {
-      "vote": false,
-      "accountInclude": [
-        "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"
+{
+  "accounts": {
+    "usdc": {
+      "owner": ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
+      "filters": [
+        { "token_account_state": true },
+        {
+          "memcmp": {
+            "offset": 0,
+            "data": { "base58": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" }
+          }
+        }
       ]
     }
   },
-  "blocks": {},
-  "blocksMeta": {},
-  "accountsDataSlice": []
+  "accounts_data_slice": [{ "offset": 32, "length": 40 }]
+}
+```
+{% endtab %}
+{% tab title="TypeScript" %}
+```typescript
+import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+
+const request = {
+  slots: {},
+  accounts: {
+    usdc: {
+      owner: ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"],
+      filters: [
+        { tokenAccountState: true },
+        {
+          memcmp: {
+            offset: 0,
+            data: { base58: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" },
+          },
+        },
+      ],
+    },
+  },
+  transactions: {},
+  blocks: {},
+  blocksMeta: {},
+  entry: {},
+  commitment: CommitmentLevel.CONFIRMED,
+  accountsDataSlice: [{ offset: 32, length: 40 }],
 };
 ```
+{% endtab %}
+{% tab title="Rust" %}
+```rust
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{
+        subscribe_request_filter_accounts_filter::Filter,
+        subscribe_request_filter_accounts_filter_memcmp::Data,
+        CommitmentLevel, SubscribeRequest, SubscribeRequestAccountsDataSlice,
+        SubscribeRequestFilterAccounts, SubscribeRequestFilterAccountsFilter,
+        SubscribeRequestFilterAccountsFilterMemcmp,
+    },
+};
 
+let mut accounts = HashMap::new();
+accounts.insert(
+    "usdc".to_string(),
+    SubscribeRequestFilterAccounts {
+        account: vec![],
+        owner: vec!["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA".to_string()],
+        filters: vec![
+            SubscribeRequestFilterAccountsFilter {
+                filter: Some(Filter::TokenAccountState(true)),
+            },
+            SubscribeRequestFilterAccountsFilter {
+                filter: Some(Filter::Memcmp(SubscribeRequestFilterAccountsFilterMemcmp {
+                    offset: 0,
+                    data: Some(Data::Base58(
+                        "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v".to_string(),
+                    )),
+                })),
+            },
+        ],
+        ..Default::default()
+    },
+);
+
+let request = SubscribeRequest {
+    accounts,
+    accounts_data_slice: vec![SubscribeRequestAccountsDataSlice {
+        offset: 32,
+        length: 40,
+    }],
+    commitment: Some(CommitmentLevel::Confirmed.into()),
+    ..Default::default()
+};
+```
 {% endtab %}
 {% endtabs %}
 
-### Subscribe to transactions excluding accounts
+{% endtab %}
+{% tab title="Compressed filters" %}
+For subscriptions tracking thousands of accounts, the explicit pubkey list dominates the payload (1M pubkeys = ~44 MB per resend). Compressed account filters carry your tracked set as a [Cuckoo filter](https://en.wikipedia.org/wiki/Cuckoo_filter), a probabilistic data structure storing small fingerprints instead of full 32-byte pubkeys, cutting payload size ~10x.
+
+| Tracked accounts | Compressed filter | Explicit pubkey list |
+| ---------------: | ----------------: | -------------------: |
+|            1,000 |            ~4 KiB |              ~44 KB |
+|           10,000 |           ~32 KiB |             ~440 KB |
+|          100,000 |          ~256 KiB |             ~4.4 MB |
+|        1,000,000 |            ~4 MiB |              ~44 MB |
+|        2,000,000 |            ~8 MiB |              ~84 MB |
+
+Inserts and removes on the filter are O(1), so account-set mutations skip a full filter rebuild.
+
+**Tradeoffs:**
+
+- **False positives** stay under 1%. Your client should keep an exact tracked set and drop incoming updates whose pubkey isn't in it. A `HashSet` check is the standard pattern; the probabilistic part lives only on the wire.
+- **One-time build cost.** A 2M-account filter takes ~390 ms on a release build. Every subsequent insert, remove, and resend is cheap.
+- **Cross-language compatibility.** SipHash-2-4 produces identical filter bytes across languages and Rust compiler versions, so a TypeScript client and a Rust client emit the same filter for the same pubkey set.
+
+Rust API today; TypeScript is coming. Build a `CompressedAccountFilterSet` and attach it to your `SubscribeRequest`:
+
+```rust Rust
+use yellowstone_grpc_proto::cuckoo::CompressedAccountFilterSet;
+
+let mut accounts = CompressedAccountFilterSet::with_capacity(2_000_000)?;
+for pk in my_tracked_pubkeys() {
+    accounts.insert(*pk)?;
+}
+
+let mut req = SubscribeRequest::default();
+accounts.insert_into_subscribe_request(&mut req, "tracked");
+```
+
+Mutate and resend when the set changes:
+
+```rust Rust
+accounts.insert(new_pubkey)?;
+accounts.remove(old_pubkey)?;
+accounts.insert_into_subscribe_request(&mut req, "tracked");
+```
+
+Drop false positives against your local exact set:
+
+```rust Rust
+if accounts.contains(&incoming_pubkey) {
+    // one of your tracked accounts
+}
+```
+
+Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.one/compressed-filters-yellowstone-grpc).
+{% endtab %}
+{% endtabs %}
+
+### Transactions
+
+If you want the **earliest possible signal** on a transaction, we expose [Deshred transactions](deshred-transactions.md) -- a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
+
+{% tabs %}
+{% tab title="All non-vote, non-failed" %}
+Subscribe to every successful, non-vote transaction at finalized commitment.
 
 {% tabs %}
 {% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
 ```json
-{"slots": { "slots": {} }, "accounts": {}, "transactions": { "serum": { "account_exclude": [ "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin", "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" ]}}, "blocks": {}, "blocks_meta": {}, "accounts_data_slice": []}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-const request = {
-  "slots": {
-    "slots": {}
-  },
+{
+  "slots": { "slots": {} },
   "accounts": {},
   "transactions": {
+    "alltxs": { "vote": false, "failed": false }
+  },
+  "blocks": {},
+  "blocks_meta": {},
+  "accounts_data_slice": [],
+  "commitment": 2
+}
+```
+{% endtab %}
+{% tab title="TypeScript" %}
+```typescript
+import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
+
+const request = {
+  slots: { slots: {} },
+  accounts: {},
+  transactions: {
+    alltxs: { vote: false, failed: false },
+  },
+  blocks: {},
+  blocksMeta: {},
+  accountsDataSlice: [],
+  commitment: CommitmentLevel.FINALIZED,
+};
+```
+{% endtab %}
+{% tab title="Rust" %}
+```rust
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{
+        CommitmentLevel, SubscribeRequest, SubscribeRequestFilterTransactions,
+    },
+};
+
+let mut transactions = HashMap::new();
+transactions.insert(
+    "alltxs".to_string(),
+    SubscribeRequestFilterTransactions {
+        vote: Some(false),
+        failed: Some(false),
+        ..Default::default()
+    },
+);
+
+let request = SubscribeRequest {
+    transactions,
+    commitment: Some(CommitmentLevel::Finalized.into()),
+    ..Default::default()
+};
+```
+{% endtab %}
+{% endtabs %}
+
+{% endtab %}
+{% tab title="Mentioning an account" %}
+Subscribe to non-vote transactions that mention a specific account anywhere.
+
+{% tabs %}
+{% tab title="gRPC" %}
+```json
+{
+  "transactions": {
     "serum": {
-      "accountExclude": [
+      "vote": false,
+      "account_include": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"]
+    }
+  }
+}
+```
+{% endtab %}
+{% endtabs %}
+
+{% endtab %}
+{% tab title="Excluding accounts" %}
+Drop transactions that mention any of the listed accounts.
+
+{% tabs %}
+{% tab title="gRPC" %}
+```json
+{
+  "transactions": {
+    "serum": {
+      "account_exclude": [
         "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin",
         "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
       ]
     }
-  },
-  "blocks": {},
-  "blocksMeta": {},
-  "accountsDataSlice": []
-};
+  }
+}
 ```
-
 {% endtab %}
 {% endtabs %}
 
-### Subscribe to transactions mentioning accounts & excluding certain accounts
+{% endtab %}
+{% tab title="Combined include + exclude" %}
+Combine include \+ exclude in one filter. The example matches transactions mentioning a Serum program but excludes any that also touch a specific account.
 
 {% tabs %}
 {% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
 ```json
-{"slots": { "slots": {} }, "accounts": {}, "transactions": { "serum": { "account_include": [ "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin" ], "account_exclude": [ "9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT" ] }}, "blocks": {}, "blocks_meta": {}, "accounts_data_slice": []}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-const request = {
-  "slots": {
-    "slots": {}
-  },
-  "accounts": {},
+{
   "transactions": {
     "serum": {
-      "accountInclude": [
-        "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"
-      ],
-      "accountExclude": [
-        "9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"
-      ]
+      "account_include": ["9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin"],
+      "account_exclude": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"]
     }
-  },
-  "blocks": {},
-  "blocksMeta": {},
-  "accountsDataSlice": []
-};
+  }
+}
 ```
-
 {% endtab %}
 {% endtabs %}
 
-### Subscribe to a transaction signature
-
-You can subscribe to an individual transaction signature, which will provide updates as the signature is confirmed and finalized.
+{% endtab %}
+{% tab title="By signature" %}
+Track a specific transaction's lifecycle from confirmed to finalized.
 
 {% tabs %}
 {% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
 ```json
-{"slots": {}, "accounts": {}, "transactions": { "sign": { "signature": "5rp2hL9b6kexex11Mugfs3vfU9GhieKruj4CkFFSnu52WLxiGn4VcLLwsB62XURhMmT1j4CZiXT6FFtYbXsLq2Zs"}}, "blocks": {}, "blocks_meta": {}, "accounts_data_slice": []}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-const request = {
-  "slots": {},
-  "accounts": {},
+{
   "transactions": {
     "sign": {
       "signature": "5rp2hL9b6kexex11Mugfs3vfU9GhieKruj4CkFFSnu52WLxiGn4VcLLwsB62XURhMmT1j4CZiXT6FFtYbXsLq2Zs"
     }
-  },
-  "blocks": {},
-  "blocksMeta": {},
-  "accountsDataSlice": []
-};
+  }
+}
 ```
+{% endtab %}
+{% endtabs %}
 
 {% endtab %}
 {% endtabs %}
 
-### Subscribe to slots
+For the wire format of each transaction update, see [`geyser.proto`](https://github.com/rpcpool/yellowstone-grpc/blob/master/yellowstone-grpc-proto/proto/geyser.proto) (search for `SubscribeUpdateTransaction`).
 
-You do not need to provide further details to subscribe to slot notifications. All you'll need to provide is a name for the slot updates that they will be tagged as.
+### Slots
+
+Subscribe to slot status changes. No filter parameters needed beyond a label.
 
 {% tabs %}
 {% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
 ```json
-{"slots": { "incoming_slots": {} }, "accounts": {}, "transactions": {}, "blocks": {}, "blocks_meta": {}, "accounts_data_slice": []}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-const request = {
-  "slots": {
-    "incoming_slots": {}
-  },
+{
+  "slots": { "incoming_slots": {} },
   "accounts": {},
   "transactions": {},
   "blocks": {},
-  "blocksMeta": {},
-  "accountsDataSlice": []
+  "blocks_meta": {},
+  "accounts_data_slice": []
+}
+```
+{% endtab %}
+{% tab title="Rust" %}
+```rust
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{SubscribeRequest, SubscribeRequestFilterSlots},
+};
+
+let mut slots = HashMap::new();
+slots.insert(
+    "incoming_slots".to_string(),
+    SubscribeRequestFilterSlots::default(),
+);
+
+let request = SubscribeRequest {
+    slots,
+    ..Default::default()
 };
 ```
-
 {% endtab %}
 {% endtabs %}
 
-### Subscribe to blocks
+Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-updates) for the full lifecycle.
 
-This will return all the blocks as they are produced. It will send blocks along with the transactions:
+### Blocks
+
+{% tabs %}
+{% tab title="All blocks" %}
+Receive every block as it's produced, with full transaction payload.
 
 {% tabs %}
 {% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
 ```json
-{"slots": {}, "accounts": { }, "transactions": {}, "blocks": { "blocks": {} }, "blocks_meta": {}, "accounts_data_slice": []}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-const request = {
+{
   "slots": {},
   "accounts": {},
   "transactions": {},
-  "blocks": {
-    "blocks": {}
-  },
-  "blocksMeta": {},
-  "accountsDataSlice": []
+  "blocks": { "blocks": {} },
+  "blocks_meta": {},
+  "accounts_data_slice": []
+}
+```
+{% endtab %}
+{% tab title="Rust" %}
+```rust
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{SubscribeRequest, SubscribeRequestFilterBlocks},
+};
+
+let mut blocks = HashMap::new();
+blocks.insert(
+    "blocks".to_string(),
+    SubscribeRequestFilterBlocks::default(),
+);
+
+let request = SubscribeRequest {
+    blocks,
+    ..Default::default()
 };
 ```
-
 {% endtab %}
 {% endtabs %}
 
-By default `Block` message includes all transactions, but you can exclude them or include updated accounts:
+{% endtab %}
+{% tab title="Customise payload" %}
+Trim the block payload by toggling `include_transactions` / `include_accounts`.
 
 {% tabs %}
 {% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
 ```json
-{"slots": {}, "accounts": { }, "transactions": {}, "blocks": { "blocks": {"include_transactions": false, "include_accounts": true} }, "blocks_meta": {}, "accounts_data_slice": []}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-const request = {
-  "slots": {},
-  "accounts": {},
-  "transactions": {},
-  "blocks": {
-    "blocks": {
-      "includeTransactions": false,
-      "includeAccounts": true
-    }
-  },
-  "blocksMeta": {},
-  "accountsDataSlice": []
-};
-```
-
-{% endtab %}
-{% endtabs %}
-
-If you interested only in transactions/accounts where any of specified accounts are mentioned you can use special filter:
-
-{% tabs %}
-{% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
-```json
-{"slots": {}, "accounts": { }, "transactions": {}, "blocks": { "blocks": {"account_include": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"]} }, "blocks_meta": {}, "accounts_data_slice": []}
-```
-
-{% endcode %}
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-const request = {
-  "slots": {},
-  "accounts": {},
-  "transactions": {},
+{
   "blocks": {
     "blocks": {
-      "accountInclude": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"]
+      "include_transactions": false,
+      "include_accounts": true
     }
-  },
-  "blocksMeta": {},
-  "accountsDataSlice": []
-};
+  }
+}
 ```
+{% endtab %}
+{% endtabs %}
+
+{% endtab %}
+{% tab title="Filtered by account" %}
+Restrict the block's transactions and accounts to those mentioning specific addresses.
+
+{% tabs %}
+{% tab title="gRPC" %}
+```json
+{
+  "blocks": {
+    "blocks": {
+      "account_include": ["So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"]
+    }
+  }
+}
+```
+{% endtab %}
+{% endtabs %}
+
+{% endtab %}
+{% tab title="Block metadata only" %}
+Get block headers without the transaction payload (much smaller messages).
+
+{% tabs %}
+{% tab title="gRPC" %}
+```json
+{
+  "blocks": {},
+  "blocks_meta": { "blockmetadata": {} }
+}
+```
+{% endtab %}
+{% endtabs %}
 
 {% endtab %}
 {% endtabs %}
 
-### Subscribe to block metadata
+### Entries
 
-If you want to subscribe just to notifications as blocks are processed without receiving all the transactions, then you can use the block meta subscription:
+Subscribe to ledger entries (groups of transactions that make up a slot). No filters; subscribe by adding any named entry filter.
 
 {% tabs %}
 {% tab title="gRPC" %}
-{% code overflow="wrap" %}
-
 ```json
-{"slots": {}, "accounts": {}, "transactions": {}, "blocks": {}, "blocks_meta": { "blockmetadata": {} }, "accounts_data_slice": []}
+{
+  "entry": { "all": {} }
+}
 ```
-
-{% endcode %}
 {% endtab %}
+{% tab title="Rust" %}
+```rust
+use {
+    std::collections::HashMap,
+    yellowstone_grpc_proto::prelude::{SubscribeRequest, SubscribeRequestFilterEntry},
+};
 
-{% tab title="NodeJS" %}
+let mut entry = HashMap::new();
+entry.insert("all".to_string(), SubscribeRequestFilterEntry::default());
 
-```javascript
-const request = {
+let request = SubscribeRequest {
+    entry,
+    ..Default::default()
+};
+```
+{% endtab %}
+{% endtabs %}
+
+## Modifying and unsubscribing
+
+The subscribe stream is bi-directional. Send a new `SubscribeRequest` at any time to update filters -- it fully replaces the previous subscription, so your client must keep a local copy of the full config it wants.
+
+To unsubscribe from everything but keep the connection open:
+
+{% tabs %}
+{% tab title="gRPC" %}
+```json
+{
   "slots": {},
   "accounts": {},
   "transactions": {},
   "blocks": {},
-  "blocksMeta": {
-    "blockmetadata": {}
-  },
-  "accountsDataSlice": []
-};
+  "blocks_meta": {}
+}
 ```
-
 {% endtab %}
 {% endtabs %}
 
-### Sending pings to keep the stream alive
+## Pings
 
-Some cloud providers (eg. Cloudflare) close idle streams. To avoid this, you need to keep sending pings to the server. The server responds with a `pong` message every 15 seconds.
+Some cloud providers (e.g. Cloudflare) close idle streams. To avoid this, you need to keep sending pings to the server. The server responds with a `pong` message every 15 seconds.
 
-Here is a rust example for this <https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88>
+{% tabs %}
+{% tab title="TypeScript" %}
+```typescript
+const PING_INTERVAL_MS = 30_000;
 
-Here is an example of how you can do periodic pings and handle the pong responses
-
-```
-const PING_INTERVAL_MILLISECONDS = 30000;
-
-// Ping request
-const pingRequest: SubscribeRequest = {
-    ping: { id: 1 },
-    accounts: {},
-    accountsDataSlice: [],
-    transactions: {},
-    transactionsStatus: {},
-    blocks: {},
-    blocksMeta: {},
-    entry: {},
-    slots: {},
+const pingRequest = {
+  ping: { id: 1 },
+  accounts: {},
+  accountsDataSlice: [],
+  transactions: {},
+  transactionsStatus: {},
+  blocks: {},
+  blocksMeta: {},
+  entry: {},
+  slots: {},
 };
 
-// Sending pings periodically
 setInterval(async () => {
   await new Promise<void>((resolve, reject) => {
-    stream.write(pingRequest, (err) => {
-      if (err === null || err === undefined) {
-        resolve();
-      } else {
-        reject(err);
-      }
-    });
-  }).catch((reason) => {
-    console.error(reason);
-    throw reason;
+    stream.write(pingRequest, (err) =>
+      err ? reject(err) : resolve()
+    );
   });
-}, PING_INTERVAL_MILLISECONDS);
+}, PING_INTERVAL_MS);
 
-// Handling pong responses
-// This goes in your `data` handler
 stream.on("data", (data) => {
-if (data.pong) {
-    console.log("Received Pong response");
+  if (data.pong) {
+    console.log("Received pong");
   }
 });
-
 ```
+{% endtab %}
+{% tab title="Rust" %}
+```rust
+use {
+    crate::grpc::geyser::{
+        SubscribeRequest, SubscribeRequestPing, geyser_client::GeyserClient,
+        subscribe_update::UpdateOneof,
+    },
+    bytes::Bytes,
+    tokio::sync::mpsc,
+    tokio_stream::{StreamExt, wrappers::ReceiverStream},
+    tonic::{
+        metadata::{Ascii, MetadataValue},
+        service::Interceptor,
+        transport::{Channel, ClientTlsConfig},
+    },
+    tower::{ServiceBuilder, ServiceExt, util::BoxService},
+};
 
-### Modifying subscription
+const MAX_DECODING_MESSAGE_SIZE_BYTES: usize = 100_000_000; // 100 MB
 
-The Subscribe method offers a bi-directional stream, so you can modify the subscription by simply submitting your newly updated subscription string, and you will start receiving updates on your modified filters.
+#[derive(Clone)]
+struct TritonAuthInterceptor {
+    x_token: MetadataValue<Ascii>,
+}
 
-This will entirely overwrite the previous subscription, so ensure your client maintains a local register of the entire subscription config you are interested in.
+impl Interceptor for TritonAuthInterceptor {
+    fn call(&mut self, request: tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status> {
+        let mut request = request;
+        let metadata = request.metadata_mut();
+        metadata.insert("x-token", self.x_token.clone());
+        Ok(request)
+    }
+}
 
-### Replaying from a slot
+pub type GeyserGrpcService = BoxService<
+    hyper::Request<tonic::body::BoxBody>,
+    hyper::Response<tonic::body::BoxBody>,
+    tonic::transport::Error,
+>;
 
-Dragon's Mouth supports replaying recently buffered updates by setting `from_slot` on `SubscribeRequest`. This is mainly used to recover from short disconnections.
+pub async fn build_geyser_grpc_endpoint(
+    endpoint: impl Into<Bytes>,
+    x_token: Option<String>,
+) -> anyhow::Result<GeyserClient<GeyserGrpcService>> {
+    let tls_config = ClientTlsConfig::new().with_native_roots();
+    let endpoint = Channel::from_shared(endpoint)?
+        .tls_config(tls_config)?
+        .connect_lazy();
+    let svc = if let Some(x_token) = x_token {
+        let metadata = x_token.try_into()?;
+        let interceptor = TritonAuthInterceptor { x_token: metadata };
+        ServiceBuilder::new()
+            .layer(tonic::service::interceptor(interceptor))
+            .service(endpoint)
+            .boxed()
+    } else {
+        endpoint.boxed()
+    };
+    let client = GeyserClient::new(svc).max_decoding_message_size(MAX_DECODING_MESSAGE_SIZE_BYTES);
+    Ok(client)
+}
 
-When a client subscribes with `from_slot`, the server first replays buffered updates starting from that slot and then continues streaming live updates on the same connection.
+pub async fn build_geyser_blockchain_event_stream(
+    endpoint: impl Into<Bytes> + Send + 'static,
+    x_token: Option<String>,
+    request: SubscribeRequest,
+    tx: mpsc::Sender<UpdateOneof>,
+) -> impl Future<Output = ()> {
+    let mut geyser_client = build_geyser_grpc_endpoint(endpoint, x_token)
+        .await
+        .expect("failed to build geyser grpc endpoint");
 
-Important details:
+    // Keep `subscribe_tx` alive to send ping requests to the geyser server.
+    // Necessary to keep the connection alive for some proxy setups.
+    let (subscribe_tx, subscribe_rx) = mpsc::channel(20000);
+    subscribe_tx
+        .send(request)
+        .await
+        .expect("failed to send subscribe request");
 
-* Replay only covers the server's retained replay window.
-* To discover the earliest replayable slot, call the unary `SubscribeReplayInfo` RPC and read `first_available`.
-* If `from_slot` is older than the earliest available slot, the request will fail and the client should retry with a newer slot.
-* Replay uses the same filters and commitment level as the live subscription.
-* Replay starts at a slot boundary. If you reconnect from the last slot you processed, you may receive duplicate updates from that slot, so clients should deduplicate.
+    let response = geyser_client
+        .subscribe(ReceiverStream::new(subscribe_rx))
+        .await
+        .expect("failed to subscribe to geyser");
+    let geyser_source = response.into_inner();
 
-This is useful for reconnect logic:
+    async move {
+        let tx = tx;
+        let mut geyser_source = geyser_source;
+        let mut ping_cnt: i32 = 0;
+        loop {
+            let result = geyser_source.next().await;
+            match result {
+                Some(event) => match event {
+                    Ok(event) => {
+                        let event = match event.update_oneof {
+                            Some(value) => value,
+                            None => continue,
+                        };
+
+                        let blockchain_event: Option<UpdateOneof> = match event {
+                            // Answer Ping requests using `subscribe_tx`
+                            UpdateOneof::Ping(_req) => {
+                                if subscribe_tx
+                                    .send(SubscribeRequest {
+                                        ping: Some(SubscribeRequestPing { id: ping_cnt }),
+                                        ..Default::default()
+                                    })
+                                    .await
+                                    .is_err()
+                                {
+                                    panic!("failed to send ping");
+                                }
+                                ping_cnt += 1;
+                                tracing::info!("Ping sent: {:?}", ping_cnt);
+                                None
+                            }
+                            UpdateOneof::Pong(_) => None,
+                            other => Some(other),
+                        };
+                        if let Some(blockchain_event) = blockchain_event {
+                            if tx.send(blockchain_event).await.is_err() {
+                                break;
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        tracing::error!("disconnected from geyser: {:?}", e);
+                        break;
+                    }
+                },
+                _ => {
+                    tracing::error!("geyser stream ended");
+                    break;
+                }
+            }
+        }
+    }
+}
+```
+{% endtab %}
+{% endtabs %}
+
+Rust source: [gist by @lvboudre](https://gist.github.com/lvboudre/7bbcd895ab3b7df3cd6b0ad1450fac88).
+
+## Replay from a slot
+
+Dragon's Mouth can replay recently buffered updates by setting `from_slot` on `SubscribeRequest`. The server replays buffered updates from that slot, then continues live on the same stream.
+
+Use it for short-disconnection recovery:
 
 1. Track the latest slot your application has processed.
 2. On disconnect, reconnect and resubscribe with `from_slot` set to that slot.
-3. If the requested slot is no longer available, fall back to a fresh live subscription or your own backfill path.
+3. If the slot is no longer available, fall back to a fresh live subscription or your own backfill path.
 
-**Example replay subscribe request**
-
-gRPC
-
+{% tabs %}
+{% tab title="gRPC" %}
 ```json
 {
-  "slots": {
-    "incoming_slots": {}
-  },
+  "slots": { "incoming_slots": {} },
   "accounts": {},
   "transactions": {
-    "alltxs": {
-      "vote": false,
-      "failed": false
-    }
+    "alltxs": { "vote": false, "failed": false }
   },
   "blocks": {},
   "blocks_meta": {},
@@ -849,322 +1066,238 @@ gRPC
   "from_slot": 382001234
 }
 ```
-
-NodeJS
-
+{% endtab %}
+{% tab title="TypeScript" %}
 ```typescript
 const request = {
-  slots: {
-    incoming_slots: {}
-  },
+  slots: { incoming_slots: {} },
   accounts: {},
   transactions: {
-    alltxs: {
-      vote: false,
-      failed: false
-    }
+    alltxs: { vote: false, failed: false },
   },
   blocks: {},
   blocksMeta: {},
   accountsDataSlice: [],
-  fromSlot: 382001234
+  fromSlot: 382001234,
 };
-
 ```
+{% endtab %}
+{% endtabs %}
 
-**Example: checking replay availability**
+To discover the earliest replayable slot, call the unary `subscribeReplayInfo` RPC:
 
+{% tabs %}
+{% tab title="TypeScript" %}
 ```typescript
 const info = await client.subscribeReplayInfo();
 console.log(info.firstAvailable);
 ```
-
-{% hint style="info" %}
-For teams running their own Yellowstone gRPC server, replay must be enabled server-side by setting `replay_stored_slots` to a value greater than `0`.
-{% endhint %}
-
-### Auto-reconnect (Rust client)
-
-Starting from v13.1.0 the Rust client library handles reconnect automatically. You can enable it when building the client:
-
-```rust
-let client = GeyserGrpcClient::build_from_shared(endpoint)?
-    .x_token(x_token)?
-    .tls_config(ClientTlsConfig::new().with_native_roots())?
-    .set_reconnect_config(ReconnectConfig::default())
-    .connect()
-    .await?;
-
-let mut stream = client.subscribe_once(request).await?;
-
-while let Some(msg) = stream.next().await {
-    // stream transparently reconnects on disconnect,
-    // replays from last processed slot, and deduplicates replayed messages
-}
-```
-
-What it does automatically:
-
-* Tracks the last fully processed slot
-* On disconnect, reconnects with `from_slot` set to that slot
-* Deduplicates messages replayed during the reconnect window
-* Falls back to a live subscription if the slot is outside the server's replay window
-
-Auto-reconnect is **disabled by default**. Omit `set_reconnect_config` to get the original single-stream behavior.
-
-### Unsubscribing
-
-If you want to unsubscribe from all streams, send the following request:
-
-{% tabs %}
-{% tab title="gRPC" %}
-
-<pre class="language-json" data-overflow="wrap"><code class="lang-json"><strong>{"slots": {}, "accounts": {}, "transactions": {}, "blocks": {}, "blocks_meta": {}}
-</strong></code></pre>
-
-{% endtab %}
-
-{% tab title="NodeJS" %}
-
-```javascript
-const request = {
-  "slots": {},
-  "accounts": {},
-  "transactions": {},
-  "blocks": {},
-  "blocksMeta": {},
-  "accountsDataSlice": []
-};
-```
-
 {% endtab %}
 {% endtabs %}
 
-This will clear all current subscriptions but keep the connection open for future subscriptions.
+**Important details:**
 
-## Managing commitment levels
+- Replay only covers the server's retained replay window.
+- If `from_slot` is older than the earliest available, the request fails. Retry with a newer slot.
+- Replay uses the same filters and commitment level as the live subscription.
+- Replay starts at a slot boundary -- you may receive duplicate updates from your last-processed slot, so dedupe.
 
-The gRPC streams happen by default on the processed commitment level.
+{% hint style="info" %}
+For teams self-hosting a Yellowstone gRPC server, replay must be enabled by setting `replay_stored_slots` to a value greater than `0`.
+{% endhint %}
 
-We also support specifying confirmed and finalized commitment levels. In these cases, Dragon's Mouth will buffer the incoming updates for you and release them once the updates have become confirmed or finalized.
+## Intra-slot updates
 
-For maximum performance, however, we recommend handling commitment levels client side.
+Subscribers can listen for "intra-slot" lifecycle events that show what's happening inside a slot, from the first shred received to a fully replayed bank.
 
-To specify commitment level in your Dragon's Mouth gRPC calls provide the following values:
-
-```
-enum CommitmentLevel {
-  PROCESSED = 0;
-  CONFIRMED = 1;
-  FINALIZED = 2;
-}
-```
-
-### Benefits of working at processed
-
-The benefit of working on processed is that you can process transactions as soon as they arrive, but only commit to them once you know whether they are confirmed or finalized. This means that you can get faster response times in your UI by doing a lot of the processing work at a lower commitment level and then be able to surface the changes as soon as you see that the event is committed.
-
-### How to manage \`confirmed\` and \`finalized\`
-
-To manage confirmed and finalized you need to buffer events by slot. Each event (transaction or account write) will have a slot attached to it. You store these events in a buffer ordered by slot.
-
-You then also make sure you subscribe to [slot notifications](#subscribe-to-slots). This will give you information about when a slot is confirmed or finalized. Depending on the commitment level you are interested in, you should release your buffer when you receive the slot notification for a particular slot at a particular commitment level.
-
-You will receive all the transaction notifications or account write notifications for the slot **before** you receive the "confirmed" and "finalized" notification for that slot.
-
-### The special thing about finalized
-
-Unfortunately, due to a quirk (fixed in `master` of solana) in the way that Geyser works on Solana not every slot finalized notification is issued. This means that you need some special processing if you want to handle finalized correctly.
-
-The special handling is as follows: whenever you see a `finalized` slot notification, you need to retroactively mark its ancestors as `finalized` too, even if you didn't receive a notification for them.
-
-## Intra-slot update
-
-The Dragon's Mouth gRPC stream allows subscribers to listen for 'intra-slot' updates, which represent different lifecycle stages a slot goes through inside the RPC node, from the first shred received to a fully replayed slot.
-
-Here's a list of supported intra-slot update events :
-
-```
+```protobuf
 enum SlotStatus {
-  ...
+  // ... standard commitment statuses ...
   SLOT_FIRST_SHRED_RECEIVED = 3;
-  SLOT_COMPLETED = 4;
-  SLOT_CREATED_BANK = 5;
-  SLOT_DEAD = 6;
+  SLOT_COMPLETED            = 4;
+  SLOT_CREATED_BANK         = 5;
+  SLOT_DEAD                 = 6;
 }
 ```
 
-**SLOT\_FIRST\_SHRED\_RECEIVED**: The remote RPC node you're connected to has received the first shred of a given slot. This does not indicate it has been replayed yet. This event occurs during the [retransmit stage](https://docs.anza.xyz/validator/tvu#retransmit-stage) in the [TVU](https://docs.anza.xyz/validator/tvu).
+| Status | What it means |
+| --- | --- |
+| `SLOT_FIRST_SHRED_RECEIVED` | The RPC node has received the first shred of this slot. Not yet replayed. Occurs in the [retransmit stage](https://docs.anza.xyz/validator/tvu#retransmit-stage). |
+| `SLOT_CREATED_BANK` | A bank for this slot has been created on the node. Banks are isolated execution contexts -- one per slot, forming a fork graph through parent-child relationships. |
+| `SLOT_COMPLETED` | All shreds for this slot received. Not necessarily replayed yet. |
+| `SLOT_DEAD` | The slot was rejected (invalid signature, bad PoH, wrong entry count). It's discarded by the network. Can happen at any point, even after `SLOT_COMPLETED`. |
 
-**SLOT\_CREATED\_BANK**: A bank for the given slot has been created on the remote RPC node you're connected to. Within a validator, a Bank acts as an isolated execution environment during the replay stage (which follows the retransmit stage). Due to the decentralized nature of blockchains, forks are inevitable, meaning a slot can have multiple descendants.
+Simplified lifecycle of a slot, time flowing left to right:
 
-To handle this, validators must be capable of replaying multiple slots that share the same ancestor without their execution interfering with one another. Each slot is assigned its own Bank instance, and these Banks form a fork graph, where each edge represents a parent-child relationship between two banks.
-
-Banks serve as self-contained execution contexts, maintaining replay results and essential metadata about the slot and its lineage. Importantly, a Bank is instantiated once per slot.
-
-**SLOT\_COMPLETED**: All the shreds for the given slot have been received by the RPC node you're connected to. However, this does not necessarily mean that the slot has been fully replayed yet.
-
-**SLOT\_DEAD:** Dead slots are slots that have been rejected by the validator for various reasons, such as invalid transaction signatures in the leader's shreds, incorrect entry hashes during Proof of History (PoH) verification, or an unexpected number of entries in the slot. When a slot is marked as dead, it is discarded by the network as a whole and effectively skipped. This can occur at any point during the replay process, even after the slot has been marked as 'completed'.
-
-Here's a "simplfied" overview of the expected lifecycle of a slot:\\
-
-{% code title="Slot lifecycle through time" %}
-
-```
-                                                                                                                                            
-                                                                                                                                            
-                                                                                                                                            
-                                          TIME ->                                                                                           
-      ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────►   
-      ┌───────────────────────────────────────────────────────┐                                                                             
-      │ Slot download                                         │                                                                             
-      │ ┌───────────┐┌──────┐         ┌───────┐┌───────────┐  │                                                                             
-      │ │FIRST_SHRED││SHRED2│  ...    │SHRED N││ COMPLETED │  │                                                                             
-      │ │ RECEIVED  │└──────┘         └───────┘└───────────┘  │                                                                             
-      │ └───────────                                          │                                                                             
-      └──────────────┌───────────────────────────────────────────────────────────────────────────────┐                                      
-                     │ REPLAY STAGE                                                                  │                                      
-                     │┌─────────────┐ ┌──────────────┐ ┌───┌───┐┌──────┐    ┌──────────┐ ┌─────────┐ │                                      
-                     ││BANK_CREATED │ │ACCOUNT UPDATE│ │TX1│TX2││ENTRY1│... │BLOCK_META│ │PROCESSED│ │                                      
-                     │└─────────────┘ └──────────────┘ └───└───┘└──────┘    └──────────┘ └─────────┘ │                                      
-                     │                                                                               │                                      
-                     └───────────────────────────────────────────────────────────────────────────────┘                                      
-                                                                                                    ┌──────────────────────────────────┐    
-                                                                                                    │ CONSENSUS                        │    
-                                                                                                    │ ┌──────────┐      ┌───────────┐  │    
-                                                                                                    │ │CONFIRMED │      │FINALIZED  │  │    
-                                                                                                    │ └──────────┘      └───────────┘  │    
-                                                                                                    │                                  │    
-                                                                                                    └──────────────────────────────────┘    
-                                                                                                                                            
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'fontSize':'17px','primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','edgeLabelBackground':'transparent'},'flowchart':{'nodeSpacing':12,'rankSpacing':20,'padding':12,'curve':'linear'}}}%%
+flowchart LR
+    SD["<b>Slot download</b><br/><br/>FIRST_SHRED → SHRED 2<br/>→ … → SHRED N<br/>→ COMPLETED"] --> RS["<b>Replay stage</b><br/><br/>BANK_CREATED → ACCOUNT_UPDATE<br/>→ TX1 → TX2 → ENTRY1<br/>→ … → BLOCK_META → PROCESSED"] --> CN["<b>Consensus</b><br/><br/>CONFIRMED → FINALIZED"]
 ```
 
-{% endcode %}
+## Clients and SDKs
 
-## Deshred transactions (beta)
+Sample clients in multiple languages live in the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory. Match your client to the current proto version.
 
-Dragon's Mouth also supports [`SubscribeDeshred`](https://github.com/rpcpool/yellowstone-grpc/blob/236ebd7b0616dd88407a7a2b61f903a56b92b186/yellowstone-grpc-proto/proto/geyser.proto?ref=blog.triton.one#L12), a separate gRPC stream that delivers transactions reconstructed from shreds before the validator executes them.
+{% tabs %}
+{% tab title="Rust" %}
+The repo's [yellowstone-grpc/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust) directory ships a `client` binary that exercises every subscribe and unary method against any endpoint.
 
-This is the earliest usable on-chain signal exposed by Dragon's Mouth. It is designed for latency-sensitive systems that care about transaction intent as early as possible, such as arbitrage, market making, copy trading, liquidations, and HFT pipelines.
+    Subscribe to account updates:
 
-Unlike the standard `Subscribe` transaction stream, deshred updates are emitted before Replay. That means you receive the decoded transaction earlier, but without execution context.
-
-A deshred update includes:
-
-* `slot`
-* `signature`
-* vote flag
-* raw transaction
-* `loaded_writable_addresses`
-* `loaded_readonly_addresses`
-
-The loaded address fields contain addresses resolved from Address Lookup Tables (ALTs), so deshred filters match both static account keys and dynamically loaded addresses.
-
-#### Deshred filters
-
-`SubscribeDeshred` supports:
-
-* `vote`
-* `account_include`
-* `account_exclude`
-* `account_required`
-
-#### Important limitations
-
-* `SubscribeDeshred` is a separate RPC, not a field on `SubscribeRequest`
-* deshred data has no execution metadata: no status, logs, inner instructions, balance changes, compute units, or `TransactionStatusMeta`
-* deshred data has no confirmation or finality guarantee: a transaction may fail, land on a dead fork, or never confirm
-* if you need confirmation and execution results, use Deshred together with the normal `transactions` stream
-
-#### Availability
-
-`SubscribeDeshred` is currently available only on Triton One gRPC servers and is in paid beta. It depends on Triton's validator-side extension and does not work out of the box on a stock Agave node.
-
-For a deeper overview of the architecture and tradeoffs, see [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/). For the wire format and RPC definitions, see [`geyser.proto`](https://github.com/rpcpool/yellowstone-grpc/blob/236ebd7b0616dd88407a7a2b61f903a56b92b186/yellowstone-grpc-proto/proto/geyser.proto?ref=blog.triton.one#L12).
-
-#### Rust example
-
-```rust
-use {
-    futures::{sink::SinkExt, stream::StreamExt},
-    solana_signature::Signature,
-    std::collections::HashMap,
-    tonic::transport::channel::ClientTlsConfig,
-    yellowstone_grpc_client::GeyserGrpcClient,
-    yellowstone_grpc_proto::prelude::{
-        subscribe_update_deshred::UpdateOneof, SubscribeDeshredRequest,
-        SubscribeRequestFilterDeshredTransactions, SubscribeRequestPing,
-    },
-};
-
-#[tokio::main]
-async fn main() -> anyhow::Result<()> {
-    let endpoint = std::env::var("ENDPOINT")
-        .unwrap_or("https://<endpoint>".into());
-    let x_token = std::env::var("X_TOKEN").ok();
-
-    let mut client = GeyserGrpcClient::build_from_shared(endpoint)?
-        .x_token(x_token)?
-        .tls_config(ClientTlsConfig::new().with_native_roots())?
-        .http2_adaptive_window(true)
-        .initial_connection_window_size(8 * 1024 * 1024) // 8 MiB
-        .initial_stream_window_size(4 * 1024 * 1024) // 4 MiB
-        .connect()
-        .await?;
-
-    let request = SubscribeDeshredRequest {
-        deshred_transactions: HashMap::from([(
-            "deshred".into(),
-            SubscribeRequestFilterDeshredTransactions {
-                vote: Some(false),
-                account_include: vec![],
-                account_exclude: vec![],
-                account_required: vec![],
-            },
-        )]),
-        ping: None,
-    };
-
-    let (mut tx, mut stream) =
-        client.subscribe_deshred_with_request(Some(request)).await?;
-
-    while let Some(msg) = stream.next().await {
-        match msg?.update_oneof {
-            Some(UpdateOneof::DeshredTransaction(update)) => {
-                let info = update.transaction.as_ref().unwrap();
-                let sig = Signature::try_from(info.signature.as_slice())?;
-                println!("slot={} sig={sig} vote={}", update.slot, info.is_vote);
-            }
-            Some(UpdateOneof::Ping(_)) => {
-                tx.send(SubscribeDeshredRequest {
-                    ping: Some(SubscribeRequestPing { id: 1 }),
-                    ..Default::default()
-                }).await?;
-            }
-            Some(UpdateOneof::Pong(_)) => {}
-            None => break,
-        }
-    }
-
-    Ok(())
-}
+```shell
+cargo run --bin client -- \
+  -e https://api.rpcpool.com \
+  --x-token <token> \
+  subscribe \
+  --accounts \
+  --accounts-account <Pubkey>
 ```
 
+    Subscribe to slots (with commitment override):
 
----
-
-# Agent Instructions: Querying This Documentation
-
-If you need additional information that is not directly available in this page, you can query the documentation dynamically by asking a question.
-
-Perform an HTTP GET request on the current page URL with the `ask` query parameter:
-
-```
-GET https://docs.triton.one/project-yellowstone/dragons-mouth-grpc-subscriptions.md?ask=<question>
+```shell
+cargo run --bin client -- \
+  -e https://api.rpcpool.com \
+  --x-token <token> \
+  --commitment processed \
+  subscribe \
+  --slots
 ```
 
-The question should be specific, self-contained, and written in natural language.
-The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+    Subscribe to non-vote, non-failed transactions touching an account:
 
-Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.
+```shell
+cargo run --bin client -- \
+  -e https://api.rpcpool.com \
+  --x-token <token> \
+  subscribe \
+  --transactions \
+  --transactions-vote false \
+  --transactions-failed false \
+  --transactions-account-include <Pubkey>
+```
 
+    Subscribe to deshred transactions (Triton-only):
+
+```shell
+cargo run --bin client -- \
+  -e https://api.rpcpool.com \
+  --x-token <token> \
+  subscribe-deshred \
+  --vote false \
+  --account-include <Pubkey>
+```
+
+    Unary calls (`ping`, `get-latest-blockhash`, `get-block-height`, `get-slot`, `is-blockhash-valid`, `get-version`):
+
+```shell
+cargo run --bin client -- \
+  -e https://api.rpcpool.com \
+  --x-token <token> \
+  get-slot
+# response: GetSlotResponse { slot: 196214563 }
+```
+
+{% hint style="info" %}
+`subscribe-deshred` only works against Triton extension servers. The open-source `yellowstone-grpc-geyser` returns `UNIMPLEMENTED`.
+{% endhint %}
+{% endtab %}
+{% tab title="TypeScript / NodeJS" %}
+From `5.1.x` the TypeScript SDK is supercharged with a Rust NAPI backend. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
+
+Install:
+
+```bash
+npm install --save @triton-one/yellowstone-grpc
+```
+
+Initialise:
+
+```typescript
+import Client from "@triton-one/yellowstone-grpc";
+
+const client = new Client(
+  "https://api.rpcpool.com:443",
+  "<your-token>"
+);
+
+await client.connect();
+
+const version = await client.getVersion();
+console.log(version);
+```
+
+Open a subscription stream:
+
+```typescript
+import { SubscribeRequest } from "@triton-one/yellowstone-grpc";
+
+const stream = client.subscribe();
+
+stream.on("data", (data) => {
+  console.log("data", data);
+});
+
+const request: SubscribeRequest = { /* see Subscribe request */ };
+
+await new Promise<void>((resolve, reject) => {
+  stream.write(request, (err) =>
+    err == null ? resolve() : reject(err)
+  );
+});
+```
+
+Full example: [yellowstone-grpc/examples/typescript](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/typescript).
+{% endtab %}
+{% tab title="grpcurl" %}
+`grpcurl` is good for testing. You need the corresponding Protobuf `.proto` files (starting with `geyser.proto` and its dependencies) so `grpcurl` can describe the protocol.
+
+```shell
+./grpcurl \
+  -proto geyser.proto \
+  -d '{"slots": { "slots": {} }, "accounts": { "usdc": { "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
+  -H "x-token: <token>" \
+  api.rpcpool.com:443 \
+  geyser.Geyser/Subscribe
+```
+
+Self-hosters can drop the `x-token` header.
+{% endtab %}
+{% tab title="Go" %}
+Requires Go 1.21. Run the sample client straight from the repo:
+
+```shell
+go run ./cmd/grpc-client/ \
+  -endpoint https://api.rpcpool.com:443 \
+  -x-token <your-token> \
+  -slots
+```
+
+    Non-SSL connections work too:
+
+```shell
+go run ./cmd/grpc-client/ \
+  -endpoint http://api.rpcpool.com:80 \
+  -x-token <your-token> \
+  -blocks
+```
+
+    Updating proto files needs `protoc` plus the Go plugins:
+
+```shell
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.35.1
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
+```
+
+    Run `make` to regenerate. Full source: [yellowstone-grpc/examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang).
+
+{% hint style="info" %}
+The Go example may lag the latest stable proto version. For production-ready code, the Rust client is the reference implementation.
+{% endhint %}
+{% endtab %}
+{% endtabs %}
+
+## What's next?
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="deshred-transactions.md">deshred-transactions.md</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="whirligig-websockets.md">whirligig-websockets.md</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="fumarole-persistent-streams.md">fumarole-persistent-streams.md</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td><a href="overview.md">overview.md</a></td></tr></tbody></table>

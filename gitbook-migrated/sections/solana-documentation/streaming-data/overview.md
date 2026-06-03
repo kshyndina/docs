@@ -1,114 +1,101 @@
 # Overview
 
-Triton's Cascade-enabled Solana endpoints support a direct HTTP transaction submission path that bypasses the JSON-RPC layer entirely:
+Triton offers multiple streaming services on Solana. This page covers what streaming is, what each service does, and how to pick the right one for your build.
 
-```
-POST /sendtx
-```
+## What is streaming?
 
-This endpoint is designed for latency-sensitive workloads where every millisecond of overhead matters. It accepts a plain transaction payload over HTTP and eliminates several sources of latency present in a standard `sendTransaction` JSON-RPC call.
+Solana produces a new block every ~400 ms. If you poll RPC every 200 ms, your data is at best 200 ms stale by the time you see it, and you'll easily hit rate limits hammering the same endpoint.
 
-#### Why use `/sendtx` instead of `sendTransaction`?
+Streaming inverts the model: you open one connection, say what you need (specific accounts, programs, transaction patterns), and the node pushes you matching events the instant they happen.
 
-The standard Solana `sendTransaction` RPC method wraps your transaction in a JSON-RPC envelope, which adds overhead at every stage of the request. The `/sendtx` endpoint removes that overhead.
-
-* **No JSON parsing.** The server receives your transaction bytes directly, skipping JSON deserialization.
-* **No CORS preflight.** When using `Content-Type: application/octet-stream` or `text/plain`, browsers skip the preflight `OPTIONS` request. That saves a full round-trip.
-* **Smaller payloads.** Without the JSON-RPC wrapper (`jsonrpc`, `id`, `method`, `params`), the request body is smaller on the wire.
-* **Simpler client code.** You don't need a Solana JSON-RPC client library. A single HTTP POST is all it takes.
-
-This makes `/sendtx` a good fit for **browser-based applications** that are sensitive to preflight latency and **high-frequency backends** that send large volumes of transactions.
-
-If you need a transaction signature returned in the response, use the `response=signature` query parameter. Otherwise, track signatures client-side before submitting. The signature is deterministic and can be derived from the signed transaction before it is sent.
-
-{% hint style="info" %}
-If you prefer the standard Solana RPC interface or need full `sendTransaction` options like `skipPreflight`, you can continue using `sendTransaction` as normal. See our [Transaction sending advice](/chains/solana/cascade/sending-txs.md) for best practices.
-{% endhint %}
-
-#### Request format
-
-**Method:** `POST`\
-**Path:** `/sendtx`
-
-The request body should contain your serialized transaction. You can submit it in one of two ways:
-
-* **Raw bytes.** Set `Content-Type: application/octet-stream` and send the transaction as a binary payload.
-* **Encoded string.** Set `Content-Type: text/plain` and send the transaction as a text body (base58 or base64). Use the `encoding` query parameter to indicate the format.
-
-#### Query parameters
-
-| Parameter     | Values             | Required    | Description                                                                 |
-| ------------- | ------------------ | ----------- | --------------------------------------------------------------------------- |
-| `encoding`    | `base58`, `base64` | No          | Encoding format when sending the transaction as text. Defaults to `base58`. |
-| `response`    | `signature`        | Recommended | When set, the response body contains the transaction signature on success.  |
-| `max_retries` | integer            | No          | Override the default retry count for this transaction.                      |
-
-#### Optional headers
-
-| Header                      | Description                                                                                                                          |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `solana-forwardingpolicies` | Comma-separated [Yellowstone Shield](/project-yellowstone/shield-transaction-policies.md) policy addresses to apply when forwarding. |
-
-#### Examples
-
-**Raw bytes**
-
-```bash
-curl -X POST 'https://<your-endpoint>/sendtx?response=signature&max_retries=3' \
-  -H 'Content-Type: application/octet-stream' \
-  --data-binary @transaction.bin
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
+sequenceDiagram
+    participant Client
+    participant RPC
+    Note over Client,RPC: Polling: ask repeatedly
+    Client->>RPC: getAccountInfo
+    RPC-->>Client: response (~200 ms stale)
+    Client->>RPC: getAccountInfo
+    RPC-->>Client: response (~200 ms stale)
+    Client->>RPC: getAccountInfo
+    RPC-->>Client: HTTP 429
 ```
 
-**Base64-encoded transaction**
-
-```bash
-curl -X POST 'https://<your-endpoint>/sendtx?encoding=base64&response=signature' \
-  -H 'Content-Type: text/plain' \
-  -d '<base64-encoded-transaction>'
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
+sequenceDiagram
+    participant Client
+    participant RPC
+    Note over Client,RPC: Streaming: subscribe once
+    Client->>RPC: subscribe (filters)
+    RPC-->>Client: event (intra-slot)
+    RPC-->>Client: event (intra-slot)
+    RPC-->>Client: event (intra-slot)
+    RPC-->>Client: event (intra-slot)
 ```
 
-**Base64 with a Yellowstone Shield forwarding policy**
+You get sub-slot latency, structured Protobuf payloads, and lower costs, also significantly cheaper than the equivalent polling traffic, as it only incurs bandwidth cost.
 
-```bash
-curl -X POST 'https://<your-endpoint>/sendtx?encoding=base64&response=signature' \
-  -H 'solana-forwardingpolicies: <policy-address>' \
-  -d '<base64-encoded-transaction>'
-```
+It's the right tool when you're building:
 
-#### Response
+- **Trading and MEV systems** where 50 ms of staleness costs money
+- **Indexers, accounting, and analytics pipelines** that need every block processed exactly once
+- **Real-time UIs** (DEXs, wallets, explorers) with live balances and transaction feeds
+- **Anything that needs to backfill chain history** at scale
 
-**On success:**
+For teams with heavy polling codebases, Yellowstone Accounts Sync delivers streaming-grade reads through a one-line SDK swap.
 
-* HTTP `200 OK`
-* If `response=signature` was set, the body contains the transaction signature as plain text.
-* If `response=signature` was not set, the body is empty. Derive the signature client-side from your signed transaction before submitting.
+## Triton streaming stack
 
-**On error:**
+Triton was first to ship gRPC streaming on Solana with **Yellowstone gRPC**, the open-source Geyser plugin that most of the ecosystem now runs on. Self-hosting is great for MVPs. At production scale, running on Triton gives you:
 
-* HTTP `4xx` or `5xx`
-* The response body contains error details describing what went wrong.
+- **Dedicated streaming clusters.** Specialised infrastructure that doesn't serve general RPC traffic, tuned for the I/O profile of pushing events to thousands of subscribers.
+- **Co-located with high-stake validators.** Streaming clusters sit next to high-stake validators in top-tier data centres and ingest shreds from our own validators, Jito, DoubleZero, and Turbine, so updates hit the edge as fast as physically possible.
+- **Globally distributed across 20\+ points of presence.** GeoDNS routes you to the nearest cluster; automatic failover handles outages.
+- **Isolated services.** All the streaming services (Whirligig, Fumarole, Faithful streams) run on modular infrastructure, so a spike in one can't degrade the others.
 
-#### Notes
+## Pick your stream
 
-* `/sendtx` is for transaction submission only. It does not support simulation or other RPC methods.
-* For best results, follow our [Transaction sending advice](/chains/solana/cascade/sending-txs.md) for client-side retries, compute budgets, priority fees, and preflight handling.
-* If you are using Yellowstone Shield policies, see the [Shield documentation](/project-yellowstone/shield-transaction-policies.md) for configuration details.
+Three things matter in streaming: **latency, reliability, and replay**. Years of running Yellowstone at scale taught us that no single product leads on all of them. So we built one for each, all on the Yellowstone Geyser foundation.
 
+- [Dragon's Mouth](dragon-s-mouth-grpc.md) is the source of truth for live data, with [Deshred](deshred-transactions.md) giving you pre-execution transaction data on the same gRPC service.
+- [Whirligig](whirligig-websockets.md) translates Dragon's Mouth output into standard Solana WebSocket messages for browsers.
+- [Fumarole](fumarole-persistent-streams.md) consumes multiple Dragon's Mouth nodes, deduplicates, and persists a cursor on the server side so you can resume exactly where you left off after disconnects.
+- [Old Faithful](/solana/streaming/old-faithful-streams) taps the historical archive but uses the same gRPC interface, so the live and historical pipelines appear identical to your client code.
 
----
+| Capability | Dragon's Mouth | Deshred tx | Whirligig websocket | Fumarole | Old Faithful |
+| --- | :-: | :-: | :-: | :-: | :-: |
+| Real-time data | ✓ | ✓ | ✓ | ✓ | ✗ |
+| Pre-execution transactions | ✗ | ✓ | ✗ | ✗ | ✗ |
+| Historical replay | ✗ | ✗ | ✗ | 4 days | Entire ledger |
+| Persistent cursor | ✗ | ✗ | ✗ | ✓ | slot range |
+| Browser-compatible | ✗ | ✗ | ✓ | ✗ | ✗ |
+| Commitment | all | ✗ | all | all (confirmed latency) | finalised |
+| Protocol | gRPC | gRPC | WebSocket | gRPC | gRPC |
 
-# Agent Instructions: Querying This Documentation
+It's normal to combine more than one product in a pipeline. Common patterns:
 
-If you need additional information that is not directly available in this page, you can query the documentation dynamically by asking a question.
+- **Trading and MEV**: Dragon's Mouth gRPC for processed data, Deshred for pre-execution tx
+- **DEX or wallet frontend**: Whirligig WebSockets
+- **Indexer, analytics, or compliance**: Fumarole for live with confirmed Faithful streams for history
 
-Perform an HTTP GET request on the current page URL with the `ask` query parameter:
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="dragon-s-mouth-grpc.md">dragon-s-mouth-grpc.md</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="deshred-transactions.md">deshred-transactions.md</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="whirligig-websockets.md">whirligig-websockets.md</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="fumarole-persistent-streams.md">fumarole-persistent-streams.md</a></td></tr></tbody></table>
 
-```
-GET https://docs.triton.one/chains/solana/cascade/transaction-submission.md?ask=<question>
-```
+## Excluded programs
 
-The question should be specific, self-contained, and written in natural language.
-The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+Light Protocol program is excluded from all our streams and is also unavailable via `getProgramAccounts`. At peak load, it accounted for over 50% of all Geyser traffic, making it impractical to include in standard streams
 
-Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.
+| Program | Address |
+| :-- | :-- |
+| Light Protocol / ZK Compression | `compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq` |
 
+The recommended replacement is the [Triton-hosted Photon service](/solana/reading-state/zk-compression-photon), which lets you query individual compressed accounts, token balances, validity proofs, and transaction signatures directly.
+
+## Pricing
+
+All streaming services are billed at `$0.08 / GB` of bandwidth, and you only pay for the data sent. See [streaming best practices](best-practices.md) for filtering, guides, and other ways to reduce it.
+
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Streaming quickstart</strong></td><td>Test every Triton streaming service in under five minutes.</td><td><a href="quickstart.md">quickstart.md</a></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Account Sync</strong></td><td>Streaming-backed local cache for account reads. No polling, no code changes.</td><td><a href="../reading-state/account-sync.md">../reading-state/account-sync.md</a></td></tr></tbody></table>

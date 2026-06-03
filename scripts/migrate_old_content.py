@@ -83,6 +83,36 @@ for t, p in old_flat:
     if d and d not in mapped and "api-reference" in d[1]:
         mapped[d] = p
 
+# ---- DO NOT overwrite pages already written in Mintlify, and DO NOT pull from
+#      retired/stale old pages (Cascade) or known bad fuzzy matches ------------
+FULL = {(k, fp): path for (t, k, fp, path) in new_pages}
+def is_written(path, title):
+    if "Get started > " in path and title in {
+        "Welcome to Triton", "Quickstart", "Plans and billing",
+        "Rate and connection limits", "Authentication", "Privacy and security"}:
+        return True
+    if "Streaming data > " in path and title in {
+        "Overview", "Quickstart", "Dragon's Mouth gRPC", "Deshred transactions",
+        "Best practices", "Pythnet and Hermes"}:
+        return True
+    if "Error handling > " in path and title in {
+        "How to troubleshoot", "Common Solana errors", "Triton RPC error codes",
+        "Web3JS socket/connection issues", "Verify your gRPC endpoint"}:
+        return True
+    if title in {"How to sign up", "Access your endpoint and token"}:
+        return True
+    return False
+TITLE_OF = {(k, fp): t for (t, k, fp, _) in new_pages}
+for dest in list(mapped):
+    op = mapped[dest]
+    path = FULL.get(dest, ""); title = TITLE_OF.get(dest, "")
+    if is_written(path, title):            # already written in Mintlify -> keep
+        del mapped[dest]; continue
+    if "cascade" in op.lower():            # retired product -> stale
+        del mapped[dest]; continue
+    if op == "core-features/support-faqs": # bad fuzzy match onto Sui FAQs
+        del mapped[dest]; continue
+
 # ---- build migrated duplicate ---------------------------------------------
 OUT = os.path.join(ROOT, "gitbook-migrated", "sections")
 if os.path.exists(os.path.dirname(OUT)):
@@ -102,6 +132,7 @@ for (key, fp), old_path in mapped.items():
     if not md:
         continue
     title = next((t for t, k, f, _ in new_pages if k == key and f == fp), None)
+    md = re.sub(r"^---\n.*?\n---\n", "", md, count=1, flags=re.S)  # strip YAML frontmatter
     body = re.sub(r"^#\s+.*\n", "", md, count=1).lstrip()    # drop old H1
     out = f"# {title}\n\n{body}\n" if title else md
     with open(os.path.join(OUT, key, fp), "w", encoding="utf-8") as f:
@@ -112,11 +143,14 @@ for (key, fp), old_path in mapped.items():
 APIMETH = re.compile(r"^(get|is|send|simulate|minimum|request|ping|account|logs|program|"
                      r"root|signature|slot|subscribe|metis|titan)", re.I)
 def status(t, k, fp):
+    path = FULL.get((k, fp), "")
+    if is_written(path, t):
+        return "Written in Mintlify (keep)", ""
     if (k, fp) in migrated_files:
-        return "Migrated (copy from old)", mapped.get((k, fp), "")
+        return "Copy available from old docs", mapped.get((k, fp), "")
     if k == "solana-api-reference" and APIMETH.match(t):
         return "TBD — copy from Solana Foundation", ""
-    return "TBD — write new", ""
+    return "TBD — write new (no source)", ""
 
 wb2 = openpyxl.Workbook(); wsx = wb2.active; wsx.title = "Migrated structure + status"
 wsx.append(["L", "Type", "Page / section", "Full path", "Status", "Old source page"])

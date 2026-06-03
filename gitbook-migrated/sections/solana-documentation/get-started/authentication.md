@@ -1,53 +1,167 @@
 # Authentication
 
-#### Our Philosophy
+We are committed to a defence-in-depth security model to protect our global infrastructure and our customers' services.
 
-We take a proactive approach to abuse prevention with two primary goals:
+This page covers both what we do (network defences, access controls, infrastructure hardening, data handling) and best practices on your side (using tokens correctly, configuring origins, keeping credentials out of public code).
 
-1. **Protect Your Application:** Ensure that malicious traffic doesn't disrupt the service for your legitimate users.
-2. **Protect Your Bill:** Prevent runaway bots or abusive traffic from causing unexpected charges.
+## What Triton protects
 
-Our abuse prevention systems are a core feature built over several years of experience running high-demand public and private endpoints.
+### Endpoint defences
 
-{% hint style="info" %}
-**A Note on Proxies**
+A multi-layered filter sits on every shared endpoint:
 
-We manage abuse prevention natively, so you do not need to place third-party proxies (like Cloudflare) in front of our service. In fact, doing so often introduces disadvantages like centralization and man-in-the-middle security risks. For a detailed explanation, please see our [guide on Proxying](/core-features/proxying.md).
-{% endhint %}
+- **Traffic filtering at the edge.** Load balancers inspect every request and reject anything that isn't valid JSON-RPC. Malformed traffic never reaches your nodes.
+- **Rate limiting per IP and per method.** See [Rate and connection limits](rate-and-connection-limits.md) for defaults and how the dual budgets work.
+- **Advanced fingerprinting.** Identifies actors trying to spoof tokens or origins, blocks them before they affect your endpoint.
+- **Origin and token validation.** Each request is authenticated by either an allowed origin (frontend) or a secret token (backend). Origin validation is intentionally disabled when a token is present.
 
-#### How We Protect You
+### DDoS protection
 
-Our strategy is a multi-layered defense designed to filter out malicious traffic while allowing legitimate requests to pass through smoothly. Key components include:
+Triton's infrastructure handles DDoS mitigation natively. You don't need Cloudflare or another commercial provider in front, and putting one there actively breaks our routing (see [Why we advise against proxying](#why-we-advise-against-proxying)).
 
-* **Access Control (Endpoints vs. Tokens):** We provide a clear distinction between two methods of access. **Public Endpoints** are for your frontend dApp and are secured by an allowlist of web origins you provide. **Secret Tokens** are for your backend services and must be kept private.
-* **Intelligent** [**Rate Limiting**](/core-features/ratelimits.md)**:** Our platform enforces carefully tuned Rate Limits based on IP address and other factors to prevent any single actor from overwhelming the service.
-* **Traffic Filtering:** Our load balancers inspect incoming traffic to ensure it conforms to valid JSON-RPC specifications. Malformed requests or traffic that doesn't resemble a useful RPC call is denied at the edge before it can impact backend nodes.
-* **Advanced Fingerprinting:** We employ sophisticated fingerprinting techniques to identify and block malicious actors attempting to circumvent our security measures, such as by spoofing authentication credentials or web origins. This protects against more advanced and persistent abuse patterns.
+### Internal security posture
 
-#### Your Role in Security
+Defence-in-depth across access, network, systems, personnel, and audit:
 
-Properly using endpoints and tokens is the most important step you can take to secure your service.
+- **Access.** Centralised IAM with least-privilege defaults. MFA mandatory; hardware tokens (Yubikeys) required for all services. SSO gates external and internal services. SSH via bastion hosts with short-lived certificates and hardware-key authentication.
+- **Network.** Private encrypted backbone for all internal traffic. Host firewalls with minimal-exposure policies. All data is encrypted in transit.
+- **Systems.** Employee workstations with full disk encryption, antivirus, and required VPN on untrusted networks. Daily automated security patching. Continuous CVE monitoring on critical packages.
+- **Personnel.** Formal onboarding with gradual access provisioning. Strict offboarding revokes all access immediately. Regular security awareness training.
+- **Audit and incident response.** Daily automated security audits on all hosts. 24/7 alerting on suspicious activity. NIST-based incident response and disaster recovery plans.
 
-* **NEVER** expose a secret Token in public source code, like a frontend JavaScript application. Use your public Endpoint URL instead.
-* **ALWAYS** keep your Tokens secure on your backend, treating them like any other API key or password.
+### Data privacy
 
-For applications like mobile or desktop apps where embedding a token may seem necessary, please contact our support team first. We will help you find a secure setup for your use case.
+Triton handles customer data in compliance with GDPR and equivalent regulations.
 
+**Customer data we process**
 
----
+- Validator node identity keys for customers running validators on our infrastructure
+- RPC service logs generated by user interaction with endpoints
+- Account and billing information required for invoicing and account management
 
-# Agent Instructions: Querying This Documentation
+**How we protect it**
 
-If you need additional information that is not directly available in this page, you can query the documentation dynamically by asking a question.
+- **Validator keys.** Never stored or transmitted unencrypted. Decrypted only in process memory while actively in use.
+- **Billing details.** Card numbers and similar sensitive payment info are never stored on Triton systems. Billing is handled entirely by separate, dedicated, compliant third-party processors.
 
-Perform an HTTP GET request on the current page URL with the `ask` query parameter:
+**RPC log retention and privacy levels**
 
+**Shared services.** Logs collected solely for abuse prevention and operational stability. Triton does not identify or de-anonymise individual end users. Retention: 4 weeks.
+
+**Dedicated services.** Customers choose the policy that fits their legal or privacy requirements:
+
+- **Max privacy.** No request parameters or payloads logged. Highest privacy, but limits some abuse-detection capability. Required for any shared infrastructure components.
+- **Enhanced privacy (default).** Method parameters may be logged, but the signer of a transaction cannot be linked to the originating IP. Balance of operational insight and user privacy.
+- **GDPR privacy.** All parameters may be logged for technical support, legal, or compliance reasons. Fully GDPR-compliant handling.
+
+## What you protect
+
+### Secret tokens vs allowed origins
+
+Triton endpoints support two authentication methods, each for a different context. Using the wrong one is the most common security mistake we see.
+
+**Secret tokens, backend only.** The token is appended directly to your endpoint URL:
+
+```text
+https://<your-endpoint>.rpcpool.com/<your-secret-token>
 ```
-GET https://docs.triton.one/core-features/abuse-prevention.md?ask=<question>
+
+Designed for server-side use: Rust backends, Node.js servers, scripts, trading bots, gRPC clients. Origin validation is intentionally disabled when a token is present, since "origin" has no meaning on the server side.
+
+**Never put a token in frontend code.** If it's embedded in a browser-facing app, anyone who opens DevTools can read it. Once it's out, anyone can run requests that land on your bill.
+
+**Allowed origins, frontend.** Browser apps use the bare endpoint URL (no token) and configure allowed origins in the customer dashboard:
+
+```text
+https://<your-endpoint>.rpcpool.com/
 ```
 
-The question should be specific, self-contained, and written in natural language.
-The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+Triton serves requests only from the domains you've explicitly whitelisted. Traffic from these endpoints is rate-limited by IP and origin domain.
 
-Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.
+To add allowed origins:
 
+1. Open the [customer dashboard](https://customers.triton.one/)
+2. Click the subscription, then the endpoint
+3. Click the `+` next to allowed origins
+4. Add the domain and save
+
+When you open the allowed origins list, you'll see `__blocked.rpcpool.com`. Don't remove it. It's a system origin signalling your endpoint requires a valid token for unauthenticated requests. If you remove it and leave the list empty, the endpoint becomes fully open: anyone can query it without a token and any traffic they generate lands on your bill.
+
+**Always use HTTPS.** Endpoints technically work over HTTP (port 80), but unencrypted requests expose authentication data to network snooping. Use `https://` everywhere.
+
+For mobile or desktop apps where embedding a token may seem necessary, contact support before you ship. We'll help you find a secure pattern for that use case.
+
+### Endpoint hygiene
+
+A short checklist that meaningfully reduces your exposure:
+
+- **Disable endpoints you're not using.** Provisioned one for a one-off backfill that's still active? Clean it up in the dashboard.
+- **Set a spend cap with prepaid credit.** A PAYG balance acts as a natural cut-off for abuse. Set low-balance alerts in the Billing tab.
+- **Monitor RPC metrics.** Spikes in unfamiliar methods, traffic at unusual hours, or sudden bandwidth jumps are worth investigating.
+- **Don't log tokens.** Tokens often end up in application logs and observability pipelines. Treat them like a database password.
+- **Separate tokens per environment.** Your Triton account ships with both mainnet and devnet tokens. Use distinct tokens across production, staging, and development to limit the blast radius of a leak.
+
+### If a token leaks
+
+If a token ends up in a public GitHub repo, a frontend bundle, a committed config file, or a shared message, act fast:
+
+1. **Contact support immediately.** Use the chat in your [customer dashboard](https://customers.triton.one/). We'll rotate the token and issue a new one. The old token becomes invalid as soon as the new one is issued.
+2. **Check your billing dashboard.** Look at the RPC Metrics tab for unusual traffic spikes or unfamiliar methods since the suspected leak.
+3. **Audit your codebase.** Search for the token string across all repos, config files, CI/CD pipelines, and environment files. GitHub secret scanning helps automate this.
+4. **Review your allowed origins.** Make sure the list is tight, no wildcards, no overly broad entries.
+5. **Rotate related credentials.** If the token was reused across environments or stored alongside other secrets, treat those as compromised too.
+
+## Why we advise against proxying
+
+Putting a third-party proxy (Cloudflare or similar) in front of your Triton endpoint typically undermines performance, breaks security guarantees, and adds operational complexity. We strongly advise against it.
+
+Before implementing a proxy, contact support. We can almost always provide a more direct, performant solution.
+
+### Performance impact
+
+- **Breaks GeoDNS routing.** Our standard routing connects users to the closest data centre. A proxy that isn't geographically distributed (or that doesn't pass accurate EDNS info) breaks this and removes the latency benefit.
+- **Incompatible with BGP Anycast.** Anycast uses the user's real IP to find the optimal path to our network. A proxy masks the real IP, making Anycast routing impossible.
+- **Delays failover.** Proxies often cache DNS records, interfering with our ability to reroute during emergencies. Result: reduced redundancy, longer downtime.
+
+### Security risks
+
+- **Redundant DDoS protection.** Triton already handles DDoS mitigation. A commercial provider on top adds nothing your endpoint doesn't already have.
+- **You become a man-in-the-middle.** A proxy decrypts all traffic between users and our servers. You inherit full responsibility for any resulting incident or data leak.
+- **SSL/TLS misconfiguration is common.** "Flexible" or "Full without strict" SSL modes leave parts of the network unencrypted and break end-to-end security. Don't disable SSL validation.
+- **Abuse prevention shifts to you.** Our systems see all traffic from one proxy IP, so we partially disable our standard rate limits and abuse defences for that endpoint. You take over the responsibility.
+
+### Technical complexity
+
+- **Header forwarding.** Your proxy must correctly forward `Host`, `Origin` (for CORS and routing), and `X-Forwarded-For` / `X-Real-IP` (to pass the original user IP).
+- **Specialised token required.** Contact us for a proxy-specific token, and make sure it doesn't leak in proxy error pages or logs.
+- **DNS-layer proxies aren't supported.** Simple DNS-layer proxies (e.g. Cloudflare's default proxied DNS records) don't work with shared endpoints. Only full HTTP-layer proxies are workable, and only with the configuration above.
+
+If a misconfigured proxy causes abusive traffic, we'll be forced to severely limit or block your endpoint.
+
+## Upcoming abuse-mitigation changes
+
+Two improvements rolling out to the abuse-mitigation stack. Worth knowing about in case something unexpected shows up in your error logs.
+
+### Earlier connection drops for repeat offenders
+
+New mitigations act earlier in the stack against sources generating large volumes of 403 or 429 errors. Previously, those sources continued to receive HTTP error responses for every request. Under the new behaviour, once a source crosses a threshold, connections from that source IP are dropped silently rather than receiving a response.
+
+In your logs this appears as one of:
+
+- A simple static HTTP error code from our network edge device
+- A network-level failure ("network connection failed" or similar) instead of an HTTP error
+
+If you see this pattern and your traffic is legitimate, the fix is almost always the same: ensure your token is correctly configured, ensure your allowed origins are set up properly, and back off for at least one minute after the fix so the block resolves.
+
+### Stricter filters on tokenless backend traffic
+
+Additional filters return 403 errors to requests that appear to originate from a backend environment but arrive without a token. Legitimate backend traffic should always use a token, so this should have no impact on properly configured services. If you see a rise in 403s, check whether any backend service has been misconfigured to use origin-based auth instead. Misconfigured backend services have a high probability of being blocked by these filters.
+
+## Contact
+
+- General security or privacy questions: contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)
+- Urgent security reports: [noc@triton.one](mailto:noc@triton.one)
+
+## Related
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-gauge">:gauge:</i> <strong>Rate and connection limits</strong></td><td>Per-endpoint and method rate limits, plus streaming connection caps.</td><td><a href="rate-and-connection-limits.md">rate-and-connection-limits.md</a></td></tr><tr><td><i class="fa-user-gear">:user-gear:</i> <strong>Account management</strong></td><td>Customer dashboard tour: endpoints, billing, team, and support.</td><td><a href="platform-overview.md">platform-overview.md</a></td></tr></tbody></table>
