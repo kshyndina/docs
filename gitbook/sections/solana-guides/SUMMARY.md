@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Guides](README.md)
+* [Solana guides](README.md)
 
 ## Quickstart on Triton
 
@@ -34,16 +34,16 @@
 * [Web3JS socket/connection issues](error-handling/web3js-socket-connection-issues.md)
 * [Verify your gRPC endpoint](error-handling/verify-your-grpc-endpoint.md)
 
-## Common workflow tutorials
+## Common workflows
 
-* [Stream Solana with gRPC](common-workflow-tutorials/stream-solana-with-grpc.md)
-* [Get token metadata](common-workflow-tutorials/get-token-metadata.md)
-* [Copy trade a wallet](common-workflow-tutorials/copy-trade-a-wallet.md)
-* [Calculate Solana fees end to end](common-workflow-tutorials/calculate-solana-fees-end-to-end.md)
-* [Stream a Raydium AMM pool](common-workflow-tutorials/stream-a-raydium-amm-pool.md)
-* [Mint a Solana token](common-workflow-tutorials/mint-a-solana-token.md)
-* [Integrate Titan Prime](common-workflow-tutorials/integrate-titan-prime.md)
-* [Build a Solana Telegram bot](common-workflow-tutorials/build-a-solana-telegram-bot.md)
-* [Build with the Jupiter Swap API](common-workflow-tutorials/build-with-the-jupiter-swap-api.md)
-* [Send transactions during congestion](common-workflow-tutorials/send-transactions-during-congestion.md)
-* [Benchmark gRPC endpoints with Thorofare](common-workflow-tutorials/benchmark-grpc-endpoints-with-thorofare.md)
+* [Stream Solana with gRPC](common-workflows/stream-solana-with-grpc.md)
+* [Get token metadata](common-workflows/get-token-metadata.md)
+* [Copy trade a wallet](common-workflows/copy-trade-a-wallet.md)
+* [Calculate Solana fees end to end](common-workflows/calculate-solana-fees-end-to-end.md)
+* [Stream a Raydium AMM pool](common-workflows/stream-a-raydium-amm-pool.md)
+* [Mint a Solana token](common-workflows/mint-a-solana-token.md)
+* [Integrate Titan Prime](common-workflows/integrate-titan-prime.md)
+* [Build a Solana Telegram bot](common-workflows/build-a-solana-telegram-bot.md)
+* [Build with the Jupiter Swap API](common-workflows/build-with-the-jupiter-swap-api.md)
+* [Send transactions during congestion](common-workflows/send-transactions-during-congestion.md)
+* [Benchmark gRPC endpoints with Thorofare](common-workflows/benchmark-grpc-endpoints-with-thorofare.md)

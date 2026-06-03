@@ -1,16 +1,10 @@
 # Table of contents
 
-* [API overview](README.md)
-
-## Overview and auth
-
-* [Authentication](overview-and-auth/authentication.md)
-* [Endpoints](overview-and-auth/endpoints.md)
+* [getAccountInfo](README.md)
 
 ## HTTP RPC methods
 
 * [Accounts](http-rpc-methods/accounts/README.md)
-  * [getAccountInfo](http-rpc-methods/accounts/getaccountinfo.md)
   * [getBalance](http-rpc-methods/accounts/getbalance.md)
   * [getMultipleAccounts](http-rpc-methods/accounts/getmultipleaccounts.md)
   * [getProgramAccounts](http-rpc-methods/accounts/getprogramaccounts.md)

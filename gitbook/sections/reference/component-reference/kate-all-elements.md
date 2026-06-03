@@ -91,7 +91,7 @@ sh -c "$(curl -sSfL https://release.solana.com/v1.18.0/install)"
 solana --version
 ```
 {% endtab %}
-{% tab title="Windows (WSL)" %}
+{% tab title="Windows" %}
 ```bash
 wsl --install
 sh -c "$(curl -sSfL https://release.solana.com/v1.18.0/install)"
@@ -138,7 +138,8 @@ curl https://your-endpoint.rpcpool.com \
 **Where to use:** landing pages, section hubs, "where do I go next".
 **Why it works:** visual nav with icons + descriptions; great for the front of each chain dropdown (e.g. Solana welcome page).
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rocket">:rocket:</i> <strong>Quickstart</strong></td><td>Get from zero to a working endpoint in about five minutes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart">https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart</a></td></tr><tr><td><i class="fa-code">:code:</i> <strong>API reference</strong></td><td>Every JSON-RPC, WebSocket, and gRPC method we expose, with examples.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/api-reference/overview-and-auth/api-overview">https://kate-6.gitbook.io/triton-one-docs/api-reference/overview-and-auth/api-overview</a></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Streaming data</strong></td><td>Yellowstone gRPC, Whirligig, Fumarole -- pick the right tool for the job.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview</a></td></tr><tr><td><i class="fa-comments">:comments:</i> <strong>FAQs</strong></td><td>Answers to the questions every team asks in the first week.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/faqs/general">https://kate-6.gitbook.io/triton-one-docs/faqs/general</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rocket">:rocket:</i> <strong>Quickstart</strong></td><td>Get from zero to a working endpoint in about five minutes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart">https://kate-6.gitbook.io/triton-one-docs/documentation/get-started/quickstart</a></td></tr><tr><td><i class="fa-code">:code:</i> <strong>API reference</strong></td><td>Every JSON-RPC, WebSocket, and gRPC method we expose, with examples.</td><td><a href="/solana-api/api-overview">/solana-api/api-overview</a></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Streaming data</strong></td><td>Yellowstone gRPC, Whirligig, Fumarole -- pick the right tool for the job.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/overview</a></td></tr><tr><td><i class="fa-comments">:comments:</i> <strong>FAQs</strong></td><td>Answers to the questions every team asks in the first week.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/faqs/general">https://kate-6.gitbook.io/triton-one-docs/faqs/general</a></td></tr></tbody></table>
+
 ### Accordions
 
 **Where to use:** FAQs, optional sections, advanced settings.
@@ -320,4 +321,4 @@ Triton's Yellowstone gRPC stack delivers shred-level data with sub-second latenc
 
 <hr>
 
-<i class="fa-life-ring">:life-ring:</i> Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)<br><i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)<br><i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)<br><i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)<br><i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+<i class="fa-life-ring">:life-ring:</i> Need help? Click the chat icon in the bottom right of your [dashboard](https://customers.triton.one)<br><i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)<br><i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)<br><i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)<br><i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

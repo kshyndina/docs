@@ -43,8 +43,8 @@ def fa_icon(name):
 # markdown link syntax literal, so everything must be HTML here).
 FOOTER_MD = (
     "\n<hr>\n\n<p>"
-    + fa_icon("life-buoy") + ' Need help? Contact support by clicking the chat icon in the '
-    'bottom right of your <a href="https://customers.triton.one">customer dashboard</a><br>'
+    + fa_icon("life-buoy") + ' Need help? Click the chat icon in the bottom right of your '
+    '<a href="https://customers.triton.one">dashboard</a><br>'
     + fa_icon("gear") + ' Manage endpoints, billing, team: '
     '<a href="https://customers.triton.one">Customer portal</a><br>'
     + fa_icon("briefcase") + ' Sales questions? <a href="https://triton.one/contact">Contact sales</a><br>'
@@ -377,6 +377,7 @@ def convert_blocks(text, ctx):
         out = ["\n{% tabs %}"]
         for tm in re.finditer(r"<Tab\b([^>]*)>(.*?)</Tab>", body, re.S):
             t = attr(tm.group(1), "title") or "Tab"
+            t = t.split(" (")[0]   # drop parenthetical so tab labels don't truncate
             out.append(f'{{% tab title="{t}" %}}')
             out.append(textwrap.dedent(tm.group(2)).strip())
             out.append("{% endtab %}")
@@ -528,13 +529,16 @@ CARD_RUN = re.compile(r"(?:[ \t]*\x02CARD\x02[^\n]*\x02\n)(?:[ \t]*\n)*"
 LUCIDE = "https://unpkg.com/lucide-static@latest/icons"
 
 def merge_card_tables(text):
+    # if a page has more than one card grid, keep them all the SAME width
+    # (never mix 2-col and 3-col on one page) -> use 2-col everywhere
+    multi = len([m for m in CARD_RUN.finditer(text) if "\x02CARD\x02" in m.group(0)]) > 1
     def build(run):
         cards = re.findall(r"\x02CARD\x02([^\x02]*)\x02([^\x02]*)\x02([^\x02]*)\x02([^\x02]*)\x02",
                            run.group(0))
         if not cards:
             return run.group(0)
-        # balance into ~2 rows: 4 cards -> 2 cols (large), 6 -> 3 cols (medium)
-        size = "large" if len(cards) in (1, 2, 4) else "medium"
+        # single grid: 4 -> 2 cols, 6 -> 3 cols. Multi-grid page: all 2 cols.
+        size = "large" if (multi or len(cards) in (1, 2, 4)) else "medium"
         head = (f"<table data-card-size=\"{size}\" data-view=\"cards\"><thead><tr><th></th><th></th>"
                 "<th data-hidden data-card-target data-type=\"content-ref\"></th>"
                 "</tr></thead><tbody>")
@@ -543,7 +547,7 @@ def merge_card_tables(text):
             tgt = f'<td><a href="{href}">{href}</a></td>' if href else "<td></td>"
             ic = (fa_icon(icon) + " ") if icon else ""
             rows.append(f"<tr><td>{ic}<strong>{title}</strong></td><td>{desc}</td>{tgt}</tr>")
-        return "\n" + head + "".join(rows) + "</tbody></table>\n"
+        return "\n\n" + head + "".join(rows) + "</tbody></table>\n\n"
     return CARD_RUN.sub(build, text)
 
 def render_mermaid(text, ctx):
@@ -670,8 +674,8 @@ def emit_section(sec):
         landing = render_page(fnode["ref"], {"section": key, "file": "README.md"}, landing_title)
         skip = fnode["file"]
     elif key == "solana-guides":
-        landing_title = "Guides"
-        landing = "# Guides\n\nGuides and tutorials for building on Triton.\n"
+        landing_title = "Solana guides"
+        landing = "# Solana guides\n\nGuides and tutorials for building on Triton.\n"
         skip = None
     else:
         landing_title = sec["title"]
@@ -746,8 +750,34 @@ def fix_guides(sections):
             if n["title"] == "Set up your RPC for...":
                 n["title"] = "Quickstart on Triton"
             elif n["title"] == "End-to-end builds":
-                n["title"] = "Common workflow tutorials"
+                n["title"] = "Common workflows"
         s["children"].insert(1, howto)
+
+def _ends(n, *suffixes):
+    return (n.get("ref") or "").endswith(suffixes)
+
+def apply_kate_edits(sections):
+    for s in sections:
+        if s["key"] == "solana-documentation":
+            for g in s["children"]:
+                if g["title"] == "Get started":
+                    kids = g["children"]
+                    idx = next((i for i, n in enumerate(kids) if _ends(n, "auth-and-security")), len(kids))
+                    kids.insert(idx, {"kind": "leaf", "title": "Available endpoints",
+                                      "ref": None, "children": [], "body": "Coming soon."})
+                elif g["title"] == "Reading state":
+                    g["children"] = [n for n in g["children"]
+                                     if not _ends(n, "standard-rpc", "zk-compression-photon")]
+                elif g["title"] == "Sending transactions":
+                    move = [n for n in g["children"]
+                            if _ends(n, "metis-swap-api", "titan-swap-api", "jito-bundles")]
+                    g["children"] = [n for n in g["children"] if n not in move]
+                    sub = {"kind": "group", "title": "3rd party APIs", "ref": None, "children": move}
+                    idx = next((i for i, n in enumerate(g["children"]) if _ends(n, "priority-fees-api")),
+                               len(g["children"]) - 1)
+                    g["children"].insert(idx + 1, sub)
+        elif s["key"] == "solana-api-reference":
+            s["children"] = [g for g in s["children"] if g["title"] != "Overview and auth"]
 
 def main():
     global LINKMAP
@@ -755,6 +785,7 @@ def main():
     sections = build_sections(docs)
     inject_pyth_into_streaming(sections)
     fix_guides(sections)
+    apply_kate_edits(sections)
     for s in sections:
         assign_paths(s["children"], "", True)
     LINKMAP = build_linkmap(sections)

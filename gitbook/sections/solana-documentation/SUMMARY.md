@@ -7,6 +7,7 @@
 * [Quickstart](get-started/quickstart.md)
 * [Plans and billing](get-started/plans-and-billing.md)
 * [Rate and connection limits](get-started/rate-and-connection-limits.md)
+* [Available endpoints](get-started/available-endpoints.md)
 * [Auth and security](get-started/auth-and-security.md)
 * [Platform overview](get-started/platform-overview.md)
 
@@ -28,10 +29,8 @@
 * [Overview](reading-state/overview.md)
 * [Quickstart](reading-state/quickstart.md)
 * [Account-sync](reading-state/account-sync.md)
-* [Standard RPC](reading-state/standard-rpc.md)
 * [Steamboat indexed accounts](reading-state/steamboat-indexed-accounts.md)
 * [Metaplex DAS API](reading-state/metaplex-das-api.md)
-* [ZK compression (Photon)](reading-state/zk-compression-photon.md)
 * [Best practices](reading-state/best-practices.md)
 
 ## Historical data
@@ -47,9 +46,10 @@
 * [Quickstart](sending-transactions/quickstart.md)
 * [Yellowstone Jet](sending-transactions/yellowstone-jet.md)
 * [Priority fees API](sending-transactions/priority-fees-api.md)
-* [Metis swap API](sending-transactions/metis-swap-api.md)
-* [Titan swap API](sending-transactions/titan-swap-api.md)
-* [Jito bundles](sending-transactions/jito-bundles.md)
+* [3rd party APIs](sending-transactions/3rd-party-apis/README.md)
+  * [Metis swap API](sending-transactions/3rd-party-apis/metis-swap-api.md)
+  * [Titan swap API](sending-transactions/3rd-party-apis/titan-swap-api.md)
+  * [Jito bundles](sending-transactions/3rd-party-apis/jito-bundles.md)
 * [Shield MEV protection](sending-transactions/shield-mev-protection.md)
 * [Best practices](sending-transactions/best-practices.md)
 

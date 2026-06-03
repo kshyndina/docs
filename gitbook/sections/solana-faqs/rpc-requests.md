@@ -129,7 +129,7 @@ Yes, dedicated node users can opt into archival nodes that store full Solana blo
 <details>
 <summary>Can I use Jito sendBundle and bundle simulation with Triton RPCs?</summary>
 
-Bundle simulation is available to everyone -- see [Jito bundles](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/jito-bundles) for the full reference.
+Bundle simulation is available to everyone -- see [Jito bundles](https://kate-6.gitbook.io/triton-one-docs/documentation/sending-transactions/3rd-party-apis/jito-bundles) for the full reference.
 
 `sendBundle` itself isn't routed through our infrastructure. Routing bundle sends through Triton would add an extra hop in front of the Jito block engine, which adds latency and works against the reason you're using bundles in the first place. The recommended pattern is to call the Jito block engine directly for sends, and use Triton for everything else (reads, streams, simulation).
 
@@ -166,4 +166,4 @@ If you suspect your Geyser stream is experiencing a drastically different latenc
 
 <hr>
 
-<i class="fa-life-ring">:life-ring:</i> Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)<br><i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)<br><i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)<br><i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)<br><i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+<i class="fa-life-ring">:life-ring:</i> Need help? Click the chat icon in the bottom right of your [dashboard](https://customers.triton.one)<br><i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)<br><i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)<br><i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)<br><i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

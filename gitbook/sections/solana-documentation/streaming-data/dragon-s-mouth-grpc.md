@@ -18,6 +18,7 @@ For browser clients that can't communicate with gRPC, use [Whirligig WebSockets]
 ## Features and benefits
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-timer">:timer:</i> <strong>Sub-slot latency</strong></td><td>Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.</td><td></td></tr><tr><td><i class="fa-sliders-horizontal">:sliders-horizontal:</i> <strong>Server-side filtering</strong></td><td>Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state, all server-side.</td><td></td></tr><tr><td><i class="fa-repeat-2">:repeat-2:</i> <strong>Bi-directional streams</strong></td><td>Modify subscriptions on the fly without reconnecting. Send a new request, server swaps your filter set.</td><td></td></tr><tr><td><i class="fa-feather">:feather:</i> <strong>Compact Protobuf payloads</strong></td><td>Binary serialisation cuts bandwidth and CPU. Cheaper to stream, faster to parse.</td><td></td></tr></tbody></table>
+
 ## Stream types and unary operations
 
 Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions and one-shot unary calls you can use for occasional queries.
@@ -243,7 +244,7 @@ let request = SubscribeRequest {
 {% endtabs %}
 
 {% endtab %}
-{% tab title="By owner (program)" %}
+{% tab title="By owner" %}
 Subscribe to every account owned by a program. The example tracks all Solend accounts.
 
 {% tabs %}
@@ -470,7 +471,7 @@ let request = SubscribeRequest {
 {% endtabs %}
 
 {% endtab %}
-{% tab title="Compressed filters (large account sets)" %}
+{% tab title="Compressed filters" %}
 For subscriptions tracking thousands of accounts, the explicit pubkey list dominates the payload (1M pubkeys = ~44 MB per resend). Compressed account filters carry your tracked set as a [Cuckoo filter](https://en.wikipedia.org/wiki/Cuckoo_filter), a probabilistic data structure storing small fingerprints instead of full 32-byte pubkeys, cutting payload size ~10x.
 
 | Tracked accounts | Compressed filter | Explicit pubkey list |
@@ -1300,6 +1301,7 @@ The Go example may lag the latest stable proto version. For production-ready cod
 ## What's next?
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="deshred-transactions.md">deshred-transactions.md</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="whirligig-websockets.md">whirligig-websockets.md</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="fumarole-persistent-streams.md">fumarole-persistent-streams.md</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td><a href="overview.md">overview.md</a></td></tr></tbody></table>
+
 <hr>
 
-<i class="fa-life-ring">:life-ring:</i> Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)<br><i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)<br><i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)<br><i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)<br><i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+<i class="fa-life-ring">:life-ring:</i> Need help? Click the chat icon in the bottom right of your [dashboard](https://customers.triton.one)<br><i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)<br><i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)<br><i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)<br><i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
