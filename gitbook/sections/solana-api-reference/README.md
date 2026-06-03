@@ -1,3 +1,3 @@
 # Solana · API reference
 
-_schematic placeholder space_
+_Documentation section._

@@ -1,3 +1,0 @@
-# getMinimumBalanceForRentExemption
-
-_schematic placeholder_

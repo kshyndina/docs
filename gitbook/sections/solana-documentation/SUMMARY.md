@@ -72,13 +72,12 @@
 * [Quickstart](dedicated-nodes/quickstart.md)
 * [Best practices](dedicated-nodes/best-practices.md)
 
-## Account management API
-
-* [Auth & headers](account-management-api/auth-headers.md)
-* [Accounts](account-management-api/accounts.md)
-* [Address watch lists](account-management-api/address-watch-lists.md)
-* [Subscriptions](account-management-api/subscriptions.md)
-* [Subscription types](account-management-api/subscription-types.md)
-* [Endpoints](account-management-api/endpoints.md)
-* [Tokens](account-management-api/tokens.md)
-* [Rate tiers](account-management-api/rate-tiers.md)
+* [Account management API](account-management-api/README.md)
+  * [Auth & headers](account-management-api/auth-headers.md)
+  * [Accounts](account-management-api/accounts.md)
+  * [Address watch lists](account-management-api/address-watch-lists.md)
+  * [Subscriptions](account-management-api/subscriptions.md)
+  * [Subscription types](account-management-api/subscription-types.md)
+  * [Endpoints](account-management-api/endpoints.md)
+  * [Tokens](account-management-api/tokens.md)
+  * [Rate tiers](account-management-api/rate-tiers.md)

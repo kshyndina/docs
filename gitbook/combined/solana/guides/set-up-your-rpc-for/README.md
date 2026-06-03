@@ -1,3 +1,0 @@
-# Set up your RPC for...
-
-_schematic placeholder_
