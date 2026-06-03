@@ -1,7 +1,3 @@
----
-icon: bookmark
----
-
 # Address watch lists
 
 Manage account watch lists used by gRPC and WebSocket subscriptions via the Account Management API.
@@ -116,10 +112,10 @@ Higher limits available on dedicated -- talk to support.
 
 ## What's next
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Subscriptions</strong></td><td>Attach plans, add-ons, or watch lists to the organisation.</td><td><a href="subscriptions.md">subscriptions.md</a></td></tr><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="../streaming-data/dragon-s-mouth-grpc.md">../streaming-data/dragon-s-mouth-grpc.md</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rss">:rss:</i> <strong>Subscriptions</strong></td><td>Attach plans, add-ons, or watch lists to the organisation.</td><td><a href="subscriptions.md">subscriptions.md</a></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="../streaming-data/dragon-s-mouth-grpc.md">../streaming-data/dragon-s-mouth-grpc.md</a></td></tr></tbody></table>
 ---
-Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
-Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
-Sales questions? [Contact sales](https://triton.one/contact)  
-AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
-Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+<i class="fa-life-ring">:life-ring:</i> Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+<i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)  
+<i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

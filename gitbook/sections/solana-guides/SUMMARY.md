@@ -1,15 +1,24 @@
 # Table of contents
 
-* [Trading and market making with Triton](README.md)
+* [Guides](README.md)
 
-## Set up your RPC for...
+## Quickstart on Triton
 
-* [DEX or DeFi protocol](set-up-your-rpc-for/dex-or-defi-protocol.md)
-* [Wallet or consumer app](set-up-your-rpc-for/wallet-or-consumer-app.md)
-* [NFT or compressed-asset platform](set-up-your-rpc-for/nft-or-compressed-asset-platform.md)
-* [Indexer or analytics](set-up-your-rpc-for/indexer-or-analytics.md)
-* [Gaming](set-up-your-rpc-for/gaming.md)
-* [AI agent or LLM app](set-up-your-rpc-for/ai-agent-or-llm-app.md)
+* [Trading and market making with Triton](quickstart-on-triton/trading-and-market-making-with-triton.md)
+* [DEX or DeFi protocol](quickstart-on-triton/dex-or-defi-protocol.md)
+* [Wallet or consumer app](quickstart-on-triton/wallet-or-consumer-app.md)
+* [NFT or compressed-asset platform](quickstart-on-triton/nft-or-compressed-asset-platform.md)
+* [Indexer or analytics](quickstart-on-triton/indexer-or-analytics.md)
+* [Gaming](quickstart-on-triton/gaming.md)
+* [AI agent or LLM app](quickstart-on-triton/ai-agent-or-llm-app.md)
+
+## How to build a...
+
+* [Wallet app](how-to-build-a/wallet-app.md)
+* [Trading / sniper bot](how-to-build-a/trading-sniper-bot.md)
+* [DEX / AMM](how-to-build-a/dex-amm.md)
+* [NFT marketplace](how-to-build-a/nft-marketplace.md)
+* [Solana game](how-to-build-a/solana-game.md)
 
 ## Account management
 
@@ -25,16 +34,16 @@
 * [Web3JS socket/connection issues](error-handling/web3js-socket-connection-issues.md)
 * [Verify your gRPC endpoint](error-handling/verify-your-grpc-endpoint.md)
 
-## End-to-end builds
+## Common workflow tutorials
 
-* [Stream Solana with gRPC](end-to-end-builds/stream-solana-with-grpc.md)
-* [Get token metadata](end-to-end-builds/get-token-metadata.md)
-* [Copy trade a wallet](end-to-end-builds/copy-trade-a-wallet.md)
-* [Calculate Solana fees end to end](end-to-end-builds/calculate-solana-fees-end-to-end.md)
-* [Stream a Raydium AMM pool](end-to-end-builds/stream-a-raydium-amm-pool.md)
-* [Mint a Solana token](end-to-end-builds/mint-a-solana-token.md)
-* [Integrate Titan Prime](end-to-end-builds/integrate-titan-prime.md)
-* [Build a Solana Telegram bot](end-to-end-builds/build-a-solana-telegram-bot.md)
-* [Build with the Jupiter Swap API](end-to-end-builds/build-with-the-jupiter-swap-api.md)
-* [Send transactions during congestion](end-to-end-builds/send-transactions-during-congestion.md)
-* [Benchmark gRPC endpoints with Thorofare](end-to-end-builds/benchmark-grpc-endpoints-with-thorofare.md)
+* [Stream Solana with gRPC](common-workflow-tutorials/stream-solana-with-grpc.md)
+* [Get token metadata](common-workflow-tutorials/get-token-metadata.md)
+* [Copy trade a wallet](common-workflow-tutorials/copy-trade-a-wallet.md)
+* [Calculate Solana fees end to end](common-workflow-tutorials/calculate-solana-fees-end-to-end.md)
+* [Stream a Raydium AMM pool](common-workflow-tutorials/stream-a-raydium-amm-pool.md)
+* [Mint a Solana token](common-workflow-tutorials/mint-a-solana-token.md)
+* [Integrate Titan Prime](common-workflow-tutorials/integrate-titan-prime.md)
+* [Build a Solana Telegram bot](common-workflow-tutorials/build-a-solana-telegram-bot.md)
+* [Build with the Jupiter Swap API](common-workflow-tutorials/build-with-the-jupiter-swap-api.md)
+* [Send transactions during congestion](common-workflow-tutorials/send-transactions-during-congestion.md)
+* [Benchmark gRPC endpoints with Thorofare](common-workflow-tutorials/benchmark-grpc-endpoints-with-thorofare.md)

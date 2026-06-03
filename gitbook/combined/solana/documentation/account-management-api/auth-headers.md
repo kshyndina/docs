@@ -1,7 +1,3 @@
----
-icon: id-card
----
-
 # Auth & headers
 
 Bearer-token authentication, organisation context, and required headers for the Account Management API.
@@ -120,10 +116,10 @@ console.log(await res.json());
 
 ## What's next
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Endpoints</strong></td><td>Provision, list, configure, and delete endpoints.</td><td><a href="endpoints.md">endpoints.md</a></td></tr><tr><td><strong>Tokens</strong></td><td>Issue, list, rotate, and revoke endpoint tokens.</td><td><a href="tokens.md">tokens.md</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-link">:link:</i> <strong>Endpoints</strong></td><td>Provision, list, configure, and delete endpoints.</td><td><a href="endpoints.md">endpoints.md</a></td></tr><tr><td><i class="fa-lock">:lock:</i> <strong>Tokens</strong></td><td>Issue, list, rotate, and revoke endpoint tokens.</td><td><a href="tokens.md">tokens.md</a></td></tr></tbody></table>
 ---
-Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
-Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
-Sales questions? [Contact sales](https://triton.one/contact)  
-AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
-Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+<i class="fa-life-ring">:life-ring:</i> Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+<i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)  
+<i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

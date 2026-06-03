@@ -69,7 +69,7 @@ Solana's validator emits every account write to a Geyser plugin, which Triton al
 
 > CTA section. One primary card, optionally a few secondary. Always link to the per-product quickstart.
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Quickstart: your first Steamboat index</strong></td><td>Define a filter, point it at a program, and read it back in under five minutes.</td><td><a href="#">#</a></td></tr><tr><td><strong>Available endpoints</strong></td><td>HTTPS REST and gRPC reads, JS / Python / Rust SDKs.</td><td><a href="#">#</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rocket">:rocket:</i> <strong>Quickstart: your first Steamboat index</strong></td><td>Define a filter, point it at a program, and read it back in under five minutes.</td><td><a href="#">#</a></td></tr><tr><td><i class="fa-server">:server:</i> <strong>Available endpoints</strong></td><td>HTTPS REST and gRPC reads, JS / Python / Rust SDKs.</td><td><a href="#">#</a></td></tr></tbody></table>
 ## Pricing
 
 > Always link to the central pricing page rather than copying numbers in. Numbers drift.
@@ -103,10 +103,10 @@ Yes. Dedicated nodes get unmetered Steamboat reads and you can pin custom indexe
 
 ## Related
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>The streaming layer Steamboat builds on. Subscribe to live account writes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc</a></td></tr><tr><td><strong>Standard RPC</strong></td><td>The simpler `getAccountInfo` / `getProgramAccounts` path for low-volume reads.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc">https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>The streaming layer Steamboat builds on. Subscribe to live account writes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc">https://kate-6.gitbook.io/triton-one-docs/documentation/streaming-data/dragon-s-mouth-grpc</a></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Standard RPC</strong></td><td>The simpler `getAccountInfo` / `getProgramAccounts` path for low-volume reads.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc">https://kate-6.gitbook.io/triton-one-docs/documentation/reading-state/standard-rpc</a></td></tr></tbody></table>
 ---
-Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
-Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
-Sales questions? [Contact sales](https://triton.one/contact)  
-AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
-Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+<i class="fa-life-ring">:life-ring:</i> Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+<i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)  
+<i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

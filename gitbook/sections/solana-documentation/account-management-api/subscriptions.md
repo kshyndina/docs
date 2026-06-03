@@ -1,7 +1,3 @@
----
-icon: rss
----
-
 # Subscriptions
 
 Manage subscriptions, attach subscription types, and read billing configuration via the Account Management API.
@@ -97,10 +93,10 @@ Base plan changes (PAYG -> committed, sizing up / down) go through the portal or
 
 ## What's next
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Subscription types</strong></td><td>The catalogue of plans and add-ons available to attach.</td><td><a href="subscription-types.md">subscription-types.md</a></td></tr><tr><td><strong>Plans and billing</strong></td><td>Pay-as-you-go vs invoiced, top-ups, and the cost calculator across shared and dedicated setups.</td><td><a href="../get-started/plans-and-billing.md">../get-started/plans-and-billing.md</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-list">:list:</i> <strong>Subscription types</strong></td><td>The catalogue of plans and add-ons available to attach.</td><td><a href="subscription-types.md">subscription-types.md</a></td></tr><tr><td><i class="fa-credit-card">:credit-card:</i> <strong>Plans and billing</strong></td><td>Pay-as-you-go vs invoiced, top-ups, and the cost calculator across shared and dedicated setups.</td><td><a href="../get-started/plans-and-billing.md">../get-started/plans-and-billing.md</a></td></tr></tbody></table>
 ---
-Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
-Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
-Sales questions? [Contact sales](https://triton.one/contact)  
-AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
-Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+<i class="fa-life-ring">:life-ring:</i> Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+<i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)  
+<i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

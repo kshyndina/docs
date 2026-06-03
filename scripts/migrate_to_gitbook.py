@@ -11,27 +11,49 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "gitbook", "sections")
 SITE_BASE = "https://kate-6.gitbook.io/triton-one-docs"
 
-# Compact footer (replaces the <FooterLinks/> snippet). Lines end with two
-# spaces = markdown hard breaks, so they render tight (no huge paragraph gaps).
+CDN = "https://cdn.jsdelivr.net/gh/kshyndina/docs@gitbook-schematic"
+
+# Lucide (Mintlify) -> Font Awesome free icon names that GitBook understands.
+FA_MAP = {
+    "activity": "chart-line", "alert-triangle": "triangle-exclamation",
+    "antenna": "tower-broadcast", "archive": "box-archive", "bar-chart-3": "chart-column",
+    "binary": "code", "bookmark": "bookmark", "bot": "robot", "calculator": "calculator",
+    "circle-help": "circle-question", "code": "code", "coins": "coins", "compass": "compass",
+    "copy": "copy", "credit-card": "credit-card", "database": "database", "droplet": "droplet",
+    "flame": "fire", "gamepad-2": "gamepad", "gauge": "gauge", "git-branch": "code-branch",
+    "git-merge": "code-merge", "history": "clock-rotate-left", "id-card": "id-card",
+    "image": "image", "key": "key", "landmark": "landmark", "layers": "layer-group",
+    "link": "link", "list": "list", "lock": "lock", "messages-square": "comments",
+    "package": "box", "palette": "palette", "play": "play", "plug": "plug", "radio": "radio",
+    "refresh-cw": "arrows-rotate", "rocket": "rocket", "rotate-cw": "rotate-right",
+    "route": "route", "rss": "rss", "send": "paper-plane", "server": "server",
+    "shield": "shield", "shield-check": "shield-halved", "sliders-vertical": "sliders",
+    "smartphone": "mobile-screen", "sparkles": "sparkles", "trending-up": "arrow-trend-up",
+    "user": "user", "user-cog": "user-gear", "user-plus": "user-plus", "wrench": "wrench",
+    "zap": "bolt", "life-buoy": "life-ring", "briefcase": "briefcase", "gear": "gear",
+    "book-open": "book-open", "messages": "comments",
+}
+
+def fa_icon(name):
+    fa = FA_MAP.get(name, name)
+    return f'<i class="fa-{fa}">:{fa}:</i>'
+
+# Footer with monochrome GitBook (Font Awesome) icons. Hard breaks keep it tight.
 FOOTER_MD = (
     "\n---\n\n"
-    "Need help? Contact support by clicking the chat icon in the bottom right of your "
-    "[customer dashboard](https://customers.triton.one)  \n"
-    "Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  \n"
-    "Sales questions? [Contact sales](https://triton.one/contact)  \n"
-    "AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  \n"
-    "Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · "
-    "[YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · "
-    "[GitHub](https://github.com/rpcpool)\n"
+    + fa_icon("life-buoy") + " Need help? Contact support by clicking the chat icon in the "
+    "bottom right of your [customer dashboard](https://customers.triton.one)  \n"
+    + fa_icon("gear") + " Manage endpoints, billing, team: "
+    "[Customer portal](https://customers.triton.one)  \n"
+    + fa_icon("briefcase") + " Sales questions? [Contact sales](https://triton.one/contact)  \n"
+    + fa_icon("sparkles") + " AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  \n"
+    + fa_icon("rss") + " Follow updates: [Blog](https://blog.triton.one) · "
+    "[X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · "
+    "[Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)\n"
 )
 
-# Customer logos -> a compact row of CDN images (the scrolling marquee can't
-# render in GitBook, so show a static "trusted by" strip instead).
-_LOGOS = ["solana", "jupiter", "phantom", "orca", "solflare", "squads", "arcium",
-          "jito-labs", "marinade", "binance", "raydium", "meteora", "bonk",
-          "bitfinex", "birdeye"]
-CDN = "https://cdn.jsdelivr.net/gh/kshyndina/docs@gitbook-schematic"
-LOGO_ROW = "\n" + " ".join(f"![]({CDN}/logos/{n}.svg)" for n in _LOGOS) + "\n"
+# Customer logo marquee is removed entirely (Kate's request).
+LOGO_ROW = "\n"
 
 # section key -> (display title, site section path)
 SECTION_PATH = {
@@ -293,19 +315,25 @@ def handle_html_blocks(text):
     text = re.sub(r"<span\b[^>]*>(.*?)</span>", lambda m: m.group(1), text, flags=re.S)
     text = re.sub(r"<span\b[^>]*/>", "", text)
     text = re.sub(r"<p\b[^>]*>(.*?)</p>", lambda m: f"\n{m.group(1).strip()}\n", text, flags=re.S)
-    # <a className="stack-leaf" href>txt</a> -> list item; other <a> -> link
+    # <a className="stack-leaf" href>txt</a> -> a card token (becomes a card grid);
+    # other <a> -> normal link
     def conv_a(m):
         attrs, inner = m.group(1), m.group(2)
         hm = re.search(r'href="([^"]+)"', attrs)
         if not hm:
             return re.sub(r"<[^>]+>", "", inner).strip()
         txt = re.sub(r"<[^>]+>", "", inner).strip()
-        return (f"\n- [{txt}]({hm.group(1)})" if "stack-leaf" in attrs
-                else f"[{txt}]({hm.group(1)})")
+        if "stack-leaf" in attrs:
+            return f"\n\x02CARD\x02{txt}\x02\x02{hm.group(1)}\x02\x02\n"
+        return f"[{txt}]({hm.group(1)})"
     text = re.sub(r"<a\b([^>]*)>(.*?)</a>", conv_a, text, flags=re.S)
-    # title divs -> bold lines
-    text = re.sub(r'<div\b[^>]*class[Nn]ame="[^"]*-title[^"]*"[^>]*>(.*?)</div>',
-                  lambda m: f"\n\n**{re.sub(r'<[^>]+>','',m.group(1)).strip()}**\n", text, flags=re.S)
+    # title divs -> headings (pillar) / bold (branch)
+    def title_div(m):
+        attrs, inner = m.group(1), m.group(2)
+        txt = re.sub(r"<[^>]+>", "", inner).strip()
+        return f"\n\n### {txt}\n" if "pillar-title" in attrs else f"\n\n**{txt}**\n"
+    text = re.sub(r'<div\b([^>]*class[Nn]ame="[^"]*-title[^"]*"[^>]*)>(.*?)</div>',
+                  title_div, text, flags=re.S)
     # <img src> -> markdown image (logos via CDN; /images handled later)
     def conv_img(m):
         src = m.group(1)
@@ -505,9 +533,10 @@ def merge_card_tables(text):
                 "<th data-hidden data-card-target data-type=\"content-ref\"></th>"
                 "</tr></thead><tbody>")
         rows = []
-        for title, desc, href, _icon in cards:
+        for title, desc, href, icon in cards:
             tgt = f'<td><a href="{href}">{href}</a></td>' if href else "<td></td>"
-            rows.append(f"<tr><td><strong>{title}</strong></td><td>{desc}</td>{tgt}</tr>")
+            ic = (fa_icon(icon) + " ") if icon else ""
+            rows.append(f"<tr><td>{ic}<strong>{title}</strong></td><td>{desc}</td>{tgt}</tr>")
         return "\n" + head + "".join(rows) + "</tbody></table>\n"
     return CARD_RUN.sub(build, text)
 
@@ -572,9 +601,7 @@ def render_page(ref, ctx, fallback_title):
     body = re.sub(r"\n{3,}", "\n\n", body).strip()
     title = meta.get("title") or fallback_title
     desc = meta.get("description", "")
-    icon = PAGE_ICON.get((ref or "").strip("/")) if ref else None
-    fm = f"---\nicon: {icon}\n---\n\n" if icon else ""
-    head = fm + f"# {title}\n"
+    head = f"# {title}\n"
     if desc:
         head += f"\n{desc}\n"
     return head + "\n" + body + "\n"
@@ -603,12 +630,23 @@ def emit_section(sec):
                 find_first(n["children"])
     find_first(sec["children"])
     fnode = first[0]
-    landing_title = fnode["title"] if fnode else sec["title"]
-    landing = (render_page(fnode["ref"], {"section": key, "file": "README.md"}, landing_title)
-               if fnode else f"# {sec['title']}\n")
+    # Guides keeps its first page in-group; use a generated landing instead
+    if key == "solana-guides":
+        fnode = None
+    if fnode:
+        landing_title = fnode["title"]
+        landing = render_page(fnode["ref"], {"section": key, "file": "README.md"}, landing_title)
+        skip = fnode["file"]
+    elif key == "solana-guides":
+        landing_title = "Guides"
+        landing = "# Guides\n\nGuides and tutorials for building on Triton.\n"
+        skip = None
+    else:
+        landing_title = sec["title"]
+        landing = f"# {sec['title']}\n"
+        skip = None
     write_file(base, "README.md", landing)
     summary = ["# Table of contents", "", f"* [{landing_title}](README.md)", ""]
-    skip = fnode["file"] if fnode else None
 
     def emit_nodes(nodes, depth):
         for n in nodes:
@@ -629,7 +667,10 @@ def emit_section(sec):
                     summary.append(f"{indent}* [{n['title']}]({n['file']})")
                     emit_nodes(n["children"], depth + 1)
             else:
-                content = render_page(n["ref"], ctx, n["title"])
+                if n.get("ref"):
+                    content = render_page(n["ref"], ctx, n["title"])
+                else:
+                    content = f"# {n['title']}\n\n{n.get('body', '')}\n"
                 write_file(base, n["file"], content)
                 summary.append(f"{indent}* [{n['title']}]({n['file']})")
 
@@ -657,12 +698,31 @@ def inject_pyth_into_streaming(sections):
                 if n["title"] == "Streaming data":
                     n["children"].extend(add)
 
+def fix_guides(sections):
+    """Kate's Guides changes: rename groups, add a 'How to build a...' group."""
+    howto = {"kind": "group", "title": "How to build a...", "ref": None, "children": [
+        {"kind": "leaf", "title": "Wallet app", "ref": None, "children": [], "body": "Coming soon."},
+        {"kind": "leaf", "title": "Trading / sniper bot", "ref": None, "children": [], "body": "Coming soon."},
+        {"kind": "leaf", "title": "DEX / AMM", "ref": None, "children": [], "body": "Coming soon."},
+        {"kind": "leaf", "title": "NFT marketplace", "ref": None, "children": [], "body": "Coming soon."},
+        {"kind": "leaf", "title": "Solana game", "ref": None, "children": [], "body": "Coming soon."},
+    ]}
+    for s in sections:
+        if s["key"] != "solana-guides":
+            continue
+        for n in s["children"]:
+            if n["title"] == "Set up your RPC for...":
+                n["title"] = "Quickstart on Triton"
+            elif n["title"] == "End-to-end builds":
+                n["title"] = "Common workflow tutorials"
+        s["children"].insert(1, howto)
+
 def main():
     global LINKMAP
     docs = json.load(open(os.path.join(ROOT, "docs.json")))
-    scan_icons()
     sections = build_sections(docs)
     inject_pyth_into_streaming(sections)
+    fix_guides(sections)
     for s in sections:
         assign_paths(s["children"], "", True)
     LINKMAP = build_linkmap(sections)

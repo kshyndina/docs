@@ -1,7 +1,3 @@
----
-icon: user-cog
----
-
 # Platform overview
 
 Triton customer portal is where you get your endpoint and token, monitor usage, and top up the balance. This page is a quick tour so you know where to find everything.
@@ -12,7 +8,7 @@ Triton customer portal is where you get your endpoint and token, monitor usage, 
 
 ## What's in the portal
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Endpoints and tokens</strong></td><td>Monitor and configure every endpoint. Manage tokens, origin allowlists, and IP allowlists per endpoint.</td><td></td></tr><tr><td><strong>Usage</strong></td><td>Live RPS, bandwidth, and method latency. Daily billing by product and endpoint.</td><td></td></tr><tr><td><strong>Billing and top-ups</strong></td><td>Deposits, balance, payment methods, and how usage builds your bill.</td><td></td></tr><tr><td><strong>Members</strong></td><td>Invite teammates and colleagues to your organisation.</td><td></td></tr><tr><td><strong>Security and profile</strong></td><td>Your name, email, password, and account preferences.</td><td></td></tr><tr><td><strong>Support</strong></td><td>Your main channel for direct chat with Triton engineering.</td><td></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-server">:server:</i> <strong>Endpoints and tokens</strong></td><td>Monitor and configure every endpoint. Manage tokens, origin allowlists, and IP allowlists per endpoint.</td><td></td></tr><tr><td><i class="fa-chart-line">:chart-line:</i> <strong>Usage</strong></td><td>Live RPS, bandwidth, and method latency. Daily billing by product and endpoint.</td><td></td></tr><tr><td><i class="fa-wallet">:wallet:</i> <strong>Billing and top-ups</strong></td><td>Deposits, balance, payment methods, and how usage builds your bill.</td><td></td></tr><tr><td><i class="fa-users">:users:</i> <strong>Members</strong></td><td>Invite teammates and colleagues to your organisation.</td><td></td></tr><tr><td><i class="fa-shield">:shield:</i> <strong>Security and profile</strong></td><td>Your name, email, password, and account preferences.</td><td></td></tr><tr><td><i class="fa-life-ring">:life-ring:</i> <strong>Support</strong></td><td>Your main channel for direct chat with Triton engineering.</td><td></td></tr></tbody></table>
 ## Common tasks
 
 Here's where to go in the dashboard for the things you'll do most often. What you can do depends on your role -- new members default to **Standard**, which covers almost everything. Expand a role below to see what it includes.
@@ -137,10 +133,10 @@ Short clips to walk you through the most common tasks, from sign-up onward.
 
 ## What's next
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Quickstart</strong></td><td>Sign up, deposit, get an endpoint, send your first request.</td><td><a href="quickstart.md">quickstart.md</a></td></tr><tr><td><strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td><a href="../streaming-data/overview.md">../streaming-data/overview.md</a></td></tr><tr><td><strong>Streaming quickstart</strong></td><td>Test every Triton streaming service in under five minutes.</td><td><a href="../streaming-data/quickstart.md">../streaming-data/quickstart.md</a></td></tr><tr><td><strong>Reading state overview</strong></td><td>Compare Standard RPC, Steamboat, DAS, Account Sync, and ZK Compression side by side.</td><td><a href="../reading-state/overview.md">../reading-state/overview.md</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rocket">:rocket:</i> <strong>Quickstart</strong></td><td>Sign up, deposit, get an endpoint, send your first request.</td><td><a href="quickstart.md">quickstart.md</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td><a href="../streaming-data/overview.md">../streaming-data/overview.md</a></td></tr><tr><td><i class="fa-play">:play:</i> <strong>Streaming quickstart</strong></td><td>Test every Triton streaming service in under five minutes.</td><td><a href="../streaming-data/quickstart.md">../streaming-data/quickstart.md</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Reading state overview</strong></td><td>Compare Standard RPC, Steamboat, DAS, Account Sync, and ZK Compression side by side.</td><td><a href="../reading-state/overview.md">../reading-state/overview.md</a></td></tr></tbody></table>
 ---
-Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
-Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
-Sales questions? [Contact sales](https://triton.one/contact)  
-AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
-Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+<i class="fa-life-ring">:life-ring:</i> Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+<i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)  
+<i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

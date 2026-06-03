@@ -129,7 +129,7 @@ If you see no events at all, see the [streaming troubleshooting checklist](/sola
 
 > Two cards: the natural next thing they'll want to do, and the deep-dive guide. Cards are not "Read more" -- they're routed at specific intents.
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Filter by program, instruction, or accounts</strong></td><td>The full subscription schema. How to scope the stream to exactly what you need.</td><td><a href="#">#</a></td></tr><tr><td><strong>Build a copy-trade bot</strong></td><td>End-to-end guide combining Dragon's Mouth, Vixen parsing, and Yellowstone Jet.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/copy-trade-a-wallet">https://kate-6.gitbook.io/triton-one-docs/guides/end-to-end-builds/copy-trade-a-wallet</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-filter">:filter:</i> <strong>Filter by program, instruction, or accounts</strong></td><td>The full subscription schema. How to scope the stream to exactly what you need.</td><td><a href="#">#</a></td></tr><tr><td><i class="fa-copy">:copy:</i> <strong>Build a copy-trade bot</strong></td><td>End-to-end guide combining Dragon's Mouth, Vixen parsing, and Yellowstone Jet.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs/guides/common-workflow-tutorials/copy-trade-a-wallet">https://kate-6.gitbook.io/triton-one-docs/guides/common-workflow-tutorials/copy-trade-a-wallet</a></td></tr></tbody></table>
 ## Footer
 
 > Standard footer pattern across all quickstarts -- support, account, sales. Keeps the reader unstuck.
@@ -139,8 +139,8 @@ If you see no events at all, see the [streaming troubleshooting checklist](/sola
  Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)
 
 ---
-Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
-Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
-Sales questions? [Contact sales](https://triton.one/contact)  
-AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
-Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
+<i class="fa-life-ring">:life-ring:</i> Need help? Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one)  
+<i class="fa-gear">:gear:</i> Manage endpoints, billing, team: [Customer portal](https://customers.triton.one)  
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact sales](https://triton.one/contact)  
+<i class="fa-sparkles">:sparkles:</i> AI agent? [Read llms.txt](https://docs.triton.one/llms.txt)  
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
