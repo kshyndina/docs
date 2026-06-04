@@ -55,82 +55,68 @@ Organisation owner. Full access to billing, endpoints, members, and dangerous ac
 
 Short clips to walk you through the most common tasks, from sign-up onward.
 
-  <video autoPlay muted loop playsInline >
-    <source src="../images/sign-up.mp4" type="video/mp4" />
-  </video>
-
 ### Sign up
 
-    1. Go to [customers.triton.one/users/sign-up](https://customers.triton.one/users/sign-up) with your work email
-    2. Click the verification link in your inbox
-    3. Name your organisation (the billing root for everything)
-    4. Provision your first endpoint -- pick **Solana mainnet** and your closest region
+1. Go to [customers.triton.one/users/sign-up](https://customers.triton.one/users/sign-up) with your work email
+2. Click the verification link in your inbox
+3. Name your organisation (the billing root for everything)
+4. Provision your first endpoint -- pick **Solana mainnet** and your closest region
+
+<video src="https://cdn.jsdelivr.net/gh/kshyndina/docs@gitbook-schematic/images/account-management/sign-up.mp4" controls muted loop playsinline width="100%"></video>
 
 ### Add a teammate
 
-    1. Open **Members** in the sidebar
-    2. Click **Invite**
-    3. Enter the teammate's email
-    4. Click **Send** -- they get a one-click join link
+1. Open **Members** in the sidebar
+2. Click **Invite**
+3. Enter the teammate's email
+4. Click **Send** -- they get a one-click join link
 
-  <video autoPlay muted loop playsInline >
-    <source src="../images/add-user.mp4" type="video/mp4" />
-  </video>
-
-  <video autoPlay muted loop playsInline >
-    <source src="../images/add-allow-origin.mp4" type="video/mp4" />
-  </video>
+<video src="https://cdn.jsdelivr.net/gh/kshyndina/docs@gitbook-schematic/images/account-management/add-user.mp4" controls muted loop playsinline width="100%"></video>
 
 ### Add a domain to the origin allowlist
 
-    1. Click into the mainnet subscription
-    2. Click the endpoint name to open its settings
-    3. Under **Allowed origins**, hit `+`
-    4. Add the domain and save -- all subdomains are allowed automatically
+1. Click into the mainnet subscription
+2. Click the endpoint name to open its settings
+3. Under **Allowed origins**, hit `+`
+4. Add the domain and save -- all subdomains are allowed automatically
+
+<video src="https://cdn.jsdelivr.net/gh/kshyndina/docs@gitbook-schematic/images/account-management/add-allow-origin.mp4" controls muted loop playsinline width="100%"></video>
 
 ### View usage
 
-    1. Open the **v3 Billing** tab
-    2. Review the per-product totals (requests and bandwidth)
-    3. Drill into per-endpoint breakdowns below
-    4. Click **Export CSV** in the top-right to download
+1. Open the **v3 Billing** tab
+2. Review the per-product totals (requests and bandwidth)
+3. Drill into per-endpoint breakdowns below
+4. Click **Export CSV** in the top-right to download
 
-  <video autoPlay muted loop playsInline >
-    <source src="../images/view-usage.mp4" type="video/mp4" />
-  </video>
-
-  <video autoPlay muted loop playsInline >
-    <source src="../images/top-up.mp4" type="video/mp4" />
-  </video>
+<video src="https://cdn.jsdelivr.net/gh/kshyndina/docs@gitbook-schematic/images/account-management/view-usage.mp4" controls muted loop playsinline width="100%"></video>
 
 ### Top up credits
 
-    1. Open **Billing** in the sidebar
-    2. Click **Buy credits**
-    3. Pay in stablecoins via Wallet Connect, or transfer from any external wallet
-    4. Card or wire? Switch to invoiced billing -- contact support
+1. Open **Billing** in the sidebar
+2. Click **Buy credits**
+3. Pay in stablecoins via Wallet Connect, or transfer from any external wallet
+4. Card or wire? Switch to invoiced billing -- contact support
+
+<video src="https://cdn.jsdelivr.net/gh/kshyndina/docs@gitbook-schematic/images/account-management/top-up.mp4" controls muted loop playsinline width="100%"></video>
 
 ### Set up low-balance notifications
 
-    1. Open **Billing** in the sidebar
-    2. Toggle alerts on
-    3. Set the threshold (for example, $10)
-    4. Save -- every user on the account gets notified when balance hits that amount
+1. Open **Billing** in the sidebar
+2. Toggle alerts on
+3. Set the threshold (for example, $10)
+4. Save -- every user on the account gets notified when balance hits that amount
 
-  <video autoPlay muted loop playsInline >
-    <source src="../images/add-notifications.mp4" type="video/mp4" />
-  </video>
-
-  <video autoPlay muted loop playsInline >
-    <source src="../images/contact-support.mp4" type="video/mp4" />
-  </video>
+<video src="https://cdn.jsdelivr.net/gh/kshyndina/docs@gitbook-schematic/images/account-management/add-notifications.mp4" controls muted loop playsinline width="100%"></video>
 
 ### Contact support
 
-    1. Click the chat icon in the bottom right of any dashboard page
-    2. Describe what's happening
-    3. Include your endpoint URL and the timestamp of the issue
-    4. Your message goes straight to engineering -- not a tier-1 queue
+1. Click the chat icon in the bottom right of any dashboard page
+2. Describe what's happening
+3. Include your endpoint URL and the timestamp of the issue
+4. Your message goes straight to engineering -- not a tier-1 queue
+
+<video src="https://cdn.jsdelivr.net/gh/kshyndina/docs@gitbook-schematic/images/account-management/contact-support.mp4" controls muted loop playsinline width="100%"></video>
 
 ## What's next
 

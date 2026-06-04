@@ -359,9 +359,41 @@ def stack_to_tabs(text, ctx):
     out.append("{% endtabs %}\n")
     return text[:s] + "\n".join(out) + text[e:]
 
+def convert_walkthroughs(text):
+    """Mintlify <div className="walkthrough-row"> blocks pair a looping <video>
+    with a <div> whose ### heading + numbered steps are indented 4 spaces -- which
+    Markdown reads as a code block. De-indent the steps (so they render as a real
+    heading + ordered list) and re-emit the clip as an HTML5 <video> from the CDN.
+    Text first, video below (GitBook is single-column)."""
+    CDN = "https://cdn.jsdelivr.net/gh/kshyndina/docs@gitbook-schematic"
+    out = []; i = 0
+    while True:
+        m = re.search(r'<div\b[^>]*class[Nn]ame="[^"]*walkthrough-row[^"]*"[^>]*>', text[i:])
+        if not m:
+            out.append(text[i:]); break
+        start = i + m.start(); out.append(text[i:start])
+        j = i + m.end(); depth = 1                       # find balanced </div>
+        while depth > 0:
+            nd, nc = text.find("<div", j), text.find("</div>", j)
+            if nc == -1: break
+            if nd != -1 and nd < nc: depth += 1; j = nd + 4
+            else: depth -= 1; j = nc + 6
+        block = text[start:j]
+        sm = re.search(r'<source\s+src="([^"]+)"', block)
+        vid = (f'\n\n<video src="{CDN}{sm.group(1)}" controls muted loop '
+               f'playsinline width="100%"></video>\n') if sm else ""
+        body = re.sub(r"<video\b.*?</video>", "", block, flags=re.S)
+        body = re.sub(r"</?div\b[^>]*>", "", body)
+        body = "\n".join(re.sub(r"^ {1,4}", "", ln) for ln in body.splitlines())
+        body = re.sub(r"\n{3,}", "\n\n", body).strip()
+        out.append("\n\n" + body + vid + "\n\n")
+        i = j
+    return "".join(out)
+
 def handle_html_blocks(text, ctx):
     """Convert raw-HTML blocks (logos, <a> link maps, custom diagrams, tables)
     and drop interactive widgets that can't run in GitBook."""
+    text = convert_walkthroughs(text)
     text = stack_to_tabs(text, ctx)
     # drop the interactive playground + static-ify the pricing calculator
     text = remove_div_block(text, "triton-try")

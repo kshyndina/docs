@@ -1,30 +1,45 @@
 # Steamboat indexed accounts
 
-Steamboat is our high-performance backend solution for `getProgramAccounts` (gPA) queries. By creating custom database indexes tailored to your specific application's needs, Steamboat can dramatically improve performance, reducing gPA query times from seconds to milliseconds. Because it uses the standard JSON-RPC API, no changes are needed to your application code.
+The URL `project-yellowstone/steamboat-custom-indexes` does not exist. This page may have been moved, renamed, or deleted.
 
-The screenshot below shows a test where filtered `getProgramAccounts` requests for the Stake program were reduced from \~1700ms to \~30ms.
+## Suggested Pages
 
-<figure><img src="/files/a848d99wZ6SXnLCsn4gz" alt=""><figcaption></figcaption></figure>
+You may be looking for one of the following:
+- [Cloudbreak Custom Indexes](https://docs.triton.one/project-yellowstone/cloudbreak-custom-indexes.md)
+- [Program Data Streams](https://docs.triton.one/project-yellowstone/program-data-streams.md)
+- [Shield Transaction Policies](https://docs.triton.one/project-yellowstone/shield-transaction-policies.md)
+- [Introduction](https://docs.triton.one/project-yellowstone/introduction.md)
+- [Fumarole Reliable Streams](https://docs.triton.one/project-yellowstone/fumarole.md)
 
-#### How It Works
+## How to find the correct page
 
-Instead of scanning the entire chain state for every request, Steamboat serves `getProgramAccounts` queries from a dedicated database. This database is populated with indexes that are optimized for your application's specific query patterns.
+If the exact page cannot be found, you can still retrieve the information using the documentation query interface.
 
-Enabling Steamboat requires us to deploy the Steamboat Geyser plugin on your dedicated node. This plugin feeds on-chain data into a separate indexer database. This setup requires a node with sufficient hardware resources to handle the additional computational load.
+### Option 1 — Ask a question (recommended)
 
-#### Index Configuration
+Perform an HTTP GET request on the documentation index with the `ask` parameter:
 
-To ensure the best performance, the database indexes must be tailored to your workload. We offer two ways to configure them:
+```
+GET https://docs.triton.one/project-yellowstone/cloudbreak-custom-indexes.md?ask=<question>
+```
 
-* **Client-Provided Indexes:** You can provide us with a list of the specific `memcmp` or other filters your application uses for `getProgramAccounts`. We will then create a set of custom indexes designed precisely for those queries.
-* **Traffic Analysis:** Alternatively, our team can analyze your application's RPC traffic to automatically identify your most common and performance-critical `getProgramAccounts` queries. We then build the optimal set of indexes based on this real-world usage.
+The question should be specific, self-contained, and written in natural language.
+The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
 
-It is important to note that these indexes are tuned for your existing traffic. If your query patterns change significantly over time, the indexes may need to be refreshed periodically to maintain optimal performance.
+### Option 2 — Browse the documentation index
 
-#### Limitation: SPL Token Program
+Full index: https://docs.triton.one/sitemap.md
 
-Steamboat is designed for custom programs and does **not** support `getProgramAccounts` queries for the standard SPL Token Program (`TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA`). Performance for SPL token queries is already highly optimized by the built-in indexes included in the standard Agave validator software that our nodes run.
+Use this to discover valid page paths or navigate the documentation structure.
 
-#### How to Enable Steamboat
+### Option 3 — Retrieve the full documentation corpus
 
-Steamboat is available for dedicated node customers. Because it requires a custom setup and index configuration, please contact our support team to discuss your application's needs and get started.
+Full export: https://docs.triton.one/llms-full.txt
+
+Use this to access all content at once and perform your own parsing or retrieval. It will be more expensive.
+
+## Tips for requesting documentation
+
+Prefer `.md` URLs for structured content, append `.md` to URLs (e.g., `/project-yellowstone/cloudbreak-custom-indexes.md`).
+
+You may also use `Accept: text/markdown` header for content negotiation.
