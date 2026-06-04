@@ -5,7 +5,7 @@ Reads docs.json + the .mdx tree, converts every Mintlify component to GitBook
 markdown, resolves snippet imports, rewrites internal links, and writes a
 GitBook-shaped project per section under gitbook/sections/<key>/ with SUMMARY.md.
 """
-import json, os, re, shutil, textwrap, hashlib, urllib.request
+import json, os, re, shutil, textwrap, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "gitbook", "sections")
