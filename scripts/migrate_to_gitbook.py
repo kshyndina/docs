@@ -615,29 +615,10 @@ def merge_card_tables(text):
         return "\n\n" + head + "".join(rows) + "</tbody></table>\n\n"
     return CARD_RUN.sub(build, text)
 
-def render_mermaid(text, ctx):
-    """Pre-render mermaid diagrams to static SVG files (committed to the repo)
-    so they're plain images - no GitBook pan/zoom on two-finger scroll."""
-    def repl(m):
-        src = m.group(1).strip()
-        h = hashlib.md5(src.encode("utf-8")).hexdigest()[:12]
-        rel = f"diagrams/{h}.svg"
-        dst = os.path.join(OUT, ctx["section"], rel)
-        if not os.path.exists(dst):
-            try:
-                req = urllib.request.Request("https://kroki.io/mermaid/svg",
-                    data=src.encode("utf-8"),
-                    headers={"Content-Type": "text/plain", "User-Agent": "curl/8.0"})
-                svg = urllib.request.urlopen(req, timeout=30).read()
-                os.makedirs(os.path.dirname(dst), exist_ok=True)
-                with open(dst, "wb") as f:
-                    f.write(svg)
-            except Exception as e:
-                print("  mermaid render failed:", e)
-                return m.group(0)
-        link = os.path.relpath(rel, os.path.dirname(ctx["file"]))
-        return f"\n![Diagram]({link})\n"
-    return re.sub(r"```mermaid\n(.*?)```", repl, text, flags=re.S)
+# NOTE: a kroki.io static-SVG mermaid renderer used to live here (it was the ONLY
+# way to kill GitBook's scroll-zoom on diagrams). Kate vetoed static SVGs -- diagrams
+# must stay live mermaid -- so the function was removed as dead code. Live mermaid keeps
+# the GitBook zoom toolbar; that is not disableable on hosted/free GitBook.
 
 def normalize_blocks(text):
     """Strip leading indentation before block-level markers, but never inside
