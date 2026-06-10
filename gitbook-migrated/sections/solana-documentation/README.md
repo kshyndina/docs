@@ -1,6 +1,10 @@
-# Welcome to Triton
+# Welcome to Triton -- Solana documentation
 
 Premium bare-metal Solana infrastructure: reads, streaming, history, trading APIs, and validator services. Built for teams running production workloads.
+
+{% hint style="info" %}
+These docs cover **Solana** -- our primary chain and the default across every tab here. Building on another chain? Sui and Monad live under the **Other chains** tab.
+{% endhint %}
 
 Here you'll find everything you need to integrate with Triton's Solana infrastructure. If you're new here, start with the Quickstart for a five-minute walk-through, or jump to the common build guides for the path that matches what you're shipping.
 
