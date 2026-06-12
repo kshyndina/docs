@@ -4,4 +4,4 @@
 
 * [Walrus](walrus.md)
 * [Seal](seal.md)
-* [FAQs](faqs.md)
+* [Dedicated nodes](dedicated-nodes.md)

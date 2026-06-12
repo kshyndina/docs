@@ -2,4 +2,4 @@
 
 * [Overview](README.md)
 
-* [FAQs](faqs.md)
+* [Dedicated nodes](dedicated-nodes.md)

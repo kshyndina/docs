@@ -33,6 +33,31 @@
   * [getTokenLargestAccounts](das-api/gettokenlargestaccounts.md)
   * [getAssets](das-api/getassets.md)
 
+## Real-time streaming
+
+* [Whirligig WebSockets](whirligig-websocket/README.md)
+  * [accountSubscribe](whirligig-websocket/accountsubscribe.md)
+  * [accountUnsubscribe](whirligig-websocket/accountunsubscribe.md)
+  * [logsSubscribe](whirligig-websocket/logssubscribe.md)
+  * [logsUnsubscribe](whirligig-websocket/logsunsubscribe.md)
+  * [programSubscribe](whirligig-websocket/programsubscribe.md)
+  * [programUnsubscribe](whirligig-websocket/programunsubscribe.md)
+  * [rootSubscribe](whirligig-websocket/rootsubscribe.md)
+  * [rootUnsubscribe](whirligig-websocket/rootunsubscribe.md)
+  * [signatureSubscribe](whirligig-websocket/signaturesubscribe.md)
+  * [signatureUnsubscribe](whirligig-websocket/signatureunsubscribe.md)
+  * [slotSubscribe](whirligig-websocket/slotsubscribe.md)
+  * [slotUnsubscribe](whirligig-websocket/slotunsubscribe.md)
+* [gRPC](yellowstone-grpc/README.md)
+  * [subscribe](yellowstone-grpc/subscribe.md)
+  * [subscribeReplayInfo](yellowstone-grpc/subscribereplayinfo.md)
+  * [getBlockHeight](yellowstone-grpc/getblockheight.md)
+  * [getLatestBlockhash](yellowstone-grpc/getlatestblockhash.md)
+  * [getSlot](yellowstone-grpc/getslot.md)
+  * [getVersion](yellowstone-grpc/getversion.md)
+  * [isBlockhashValid](yellowstone-grpc/isblockhashvalid.md)
+  * [ping](yellowstone-grpc/ping.md)
+
 ## Historical data
 
 * [getBlock](http-rpc-methods/history/getblock.md)
@@ -64,31 +89,6 @@
 * [Titan](transactions/titan/README.md)
   * [Titan /quote](transactions/titan/titan-quote.md)
   * [Titan /swap](transactions/titan/titan-swap.md)
-
-## Real-time streaming
-
-* [Whirligig WebSockets](whirligig-websocket/README.md)
-  * [accountSubscribe](whirligig-websocket/accountsubscribe.md)
-  * [accountUnsubscribe](whirligig-websocket/accountunsubscribe.md)
-  * [logsSubscribe](whirligig-websocket/logssubscribe.md)
-  * [logsUnsubscribe](whirligig-websocket/logsunsubscribe.md)
-  * [programSubscribe](whirligig-websocket/programsubscribe.md)
-  * [programUnsubscribe](whirligig-websocket/programunsubscribe.md)
-  * [rootSubscribe](whirligig-websocket/rootsubscribe.md)
-  * [rootUnsubscribe](whirligig-websocket/rootunsubscribe.md)
-  * [signatureSubscribe](whirligig-websocket/signaturesubscribe.md)
-  * [signatureUnsubscribe](whirligig-websocket/signatureunsubscribe.md)
-  * [slotSubscribe](whirligig-websocket/slotsubscribe.md)
-  * [slotUnsubscribe](whirligig-websocket/slotunsubscribe.md)
-* [gRPC](yellowstone-grpc/README.md)
-  * [subscribe](yellowstone-grpc/subscribe.md)
-  * [subscribeReplayInfo](yellowstone-grpc/subscribereplayinfo.md)
-  * [getBlockHeight](yellowstone-grpc/getblockheight.md)
-  * [getLatestBlockhash](yellowstone-grpc/getlatestblockhash.md)
-  * [getSlot](yellowstone-grpc/getslot.md)
-  * [getVersion](yellowstone-grpc/getversion.md)
-  * [isBlockhashValid](yellowstone-grpc/isblockhashvalid.md)
-  * [ping](yellowstone-grpc/ping.md)
 
 ## Utility (JSON-RPC)
 
