@@ -1,4 +1,4 @@
-# Overview
+# Reading account state
 
 Read Solana state via Triton: standard JSON-RPC, custom indexes, DAS for digital assets, ZK compression, and live account mirrors.
 

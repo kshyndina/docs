@@ -1,4 +1,4 @@
-# Overview
+# Real-time streaming
 
 Triton offers multiple streaming services on Solana. This page covers what streaming is, what each service does, and how to pick the right one for your build.
 

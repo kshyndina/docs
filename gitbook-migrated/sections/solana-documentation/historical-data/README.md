@@ -1,4 +1,4 @@
-# Overview
+# Historical data
 
 Access Solana historical data: full ledger archives, transaction history, and time-travel queries.
 

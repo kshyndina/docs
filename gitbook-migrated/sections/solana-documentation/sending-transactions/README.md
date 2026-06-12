@@ -1,4 +1,4 @@
-# Overview
+# Sending transactions
 
 Send Solana transactions through Triton: SWQoS-routed delivery, priority-fee estimation, swap routers, and Jito bundles.
 
