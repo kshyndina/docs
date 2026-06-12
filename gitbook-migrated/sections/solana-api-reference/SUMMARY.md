@@ -17,7 +17,7 @@
   * [getMinimumBalanceForRentExemption](http-rpc-methods/accounts/getminimumbalanceforrentexemption.md)
   * [getStakeMinimumDelegation](http-rpc-methods/accounts/getstakeminimumdelegation.md)
   * [getVoteAccounts](http-rpc-methods/standard/getvoteaccounts.md)
-  * [Metaplex DAS](das-api/README.md)
+  * [Metaplex DAS API](das-api/README.md)
     * [getAsset](das-api/getasset.md)
     * [getAssetBatch](das-api/getassetbatch.md)
     * [getAssetProof](das-api/getassetproof.md)
