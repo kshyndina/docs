@@ -1,4 +1,4 @@
-# Streaming data
+# Real-time streaming
 
 Questions about gRPC streaming, WebSocket connections, and the Yellowstone ecosystem of streaming components.
 

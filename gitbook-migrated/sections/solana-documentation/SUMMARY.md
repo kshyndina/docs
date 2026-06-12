@@ -2,7 +2,7 @@
 
 * [Solana documentation](README.md)
 
-## Streaming data
+## Real-time streaming
 
 * [Overview](streaming-data/overview.md)
 * [Quickstart](streaming-data/quickstart.md)

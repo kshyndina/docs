@@ -4,5 +4,5 @@
 
 * [My account](my-account.md)
 * [RPC requests](rpc-requests.md)
-* [Streaming data](streaming-data.md)
+* [Real-time streaming](streaming-data.md)
 * [Sending transactions](sending-transactions.md)
