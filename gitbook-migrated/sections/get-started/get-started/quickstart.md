@@ -86,7 +86,7 @@ Two ways in. Pick the tab that fits.
 {% tab title="By product" %}
 Each product is purpose-built for one job. Pick what you need.
 
-### Reading state
+### Reading account state
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-database">:database:</i> <strong>Steamboat</strong></td><td>Custom indexes for `getProgramAccounts` and token-account hot paths. Up to 50x faster, no premium.</td><td><a href="../reading-state/steamboat-indexed-accounts.md">../reading-state/steamboat-indexed-accounts.md</a></td></tr><tr><td><i class="fa-image">:image:</i> <strong>DAS API</strong></td><td>Fastest read for NFT and cNFT ownership, proofs, and metadata.</td><td><a href="../reading-state/metaplex-das-api.md">../reading-state/metaplex-das-api.md</a></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Account Sync</strong></td><td>Streaming-backed local cache for account reads. No polling, no code changes.</td><td><a href="../reading-state/account-sync.md">../reading-state/account-sync.md</a></td></tr></tbody></table>
 

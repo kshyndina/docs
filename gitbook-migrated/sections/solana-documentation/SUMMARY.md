@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Welcome to Triton](README.md)
+* [Solana documentation](README.md)
 
 ## Streaming data
 
@@ -13,7 +13,7 @@
 * [Best practices](streaming-data/best-practices.md)
 * [Pythnet and Hermes](streaming-data/pythnet-and-hermes.md)
 
-## Reading state
+## Reading account state
 
 * [Overview](reading-state/overview.md)
 * [Quickstart](reading-state/quickstart.md)
@@ -41,12 +41,6 @@
   * [Jito bundles](sending-transactions/3rd-party-apis/jito-bundles.md)
 * [Best practices](sending-transactions/best-practices.md)
 
-## Agents / MCP
-
-* [Overview](agents-mcp/overview.md)
-* [Quickstart](agents-mcp/quickstart.md)
-* [MCP server](agents-mcp/mcp-server.md)
-
 ## Validator services
 
 * [White-label validators](validator-services/white-label-validators/README.md)
@@ -60,14 +54,3 @@
 * [Overview](dedicated-nodes/overview.md)
 * [Quickstart](dedicated-nodes/quickstart.md)
 * [Best practices](dedicated-nodes/best-practices.md)
-
-## Account management API
-
-* [Auth & headers](account-management-api/auth-headers.md)
-* [Accounts](account-management-api/accounts.md)
-* [Address watch lists](account-management-api/address-watch-lists.md)
-* [Subscriptions](account-management-api/subscriptions.md)
-* [Subscription types](account-management-api/subscription-types.md)
-* [Endpoints](account-management-api/endpoints.md)
-* [Tokens](account-management-api/tokens.md)
-* [Rate limits](account-management-api/rate-limits.md)
