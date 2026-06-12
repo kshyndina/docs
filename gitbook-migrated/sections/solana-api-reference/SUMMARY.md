@@ -87,7 +87,7 @@
     * [Titan /quote](transactions/titan/titan-quote.md)
     * [Titan /swap](transactions/titan/titan-swap.md)
 
-* [Utility (JSON-RPC)](_groups/utility.md)
+* [Utility methods](_groups/utility.md)
   * [getClusterNodes](http-rpc-methods/standard/getclusternodes.md)
   * [getEpochInfo](http-rpc-methods/standard/getepochinfo.md)
   * [getEpochSchedule](http-rpc-methods/standard/getepochschedule.md)

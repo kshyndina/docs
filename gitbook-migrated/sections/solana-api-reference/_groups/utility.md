@@ -1,3 +1,3 @@
-# Utility (JSON-RPC)
+# Utility methods
 
 Overview.
