@@ -11,7 +11,6 @@
 * [Whirligig WebSockets](streaming-data/whirligig-websockets.md)
 * [Fumarole persistent streams](streaming-data/fumarole-persistent-streams.md)
 * [Best practices](streaming-data/best-practices.md)
-* [Pythnet and Hermes](streaming-data/pythnet-and-hermes.md)
 
 ## Reading account state
 
