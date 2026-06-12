@@ -2,16 +2,6 @@
 
 * [Welcome to Triton](README.md)
 
-## Get started
-
-* [Quickstart](get-started/quickstart.md)
-* [Plans and billing](get-started/plans-and-billing.md)
-* [Rate and connection limits](get-started/rate-and-connection-limits.md)
-* [Endpoints and regions](get-started/endpoints-and-regions.md)
-* [Authentication](get-started/authentication.md)
-* [Privacy and security](get-started/privacy-and-security.md)
-* [Platform overview](get-started/platform-overview.md)
-
 ## Streaming data
 
 * [Overview](streaming-data/overview.md)
