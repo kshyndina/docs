@@ -7,7 +7,7 @@ Test all Triton streaming solutions in 5 minutes. For the streaming overview and
 All five streaming services we'll be testing use Triton endpoints with token-based authentication. Before starting, here's what you need:
 
 - An active Triton subscription
-- Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) ([how to get them](../../solana-guides/account-management/access-your-endpoint-and-token.md))
+- Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) (how to get them)
 - A backend environment in TypeScript, Rust, Go, or Python
 - You've picked a service to try
 

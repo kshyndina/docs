@@ -70,7 +70,7 @@ You can self-onboard at [customers.triton.one](https://customers.triton.one/user
 <details>
 <summary>How can I decide which service fits my traffic needs best?</summary>
 
-Our docs cover comparisons for [streaming](../solana-documentation/streaming-data/overview.md), [reading state](../solana-documentation/reading-state/overview.md), and [sending transactions](../solana-documentation/sending-transactions/overview.md), so you can match the service to your traffic shape. If you want more tailored guidance, [contact sales](https://triton.one/contact). If you already have an account, contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).
+Our docs cover comparisons for streaming, reading state, and sending transactions, so you can match the service to your traffic shape. If you want more tailored guidance, [contact sales](https://triton.one/contact). If you already have an account, contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).
 
 </details>
 
@@ -144,7 +144,7 @@ The most common mistake is omitting the token, `v2`, or `hermes` parts of the pa
 <details>
 <summary>Does Triton have a validator?</summary>
 
-Yes. You can stake directly with our [Private Trusted Validator](../solana-documentation/validator-services/white-label-validators/overview.md) and earn weekly USDC rewards. The minimum delegation is 2,500 SOL.
+Yes. You can stake directly with our Private Trusted Validator and earn weekly USDC rewards. The minimum delegation is 2,500 SOL.
 
     This is built for people or teams with larger delegations who want steady income to cover operating expenses, with white-glove setup for custodians and stake pools.
 

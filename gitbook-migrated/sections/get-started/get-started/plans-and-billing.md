@@ -68,7 +68,7 @@ Once you've made a deposit, it's valid for a year and draws down as you use the 
 There is no free trial, as the deposit replaces it: you get a year of testing room with the same account, endpoint, and tokens you'd ship to production.
 
 {% hint style="info" %}
-[Sign up at customers.triton.one](https://customers.triton.one/users/sign-up). For a step-by-step, see [How to sign up](../../solana-guides/account-management/how-to-sign-up.md).
+[Sign up at customers.triton.one](https://customers.triton.one/users/sign-up). For a step-by-step, see How to sign up.
 {% endhint %}
 
 ## What's next

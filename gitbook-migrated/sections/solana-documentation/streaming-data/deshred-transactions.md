@@ -29,7 +29,7 @@ Unlike the standard `Subscribe` transaction stream, deshred updates are emitted 
 Before you start, make sure you have:
 
 - An active Triton subscription
-- Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) ([how to get them](../../solana-guides/account-management/access-your-endpoint-and-token.md))
+- Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) (how to get them)
 - A backend environment in TypeScript, Rust, Go, or another language with a gRPC client
 - Familiarity with gRPC and Protocol Buffers
 
