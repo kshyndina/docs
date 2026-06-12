@@ -1,4 +1,4 @@
-# Overview
+# Error handling
 
 A step-by-step process to diagnose and fix issues with your Triton One RPC.
 
