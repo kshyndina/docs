@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Welcome to Triton](README.md)
+* [Get started](README.md)
 
 ## Get started
 
@@ -14,7 +14,6 @@
 
 ## Agents / MCP
 
-* [Overview](agents-mcp/overview.md)
 * [Quickstart](agents-mcp/quickstart.md)
 * [MCP server](agents-mcp/mcp-server.md)
 
